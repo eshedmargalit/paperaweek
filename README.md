@@ -6,10 +6,10 @@ You'll need two API keys:
 1) For the MongoDB instance
 1) For Microsoft Cognitive Services, which provides the academic search [MS Cog Services](https://azure.microsoft.com/en-us/services/cognitive-services/)
 
-Create `.env.local` in the root directory and add:
+Create `.env` in the root directory and add:
 
 ```bash
-REACT_APP_DB_CONNECTION_STRING=<your connection string goes here>
+DB_CONNECTION_STRING="<your connection string goes here>"
 ```
 
 Create `client/.env.local` and add:
