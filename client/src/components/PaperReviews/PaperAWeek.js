@@ -4,18 +4,17 @@ import {
   Container,
   Row,
   Col,
-  Form,
-  FormGroup,
-  Label,
   Nav,
   NavItem,
   NavLink
 } from "reactstrap";
+
 import { Button, Icon, Select, Input, Tag, List } from "antd";
-import { FaArrowLeft, FaBackspace } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import moment from "moment";
-import "./PaperReviews.css";
 import Fuse from "fuse.js";
+
+import "./PaperReviews.css";
 
 class PaperAWeek extends Component {
   constructor(props) {
@@ -27,7 +26,7 @@ class PaperAWeek extends Component {
       searchbar_value: "",
       active_paper: null,
       viewing_paper: false,
-      current_paper_short_title: "Margalit et al., 2019",
+      current_paper_short_title: "",
       sort_mode: "review-date-descending"
     };
   }
@@ -44,31 +43,31 @@ class PaperAWeek extends Component {
     return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
   };
 
-  render_comma_sep_list = authors => {
-    return authors.map((author, i) => {
+  render_comma_sep_list = items => {
+    return items.map((item, i) => {
       let to_render;
-      if (i === authors.length - 1) {
+      if (i === items.length - 1) {
         // last
-        if (authors.length === 1) {
+        if (items.length === 1) {
           to_render = (
             <span>
-              {author}
+              {item}
               <br />
             </span>
           );
         } else {
           to_render = (
             <span>
-              and {author}
+              and {item}
               <br />
             </span>
           );
         }
-      } else if (i === authors.length - 2) {
+      } else if (i === items.length - 2) {
         // penultimate
         to_render = (
           <span>
-            {author}
+            {item}
             {` `}
           </span>
         );
@@ -76,11 +75,11 @@ class PaperAWeek extends Component {
         //all others
         to_render = (
           <span>
-            {author},{` `}
+            {item},{` `}
           </span>
         );
       }
-      return <span key={authors.tag + author}>{to_render}</span>;
+      return <span key={items.tag + item}>{to_render}</span>;
     });
   };
 
@@ -99,6 +98,7 @@ class PaperAWeek extends Component {
 
   render_tags = tags => {
     let tag_render = null;
+
     if (tags && tags.length > 0) {
       tag_render = tags.map(tag => {
         if (tag === "") {
