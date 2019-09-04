@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
+import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import "./Home.css";
 
 class Home extends Component {
@@ -25,11 +26,7 @@ class Home extends Component {
     return (
       <div className="home-wrapper">
         <div style={{ width: "80%", margin: "auto" }}>
-          <Link to="/Form">
-            <Button type="primary" className="form-link-button">
-              Write Review
-            </Button>
-          </Link>
+          <PaperSearchBar />
         </div>
         <div style={{ width: "80%", margin: "auto" }}>
           {this.state.loading ? (
@@ -40,6 +37,13 @@ class Home extends Component {
           ) : (
             <ReviewReader papers={this.state.papers} />
           )}
+        </div>
+        <div>
+          <Link to="/Form">
+            <Button type="primary" className="form-link-button">
+              Write Review
+            </Button>
+          </Link>
         </div>
       </div>
     );

@@ -256,6 +256,7 @@ class ReviewReader extends Component {
   render() {
     const directory = (
       <div>
+        <PageHeader title="Read Your Reviews" avatar={{ icon: "read" }} />
         <div
           style={{
             width: "100%",
