@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button } from 'antd';
+import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import "./Home.css";
 
@@ -17,7 +18,7 @@ class Home extends Component {
   componentDidMount() {
     fetch("/api/papers")
       .then(response => response.json())
-      .then(data => this.setState({papers: data}));
+      .then(data => this.setState({papers: data, loading: false}));
   }
 
   render() {
@@ -29,7 +30,14 @@ class Home extends Component {
           </Link>
         </div>
         <div style={{width: "80%", margin: "auto"}}>
-          <ReviewReader papers={this.state.papers}/>
+          {this.state.loading ? (
+            <div>
+              <h6> Loading Reviews </h6>
+              <FadeLoader />
+            </div>
+          ) : (
+            <ReviewReader papers={this.state.papers}/>
+          )}
         </div>
       </div>
     );
