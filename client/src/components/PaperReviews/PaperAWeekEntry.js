@@ -13,7 +13,7 @@ import {
 import { BeatLoader } from "react-spinners";
 import _ from "lodash";
 import moment from "moment";
-import { render_comma_sep_list, capital_case } from "./utils.js";
+import { render_comma_sep_list, capital_case } from "../utils.js";
 import PAWForm from "./PAWForm";
 
 import { FaBackspace } from "react-icons/fa";

@@ -28,31 +28,31 @@ export function capital_case(input_str) {
   return new_str;
 }
 
-export function render_comma_sep_list(authors) {
-  return authors.map((author, i) => {
+export function render_comma_sep_list(items, key) {
+  return items.map((item, i) => {
     let to_render;
-    if (i === authors.length - 1) {
+    if (i === items.length - 1) {
       // last
-      if (authors.length === 1) {
+      if (items.length === 1) {
         to_render = (
           <span>
-            {author.name}
+            {item}
             <br />
           </span>
         );
       } else {
         to_render = (
           <span>
-            and {author.name}
+            and {item}
             <br />
           </span>
         );
       }
-    } else if (i === authors.length - 2) {
+    } else if (i === items.length - 2) {
       // penultimate
       to_render = (
         <span>
-          {author.name}
+          {item}
           {` `}
         </span>
       );
@@ -60,10 +60,10 @@ export function render_comma_sep_list(authors) {
       //all others
       to_render = (
         <span>
-          {author.name},{` `}
+          {item},{` `}
         </span>
       );
     }
-    return <span key={author.paper_id + author.name}>{to_render}</span>;
+    return <span key={key + item}>{to_render}</span>;
   });
 }

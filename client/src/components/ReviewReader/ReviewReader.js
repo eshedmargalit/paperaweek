@@ -14,9 +14,9 @@ import { FaArrowLeft } from "react-icons/fa";
 import moment from "moment";
 import Fuse from "fuse.js";
 
-import "./PaperReviews.css";
+import {render_comma_sep_list} from "../utils.js";
 
-class PaperAWeek extends Component {
+class ReviewReader extends Component {
   constructor(props) {
     super(props);
     this.navRef = React.createRef();
@@ -41,46 +41,6 @@ class PaperAWeek extends Component {
     const saturation = "80%";
     const lightness = "30%";
     return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
-  };
-
-  render_comma_sep_list = items => {
-    return items.map((item, i) => {
-      let to_render;
-      if (i === items.length - 1) {
-        // last
-        if (items.length === 1) {
-          to_render = (
-            <span>
-              {item}
-              <br />
-            </span>
-          );
-        } else {
-          to_render = (
-            <span>
-              and {item}
-              <br />
-            </span>
-          );
-        }
-      } else if (i === items.length - 2) {
-        // penultimate
-        to_render = (
-          <span>
-            {item}
-            {` `}
-          </span>
-        );
-      } else {
-        //all others
-        to_render = (
-          <span>
-            {item},{` `}
-          </span>
-        );
-      }
-      return <span key={items.tag + item}>{to_render}</span>;
-    });
   };
 
   handleSearch = search_term => {
@@ -153,7 +113,7 @@ class PaperAWeek extends Component {
         <div>
           <h6>{meta.title}</h6>
           <div>
-            {this.render_comma_sep_list(meta.authors)}
+            {render_comma_sep_list(meta.authors, "authors")}
             Published {publication_date_render}
           </div>
           <div>{this.render_tags(meta.keywords)}</div>
@@ -165,13 +125,14 @@ class PaperAWeek extends Component {
         <div>
           <Button
             type="default"
+            size="large"
             style={{ display: "flex", alignItems: "center" }}
             onClick={e => {
               e.preventDefault();
               this.review_clicked(paper);
             }}
           >
-            View Review <Icon type="right-circle" />
+            Read Review <Icon type="right-circle" />
           </Button>
         </div>
       </div>
@@ -494,4 +455,4 @@ class PaperAWeek extends Component {
   }
 }
 
-export default PaperAWeek;
+export default ReviewReader;
