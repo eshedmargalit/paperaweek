@@ -1,16 +1,5 @@
 import React, { Component } from "react";
-
-import {
-  Container,
-  Row,
-  Col,
-  Nav,
-  NavItem,
-  NavLink
-} from "reactstrap";
-
-import { Button, Icon, Select, Input, Tag, List } from "antd";
-import { FaArrowLeft } from "react-icons/fa";
+import { PageHeader, Button, Icon, Select, Input, Tag, List } from "antd";
 import moment from "moment";
 import Fuse from "fuse.js";
 
@@ -19,14 +8,10 @@ import {render_comma_sep_list} from "../utils.js";
 class ReviewReader extends Component {
   constructor(props) {
     super(props);
-    this.navRef = React.createRef();
 
     this.state = {
       query: "",
-      searchbar_value: "",
       active_paper: null,
-      viewing_paper: false,
-      current_paper_short_title: "",
       sort_mode: "review-date-descending"
     };
   }
@@ -46,13 +31,6 @@ class ReviewReader extends Component {
   handleSearch = search_term => {
     this.setState({
       query: search_term,
-      searchbar_value: search_term
-    });
-  };
-
-  handleSort = sort_mode => {
-    this.setState({
-      sort_mode: sort_mode
     });
   };
 
@@ -65,19 +43,17 @@ class ReviewReader extends Component {
           return null;
         }
         return (
-          <span key={tag}>
-            <Tag
-              color={this.get_tag_color(tag)}
-              onClick={e => {
-                e.stopPropagation();
-                e.preventDefault();
-                this.handleSearch(`${e.target.innerHTML}`);
-              }}
-            >
-              {tag}
-            </Tag>
-            {` `}
-          </span>
+          <Tag
+            color={this.get_tag_color(tag)}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+              this.handleSearch(`${e.target.innerHTML}`);
+            }}
+            key={tag}
+          >
+            {tag}
+          </Tag>
         );
       });
     }
@@ -185,26 +161,8 @@ class ReviewReader extends Component {
   };
 
   review_clicked = review => {
-    const { date, authors } = review.metadata;
-    const year = date.substring(0, 4);
-    const n_authors = authors.length;
-
-    let author_string;
-    if (n_authors === 2) {
-      author_string =
-        authors[0].split(",")[0] + " and " + authors[1].split(",")[0];
-    } else if (n_authors === 1) {
-      author_string = authors[0].split(",")[0];
-    } else {
-      author_string = authors[0].split(",")[0] + " et al.";
-    }
-
-    const tab_str = author_string + ", " + year;
-
     this.setState({
       active_paper: review,
-      viewing_paper: true,
-      current_paper_short_title: tab_str
     });
   };
 
@@ -221,75 +179,6 @@ class ReviewReader extends Component {
   };
 
   render_review = paper => {
-    const summary = (
-      <div>
-        <h6>General Summary</h6>
-        <ul>
-          {paper.review.summary.map(summary_point => {
-            return <li key={summary_point}>{summary_point}</li>;
-          })}
-        </ul>
-      </div>
-    );
-
-    const background = (
-      <div>
-        <h6>Background</h6>
-        <ul>
-          {paper.review.background.map(background_point => {
-            return <li key={background_point}>{background_point}</li>;
-          })}
-        </ul>
-      </div>
-    );
-
-    const approach = (
-      <div>
-        <h6>Approach and Methods</h6>
-        <ul>
-          {paper.review.approach.map(approach_point => {
-            return <li key={approach_point}>{approach_point}</li>;
-          })}
-        </ul>
-      </div>
-    );
-
-    const results = (
-      <div>
-        <h6>Results</h6>
-        <ul>
-          {paper.review.results.map(results_point => {
-            return <li key={results_point}>{results_point}</li>;
-          })}
-        </ul>
-      </div>
-    );
-
-    const conclusions = (
-      <div>
-        <h6>Conclusions</h6>
-        <ul>
-          {paper.review.conclusions.map(conclusions_point => {
-            return <li key={conclusions_point}>{conclusions_point}</li>;
-          })}
-        </ul>
-      </div>
-    );
-
-    let other = null;
-    if (paper.review.other.length > 0) {
-      other = (
-        <div>
-          <h6>Other information</h6>
-          <ul>
-            {paper.review.other.map(other_point => {
-              return <li key={other_point}>{other_point}</li>;
-            })}
-          </ul>
-        </div>
-      );
-    }
-
     const date_str = moment(paper.metadata.date, "YYYY-MM").format("MMMM YYYY");
     let doi_tag = null;
     if (paper.metadata.doi) {
@@ -304,39 +193,61 @@ class ReviewReader extends Component {
       );
     }
 
+
+    const fields = [
+      {
+        heading: "General Summary",
+        review_key: "summary"
+      },
+      {
+        heading: "Background",
+        review_key: "background"
+      },
+      {
+        heading: "Approach",
+        review_key: "approach"
+      },
+      {
+        heading: "Results",
+        review_key: "results"
+      },
+      {
+        heading: "Conclusions",
+        review_key: "conclusions"
+      },
+      {
+        heading: "Other Information",
+        review_key: "other"
+      }
+    ];
+
+
+    const review = fields.map(field => {
+      return (
+      <div key={field.heading}>
+        <strong>{field.heading}</strong>
+        <ul>
+          {paper.review[field.review_key].map(point=> {
+            return <li key={point}>{point}</li>;
+          })}
+        </ul>
+      </div>
+      );
+    })
+
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h4>{paper.metadata.title}</h4>
-            {this.render_comma_sep_list(paper.metadata.authors)}
-            {this.render_comma_sep_list(paper.metadata.institutions)}
+        <div>
+          <PageHeader tags={this.render_tags(paper.metadata.keywords)} title={paper.metadata.title} onBack={() => this.setState({active_paper: null})} />
+          <div>
+            {render_comma_sep_list(paper.metadata.authors)}
+            {render_comma_sep_list(paper.metadata.institutions)}
             Published in {paper.metadata.journal} in {date_str}
             {` `}
             {doi_tag}
-            <hr />
-            {summary}
-            {background}
-            {approach}
-            {results}
-            {conclusions}
-            {other}
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Button
-              onClick={e => {
-                this.setState({ viewing_paper: false });
-                window.scrollTo(0, this.navRef.current.offsetTop);
-              }}
-              color="primary"
-            >
-              <FaArrowLeft /> Back to List of Reviews
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+          <hr />
+          {review}
+        </div>
     );
   };
 
@@ -359,7 +270,7 @@ class ReviewReader extends Component {
                   width="500px"
                   onChange={e => this.handleSearch(`${e.target.value}`)}
                   placeholder="e.g., orthogonal"
-                  value={this.state.searchbar_value}
+                  value={this.state.query}
                   allowClear
                 />
               </div>
@@ -368,7 +279,7 @@ class ReviewReader extends Component {
                   defaultValue="review-date-descending"
                   style={{ width: 220 }}
                   id="sort_input"
-                  onChange={this.handleSort}
+                  onChange={(e) => {this.setState({sort_mode: e})}}
                 >
                   <Select.Option value="review-date-descending">
                     review date (descending)
@@ -398,57 +309,12 @@ class ReviewReader extends Component {
     );
 
     let to_render = directory;
-    let nav = (
-      <Nav tabs>
-        <NavItem>
-          <NavLink className="nav-tab" active={!this.state.viewing_paper}>
-            List of Reviews
-          </NavLink>
-        </NavItem>
-      </Nav>
-    );
-
-    if (this.state.active_paper) {
-      if (this.state.viewing_paper) {
-        to_render = this.render_review(this.state.active_paper);
-      } else {
-        to_render = directory;
-      }
-      nav = (
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className="nav-tab"
-              onClick={e => {
-                this.setState({
-                  viewing_paper: false,
-                  query: "",
-                  searchbar_value: ""
-                });
-              }}
-              active={!this.state.viewing_paper}
-            >
-              List of Reviews
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className="nav-tab"
-              onClick={e => {
-                this.setState({ viewing_paper: true });
-              }}
-              active={this.state.viewing_paper}
-            >
-              {this.state.current_paper_short_title}
-            </NavLink>
-          </NavItem>
-        </Nav>
-      );
+    if (this.state.active_paper){
+      to_render = this.render_review(this.state.active_paper)
     }
+
     return (
-      <div ref={this.navRef}>
-        {nav}
-        <br />
+      <div>
         {to_render}
       </div>
     );
