@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Icon, Button, Input, PageHeader } from "antd";
+import { start_review } from "../../actions/index";
 import { BeatLoader } from "react-spinners";
 import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
@@ -99,39 +101,30 @@ class PaperSearchBar extends Component {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
 
-    let source_url = "";
-    if (ent.S) {
-      source_url = ent.S[0].U;
-    }
-
     let authors = _.sortBy(ent.AA, [
       function(o) {
         return o.S;
       }
     ]);
 
-    let author_names = authors.map(author => {
-      return author.DAuN;
+    authors = authors.map(author => {
+      return { name: author.DAuN, affiliation: capital_case(author.AfN) };
     });
 
-    let author_institutions = authors.map(author => {
-      return capital_case(author.AfN);
-    });
-
-    //remove duplicate items (multiple affiliations)
-    author_names = _.uniq(author_names);
-    author_institutions = _.uniq(author_institutions);
-
-    this.setState({
-      query: "",
-      entities: [],
-      author_names: author_names,
-      institution_names: author_institutions,
+    const paper_metadata = {
       title: ent.DN,
+      authors: authors,
       date: new Date(ent.D),
       doi: ent.DOI,
       journal: ent.BV,
-      url: source_url
+      url: ent.S ? ent.S[0].U : ""
+    };
+
+    this.props.dispatch(start_review(paper_metadata));
+
+    this.setState({
+      query: "",
+      entities: []
     });
   };
 
@@ -245,4 +238,4 @@ class PaperSearchBar extends Component {
   }
 }
 
-export default PaperSearchBar;
+export default connect()(PaperSearchBar);

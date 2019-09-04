@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
+import ReviewForm from "../ReviewForm/ReviewForm";
 import "./Home.css";
 
 class Home extends Component {
@@ -23,7 +25,7 @@ class Home extends Component {
   }
 
   render() {
-    return (
+    const home_render = (
       <div className="home-wrapper">
         <div style={{ width: "80%", margin: "auto" }}>
           <PaperSearchBar />
@@ -47,7 +49,23 @@ class Home extends Component {
         </div>
       </div>
     );
+
+    const form_render = (
+      <div>
+        <div style={{ width: "80%", margin: "auto" }}>
+          <ReviewForm />
+        </div>
+      </div>
+    );
+
+    return this.props.data.review.displayForm ? form_render : home_render;
   }
 }
 
-export default Home;
+const mapStateToProps = state => {
+  return {
+    data: state
+  };
+};
+
+export default connect(mapStateToProps)(Home);
