@@ -3,7 +3,7 @@ import { PageHeader, Button, Icon, Select, Input, Tag, List } from "antd";
 import moment from "moment";
 import Fuse from "fuse.js";
 
-import {render_comma_sep_list} from "../utils.js";
+import { render_comma_sep_list } from "../utils.js";
 
 class ReviewReader extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class ReviewReader extends Component {
 
   handleSearch = search_term => {
     this.setState({
-      query: search_term,
+      query: search_term
     });
   };
 
@@ -162,7 +162,7 @@ class ReviewReader extends Component {
 
   review_clicked = review => {
     this.setState({
-      active_paper: review,
+      active_paper: review
     });
   };
 
@@ -193,7 +193,6 @@ class ReviewReader extends Component {
       );
     }
 
-
     const fields = [
       {
         heading: "General Summary",
@@ -221,33 +220,36 @@ class ReviewReader extends Component {
       }
     ];
 
-
     const review = fields.map(field => {
       return (
-      <div key={field.heading}>
-        <strong>{field.heading}</strong>
-        <ul>
-          {paper.review[field.review_key].map(point=> {
-            return <li key={point}>{point}</li>;
-          })}
-        </ul>
-      </div>
+        <div key={field.heading}>
+          <strong>{field.heading}</strong>
+          <ul>
+            {paper.review[field.review_key].map(point => {
+              return <li key={point}>{point}</li>;
+            })}
+          </ul>
+        </div>
       );
-    })
+    });
 
     return (
+      <div>
+        <PageHeader
+          tags={this.render_tags(paper.metadata.keywords)}
+          title={paper.metadata.title}
+          onBack={() => this.setState({ active_paper: null })}
+        />
         <div>
-          <PageHeader tags={this.render_tags(paper.metadata.keywords)} title={paper.metadata.title} onBack={() => this.setState({active_paper: null})} />
-          <div>
-            {render_comma_sep_list(paper.metadata.authors)}
-            {render_comma_sep_list(paper.metadata.institutions)}
-            Published in {paper.metadata.journal} in {date_str}
-            {` `}
-            {doi_tag}
-          </div>
-          <hr />
-          {review}
+          {render_comma_sep_list(paper.metadata.authors)}
+          {render_comma_sep_list(paper.metadata.institutions)}
+          Published in {paper.metadata.journal} in {date_str}
+          {` `}
+          {doi_tag}
         </div>
+        <hr />
+        {review}
+      </div>
     );
   };
 
@@ -263,7 +265,13 @@ class ReviewReader extends Component {
         >
           <div style={{ width: "100%" }}>
             <div>Filter by author, year, title, or keyword:</div>
-            <div style={{ width: "100%", display: "flex", justifyContent: "space-between"}}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between"
+              }}
+            >
               <div style={{ width: "100%", marginRight: "100px" }}>
                 <Input
                   type="text"
@@ -279,7 +287,9 @@ class ReviewReader extends Component {
                   defaultValue="review-date-descending"
                   style={{ width: 220 }}
                   id="sort_input"
-                  onChange={(e) => {this.setState({sort_mode: e})}}
+                  onChange={e => {
+                    this.setState({ sort_mode: e });
+                  }}
                 >
                   <Select.Option value="review-date-descending">
                     review date (descending)
@@ -309,15 +319,11 @@ class ReviewReader extends Component {
     );
 
     let to_render = directory;
-    if (this.state.active_paper){
-      to_render = this.render_review(this.state.active_paper)
+    if (this.state.active_paper) {
+      to_render = this.render_review(this.state.active_paper);
     }
 
-    return (
-      <div>
-        {to_render}
-      </div>
-    );
+    return <div>{to_render}</div>;
   }
 }
 
