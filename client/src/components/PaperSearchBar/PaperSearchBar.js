@@ -109,13 +109,16 @@ class PaperSearchBar extends Component {
 
     let author_names = _.uniq(
       authors.map(author => {
-        return author.DAuN;
+        return author.DAuN.split(".").join("");
       })
     ).filter(name => name !== "");
 
     let institutions = _.uniq(
       authors.map(author => {
-        return capital_case(author.AfN);
+        return capital_case(author.AfN)
+          .split(".")
+          .join("")
+          .trim();
       })
     ).filter(name => name !== "");
 
