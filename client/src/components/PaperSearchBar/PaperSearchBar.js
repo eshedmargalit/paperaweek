@@ -107,13 +107,22 @@ class PaperSearchBar extends Component {
       }
     ]);
 
-    authors = authors.map(author => {
-      return { name: author.DAuN, affiliation: capital_case(author.AfN) };
-    });
+    let author_names = _.uniq(
+      authors.map(author => {
+        return author.DAuN;
+      })
+    ).filter(name => name !== "");
+
+    let institutions = _.uniq(
+      authors.map(author => {
+        return capital_case(author.AfN);
+      })
+    ).filter(name => name !== "");
 
     const paper_metadata = {
       title: ent.DN,
-      authors: authors,
+      author_names: author_names,
+      institution_names: institutions,
       date: new Date(ent.D),
       doi: ent.DOI,
       journal: ent.BV,
