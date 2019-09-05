@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
+import { Form, Button } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
@@ -25,6 +25,7 @@ class Home extends Component {
   }
 
   render() {
+    const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
     const home_render = (
       <div className="home-wrapper">
         <div style={{ width: "80%", margin: "auto" }}>
@@ -53,7 +54,7 @@ class Home extends Component {
     const form_render = (
       <div>
         <div style={{ width: "80%", margin: "auto" }}>
-          <ReviewForm />
+          <WrappedReviewForm />
         </div>
       </div>
     );

@@ -206,11 +206,13 @@ class PaperSearchBar extends Component {
 
     const directory = (
       <div>
-        <PageHeader
-          title="Write a Review"
-          subTitle="Search online for papers"
-          avatar={{ icon: "file-search" }}
-        />
+        <div>
+          <PageHeader
+            title="Write a Review"
+            subTitle="Search online for papers"
+            avatar={{ icon: "file-search" }}
+          />
+        </div>
         <Input
           type="text"
           width="50%"
