@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Icon, DatePicker, Button, Input, Form, PageHeader, Steps } from "antd";
+import { ClimbingBoxLoader } from "react-spinners";
 import { connect } from "react-redux";
 import { exit_form } from "../../actions/index";
 import moment from "moment";
@@ -8,8 +9,49 @@ import "./ReviewForm.css";
 const { Step } = Steps;
 const { MonthPicker } = DatePicker;
 
-let author_id = 0;
-let institution_id = 0;
+var ids = {
+  authors: 1,
+  institutions: 1,
+  summary_points: 1,
+  background_points: 1,
+  approach_points: 1,
+  results_points: 1,
+  conclusions_points: 1,
+  other_points: 1
+};
+
+const review_fields = [
+  {
+    field_name: "summary_points",
+    label: "Paper Summary",
+    required: true
+  },
+  {
+    field_name: "background_points",
+    label: "Background Info",
+    required: true
+  },
+  {
+    field_name: "approach_points",
+    label: "Approach",
+    required: true
+  },
+  {
+    field_name: "results_points",
+    label: "Results",
+    required: true
+  },
+  {
+    field_name: "conclusions_points",
+    label: "Conclusions",
+    required: true
+  },
+  {
+    field_name: "other_points",
+    label: "Other (optional)",
+    required: false
+  }
+];
 
 class ReviewForm extends Component {
   constructor(props) {
@@ -26,38 +68,55 @@ class ReviewForm extends Component {
     this.props.form.validateFields();
 
     // on form load, set the index for dynamic fields at the right spot
-    author_id = this.props.data.review.metadata.author_names.length;
-    institution_id = this.props.data.review.metadata.institution_names.length;
+    ids.authors = this.props.data.review.metadata.author_names.length;
+    ids.institutions = this.props.data.review.metadata.institution_names.length;
   }
 
+  handleSubmit = () => {
+    this.setState({ step: 2 });
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        //parse metadata fields
+        let authors = values.authors.map(author_idx => {
+          return values.author_names[author_idx];
+        });
+        let institutions = values.institutions.map(institution_idx => {
+          return values.institution_names[institution_idx];
+        });
+
+        const metadata = {
+          title: values.title,
+          authors: authors,
+          institutions: institutions,
+          journal: values.journal,
+          doi: values.doi,
+          url: values.url,
+          date: values.date
+        };
+
+        //parse review fields
+        let review = {};
+        review_fields.forEach(review_field => {
+          let { field_name } = review_field;
+
+          let merged_values = values[field_name].map(idx => {
+            return values[`${field_name}_names`][idx];
+          });
+
+          review[field_name] = merged_values;
+        });
+
+        const review_object = {
+          metadata: metadata,
+          review: review
+        };
+
+        console.log(review_object);
+      }
+    });
+  };
+
   next_step = () => {
-    if (this.state.step === 0) {
-      // finished metadata entry
-      this.props.form.validateFields((err, values) => {
-        if (!err) {
-          let authors = values.authors.map(author_idx => {
-            return values.author_names[author_idx];
-          });
-          let institutions = values.institutions.map(institution_idx => {
-            return values.institution_names[institution_idx];
-          });
-
-          const metadata = {
-            title: values.title,
-            authors: authors,
-            institutions: institutions,
-            journal: values.journal,
-            doi: values.doi,
-            url: values.url,
-            date: values.date
-          };
-
-          this.setState({
-            metadata: metadata
-          });
-        }
-      });
-    }
     this.setState({
       step: this.state.step + 1
     });
@@ -69,59 +128,32 @@ class ReviewForm extends Component {
     });
   }
 
-  removeAuthor = k => {
+  removeItem(field_name, k) {
     const { form } = this.props;
     // can use data-binding to get
-    const authors = form.getFieldValue("authors");
+    const items = form.getFieldValue(field_name);
     // We need at least one passenger
-    if (authors.length === 1) {
+    if (items.length === 1) {
       return;
     }
 
     // can use data-binding to set
     form.setFieldsValue({
-      authors: authors.filter(author => author !== k)
+      [`${field_name}`]: items.filter(item => item !== k)
     });
-  };
+  }
 
-  addAuthor = () => {
+  addItem(field_name) {
     const { form } = this.props;
     // can use data-binding to get
-    const authors = form.getFieldValue("authors");
-    const nextAuthors = authors.concat(author_id++);
+    const items = form.getFieldValue(field_name);
+    const nextItems = items.concat(ids[field_name]++);
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
-      authors: nextAuthors
+      [`${field_name}`]: nextItems
     });
-  };
-
-  removeInstitution = k => {
-    const { form } = this.props;
-    // can use data-binding to get
-    const institutions = form.getFieldValue("institutions");
-    // We need at least one passenger
-    if (institutions.length === 1) {
-      return;
-    }
-
-    // can use data-binding to set
-    form.setFieldsValue({
-      institutions: institutions.filter(institution => institution !== k)
-    });
-  };
-
-  addInstitution = () => {
-    const { form } = this.props;
-    // can use data-binding to get
-    const institutions = form.getFieldValue("institutions");
-    const nextInstitutions = institutions.concat(institution_id++);
-    // can use data-binding to set
-    // important! notify form to detect changes
-    form.setFieldsValue({
-      institutions: nextInstitutions
-    });
-  };
+  }
 
   renderForm() {
     const { getFieldDecorator, getFieldValue } = this.props.form;
@@ -189,11 +221,57 @@ class ReviewForm extends Component {
           <Icon
             className="dynamic-delete-button"
             type="close"
-            onClick={() => this.removeAuthor(author_idx)}
+            onClick={() => this.removeItem("authors", author_idx)}
           />
         ) : null}
       </Form.Item>
     ));
+
+    const rendered_fields = review_fields.map(review_field => {
+      let { field_name, label, required } = review_field;
+
+      getFieldDecorator(field_name, { initialValue: [0] });
+      getFieldDecorator(`${field_name}_names[${0}]`, { initialValue: "" });
+
+      const field_value = getFieldValue(field_name);
+      const inputs = field_value.map((field_value_idx, index) => (
+        <Form.Item
+          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+          label={index === 0 ? label : ""}
+          required={required}
+          key={field_name + field_value_idx}
+        >
+          {getFieldDecorator(`${field_name}_names[${field_value_idx}]`, {})(
+            <Input style={{ width: "90%" }} />
+          )}
+          {field_value.length > 1 ? (
+            <Icon
+              className="dynamic-delete-button"
+              type="close"
+              onClick={() => this.removeItem(field_name, field_value_idx)}
+            />
+          ) : null}
+        </Form.Item>
+      ));
+
+      return (
+        <div>
+          {inputs}
+          <Form.Item {...formItemLayoutWithOutLabel}>
+            <Button
+              type="dashed"
+              onClick={() => {
+                this.addItem(field_name);
+              }}
+              style={{ width: "60%" }}
+            >
+              <Icon type="plus" /> Add Point
+            </Button>
+          </Form.Item>
+          <br />
+        </div>
+      );
+    });
 
     // setup for institutions fields starts here
     let institution_keys = [];
@@ -232,14 +310,14 @@ class ReviewForm extends Component {
           <Icon
             className="dynamic-delete-button"
             type="close"
-            onClick={() => this.removeInstitution(institution_idx)}
+            onClick={() => this.removeItem("institutions", institution_idx)}
           />
         ) : null}
       </Form.Item>
     ));
 
     const step0_content = (
-      <Form>
+      <div>
         <Form.Item {...formItemLayout} label="Title">
           {getFieldDecorator("title", {
             rules: [{ required: true, message: "rname!" }],
@@ -251,7 +329,9 @@ class ReviewForm extends Component {
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
             type="dashed"
-            onClick={this.addAuthor}
+            onClick={() => {
+              this.addItem("authors");
+            }}
             style={{ width: "60%" }}
           >
             <Icon type="plus" /> Add Author
@@ -264,7 +344,9 @@ class ReviewForm extends Component {
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
             type="dashed"
-            onClick={this.addInstitution}
+            onClick={() => {
+              this.addItem("institutions");
+            }}
             style={{ width: "60%" }}
           >
             <Icon type="plus" /> Add Institution
@@ -304,6 +386,11 @@ class ReviewForm extends Component {
             initialValue: moment(date, "YYYY-MM")
           })(<MonthPicker />)}
         </Form.Item>
+        <Form.Item {...formItemLayout} label="One Sentence Summary">
+          {getFieldDecorator("one_sentence", {
+            rules: [{ required: true, message: "rname!" }]
+          })(<Input placeholder="The authors show that..." />)}
+        </Form.Item>
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
             type="primary"
@@ -313,22 +400,34 @@ class ReviewForm extends Component {
             Step 2: Write Review <Icon type="edit" />
           </Button>
         </Form.Item>
-      </Form>
+      </div>
     );
 
     const step1_content = (
       <div>
-        <Button onClick={this.next_step}> Forward </Button>
+        {rendered_fields}
+
+        <Form.Item {...formItemLayoutWithOutLabel}>
+          <Button
+            type="primary"
+            onClick={this.handleSubmit}
+            style={{ width: "40%" }}
+          >
+            Step 3: Submit! <Icon type="edit" />
+          </Button>
+        </Form.Item>
       </div>
     );
+
     const step2_content = (
       <div>
-        <Button onClick={this.handleSubmit}> Validate </Button>
+        Saving Review...
+        <ClimbingBoxLoader size={20} />
       </div>
     );
     const content_blocks = [step0_content, step1_content, step2_content];
 
-    return content_blocks[this.state.step];
+    return <Form>{content_blocks[this.state.step]}</Form>;
   }
 
   render() {
