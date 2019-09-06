@@ -320,7 +320,7 @@ class ReviewForm extends Component {
       <div>
         <Form.Item {...formItemLayout} label="Title">
           {getFieldDecorator("title", {
-            rules: [{ required: true, message: "rname!" }],
+            rules: [{ required: true, message: "Please enter a title" }],
             initialValue: title
           })(<Input />)}
         </Form.Item>
@@ -357,21 +357,23 @@ class ReviewForm extends Component {
 
         <Form.Item {...formItemLayout} label="Journal">
           {getFieldDecorator("journal", {
-            rules: [{ required: true, message: "rname!" }],
+            rules: [{ required: true, message: "Please enter a journal name" }],
             initialValue: journal
           })(<Input />)}
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="DOI">
           {getFieldDecorator("doi", {
-            rules: [{ required: true, message: "Please input your username!" }],
+            rules: [
+              { required: true, message: "Please enter the article DOI" }
+            ],
             initialValue: doi
           })(<Input />)}
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="URL">
           {getFieldDecorator("url", {
-            rules: [{ required: true, message: "Please input your username!" }],
+            rules: [{ required: true, message: "Please add the article URL" }],
             initialValue: url
           })(<Input />)}
         </Form.Item>
@@ -380,7 +382,8 @@ class ReviewForm extends Component {
           {getFieldDecorator("date", {
             rules: [
               {
-                required: true
+                required: true,
+                message: "Please provide the month of publication"
               }
             ],
             initialValue: moment(date, "YYYY-MM")
@@ -388,7 +391,12 @@ class ReviewForm extends Component {
         </Form.Item>
         <Form.Item {...formItemLayout} label="One Sentence Summary">
           {getFieldDecorator("one_sentence", {
-            rules: [{ required: true, message: "rname!" }]
+            rules: [
+              {
+                required: true,
+                message: "Please add a one-sentence summary of the paper"
+              }
+            ]
           })(<Input placeholder="The authors show that..." />)}
         </Form.Item>
         <Form.Item {...formItemLayoutWithOutLabel}>
