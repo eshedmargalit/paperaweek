@@ -78,9 +78,6 @@ class ReviewForm extends Component {
   }
 
   componentDidMount() {
-    // To disable submit button at outset
-    this.props.form.validateFields();
-
     // on form load, set the index for dynamic fields that might come from props at the right spot
     ids.authors = this.props.data.review.metadata.author_names.length;
     ids.institutions = this.props.data.review.metadata.institution_names.length;
@@ -112,42 +109,65 @@ class ReviewForm extends Component {
   next_step = () => {
     // step 0 -> step 1: store metadata
     if (this.state.step === 0) {
-      this.props.form.validateFields((err, values) => {
-        if (!err) {
-          //parse metadata fields
-          let authors = values.authors.map(author_idx => {
-            return values.author_names[author_idx];
-          });
-          let institutions = values.institutions.map(institution_idx => {
-            return values.institution_names[institution_idx];
-          });
-
-          // parse keywords
-          let keywords_array = [];
-          if (values.keywords) {
-            keywords_array = values.keywords.split(",").map(item => {
-              return item.trim();
+      this.props.form.validateFields(
+        [
+          "title",
+          "authors",
+          "author_names",
+          "institutions",
+          "institution_names",
+          "journal",
+          "doi",
+          "url",
+          "date",
+          "one_sentence",
+          "keywords"
+        ],
+        (err, values) => {
+          if (!err) {
+            //parse metadata fields
+            let authors = values.authors.map(author_idx => {
+              return values.author_names[author_idx];
             });
+            let institutions = values.institutions.map(institution_idx => {
+              return values.institution_names[institution_idx];
+            });
+
+            // parse keywords
+            let keywords_array = [];
+            if (values.keywords) {
+              keywords_array = values.keywords.split(",").map(item => {
+                return item.trim();
+              });
+            }
+
+            const metadata = {
+              title: values.title,
+              authors: authors,
+              institutions: institutions,
+              journal: values.journal,
+              doi: values.doi,
+              url: values.url,
+              date: values.date.format("YYYY-MM"),
+              one_sentence: values.one_sentence,
+              keywords: keywords_array
+            };
+
+            this.setState({ metadata: metadata, step: 1 });
           }
-
-          const metadata = {
-            title: values.title,
-            authors: authors,
-            institutions: institutions,
-            journal: values.journal,
-            doi: values.doi,
-            url: values.url,
-            date: values.date.format("YYYY-MM"),
-            one_sentence: values.one_sentence,
-            keywords: keywords_array
-          };
-
-          this.setState({ metadata: metadata, step: 1 });
         }
-      });
+      );
     } else if (this.state.step === 1) {
       // step 1 -> step 2: store review and trigger submission
-      this.props.form.validateFields((err, values) => {
+      let step1_fields = [];
+      review_fields.forEach(review_field => {
+        let { field_name } = review_field;
+        step1_fields.push(field_name);
+        step1_fields.push(`${field_name}_names`);
+      });
+      console.log(step1_fields);
+
+      this.props.form.validateFields(step1_fields, (err, values) => {
         if (!err) {
           //parse review fields
           let review = {};
@@ -250,7 +270,7 @@ class ReviewForm extends Component {
             {
               required: true,
               whitespace: true,
-              message: "Please input author's name or delete this field"
+              message: "Author name cannot be blank"
             }
           ]
         })(
@@ -261,7 +281,7 @@ class ReviewForm extends Component {
         )}
         {authors.length > 1 ? (
           <Icon
-            className="dynamic-delete-button"
+            className="dynamic-delete-button shifted-icon"
             type="close"
             onClick={() => this.removeItem("authors", author_idx)}
           />
@@ -293,7 +313,7 @@ class ReviewForm extends Component {
             {
               required: true,
               whitespace: true,
-              message: "Please input institution's name or delete this field"
+              message: "Institution name cannot be blank"
             }
           ]
         })(
@@ -349,9 +369,9 @@ class ReviewForm extends Component {
               onClick={() => {
                 this.addItem(field_name);
               }}
-              style={{ width: "60%" }}
+              style={{ width: "150px" }}
             >
-              <Icon type="plus" /> Add Point
+              <Icon type="plus" className="shifted-icon" /> Add Point
             </Button>
           </Form.Item>
           <br />
@@ -375,9 +395,9 @@ class ReviewForm extends Component {
             onClick={() => {
               this.addItem("authors");
             }}
-            style={{ width: "60%" }}
+            style={{ width: "150px" }}
           >
-            <Icon type="plus" /> Add Author
+            <Icon type="plus" className="shifted-icon" /> Add Author
           </Button>
         </Form.Item>
 
@@ -390,9 +410,9 @@ class ReviewForm extends Component {
             onClick={() => {
               this.addItem("institutions");
             }}
-            style={{ width: "60%" }}
+            style={{ width: "150px" }}
           >
-            <Icon type="plus" /> Add Institution
+            <Icon type="plus" className="shifted-icon" /> Add Institution
           </Button>
         </Form.Item>
 
@@ -434,9 +454,14 @@ class ReviewForm extends Component {
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="One Sentence Summary">
-          {getFieldDecorator("one_sentence", {})(
-            <Input placeholder="The authors show that..." />
-          )}
+          {getFieldDecorator("one_sentence", {
+            rules: [
+              {
+                required: true,
+                message: "Please enter a one-sentence summary of the paper"
+              }
+            ]
+          })(<Input placeholder="The authors show that..." />)}
         </Form.Item>
 
         <Form.Item {...formItemLayout} label="Keywords (comma separated)">
