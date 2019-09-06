@@ -59,7 +59,8 @@ class ReviewForm extends Component {
 
     this.state = {
       step: 0,
-      metadata: []
+      metadata: [],
+      review: []
     };
   }
 
@@ -74,49 +75,60 @@ class ReviewForm extends Component {
 
   handleSubmit = () => {
     this.setState({ step: 2 });
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        //parse metadata fields
-        let authors = values.authors.map(author_idx => {
-          return values.author_names[author_idx];
-        });
-        let institutions = values.institutions.map(institution_idx => {
-          return values.institution_names[institution_idx];
-        });
-
-        const metadata = {
-          title: values.title,
-          authors: authors,
-          institutions: institutions,
-          journal: values.journal,
-          doi: values.doi,
-          url: values.url,
-          date: values.date
-        };
-
-        //parse review fields
-        let review = {};
-        review_fields.forEach(review_field => {
-          let { field_name } = review_field;
-
-          let merged_values = values[field_name].map(idx => {
-            return values[`${field_name}_names`][idx];
-          });
-
-          review[field_name] = merged_values;
-        });
-
-        const review_object = {
-          metadata: metadata,
-          review: review
-        };
-
-        console.log(review_object);
-      }
-    });
   };
 
   next_step = () => {
+    if (this.state.step === 0) {
+      this.props.form.validateFields((err, values) => {
+        if (!err) {
+          //parse metadata fields
+          let authors = values.authors.map(author_idx => {
+            return values.author_names[author_idx];
+          });
+          let institutions = values.institutions.map(institution_idx => {
+            return values.institution_names[institution_idx];
+          });
+
+          // parse keywords
+          const keywords_array = values.keywords.split(",").map(item => {
+            return item.trim();
+          });
+
+          const metadata = {
+            title: values.title,
+            authors: authors,
+            institutions: institutions,
+            journal: values.journal,
+            doi: values.doi,
+            url: values.url,
+            date: values.date,
+            one_sentence: values.one_sentence,
+            keywords: keywords_array
+          };
+
+          this.setState({ metadata: metadata });
+        }
+      });
+    } else if (this.state.step === 1) {
+      this.props.form.validateFields((err, values) => {
+        if (!err) {
+          //parse review fields
+          let review = {};
+          review_fields.forEach(review_field => {
+            let { field_name } = review_field;
+
+            let merged_values = values[field_name].map(idx => {
+              return values[`${field_name}_names`][idx];
+            });
+
+            review[field_name] = merged_values;
+          });
+
+          this.setState({ review: review });
+        }
+      });
+    }
+
     this.setState({
       step: this.state.step + 1
     });
@@ -255,7 +267,7 @@ class ReviewForm extends Component {
       ));
 
       return (
-        <div>
+        <div key={"field name" + field_name}>
           {inputs}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button
@@ -389,16 +401,19 @@ class ReviewForm extends Component {
             initialValue: moment(date, "YYYY-MM")
           })(<MonthPicker />)}
         </Form.Item>
+
         <Form.Item {...formItemLayout} label="One Sentence Summary">
-          {getFieldDecorator("one_sentence", {
-            rules: [
-              {
-                required: true,
-                message: "Please add a one-sentence summary of the paper"
-              }
-            ]
-          })(<Input placeholder="The authors show that..." />)}
+          {getFieldDecorator("one_sentence", {})(
+            <Input placeholder="The authors show that..." />
+          )}
         </Form.Item>
+
+        <Form.Item {...formItemLayout} label="Keywords (comma separated)">
+          {getFieldDecorator("keywords", {})(
+            <Input placeholder="human,fMRI,classification" />
+          )}
+        </Form.Item>
+
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
             type="primary"
@@ -418,7 +433,7 @@ class ReviewForm extends Component {
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
             type="primary"
-            onClick={this.handleSubmit}
+            onClick={this.next_step}
             style={{ width: "40%" }}
           >
             Step 3: Submit! <Icon type="edit" />
@@ -431,6 +446,14 @@ class ReviewForm extends Component {
       <div>
         Saving Review...
         <ClimbingBoxLoader size={20} />
+        <Button
+          onClick={() => {
+            console.log(this.state);
+          }}
+        >
+          {" "}
+          State Report{" "}
+        </Button>
       </div>
     );
     const content_blocks = [step0_content, step1_content, step2_content];
