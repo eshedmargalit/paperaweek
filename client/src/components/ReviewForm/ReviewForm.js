@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { Icon, DatePicker, Button, Input, Form, PageHeader, Steps } from "antd";
+import {
+  Alert,
+  Icon,
+  DatePicker,
+  Button,
+  Input,
+  Form,
+  PageHeader,
+  Steps
+} from "antd";
 import { ClimbingBoxLoader } from "react-spinners";
 import { connect } from "react-redux";
 import { exit_form } from "../../actions/index";
@@ -60,7 +69,8 @@ class ReviewForm extends Component {
     this.state = {
       step: 0,
       metadata: [],
-      review: []
+      review: [],
+      submitting: true
     };
   }
 
@@ -73,9 +83,26 @@ class ReviewForm extends Component {
     ids.institutions = this.props.data.review.metadata.institution_names.length;
   }
 
-  handleSubmit = () => {
-    this.setState({ step: 2 });
-  };
+  handleSubmission() {
+    const review_object = {
+      metadata: this.state.metadata,
+      review: this.state.review
+    };
+
+    fetch("/api/papers", {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(review_object)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(JSON.stringify(data));
+        this.setState({ submitting: false }, () => {
+          this.props.refreshPapers();
+          this.props.dispatch(exit_form());
+        });
+      });
+  }
 
   next_step = () => {
     if (this.state.step === 0) {
@@ -101,12 +128,12 @@ class ReviewForm extends Component {
             journal: values.journal,
             doi: values.doi,
             url: values.url,
-            date: values.date,
+            date: values.date.format("YYYY-MM"),
             one_sentence: values.one_sentence,
             keywords: keywords_array
           };
 
-          this.setState({ metadata: metadata });
+          this.setState({ metadata: metadata, step: 1 });
         }
       });
     } else if (this.state.step === 1) {
@@ -124,14 +151,12 @@ class ReviewForm extends Component {
             review[field_name] = merged_values;
           });
 
-          this.setState({ review: review });
+          this.setState({ review: review, step: 2 }, () => {
+            this.handleSubmission();
+          });
         }
       });
     }
-
-    this.setState({
-      step: this.state.step + 1
-    });
   };
 
   prev_step() {
@@ -442,20 +467,18 @@ class ReviewForm extends Component {
       </div>
     );
 
-    const step2_content = (
+    const submitting_indicator = (
       <div>
-        Saving Review...
-        <ClimbingBoxLoader size={20} />
-        <Button
-          onClick={() => {
-            console.log(this.state);
-          }}
-        >
-          {" "}
-          State Report{" "}
-        </Button>
+        Submitting, sit tight!
+        <ClimbingBoxLoader size={8} />
       </div>
     );
+
+    const submitted_indicator = <Alert message="Success!" type="success" />;
+
+    const step2_content = this.state.submitting
+      ? submitting_indicator
+      : submitted_indicator;
     const content_blocks = [step0_content, step1_content, step2_content];
 
     return <Form>{content_blocks[this.state.step]}</Form>;

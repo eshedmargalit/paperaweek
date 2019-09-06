@@ -62,9 +62,8 @@ class ReviewReader extends Component {
 
   render_paper_in_list = paper => {
     const meta = paper.metadata;
-    const review_date_render = moment(meta.review_date, "YYYY-MM-DD").format(
-      "MMMM DD, YYYY"
-    );
+    const time_created = paper.createdAt;
+    const review_date_render = moment(time_created).format("MMMM Do, YYYY");
     const publication_date_render = moment(meta.date, "YYYY-MM").format(
       "MMMM YYYY"
     );
@@ -118,12 +117,11 @@ class ReviewReader extends Component {
   sort_reviews = reviews => {
     if (this.state.sort_mode === "review-date-descending") {
       return reviews.sort(
-        (a, b) =>
-          -moment(a.metadata.review_date).diff(moment(b.metadata.review_date))
+        (a, b) => -moment(a.createdAt).diff(moment(b.createdAt))
       );
     } else if (this.state.sort_mode === "review-date-ascending") {
       return reviews.sort((a, b) =>
-        moment(a.metadata.review_date).diff(moment(b.metadata.review_date))
+        moment(a.createdAt).diff(moment(b.createdAt))
       );
     } else if (this.state.sort_mode === "pub-date-descending") {
       return reviews.sort(
@@ -196,27 +194,27 @@ class ReviewReader extends Component {
     const fields = [
       {
         heading: "General Summary",
-        review_key: "summary"
+        review_key: "summary_points"
       },
       {
         heading: "Background",
-        review_key: "background"
+        review_key: "background_points"
       },
       {
         heading: "Approach",
-        review_key: "approach"
+        review_key: "approach_points"
       },
       {
         heading: "Results",
-        review_key: "results"
+        review_key: "results_points"
       },
       {
         heading: "Conclusions",
-        review_key: "conclusions"
+        review_key: "conclusions_points"
       },
       {
         heading: "Other Information",
-        review_key: "other"
+        review_key: "other_points"
       }
     ];
 

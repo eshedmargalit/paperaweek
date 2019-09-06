@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { Form, Button } from "antd";
+import { Form } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
@@ -24,6 +23,12 @@ class Home extends Component {
       .then(data => this.setState({ papers: data, loading: false }));
   }
 
+  refreshPapers = () => {
+    fetch("/api/papers")
+      .then(response => response.json())
+      .then(data => this.setState({ papers: data, loading: false }));
+  };
+
   render() {
     const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
     const home_render = (
@@ -41,20 +46,13 @@ class Home extends Component {
             <ReviewReader papers={this.state.papers} />
           )}
         </div>
-        <div>
-          <Link to="/Form">
-            <Button type="primary" className="form-link-button">
-              Write Review
-            </Button>
-          </Link>
-        </div>
       </div>
     );
 
     const form_render = (
       <div>
         <div style={{ width: "80%", margin: "auto" }}>
-          <WrappedReviewForm />
+          <WrappedReviewForm refreshPapers={this.refreshPapers} />
         </div>
       </div>
     );

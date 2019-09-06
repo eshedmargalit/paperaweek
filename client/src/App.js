@@ -5,9 +5,6 @@ import Home from "./components/Home/Home";
 import ReviewForm from "./components/ReviewForm/ReviewForm";
 
 function App() {
-  fetch("/api")
-    .then(response => response.json())
-    .then(data => console.log(JSON.stringify(data)));
   return (
     <HashRouter>
       <div className="App">
