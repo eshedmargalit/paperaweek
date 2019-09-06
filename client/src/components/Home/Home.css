@@ -1,13 +1,4 @@
-
-.home-wrapper{
-  display: flex;
-  width: 75%;
-  justify-content: space-around;
-  margin: 200px auto;
-}
-
-.form-review-button{
-  width: 200px;
-  height: 200px;
-  font-size: 20px;
+.width80 {
+  width: 80%;
+  margin: auto;
 }
