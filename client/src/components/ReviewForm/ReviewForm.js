@@ -13,6 +13,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import { connect } from "react-redux";
 import { exit_form } from "../../actions/index";
 import moment from "moment";
+import _ from "lodash";
 import "./ReviewForm.css";
 
 const { Step } = Steps;
@@ -136,9 +137,11 @@ class ReviewForm extends Component {
             // parse keywords
             let keywords_array = [];
             if (values.keywords) {
-              keywords_array = values.keywords.split(",").map(item => {
-                return item.trim();
-              });
+              keywords_array = _.uniq(
+                values.keywords.split(",").map(item => {
+                  return item.trim();
+                })
+              );
             }
 
             const metadata = {
