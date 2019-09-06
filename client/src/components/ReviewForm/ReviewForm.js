@@ -18,6 +18,7 @@ import "./ReviewForm.css";
 const { Step } = Steps;
 const { MonthPicker } = DatePicker;
 
+// set counters for which field number is next for dynamic fields
 var ids = {
   authors: 1,
   institutions: 1,
@@ -29,6 +30,8 @@ var ids = {
   other_points: 1
 };
 
+// specify for each review field (in step 2) the field name,
+// label to render, and whether it's required
 const review_fields = [
   {
     field_name: "summary_points",
@@ -78,17 +81,19 @@ class ReviewForm extends Component {
     // To disable submit button at outset
     this.props.form.validateFields();
 
-    // on form load, set the index for dynamic fields at the right spot
+    // on form load, set the index for dynamic fields that might come from props at the right spot
     ids.authors = this.props.data.review.metadata.author_names.length;
     ids.institutions = this.props.data.review.metadata.institution_names.length;
   }
 
   handleSubmission() {
+    // combine state fields into single object
     const review_object = {
       metadata: this.state.metadata,
       review: this.state.review
     };
 
+    // post object, refresh papers in Home.js, and exit the form
     fetch("/api/papers", {
       method: "post",
       headers: { "content-type": "application/json" },
@@ -105,6 +110,7 @@ class ReviewForm extends Component {
   }
 
   next_step = () => {
+    // step 0 -> step 1: store metadata
     if (this.state.step === 0) {
       this.props.form.validateFields((err, values) => {
         if (!err) {
@@ -117,9 +123,12 @@ class ReviewForm extends Component {
           });
 
           // parse keywords
-          const keywords_array = values.keywords.split(",").map(item => {
-            return item.trim();
-          });
+          let keywords_array = [];
+          if (values.keywords) {
+            keywords_array = values.keywords.split(",").map(item => {
+              return item.trim();
+            });
+          }
 
           const metadata = {
             title: values.title,
@@ -137,6 +146,7 @@ class ReviewForm extends Component {
         }
       });
     } else if (this.state.step === 1) {
+      // step 1 -> step 2: store review and trigger submission
       this.props.form.validateFields((err, values) => {
         if (!err) {
           //parse review fields
@@ -158,12 +168,6 @@ class ReviewForm extends Component {
       });
     }
   };
-
-  prev_step() {
-    this.setState({
-      step: this.state.step - 1
-    });
-  }
 
   removeItem(field_name, k) {
     const { form } = this.props;
@@ -197,7 +201,7 @@ class ReviewForm extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 4 },
-        sm: { span: 4 }
+        sm: { span: 6 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -207,10 +211,11 @@ class ReviewForm extends Component {
     const formItemLayoutWithOutLabel = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
-        sm: { span: 18, offset: 4 }
+        sm: { span: 18, offset: 6 }
       }
     };
 
+    // unpack values from redux store
     const {
       title,
       author_names,
@@ -264,6 +269,50 @@ class ReviewForm extends Component {
       </Form.Item>
     ));
 
+    // setup for institutions fields starts here
+    let institution_keys = [];
+    for (let i = 0; i < institution_names.length; i++) {
+      institution_keys.push(i);
+      getFieldDecorator(`institution_names[${i}]`, {
+        initialValue: institution_names[i]
+      });
+    }
+    getFieldDecorator("institutions", { initialValue: institution_keys });
+
+    const institutions = getFieldValue("institutions");
+    const institutionFields = institutions.map((institution_idx, index) => (
+      <Form.Item
+        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+        label={index === 0 ? "Institutions" : ""}
+        required={true}
+        key={"institution" + institution_idx}
+      >
+        {getFieldDecorator(`institution_names[${institution_idx}]`, {
+          validateTrigger: ["onChange", "onBlur"],
+          rules: [
+            {
+              required: true,
+              whitespace: true,
+              message: "Please input institution's name or delete this field"
+            }
+          ]
+        })(
+          <Input
+            placeholder="Institution Name"
+            style={{ width: "60%", marginRight: 8 }}
+          />
+        )}
+        {institutions.length > 1 ? (
+          <Icon
+            className="dynamic-delete-button"
+            type="close"
+            onClick={() => this.removeItem("institutions", institution_idx)}
+          />
+        ) : null}
+      </Form.Item>
+    ));
+
+    // create a list of step 2 fields
     const rendered_fields = review_fields.map(review_field => {
       let { field_name, label, required } = review_field;
 
@@ -309,49 +358,6 @@ class ReviewForm extends Component {
         </div>
       );
     });
-
-    // setup for institutions fields starts here
-    let institution_keys = [];
-    for (let i = 0; i < institution_names.length; i++) {
-      institution_keys.push(i);
-      getFieldDecorator(`institution_names[${i}]`, {
-        initialValue: institution_names[i]
-      });
-    }
-    getFieldDecorator("institutions", { initialValue: institution_keys });
-
-    const institutions = getFieldValue("institutions");
-    const institutionFields = institutions.map((institution_idx, index) => (
-      <Form.Item
-        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-        label={index === 0 ? "Institutions" : ""}
-        required={true}
-        key={"institution" + institution_idx}
-      >
-        {getFieldDecorator(`institution_names[${institution_idx}]`, {
-          validateTrigger: ["onChange", "onBlur"],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: "Please input institution's name or delete this field"
-            }
-          ]
-        })(
-          <Input
-            placeholder="Institution Name"
-            style={{ width: "60%", marginRight: 8 }}
-          />
-        )}
-        {institutions.length > 1 ? (
-          <Icon
-            className="dynamic-delete-button"
-            type="close"
-            onClick={() => this.removeItem("institutions", institution_idx)}
-          />
-        ) : null}
-      </Form.Item>
-    ));
 
     const step0_content = (
       <div>
@@ -481,7 +487,7 @@ class ReviewForm extends Component {
       : submitted_indicator;
     const content_blocks = [step0_content, step1_content, step2_content];
 
-    return <Form>{content_blocks[this.state.step]}</Form>;
+    return <Form layout="vertical">{content_blocks[this.state.step]}</Form>;
   }
 
   render() {

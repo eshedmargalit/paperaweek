@@ -6,36 +6,27 @@ import { BeatLoader } from "react-spinners";
 import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
 
+const cognitiveServices = require("cognitive-services");
+
 class PaperSearchBar extends Component {
   constructor(props) {
     super(props);
 
     // debounce search to avoid repeated calls to API
-    this.ms_search_throttled = _.debounce(this.ms_search, 200);
+    this.academicSearchThrottled = _.debounce(this.academicSearch, 200);
 
     this.state = {
       query: "",
-      date: new Date(),
-      entities: [],
-      author_names: [""],
-      institution_names: [""],
-      keywords: [""],
-      summary_points: [""],
-      background_points: [""],
-      approach_points: [""],
-      results_points: [""],
-      conclusions_points: [""],
-      other_points: [""]
+      entities: []
     };
   }
 
-  async ms_search(query) {
+  async academicSearch(query) {
+    // bail out if no query
     if (query.length === 0) {
       this.setState({ resultsAreLoading: false });
       return;
     }
-
-    const cognitiveServices = require("cognitive-services");
 
     const client = new cognitiveServices.academicKnowledge({
       apiKey: process.env.REACT_APP_MSCOG_KEY1,
@@ -49,25 +40,35 @@ class PaperSearchBar extends Component {
     var response = client.interpret({
       parameters
     });
-    var resp = await response;
 
+    var resp = await response;
     if (resp.interpretations.length === 0) {
-      this.setState({ resultsAreLoading: false });
+      this.setState({ entities: [], resultsAreLoading: false });
       return;
     }
     var value = resp.interpretations[0].rules[0].output.value;
 
-    // attributes, in order, are: Author name, author order, DOI, Paper name, Journal Name, Affilitation display name, publication year, publication date
+    // Attributes:
+    // key     | meaning
+    // -----------------
+    // AA.DAuN | Author Name
+    // AA.AfN  | Author affiliation
+    // AA.S    | Author position
+    // E.DOI   | Paper DOI
+    // E.DN    | Paper title
+    // E.BV    | Journal name
+    // E.S     | Paper source
+    // Y       | Paper year
+    // D       | Paper publication date
+    // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
     parameters = {
       expr: value,
       attributes: "AA.DAuN,AA.AfN,AA.S,E.DOI,E.DN,E.BV,E.S,Y,D",
       count: 5
     };
-
     response = client.evaluate({
       parameters
     });
-
     resp = await response;
 
     this.setState({
@@ -86,13 +87,14 @@ class PaperSearchBar extends Component {
       return;
     }
 
+    // update searchbar value, start spinner, and only then run the search
     this.setState(
       {
         query: search_term,
         resultsAreLoading: true
       },
       () => {
-        this.ms_search_throttled(search_term);
+        this.academicSearchThrottled(search_term);
       }
     );
   };
@@ -101,18 +103,21 @@ class PaperSearchBar extends Component {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
 
+    // sort authors by position (first author first, etc)
     let authors = _.sortBy(ent.AA, [
       function(o) {
         return o.S;
       }
     ]);
 
+    // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
         return author.DAuN.split(".").join("");
       })
     ).filter(name => name !== "");
 
+    // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
       authors.map(author => {
         return capital_case(author.AfN)
@@ -122,6 +127,7 @@ class PaperSearchBar extends Component {
       })
     ).filter(name => name !== "");
 
+    // dispatch action to begin the review
     const paper_metadata = {
       title: ent.DN,
       author_names: author_names,
@@ -131,9 +137,9 @@ class PaperSearchBar extends Component {
       journal: ent.BV,
       url: ent.S ? ent.S[0].U : ""
     };
-
     this.props.dispatch(start_review(paper_metadata));
 
+    // reset the search bar and results
     this.setState({
       query: "",
       entities: []
@@ -141,7 +147,7 @@ class PaperSearchBar extends Component {
   };
 
   renderHits() {
-    const lg_items = this.state.entities.map(ent => {
+    const rendered_entities = this.state.entities.map(ent => {
       let authors = ent.AA;
 
       // sort by author order
@@ -203,7 +209,7 @@ class PaperSearchBar extends Component {
       );
     });
 
-    return <div>{lg_items}</div>;
+    return <div>{rendered_entities}</div>;
   }
 
   render() {
@@ -216,7 +222,7 @@ class PaperSearchBar extends Component {
       );
     }
 
-    const directory = (
+    const search_area = (
       <div>
         <div>
           <PageHeader
@@ -237,15 +243,12 @@ class PaperSearchBar extends Component {
       </div>
     );
 
-    let results = null;
-    if (this.state.entities.length > 0) {
-      results = this.renderHits();
-    }
+    let results = this.state.entities.length > 0 ? this.renderHits() : null;
 
     return (
       <div>
         <br />
-        {directory}
+        {search_area}
         {results}
       </div>
     );

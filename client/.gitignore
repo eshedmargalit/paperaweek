@@ -25,3 +25,4 @@ yarn-error.log*
 # editor temp files 
 *.swp
 *.swo
+vim-markdown-preview*

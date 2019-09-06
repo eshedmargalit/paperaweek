@@ -1,15 +1,4 @@
-
-.rome-wrapper{
-  display: flex;
-  width: 85%;
-  justify-content: space-around;
-  margin: 200px auto;
-}
-
-.form-link-button{
-  width: 150px;
-  height: 30px;
-  font-size: 12px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+.width80 {
+  width: 80%;
+  margin: auto;
 }

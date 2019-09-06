@@ -30,13 +30,15 @@ class Home extends Component {
   };
 
   render() {
+    // need to use Form.create to inject this.props.form in the ReviewForm component
     const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
+
     const home_render = (
-      <div className="home-wrapper">
-        <div style={{ width: "80%", margin: "auto" }}>
+      <div>
+        <div className="width80">
           <PaperSearchBar />
         </div>
-        <div style={{ width: "80%", margin: "auto" }}>
+        <div className="width80">
           {this.state.loading ? (
             <div>
               <h6> Loading Reviews </h6>
@@ -51,7 +53,7 @@ class Home extends Component {
 
     const form_render = (
       <div>
-        <div style={{ width: "80%", margin: "auto" }}>
+        <div className="width80">
           <WrappedReviewForm refreshPapers={this.refreshPapers} />
         </div>
       </div>
