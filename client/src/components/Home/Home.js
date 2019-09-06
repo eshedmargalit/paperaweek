@@ -45,7 +45,10 @@ class Home extends Component {
               <FadeLoader />
             </div>
           ) : (
-            <ReviewReader papers={this.state.papers} />
+            <ReviewReader
+              refreshPapers={this.refreshPapers}
+              papers={this.state.papers}
+            />
           )}
         </div>
       </div>

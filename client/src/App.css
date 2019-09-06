@@ -1,4 +1,4 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .App {
   text-align: left;
@@ -8,6 +8,11 @@
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
   pointer-events: none;
+}
+
+.shifted-icon {
+  position: relative;
+  top: -5px;
 }
 
 .App-header {
