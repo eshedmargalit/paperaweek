@@ -1,7 +1,12 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
 
 .App {
   text-align: left;
+}
+
+.shifted-icon {
+  position: relative;
+  top: -5px;
 }
 
 .App-logo {

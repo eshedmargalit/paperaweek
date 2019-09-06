@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form } from "antd";
+import { Button, Form, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewForm from "../ReviewForm/ReviewForm";
+import { start_review } from "../../actions/index";
 import "./Home.css";
 
 class Home extends Component {
@@ -29,6 +30,19 @@ class Home extends Component {
       .then(data => this.setState({ papers: data, loading: false }));
   };
 
+  startBlankReview = () => {
+    const blank_metadata = {
+      title: "",
+      author_names: [""],
+      institution_names: [""],
+      date: new Date(),
+      doi: "",
+      journal: "",
+      url: ""
+    };
+    this.props.dispatch(start_review(blank_metadata));
+  };
+
   render() {
     // need to use Form.create to inject this.props.form in the ReviewForm component
     const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
@@ -37,6 +51,15 @@ class Home extends Component {
       <div>
         <div className="width80">
           <PaperSearchBar />
+          <Button
+            size="small"
+            shape="round"
+            type="dashed"
+            style={{ marginTop: "2px" }}
+            onClick={this.startBlankReview}
+          >
+            Create Manual Entry <Icon className="shifted-icon" type="plus" />
+          </Button>
         </div>
         <div className="width80">
           {this.state.loading ? (
@@ -69,4 +92,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Home);
+export default connect(
+  mapStateToProps,
+  null
+)(Home);
