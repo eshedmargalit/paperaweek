@@ -9,7 +9,7 @@ import {
   PageHeader,
   Steps
 } from "antd";
-import { ClimbingBoxLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 import { connect } from "react-redux";
 import { exit_form } from "../../actions/index";
 import moment from "moment";
@@ -168,7 +168,6 @@ class ReviewForm extends Component {
         step1_fields.push(field_name);
         step1_fields.push(`${field_name}_names`);
       });
-      console.log(step1_fields);
 
       this.props.form.validateFields(step1_fields, (err, values) => {
         if (!err) {
@@ -350,9 +349,11 @@ class ReviewForm extends Component {
           required={required}
           key={field_name + field_value_idx}
         >
-          {getFieldDecorator(`${field_name}_names[${field_value_idx}]`, {})(
-            <Input style={{ width: "90%" }} />
-          )}
+          {getFieldDecorator(`${field_name}_names[${field_value_idx}]`, {
+            rules: [
+              { required: required, message: `${label} point cannot be blank` }
+            ]
+          })(<Input style={{ width: "90%" }} />)}
           {field_value.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
@@ -504,7 +505,7 @@ class ReviewForm extends Component {
     const submitting_indicator = (
       <div>
         Submitting, sit tight!
-        <ClimbingBoxLoader size={8} />
+        <BeatLoader size={8} />
       </div>
     );
 
