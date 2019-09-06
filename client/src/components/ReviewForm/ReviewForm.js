@@ -4,6 +4,7 @@ import {
   Icon,
   DatePicker,
   Button,
+  Modal,
   Input,
   Form,
   PageHeader,
@@ -84,6 +85,32 @@ class ReviewForm extends Component {
     ids.institutions = this.props.data.review.metadata.institution_names.length;
   }
 
+  openSuccessModelAndExit = () => {
+    let secondsToGo = 3;
+    const modal = Modal.success({
+      title: "Success! Review Submitted",
+      content: `Taking you back home in ${secondsToGo}s.`
+    });
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+      modal.update({
+        content: `Taking you back home in ${secondsToGo}s.`
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(timer);
+      modal.destroy();
+      this.props.dispatch(exit_form());
+    }, secondsToGo * 1000);
+  };
+
+  confirmSuccess = () => {
+    this.setState({ submitting: false }, () => {
+      this.props.refreshPapers();
+      this.openSuccessModelAndExit();
+    });
+  };
+
   handleSubmission() {
     // combine state fields into single object
     const review_object = {
@@ -100,10 +127,7 @@ class ReviewForm extends Component {
       .then(response => response.json())
       .then(data => {
         console.log(JSON.stringify(data));
-        this.setState({ submitting: false }, () => {
-          this.props.refreshPapers();
-          this.props.dispatch(exit_form());
-        });
+        this.confirmSuccess();
       });
   }
 
