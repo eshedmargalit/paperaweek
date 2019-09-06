@@ -1,9 +1,19 @@
 import React, { Component } from "react";
-import { PageHeader, Button, Icon, Select, Input, Tag, List } from "antd";
+import {
+  Modal,
+  PageHeader,
+  Button,
+  Icon,
+  Select,
+  Input,
+  Tag,
+  List
+} from "antd";
 import moment from "moment";
 import Fuse from "fuse.js";
-
 import { render_comma_sep_list } from "../utils.js";
+
+const { confirm } = Modal;
 
 class ReviewReader extends Component {
   constructor(props) {
@@ -98,17 +108,34 @@ class ReviewReader extends Component {
           {tldr}
         </div>
         <div>
-          <Button
-            type="default"
-            size="large"
-            style={{ display: "flex", alignItems: "center" }}
-            onClick={e => {
-              e.preventDefault();
-              this.review_clicked(paper);
-            }}
-          >
-            Read Review <Icon type="right-circle" />
-          </Button>
+          <div>
+            <Button
+              type="default"
+              size="large"
+              style={{ display: "flex", alignItems: "center" }}
+              onClick={e => {
+                this.review_clicked(paper);
+              }}
+            >
+              Read Review <Icon type="right-circle" />
+            </Button>
+          </div>
+          <div>
+            <Button
+              type="dashed"
+              size="small"
+              style={{ marginTop: "2px", float: "right" }}
+              onClick={() => {
+                this.deleteReview(paper);
+              }}
+            >
+              <Icon
+                type="delete"
+                className="shifted-icon"
+                style={{ color: "red" }}
+              />
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -161,6 +188,28 @@ class ReviewReader extends Component {
   review_clicked = review => {
     this.setState({
       active_paper: review
+    });
+  };
+
+  deleteReview = review => {
+    confirm({
+      title: "Are you sure delete this reivew?",
+      content: "Once it's gone, it's gone forever!",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: () => {
+        fetch("/api/papers", {
+          method: "delete",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(review)
+        })
+          .then(response => response.json())
+          .then(() => {
+            this.props.refreshPapers();
+          });
+      },
+      onCancel() {}
     });
   };
 
