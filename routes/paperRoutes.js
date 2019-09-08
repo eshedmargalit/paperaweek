@@ -5,10 +5,17 @@ const Paper = mongoose.model("papers");
 module.exports = app => {
   app.get("/api", (req, res) => res.send(JSON.stringify("Hello World")));
   app.post("/api/papers", async (req, res) => {
-    console.log(req.body);
     let ret = await new Paper(req.body).save();
-    console.log(ret);
     res.send(ret);
+  });
+  app.delete("/api/papers", async (req, res) => {
+    try {
+      const paper = await Paper.findByIdAndDelete(req.body._id);
+      if (!paper) res.status(404).send("No item found");
+      res.send(paper);
+    } catch (err) {
+      res.status(500).send(err);
+    }
   });
   app.get("/api/papers", async (req, res) => {
     Paper.find({}, (err, papers) => {
