@@ -20,6 +20,14 @@
   top: -5px;
 }
 
+.ant-page-header {
+  padding-left: 0px;
+}
+
+.anticon {
+  vertical-align: middle;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
