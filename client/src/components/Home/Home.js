@@ -6,6 +6,9 @@ import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewForm from "../ReviewForm/ReviewForm";
 import { start_review } from "../../actions/index";
+// import { CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { CognitoAuth } from "amazon-cognito-auth-js";
+
 import "./Home.css";
 
 class Home extends Component {
@@ -23,6 +26,40 @@ class Home extends Component {
       .then(response => response.json())
       .then(data => this.setState({ papers: data, loading: false }));
   }
+
+  signIn = () => {
+    var authData = {
+      ClientId: "2vpouevkvestdot5o94m8tbnf4",
+      AppWebDomain: "paperaweek.auth.us-west-2.amazoncognito.com",
+      TokenScopesArray: [
+        "phone",
+        "email",
+        "profile",
+        "openid",
+        "aws.cognito.signin.user.admin"
+      ],
+      RedirectUriSignIn: "https://localhost:3000",
+      RedirectUriSignOut: "https://localhost:3000",
+      IdentityProvider: "Google",
+      UserPoolId: "us-west-2_qQAUz1CtO",
+      AdvancedSecurityDataCollectionFlag: true
+    };
+
+    var auth = new CognitoAuth(authData);
+    auth.userhandler = {
+      onSuccess: function(result) {
+        alert("Sign in success");
+        console.log(result);
+      },
+      onFailure: function(err) {
+        alert("Error!");
+      }
+    };
+
+    // var curUrl = window.location.href;
+    // auth.parseCognitoWebResponse(curUrl);
+    auth.getSession();
+  };
 
   refreshPapers = () => {
     fetch("/api/papers")
@@ -85,7 +122,12 @@ class Home extends Component {
       </div>
     );
 
-    return this.props.data.review.displayForm ? form_render : home_render;
+    return (
+      <div>
+        {this.props.data.review.displayForm ? form_render : home_render}
+        <Button onClick={this.signIn}>Sign In</Button>
+      </div>
+    );
   }
 }
 
