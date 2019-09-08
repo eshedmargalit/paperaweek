@@ -39,3 +39,27 @@ You'll need the following installed (maybe globally) if you want hot-reloading a
   ```
 
 To start the server and client together, just run `yarn run dev` from the top-level directory.
+
+### Figuring out Cognito, Eshed's stream of consciousness
+
+Cognito has "User Pools" and "Identity Pools". User pools are used to provide sign-up and sign-in options, optionally with federated auth. The Identity Pools are used to get AWS credentials and to access other AWS applications. We'll be using User Pools.
+
+##### Settings selected during pool creation
+
+- Pool name: `paw_users`
+- Allowing log in with email, but not username or phone
+  - All other defaults kept
+- Add "App client" to give PAW access to the User Pool
+  - App client name: "paw"
+  - Refresh token expiration (days): 30
+  - app client id: `2vpouevkvestdot5o94m8tbnf4`
+  - `https://paperaweek.auth.us-west-2.amazoncognito.com/login/?response_type=code&client_id=2vpouevkvestdot5o94m8tbnf4&redirect_uri=https://www.paperaweek.com`
+
+##### Google Auth
+
+- Client ID: `***REMOVED***`
+- Client Secret: `***REMOVED***`
+
+##### Notes
+
+Manual sign-in works, but because www.paperaweek.com doesnt exist yet, it redirects to a nonexistent webpage. May want to snag the domain soon?
