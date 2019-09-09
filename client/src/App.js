@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
 import ReviewForm from "./components/ReviewForm/ReviewForm";
 import Dashboard from "./components/Dashboard/Dashboard";
+import SignOut from "./components/SignOut/SignOut";
 import { CognitoAuth } from "amazon-cognito-auth-js";
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
       "aws.cognito.signin.user.admin"
     ],
     RedirectUriSignIn: "http://localhost:3000/Dashboard",
-    RedirectUriSignOut: "http://localhost:3000/Dashboard",
+    RedirectUriSignOut: "http://localhost:3000/SignOut",
     IdentityProvider: "Google",
     UserPoolId: "us-west-2_qQAUz1CtO",
     AdvancedSecurityDataCollectionFlag: true
@@ -49,6 +50,7 @@ function App() {
           path="/Dashboard"
           render={props => <Dashboard {...props} auth={auth} />}
         />
+        <Route exact path="/SignOut" component={SignOut} />
       </div>
     </BrowserRouter>
   );

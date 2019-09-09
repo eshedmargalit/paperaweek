@@ -1,10 +1,19 @@
+const CognitoExpress = require("cognito-express");
+const cognitoExpress = new CognitoExpress({
+  region: "us-west-2",
+  cognitoUserPoolId: "us-west-2_qQAUz1CtO",
+  tokenUse: "id", //Possible Values: access | id
+  tokenExpiration: 3600000 //Up to default expiration of 1 hour (3600000 ms)
+});
+
 module.exports = app => {
   app.get("/api/auth", (req, res) => {
-    console.log(req.headers);
+    let idTokenFromClient = req.headers.idtoken;
+    if (!idTokenFromClient) return res.status(401).send("No ID Token received");
 
-    // token is header sent from the front-end
-    let user = req.headers.user;
-    if (!user) return res.status(401).send("User ID missing from header");
-    console.log(user);
+    cognitoExpress.validate(idTokenFromClient, function(err, response) {
+      if (err) return res.status(401).send(err);
+      res.send(JSON.stringify(response));
+    });
   });
 };

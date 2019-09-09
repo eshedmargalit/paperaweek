@@ -29,6 +29,10 @@ class Home extends Component {
     this.props.auth.getSession();
   };
 
+  signOut = () => {
+    this.props.auth.signOut();
+  };
+
   refreshPapers = () => {
     fetch("/api/papers")
       .then(response => response.json())
@@ -93,15 +97,9 @@ class Home extends Component {
     return (
       <div>
         {this.props.data.review.displayForm ? form_render : home_render}
-        <div
-          style={{
-            display: "flex",
-            width: "50%",
-            margin: "auto",
-            marginBottom: "100px"
-          }}
-        >
+        <div className="width80">
           <Button onClick={this.signIn}>Sign In</Button>
+          <Button onClick={this.signOut}>Sign Out</Button>
         </div>
       </div>
     );
