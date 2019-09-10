@@ -7,7 +7,7 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      display_name: null
+      displayName: null
     };
   }
   componentDidMount() {
@@ -15,7 +15,6 @@ class Dashboard extends Component {
 
     // parse return URL from cognito
     auth.parseCognitoWebResponse(window.location.href);
-    console.log(auth.signInUserSession);
 
     // send JWT to backend
     fetch("/api/auth", {
@@ -25,12 +24,12 @@ class Dashboard extends Component {
       }
     })
       .then(response => response.json())
-      .then(data => this.setState({ display_name: data.name }));
+      .then(({ name }) => this.setState({ displayName: name }));
   }
 
   render() {
-    let { display_name } = this.state;
-    let name_render = display_name ? display_name : "Unidentified";
+    let { displayName } = this.state;
+    let name_render = displayName || "Unidentified";
     return (
       <div
         style={{
