@@ -21,9 +21,9 @@ const { Step } = Steps;
 const { MonthPicker } = DatePicker;
 
 // set counters for which field number is next for dynamic fields
-var ids = {
-  authors: 1,
-  institutions: 1,
+var dynamic_field_counters = {
+  author_names: 1,
+  institution_names: 1,
   summary_points: 1,
   background_points: 1,
   approach_points: 1,
@@ -81,8 +81,12 @@ class ReviewForm extends Component {
 
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
-    ids.authors = this.props.data.review.metadata.author_names.length;
-    ids.institutions = this.props.data.review.metadata.institution_names.length;
+
+    for (var field_name of Object.keys(dynamic_field_counters)) {
+      console.log(field_name);
+    }
+    dynamic_field_counters.author_names = this.props.data.review.metadata.author_names.length;
+    dynamic_field_counters.institution_names = this.props.data.review.metadata.institution_names.length;
   }
 
   openSuccessModelAndExit = () => {
@@ -137,10 +141,10 @@ class ReviewForm extends Component {
       this.props.form.validateFields(
         [
           "title",
-          "authors",
           "author_names",
-          "institutions",
+          "author_list_values",
           "institution_names",
+          "institution_list_values",
           "journal",
           "doi",
           "url",
@@ -151,11 +155,11 @@ class ReviewForm extends Component {
         (err, values) => {
           if (!err) {
             //parse metadata fields
-            let authors = values.authors.map(author_idx => {
-              return values.author_names[author_idx];
+            let authors = values.author_names.map(author_idx => {
+              return values.author_list_values[author_idx];
             });
-            let institutions = values.institutions.map(institution_idx => {
-              return values.institution_names[institution_idx];
+            let institutions = values.institution_names.map(institution_idx => {
+              return values.institution_list_values[institution_idx];
             });
 
             // parse keywords
@@ -190,7 +194,7 @@ class ReviewForm extends Component {
       review_fields.forEach(review_field => {
         let { field_name } = review_field;
         step1_fields.push(field_name);
-        step1_fields.push(`${field_name}_names`);
+        step1_fields.push(`${field_name}_list_values`);
       });
 
       this.props.form.validateFields(step1_fields, (err, values) => {
@@ -201,7 +205,7 @@ class ReviewForm extends Component {
             let { field_name } = review_field;
 
             let merged_values = values[field_name].map(idx => {
-              return values[`${field_name}_names`][idx];
+              return values[`${field_name}_list_values`][idx];
             });
 
             review[field_name] = merged_values;
@@ -234,7 +238,7 @@ class ReviewForm extends Component {
     const { form } = this.props;
     // can use data-binding to get
     const items = form.getFieldValue(field_name);
-    const nextItems = items.concat(ids[field_name]++);
+    const nextItems = items.concat(dynamic_field_counters[field_name]++);
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
@@ -276,21 +280,21 @@ class ReviewForm extends Component {
     let author_keys = [];
     for (let i = 0; i < author_names.length; i++) {
       author_keys.push(i);
-      getFieldDecorator(`author_names[${i}]`, {
+      getFieldDecorator(`author_list_values[${i}]`, {
         initialValue: author_names[i]
       });
     }
-    getFieldDecorator("authors", { initialValue: author_keys });
+    getFieldDecorator("author_names", { initialValue: author_keys });
 
-    const authors = getFieldValue("authors");
-    const authorFields = authors.map((author_idx, index) => (
+    const author_names_list = getFieldValue("author_names");
+    const authorFields = author_names_list.map((author_idx, index) => (
       <Form.Item
         {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
         label={index === 0 ? "Authors" : ""}
         required={true}
         key={"author" + author_idx}
       >
-        {getFieldDecorator(`author_names[${author_idx}]`, {
+        {getFieldDecorator(`author_list_values[${author_idx}]`, {
           validateTrigger: ["onChange", "onBlur"],
           rules: [
             {
@@ -305,11 +309,11 @@ class ReviewForm extends Component {
             style={{ width: "60%", marginRight: 8 }}
           />
         )}
-        {authors.length > 1 ? (
+        {author_names.length > 1 ? (
           <Icon
             className="dynamic-delete-button shifted-icon"
             type="close"
-            onClick={() => this.removeItem("authors", author_idx)}
+            onClick={() => this.removeItem("author_names", author_idx)}
           />
         ) : null}
       </Form.Item>
@@ -319,51 +323,57 @@ class ReviewForm extends Component {
     let institution_keys = [];
     for (let i = 0; i < institution_names.length; i++) {
       institution_keys.push(i);
-      getFieldDecorator(`institution_names[${i}]`, {
+      getFieldDecorator(`institution_list_values[${i}]`, {
         initialValue: institution_names[i]
       });
     }
-    getFieldDecorator("institutions", { initialValue: institution_keys });
+    getFieldDecorator("institution_names", { initialValue: institution_keys });
 
-    const institutions = getFieldValue("institutions");
-    const institutionFields = institutions.map((institution_idx, index) => (
-      <Form.Item
-        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-        label={index === 0 ? "Institutions" : ""}
-        required={true}
-        key={"institution" + institution_idx}
-      >
-        {getFieldDecorator(`institution_names[${institution_idx}]`, {
-          validateTrigger: ["onChange", "onBlur"],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: "Institution name cannot be blank"
-            }
-          ]
-        })(
-          <Input
-            placeholder="Institution Name"
-            style={{ width: "60%", marginRight: 8 }}
-          />
-        )}
-        {institutions.length > 1 ? (
-          <Icon
-            className="dynamic-delete-button"
-            type="close"
-            onClick={() => this.removeItem("institutions", institution_idx)}
-          />
-        ) : null}
-      </Form.Item>
-    ));
+    const institution_names_list = getFieldValue("institution_names");
+    const institutionFields = institution_names_list.map(
+      (institution_idx, index) => (
+        <Form.Item
+          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+          label={index === 0 ? "Institutions" : ""}
+          required={true}
+          key={"institution" + institution_idx}
+        >
+          {getFieldDecorator(`institution_list_values[${institution_idx}]`, {
+            validateTrigger: ["onChange", "onBlur"],
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message: "Institution name cannot be blank"
+              }
+            ]
+          })(
+            <Input
+              placeholder="Institution Name"
+              style={{ width: "60%", marginRight: 8 }}
+            />
+          )}
+          {institution_names.length > 1 ? (
+            <Icon
+              className="dynamic-delete-button"
+              type="close"
+              onClick={() =>
+                this.removeItem("institution_names", institution_idx)
+              }
+            />
+          ) : null}
+        </Form.Item>
+      )
+    );
 
     // create a list of step 2 fields
     const rendered_fields = review_fields.map(review_field => {
       let { field_name, label, required } = review_field;
 
       getFieldDecorator(field_name, { initialValue: [0] });
-      getFieldDecorator(`${field_name}_names[${0}]`, { initialValue: "" });
+      getFieldDecorator(`${field_name}_list_values[${0}]`, {
+        initialValue: ""
+      });
 
       const field_value = getFieldValue(field_name);
       const inputs = field_value.map((field_value_idx, index) => (
@@ -373,7 +383,7 @@ class ReviewForm extends Component {
           required={required}
           key={field_name + field_value_idx}
         >
-          {getFieldDecorator(`${field_name}_names[${field_value_idx}]`, {
+          {getFieldDecorator(`${field_name}_list_values[${field_value_idx}]`, {
             rules: [
               { required: required, message: `${label} point cannot be blank` }
             ]
@@ -421,7 +431,7 @@ class ReviewForm extends Component {
           <Button
             type="dashed"
             onClick={() => {
-              this.addItem("authors");
+              this.addItem("author_names");
             }}
             style={{ width: "150px" }}
           >
@@ -436,7 +446,7 @@ class ReviewForm extends Component {
           <Button
             type="dashed"
             onClick={() => {
-              this.addItem("institutions");
+              this.addItem("institution_names");
             }}
             style={{ width: "150px" }}
           >
