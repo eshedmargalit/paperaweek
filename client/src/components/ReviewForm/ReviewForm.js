@@ -19,6 +19,7 @@ import "./ReviewForm.css";
 
 const { Step } = Steps;
 const { MonthPicker } = DatePicker;
+const { TextArea } = Input;
 
 // set counters for which field number is next for dynamic fields
 var dynamic_field_counters = {
@@ -387,7 +388,7 @@ class ReviewForm extends Component {
             rules: [
               { required: required, message: `${label} point cannot be blank` }
             ]
-          })(<Input style={{ width: "90%" }} />)}
+          })(<TextArea style={{ width: "90%" }} />)}
           {field_value.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
