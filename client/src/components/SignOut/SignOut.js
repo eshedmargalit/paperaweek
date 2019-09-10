@@ -7,7 +7,7 @@ class SignOut extends Component {
     super(props);
 
     this.state = {
-      return_home: false
+      returnHome: false
     };
   }
   componentDidMount() {
@@ -26,18 +26,13 @@ class SignOut extends Component {
       clearInterval(timer);
       modal.destroy();
       this.setState({
-        return_home: true
+        returnHome: true
       });
     }, secondsToGo * 1000);
   }
 
   render() {
-    let to_render = null;
-    if (this.state.return_home) {
-      to_render = <Redirect to="/" push />;
-    }
-
-    return to_render;
+    return this.state.returnHome ? <Redirect to="/" push /> : null;
   }
 }
 
