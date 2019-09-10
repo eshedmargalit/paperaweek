@@ -6,6 +6,7 @@ import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewForm from "../ReviewForm/ReviewForm";
 import { start_review } from "../../actions/index";
+
 import "./Home.css";
 
 class Home extends Component {
@@ -23,6 +24,14 @@ class Home extends Component {
       .then(response => response.json())
       .then(data => this.setState({ papers: data, loading: false }));
   }
+
+  signIn = () => {
+    this.props.auth.getSession();
+  };
+
+  signOut = () => {
+    this.props.auth.signOut();
+  };
 
   refreshPapers = () => {
     fetch("/api/papers")
@@ -85,7 +94,15 @@ class Home extends Component {
       </div>
     );
 
-    return this.props.data.review.displayForm ? form_render : home_render;
+    return (
+      <div>
+        {this.props.data.review.displayForm ? form_render : home_render}
+        <div className="width80">
+          <Button onClick={this.signIn}>Sign In</Button>
+          <Button onClick={this.signOut}>Sign Out</Button>
+        </div>
+      </div>
+    );
   }
 }
 
