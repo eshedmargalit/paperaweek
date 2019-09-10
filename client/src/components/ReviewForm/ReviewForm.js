@@ -82,12 +82,12 @@ class ReviewForm extends Component {
 
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
-
     for (var field_name of Object.keys(dynamic_field_counters)) {
-      console.log(field_name);
+      let existing_metadata = this.props.data.review.metadata[field_name];
+      if (existing_metadata) {
+        dynamic_field_counters[field_name] = existing_metadata.length;
+      }
     }
-    dynamic_field_counters.author_names = this.props.data.review.metadata.author_names.length;
-    dynamic_field_counters.institution_names = this.props.data.review.metadata.institution_names.length;
   }
 
   openSuccessModelAndExit = () => {
@@ -310,7 +310,7 @@ class ReviewForm extends Component {
             style={{ width: "60%", marginRight: 8 }}
           />
         )}
-        {author_names.length > 1 ? (
+        {author_names_list.length > 1 ? (
           <Icon
             className="dynamic-delete-button shifted-icon"
             type="close"
@@ -354,7 +354,7 @@ class ReviewForm extends Component {
               style={{ width: "60%", marginRight: 8 }}
             />
           )}
-          {institution_names.length > 1 ? (
+          {institution_names_list.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
               type="close"
