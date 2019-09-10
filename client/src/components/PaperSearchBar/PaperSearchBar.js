@@ -166,7 +166,7 @@ class PaperSearchBar extends Component {
         author_names,
         "author_results"
       );
-      let journal_name = ent.BV + ", ";
+      let journal_name = ent.BV ? ent.BV + ", " : "";
       let year = ent.Y;
 
       return (
