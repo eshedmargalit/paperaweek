@@ -10,7 +10,6 @@ import { getAuthData } from "./utils.js";
 
 function App() {
   let auth = new CognitoAuth(getAuthData());
-  console.log(auth);
   auth.userhandler = {
     onSuccess: function(result) {
       console.log("Sign in successful");
