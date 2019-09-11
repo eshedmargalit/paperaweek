@@ -40,16 +40,26 @@ class Home extends Component {
   };
 
   startBlankReview = () => {
-    const blank_metadata = {
-      title: "",
-      author_names: [""],
-      institution_names: [""],
-      date: new Date(),
-      doi: "",
-      journal: "",
-      url: ""
+    const blank_review = {
+      metadata: {
+        title: "",
+        author_names: [""],
+        institution_names: [""],
+        date: new Date(),
+        doi: "",
+        journal: "",
+        url: ""
+      },
+      review: {
+        summary_points: [""],
+        background_points: [""],
+        approach_points: [""],
+        results_points: [""],
+        conclusions_points: [""],
+        other_points: [""]
+      }
     };
-    this.props.dispatch(start_review(blank_metadata));
+    this.props.dispatch(start_review(blank_review));
   };
 
   render() {
