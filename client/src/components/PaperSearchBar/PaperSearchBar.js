@@ -128,16 +128,26 @@ class PaperSearchBar extends Component {
     ).filter(name => name !== "");
 
     // dispatch action to begin the review
-    const paper_metadata = {
-      title: ent.DN,
-      authors: author_names,
-      institutions: institutions,
-      date: new Date(ent.D),
-      doi: ent.DOI,
-      journal: ent.BV,
-      url: ent.S ? ent.S[0].U : ""
+    const review = {
+      metadata: {
+        title: ent.DN,
+        authors: author_names,
+        institutions: institutions,
+        date: new Date(ent.D),
+        doi: ent.DOI,
+        journal: ent.BV,
+        url: ent.S ? ent.S[0].U : ""
+      },
+      review: {
+        summary_points: [""],
+        background_points: [""],
+        approach_points: [""],
+        results_points: [""],
+        conclusions_points: [""],
+        other_points: [""]
+      }
     };
-    this.props.dispatch(start_review(paper_metadata));
+    this.props.dispatch(start_review(review));
 
     // reset the search bar and results
     this.setState({

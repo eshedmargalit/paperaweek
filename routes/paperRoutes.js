@@ -8,6 +8,15 @@ module.exports = app => {
     let ret = await new Paper(req.body).save();
     res.send(ret);
   });
+  app.put("/api/papers", async (req, res) => {
+    try {
+      const paper = await Paper.findByIdAndUpdate(req.headers.id, req.body);
+      if (!paper) res.status(404).send("No item found");
+      res.send(paper);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
   app.delete("/api/papers", async (req, res) => {
     try {
       const paper = await Paper.findByIdAndDelete(req.body._id);

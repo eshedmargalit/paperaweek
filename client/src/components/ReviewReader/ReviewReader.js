@@ -9,6 +9,8 @@ import {
   Tag,
   List
 } from "antd";
+import { start_review } from "../../actions/index";
+import { connect } from "react-redux";
 import moment from "moment";
 import Fuse from "fuse.js";
 import { render_comma_sep_list } from "../utils.js";
@@ -136,6 +138,18 @@ class ReviewReader extends Component {
               />
             </Button>
           </div>
+          <div>
+            <Button
+              type="dashed"
+              size="small"
+              style={{ marginTop: "2px", float: "right" }}
+              onClick={() => {
+                this.editReview(paper);
+              }}
+            >
+              Edit <Icon type="edit" />
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -211,6 +225,10 @@ class ReviewReader extends Component {
       },
       onCancel() {}
     });
+  };
+
+  editReview = review => {
+    this.props.dispatch(start_review(review));
   };
 
   render_papers = papers => {
@@ -381,4 +399,4 @@ class ReviewReader extends Component {
   }
 }
 
-export default ReviewReader;
+export default connect()(ReviewReader);
