@@ -99,3 +99,13 @@ export function getReviewFields() {
   ];
   return review_fields;
 }
+
+export function notEmpty(arr) {
+  let empty = true;
+  arr.forEach(item => {
+    if (item !== "") {
+      empty = false;
+    }
+  });
+  return empty;
+}

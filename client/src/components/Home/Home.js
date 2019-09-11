@@ -96,7 +96,7 @@ class Home extends Component {
 
     return (
       <div>
-        {this.props.data.review.displayForm ? form_render : home_render}
+        {this.props.data.review_data.displayForm ? form_render : home_render}
         <div className="width80">
           <Button onClick={this.signIn}>Sign In</Button>
           <Button onClick={this.signOut}>Sign Out</Button>

@@ -17,7 +17,7 @@ import moment from "moment";
 import _ from "lodash";
 import "./ReviewForm.css";
 
-import { getMetaFields, getReviewFields } from "./utils.js";
+import { getMetaFields, getReviewFields, notEmpty } from "./utils.js";
 
 const { Step } = Steps;
 const { MonthPicker } = DatePicker;
@@ -68,14 +68,22 @@ class ReviewForm extends Component {
       submitting: true,
       step1_visited: false
     };
+
+    this.reviewFromStore = this.props.data.review_data.review_object;
   }
 
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var field_name of Object.keys(dynamic_field_counters)) {
-      let existing_metadata = this.props.data.review.metadata[field_name];
+      let existing_metadata = this.reviewFromStore.metadata[field_name];
+      let existing_review = this.reviewFromStore.review[field_name];
+
       if (existing_metadata) {
         dynamic_field_counters[field_name] = existing_metadata.length;
+      }
+
+      if (existing_review) {
+        dynamic_field_counters[field_name] = existing_review.length;
       }
     }
   }
@@ -111,16 +119,23 @@ class ReviewForm extends Component {
     this.props.form.validateFields(allFieldNames, (err, values) => {
       if (!err) {
         // combine state fields into single object
-        const review_object = {
+        const reviewObject = {
           metadata: this.state.metadata,
           review: this.state.review
         };
 
-        // post object, refresh papers in Home.js, and exit the form
+        // post or put object, refresh papers in Home.js, and exit the form
+        let review_id = this.reviewFromStore._id;
+        let fetch_method = "post";
+        let headers = { "content-type": "application/json" };
+        if (review_id) {
+          fetch_method = "put";
+          headers = { "content-type": "application/json", id: review_id };
+        }
         fetch("/api/papers", {
-          method: "post",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(review_object)
+          method: fetch_method,
+          headers: headers,
+          body: JSON.stringify(reviewObject)
         })
           .then(response => response.json())
           .then(data => {
@@ -139,7 +154,7 @@ class ReviewForm extends Component {
     });
   }
 
-  stashResults() {
+  stashResults(_callback) {
     // step 0 -> step 1: store metadata
     if (this.state.step === 0) {
       this.props.form.validateFields(metaFieldNames, (err, values) => {
@@ -157,7 +172,7 @@ class ReviewForm extends Component {
           }
 
           if (fieldName === "keywords") {
-            if (values.keywords) {
+            if (values.keywords && notEmpty(values.keywords)) {
               metadataValue = _.uniq(
                 values.keywords.split(",").map(item => {
                   return item.trim();
@@ -170,7 +185,7 @@ class ReviewForm extends Component {
 
           metadata[fieldName] = metadataValue;
         });
-        this.setState({ metadata: metadata, step: 1 });
+        this.setState({ metadata: metadata, step: 1 }, _callback);
       });
     } else if (this.state.step === 1) {
       // step 1 -> step 2: store review and trigger submission
@@ -187,26 +202,26 @@ class ReviewForm extends Component {
           review[fieldName] = mergedValues;
         });
 
-        this.setState({ review: review });
+        // BUG HERE: because setState is async, review is still null at submission!!
+        this.setState({ review: review }, _callback);
       });
     }
   }
 
   next_step = () => {
-    this.stashResults();
-
     if (this.state.step === 0) {
+      this.stashResults(null);
       if (this.state.step1_visited) {
         this.props.form.validateFields(allFieldNames);
       }
       this.setState({ step: 1, step1_visited: true });
     } else if (this.state.step === 1) {
-      this.handleSubmission();
+      this.stashResults(this.handleSubmission);
     }
   };
 
   prev_step = () => {
-    this.stashResults();
+    this.stashResults(null);
     this.setState(
       {
         step: this.state.step - 1
@@ -238,8 +253,8 @@ class ReviewForm extends Component {
   }
 
   renderForm() {
-    const existingMeta = this.state.metadata || this.props.data.review.metadata;
-    const existingReview = this.state.review;
+    const existingMeta = this.state.metadata || this.reviewFromStore.metadata;
+    const existingReview = this.state.review || this.reviewFromStore.review;
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
