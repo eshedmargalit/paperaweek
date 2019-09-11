@@ -458,7 +458,7 @@ class ReviewForm extends Component {
           <Button
             type="primary"
             onClick={this.next_step}
-            style={{ width: "40%" }}
+            style={{ width: "30%" }}
           >
             Step 2: Write Review
           </Button>
@@ -474,14 +474,14 @@ class ReviewForm extends Component {
           <Button
             type="primary"
             onClick={this.prev_step}
-            style={{ width: "40%" }}
+            style={{ width: "30%" }}
           >
             <Icon type="left" /> Metadata
-          </Button>
+          </Button>{" "}
           <Button
             type="primary"
             onClick={this.next_step}
-            style={{ width: "40%" }}
+            style={{ width: "30%" }}
           >
             Step 3: Submit! <Icon type="edit" />
           </Button>
