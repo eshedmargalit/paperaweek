@@ -27,7 +27,7 @@ export function getMetaFields() {
     {
       fieldName: "doi",
       label: "DOI",
-      required: true,
+      required: false,
       list: false
     },
     {
