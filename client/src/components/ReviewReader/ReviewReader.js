@@ -268,16 +268,22 @@ class ReviewReader extends Component {
     ];
 
     const review = fields.map(field => {
-      return (
+      let empty = true;
+      let to_render = (
         <div key={field.heading}>
           <strong>{field.heading}</strong>
           <ul>
             {paper.review[field.review_key].map(point => {
+              if (point !== "") {
+                empty = false;
+              }
               return <li key={point}>{point}</li>;
             })}
           </ul>
         </div>
       );
+
+      return empty ? null : to_render;
     });
 
     return (
