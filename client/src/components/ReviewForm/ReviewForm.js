@@ -188,9 +188,7 @@ class ReviewForm extends Component {
         this.setState({ metadata: metadata, step: 1 }, _callback);
       });
     } else if (this.state.step === 1) {
-      // step 1 -> step 2: store review and trigger submission
       this.props.form.validateFields(reviewFieldNames, (err, values) => {
-        //parse review fields
         let review = {};
         reviewFields.forEach(reviewField => {
           let { fieldName } = reviewField;
@@ -202,7 +200,6 @@ class ReviewForm extends Component {
           review[fieldName] = mergedValues;
         });
 
-        // BUG HERE: because setState is async, review is still null at submission!!
         this.setState({ review: review }, _callback);
       });
     }
