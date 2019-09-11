@@ -130,8 +130,8 @@ class PaperSearchBar extends Component {
     // dispatch action to begin the review
     const paper_metadata = {
       title: ent.DN,
-      author_names: author_names,
-      institution_names: institutions,
+      authors: author_names,
+      institutions: institutions,
       date: new Date(ent.D),
       doi: ent.DOI,
       journal: ent.BV,
