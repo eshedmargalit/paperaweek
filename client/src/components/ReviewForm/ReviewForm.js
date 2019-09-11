@@ -17,6 +17,8 @@ import moment from "moment";
 import _ from "lodash";
 import "./ReviewForm.css";
 
+import { getMetaFields, getReviewFields } from "./utils.js";
+
 const { Step } = Steps;
 const { MonthPicker } = DatePicker;
 const { TextArea } = Input;
@@ -33,40 +35,8 @@ var dynamic_field_counters = {
   other_points: 1
 };
 
-// specify for each review field (in step 2) the field name,
-// label to render, and whether it's required
-const review_fields = [
-  {
-    field_name: "summary_points",
-    label: "Paper Summary",
-    required: true
-  },
-  {
-    field_name: "background_points",
-    label: "Background Info",
-    required: true
-  },
-  {
-    field_name: "approach_points",
-    label: "Approach",
-    required: true
-  },
-  {
-    field_name: "results_points",
-    label: "Results",
-    required: true
-  },
-  {
-    field_name: "conclusions_points",
-    label: "Conclusions",
-    required: true
-  },
-  {
-    field_name: "other_points",
-    label: "Other (optional)",
-    required: false
-  }
-];
+const metaFields = getMetaFields();
+const reviewFields = getReviewFields();
 
 class ReviewForm extends Component {
   constructor(props) {
@@ -139,77 +109,70 @@ class ReviewForm extends Component {
   next_step = () => {
     // step 0 -> step 1: store metadata
     if (this.state.step === 0) {
-      this.props.form.validateFields(
-        [
-          "title",
-          "author_names",
-          "author_list_values",
-          "institution_names",
-          "institution_list_values",
-          "journal",
-          "doi",
-          "url",
-          "date",
-          "one_sentence",
-          "keywords"
-        ],
-        (err, values) => {
-          if (!err) {
-            //parse metadata fields
-            let authors = values.author_names.map(author_idx => {
-              return values.author_list_values[author_idx];
-            });
-            let institutions = values.institution_names.map(institution_idx => {
-              return values.institution_list_values[institution_idx];
-            });
-
-            // parse keywords
-            let keywords_array = [];
-            if (values.keywords) {
-              keywords_array = _.uniq(
-                values.keywords.split(",").map(item => {
-                  return item.trim();
-                })
-              );
-            }
-
-            const metadata = {
-              title: values.title,
-              authors: authors,
-              institutions: institutions,
-              journal: values.journal,
-              doi: values.doi,
-              url: values.url,
-              date: values.date.format("YYYY-MM"),
-              one_sentence: values.one_sentence,
-              keywords: keywords_array
-            };
-
-            this.setState({ metadata: metadata, step: 1 });
-          }
+      let metaFieldNames = [];
+      metaFields.forEach(field => {
+        let { fieldName, list } = field;
+        metaFieldNames.push(fieldName);
+        if (list) {
+          metaFieldNames.push(`${fieldName}_list_values`);
         }
-      );
-    } else if (this.state.step === 1) {
-      // step 1 -> step 2: store review and trigger submission
-      let step1_fields = [];
-      review_fields.forEach(review_field => {
-        let { field_name } = review_field;
-        step1_fields.push(field_name);
-        step1_fields.push(`${field_name}_list_values`);
       });
 
-      this.props.form.validateFields(step1_fields, (err, values) => {
+      this.props.form.validateFields(metaFieldNames, (err, values) => {
+        if (!err) {
+          let metadata = {};
+
+          metaFields.forEach(field => {
+            let { fieldName, list } = field;
+            let metadataValue = values[fieldName];
+
+            if (list) {
+              let listValues = values[fieldName].map(itemIdx => {
+                return values[`${fieldName}_list_values`][itemIdx];
+              });
+              metadataValue = listValues;
+            }
+
+            if (fieldName === "keywords") {
+              if (values.keywords) {
+                metadataValue = _.uniq(
+                  values.keywords.split(",").map(item => {
+                    return item.trim();
+                  })
+                );
+              }
+            } else if (fieldName === "date") {
+              metadataValue = values.date.format("YYYY-MM");
+            }
+
+            metadata[fieldName] = metadataValue;
+          });
+          this.setState({ metadata: metadata, step: 1 });
+        }
+      });
+    } else if (this.state.step === 1) {
+      // step 1 -> step 2: store review and trigger submission
+      let reviewFieldNames = [];
+      reviewFields.forEach(field => {
+        let { fieldName, list } = field;
+        reviewFieldNames.push(fieldName);
+        if (list) {
+          reviewFieldNames.push(`${fieldName}_list_values`);
+        }
+      });
+
+      this.props.form.validateFields(reviewFieldNames, (err, values) => {
         if (!err) {
           //parse review fields
           let review = {};
-          review_fields.forEach(review_field => {
-            let { field_name } = review_field;
+          reviewFields.forEach(reviewField => {
+            let { fieldName } = reviewField;
 
-            let merged_values = values[field_name].map(idx => {
-              return values[`${field_name}_list_values`][idx];
+            let mergedValues = values[fieldName].map(idx => {
+              return values[`${fieldName}_list_values`][idx];
             });
 
-            review[field_name] = merged_values;
+            review[fieldName] = mergedValues;
           });
 
           this.setState({ review: review, step: 2 }, () => {
@@ -220,34 +183,28 @@ class ReviewForm extends Component {
     }
   };
 
-  removeItem(field_name, k) {
+  removeItem(fieldName, k) {
     const { form } = this.props;
-    // can use data-binding to get
-    const items = form.getFieldValue(field_name);
-    // We need at least one passenger
+    const items = form.getFieldValue(fieldName);
     if (items.length === 1) {
       return;
     }
-
-    // can use data-binding to set
     form.setFieldsValue({
-      [`${field_name}`]: items.filter(item => item !== k)
+      [`${fieldName}`]: items.filter(item => item !== k)
     });
   }
 
-  addItem(field_name) {
+  addItem(fieldName) {
     const { form } = this.props;
-    // can use data-binding to get
-    const items = form.getFieldValue(field_name);
-    const nextItems = items.concat(dynamic_field_counters[field_name]++);
-    // can use data-binding to set
-    // important! notify form to detect changes
+    const items = form.getFieldValue(fieldName);
+    const nextItems = items.concat(dynamic_field_counters[fieldName]++);
     form.setFieldsValue({
-      [`${field_name}`]: nextItems
+      [`${fieldName}`]: nextItems
     });
   }
 
   renderForm() {
+    const existingMeta = this.props.data.review.metadata;
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -267,124 +224,143 @@ class ReviewForm extends Component {
     };
 
     // unpack values from redux store
-    const {
-      title,
-      author_names,
-      institution_names,
-      journal,
-      doi,
-      url,
-      date
-    } = this.props.data.review.metadata;
+    // const {
+    //   title,
+    //   author_names,
+    //   institution_names,
+    //   journal,
+    //   doi,
+    //   url,
+    //   date
+    // } = this.props.data.review.metadata;
 
-    // setup for authors fields starts here
-    let author_keys = [];
-    for (let i = 0; i < author_names.length; i++) {
-      author_keys.push(i);
-      getFieldDecorator(`author_list_values[${i}]`, {
-        initialValue: author_names[i]
-      });
-    }
-    getFieldDecorator("author_names", { initialValue: author_keys });
+    // construct fields for metadata
+    const renderedMetaFields = metaFields.map(metaField => {
+      let { fieldName, label, required, list } = metaField;
 
-    const author_names_list = getFieldValue("author_names");
-    const authorFields = author_names_list.map((author_idx, index) => (
-      <Form.Item
-        {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-        label={index === 0 ? "Authors" : ""}
-        required={true}
-        key={"author" + author_idx}
-      >
-        {getFieldDecorator(`author_list_values[${author_idx}]`, {
-          validateTrigger: ["onChange", "onBlur"],
-          rules: [
-            {
-              required: true,
-              whitespace: true,
-              message: "Author name cannot be blank"
-            }
-          ]
-        })(
-          <Input
-            placeholder="Author Name"
-            style={{ width: "60%", marginRight: 8 }}
-          />
-        )}
-        {author_names_list.length > 1 ? (
-          <Icon
-            className="dynamic-delete-button shifted-icon"
-            type="close"
-            onClick={() => this.removeItem("author_names", author_idx)}
-          />
-        ) : null}
-      </Form.Item>
-    ));
-
-    // setup for institutions fields starts here
-    let institution_keys = [];
-    for (let i = 0; i < institution_names.length; i++) {
-      institution_keys.push(i);
-      getFieldDecorator(`institution_list_values[${i}]`, {
-        initialValue: institution_names[i]
-      });
-    }
-    getFieldDecorator("institution_names", { initialValue: institution_keys });
-
-    const institution_names_list = getFieldValue("institution_names");
-    const institutionFields = institution_names_list.map(
-      (institution_idx, index) => (
-        <Form.Item
-          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-          label={index === 0 ? "Institutions" : ""}
-          required={true}
-          key={"institution" + institution_idx}
-        >
-          {getFieldDecorator(`institution_list_values[${institution_idx}]`, {
-            validateTrigger: ["onChange", "onBlur"],
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message: "Institution name cannot be blank"
-              }
-            ]
-          })(
-            <Input
-              placeholder="Institution Name"
-              style={{ width: "60%", marginRight: 8 }}
-            />
-          )}
-          {institution_names_list.length > 1 ? (
-            <Icon
-              className="dynamic-delete-button"
-              type="close"
-              onClick={() =>
-                this.removeItem("institution_names", institution_idx)
-              }
-            />
-          ) : null}
-        </Form.Item>
-      )
-    );
+      let renderedField = null;
+      if (list) {
+        // either prepopulate the list or add an empty first entry
+        let existingList = existingMeta[fieldName];
+        if (existingList) {
+          let fieldKeys = [];
+          for (let i = 0; i < existingList.length; i++) {
+            fieldKeys.push(i);
+            getFieldDecorator(`${fieldName}_list_values[${i}]`, {
+              initialValue: existingList[i]
+            });
+          }
+          getFieldDecorator(fieldName, { initialValue: fieldKeys });
+        } else {
+          getFieldDecorator(`${fieldName}_list_values[${0}]`, {
+            initialValue: ""
+          });
+          getFieldDecorator(fieldName, { initialValue: [0] });
+        }
+        const fieldValue = getFieldValue(fieldName);
+        renderedField = fieldValue.map((listIdx, mapIdx) => (
+          <Form.Item
+            {...(mapIdx === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+            label={mapIdx === 0 ? label : ""}
+            required={required}
+            key={label + listIdx}
+          >
+            {getFieldDecorator(`${fieldName}_list_values[${listIdx}]`, {
+              validateTrigger: ["onChange", "onBlur"],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: "Field cannot be blank"
+                }
+              ]
+            })(
+              <Input
+                placeholder={label}
+                style={{ width: "60%", marginRight: 8 }}
+              />
+            )}
+            {fieldValue.length > 1 ? (
+              <Icon
+                className="dynamic-delete-button shifted-icon"
+                type="close"
+                onClick={() => this.removeItem(fieldName, listIdx)}
+              />
+            ) : null}
+          </Form.Item>
+        ));
+        return (
+          <div key={"field name" + fieldName}>
+            {renderedField}
+            <Form.Item {...formItemLayoutWithOutLabel}>
+              <Button
+                type="dashed"
+                onClick={() => {
+                  this.addItem(fieldName);
+                }}
+                style={{ width: "150px" }}
+              >
+                <Icon type="plus" className="shifted-icon" /> Add New
+              </Button>
+            </Form.Item>
+            <br />
+          </div>
+        );
+      } else {
+        // not a list
+        if (fieldName === "date") {
+          return (
+            <div key={"field name" + fieldName}>
+              <Form.Item {...formItemLayout} label="Publication Date">
+                {getFieldDecorator("date", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "Please provide the month of publication"
+                    }
+                  ],
+                  initialValue: moment(existingMeta.date, "YYYY-MM")
+                })(<MonthPicker />)}
+              </Form.Item>
+            </div>
+          );
+        } else {
+          let existingValue = existingMeta[fieldName];
+          const init = existingValue ? existingValue : "";
+          return (
+            <div key={"field name" + fieldName}>
+              <Form.Item {...formItemLayout} label={label}>
+                {getFieldDecorator(fieldName, {
+                  rules: [
+                    { required: required, message: "Field cannot be blank" }
+                  ],
+                  initialValue: init
+                })(<Input />)}
+              </Form.Item>
+            </div>
+          );
+        }
+      }
+    });
 
     // create a list of step 2 fields
-    const rendered_fields = review_fields.map(review_field => {
-      let { field_name, label, required } = review_field;
+    const renderedReviewFields = reviewFields.map(reviewField => {
+      let { fieldName, label, required } = reviewField;
 
-      getFieldDecorator(field_name, { initialValue: [0] });
-      getFieldDecorator(`${field_name}_list_values[${0}]`, {
+      getFieldDecorator(fieldName, { initialValue: [0] });
+      getFieldDecorator(`${fieldName}_list_values[${0}]`, {
         initialValue: ""
       });
 
-      const field_value = getFieldValue(field_name);
+      const field_value = getFieldValue(fieldName);
       const inputs = field_value.map((field_value_idx, index) => (
         <Form.Item
           {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
           label={index === 0 ? label : ""}
           required={required}
-          key={field_name + field_value_idx}
+          key={fieldName + field_value_idx}
         >
-          {getFieldDecorator(`${field_name}_list_values[${field_value_idx}]`, {
+          {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
             rules: [
               { required: required, message: `${label} point cannot be blank` }
             ]
@@ -393,20 +369,20 @@ class ReviewForm extends Component {
             <Icon
               className="dynamic-delete-button"
               type="close"
-              onClick={() => this.removeItem(field_name, field_value_idx)}
+              onClick={() => this.removeItem(fieldName, field_value_idx)}
             />
           ) : null}
         </Form.Item>
       ));
 
       return (
-        <div key={"field name" + field_name}>
+        <div key={"field name" + fieldName}>
           {inputs}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button
               type="dashed"
               onClick={() => {
-                this.addItem(field_name);
+                this.addItem(fieldName);
               }}
               style={{ width: "150px" }}
             >
@@ -420,94 +396,7 @@ class ReviewForm extends Component {
 
     const step0_content = (
       <div>
-        <Form.Item {...formItemLayout} label="Title">
-          {getFieldDecorator("title", {
-            rules: [{ required: true, message: "Please enter a title" }],
-            initialValue: title
-          })(<Input />)}
-        </Form.Item>
-
-        {authorFields}
-        <Form.Item {...formItemLayoutWithOutLabel}>
-          <Button
-            type="dashed"
-            onClick={() => {
-              this.addItem("author_names");
-            }}
-            style={{ width: "150px" }}
-          >
-            <Icon type="plus" className="shifted-icon" /> Add Author
-          </Button>
-        </Form.Item>
-
-        <br />
-
-        {institutionFields}
-        <Form.Item {...formItemLayoutWithOutLabel}>
-          <Button
-            type="dashed"
-            onClick={() => {
-              this.addItem("institution_names");
-            }}
-            style={{ width: "150px" }}
-          >
-            <Icon type="plus" className="shifted-icon" /> Add Institution
-          </Button>
-        </Form.Item>
-
-        <br />
-
-        <Form.Item {...formItemLayout} label="Journal">
-          {getFieldDecorator("journal", {
-            rules: [{ required: true, message: "Please enter a journal name" }],
-            initialValue: journal
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="DOI">
-          {getFieldDecorator("doi", {
-            rules: [
-              { required: true, message: "Please enter the article DOI" }
-            ],
-            initialValue: doi
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="URL">
-          {getFieldDecorator("url", {
-            rules: [{ required: true, message: "Please add the article URL" }],
-            initialValue: url
-          })(<Input />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Publication Date">
-          {getFieldDecorator("date", {
-            rules: [
-              {
-                required: true,
-                message: "Please provide the month of publication"
-              }
-            ],
-            initialValue: moment(date, "YYYY-MM")
-          })(<MonthPicker />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="One Sentence Summary">
-          {getFieldDecorator("one_sentence", {
-            rules: [
-              {
-                required: true,
-                message: "Please enter a one-sentence summary of the paper"
-              }
-            ]
-          })(<Input placeholder="The authors show that..." />)}
-        </Form.Item>
-
-        <Form.Item {...formItemLayout} label="Keywords (comma separated)">
-          {getFieldDecorator("keywords", {})(
-            <Input placeholder="human,fMRI,classification" />
-          )}
-        </Form.Item>
+        {renderedMetaFields}
 
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
@@ -515,7 +404,7 @@ class ReviewForm extends Component {
             onClick={this.next_step}
             style={{ width: "40%" }}
           >
-            Step 2: Write Review <Icon type="edit" />
+            Step 2: Write Review
           </Button>
         </Form.Item>
       </div>
@@ -523,7 +412,7 @@ class ReviewForm extends Component {
 
     const step1_content = (
       <div>
-        {rendered_fields}
+        {renderedReviewFields}
 
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button
