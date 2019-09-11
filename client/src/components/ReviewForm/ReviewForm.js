@@ -25,8 +25,8 @@ const { TextArea } = Input;
 
 // set counters for which field number is next for dynamic fields
 var dynamic_field_counters = {
-  author_names: 1,
-  institution_names: 1,
+  authors: 1,
+  institutions: 1,
   summary_points: 1,
   background_points: 1,
   approach_points: 1,
@@ -37,6 +37,25 @@ var dynamic_field_counters = {
 
 const metaFields = getMetaFields();
 const reviewFields = getReviewFields();
+var metaFieldNames = [];
+metaFields.forEach(field => {
+  let { fieldName, list } = field;
+  metaFieldNames.push(fieldName);
+  if (list) {
+    metaFieldNames.push(`${fieldName}_list_values`);
+  }
+});
+
+var reviewFieldNames = [];
+reviewFields.forEach(field => {
+  let { fieldName, list } = field;
+  reviewFieldNames.push(fieldName);
+  if (list) {
+    reviewFieldNames.push(`${fieldName}_list_values`);
+  }
+});
+
+const allFieldNames = metaFieldNames.concat(reviewFieldNames);
 
 class ReviewForm extends Component {
   constructor(props) {
@@ -44,9 +63,10 @@ class ReviewForm extends Component {
 
     this.state = {
       step: 0,
-      metadata: [],
-      review: [],
-      submitting: true
+      metadata: null,
+      review: null,
+      submitting: true,
+      step1_visited: false
     };
   }
 
@@ -87,100 +107,114 @@ class ReviewForm extends Component {
   };
 
   handleSubmission() {
-    // combine state fields into single object
-    const review_object = {
-      metadata: this.state.metadata,
-      review: this.state.review
-    };
+    //validate
+    this.props.form.validateFields(allFieldNames, (err, values) => {
+      if (!err) {
+        // combine state fields into single object
+        const review_object = {
+          metadata: this.state.metadata,
+          review: this.state.review
+        };
 
-    // post object, refresh papers in Home.js, and exit the form
-    fetch("/api/papers", {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(review_object)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(JSON.stringify(data));
-        this.confirmSuccess();
-      });
+        // post object, refresh papers in Home.js, and exit the form
+        fetch("/api/papers", {
+          method: "post",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(review_object)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(JSON.stringify(data));
+            this.confirmSuccess();
+            this.setState({
+              step: 2
+            });
+          });
+      } else {
+        Modal.error({
+          title: "Oops! You missed a spot",
+          content: "Looks like some required fields weren't filled out"
+        });
+      }
+    });
   }
 
-  next_step = () => {
+  stashResults() {
     // step 0 -> step 1: store metadata
     if (this.state.step === 0) {
-      let metaFieldNames = [];
-      metaFields.forEach(field => {
-        let { fieldName, list } = field;
-        metaFieldNames.push(fieldName);
-        if (list) {
-          metaFieldNames.push(`${fieldName}_list_values`);
-        }
-      });
-
       this.props.form.validateFields(metaFieldNames, (err, values) => {
-        if (!err) {
-          let metadata = {};
+        let metadata = {};
 
-          metaFields.forEach(field => {
-            let { fieldName, list } = field;
-            let metadataValue = values[fieldName];
+        metaFields.forEach(field => {
+          let { fieldName, list } = field;
+          let metadataValue = values[fieldName];
 
-            if (list) {
-              let listValues = values[fieldName].map(itemIdx => {
-                return values[`${fieldName}_list_values`][itemIdx];
-              });
-              metadataValue = listValues;
+          if (list) {
+            let listValues = values[fieldName].map(itemIdx => {
+              return values[`${fieldName}_list_values`][itemIdx];
+            });
+            metadataValue = listValues;
+          }
+
+          if (fieldName === "keywords") {
+            if (values.keywords) {
+              metadataValue = _.uniq(
+                values.keywords.split(",").map(item => {
+                  return item.trim();
+                })
+              );
             }
+          } else if (fieldName === "date") {
+            metadataValue = values.date.format("YYYY-MM");
+          }
 
-            if (fieldName === "keywords") {
-              if (values.keywords) {
-                metadataValue = _.uniq(
-                  values.keywords.split(",").map(item => {
-                    return item.trim();
-                  })
-                );
-              }
-            } else if (fieldName === "date") {
-              metadataValue = values.date.format("YYYY-MM");
-            }
-
-            metadata[fieldName] = metadataValue;
-          });
-          this.setState({ metadata: metadata, step: 1 });
-        }
+          metadata[fieldName] = metadataValue;
+        });
+        this.setState({ metadata: metadata, step: 1 });
       });
     } else if (this.state.step === 1) {
       // step 1 -> step 2: store review and trigger submission
-      let reviewFieldNames = [];
-      reviewFields.forEach(field => {
-        let { fieldName, list } = field;
-        reviewFieldNames.push(fieldName);
-        if (list) {
-          reviewFieldNames.push(`${fieldName}_list_values`);
-        }
-      });
-
       this.props.form.validateFields(reviewFieldNames, (err, values) => {
-        if (!err) {
-          //parse review fields
-          let review = {};
-          reviewFields.forEach(reviewField => {
-            let { fieldName } = reviewField;
+        //parse review fields
+        let review = {};
+        reviewFields.forEach(reviewField => {
+          let { fieldName } = reviewField;
 
-            let mergedValues = values[fieldName].map(idx => {
-              return values[`${fieldName}_list_values`][idx];
-            });
-
-            review[fieldName] = mergedValues;
+          let mergedValues = values[fieldName].map(idx => {
+            return values[`${fieldName}_list_values`][idx];
           });
 
-          this.setState({ review: review, step: 2 }, () => {
-            this.handleSubmission();
-          });
-        }
+          review[fieldName] = mergedValues;
+        });
+
+        this.setState({ review: review });
       });
     }
+  }
+
+  next_step = () => {
+    this.stashResults();
+
+    if (this.state.step === 0) {
+      if (this.state.step1_visited) {
+        this.props.form.validateFields(allFieldNames);
+      }
+      this.setState({ step: 1, step1_visited: true });
+    } else if (this.state.step === 1) {
+      this.handleSubmission();
+    }
+  };
+
+  prev_step = () => {
+    this.stashResults();
+    this.setState(
+      {
+        step: this.state.step - 1
+      },
+      () => {
+        this.props.form.validateFields(allFieldNames);
+      }
+    );
   };
 
   removeItem(fieldName, k) {
@@ -204,7 +238,9 @@ class ReviewForm extends Component {
   }
 
   renderForm() {
-    const existingMeta = this.props.data.review.metadata;
+    const existingMeta = this.state.metadata || this.props.data.review.metadata;
+    const existingReview = this.state.review;
+
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -222,17 +258,6 @@ class ReviewForm extends Component {
         sm: { span: 18, offset: 6 }
       }
     };
-
-    // unpack values from redux store
-    // const {
-    //   title,
-    //   author_names,
-    //   institution_names,
-    //   journal,
-    //   doi,
-    //   url,
-    //   date
-    // } = this.props.data.review.metadata;
 
     // construct fields for metadata
     const renderedMetaFields = metaFields.map(metaField => {
@@ -347,10 +372,26 @@ class ReviewForm extends Component {
     const renderedReviewFields = reviewFields.map(reviewField => {
       let { fieldName, label, required } = reviewField;
 
-      getFieldDecorator(fieldName, { initialValue: [0] });
-      getFieldDecorator(`${fieldName}_list_values[${0}]`, {
-        initialValue: ""
-      });
+      let existingList = null;
+      if (existingReview) {
+        existingList = existingReview[fieldName];
+      }
+
+      if (existingList) {
+        let fieldKeys = [];
+        for (let i = 0; i < existingList.length; i++) {
+          fieldKeys.push(i);
+          getFieldDecorator(`${fieldName}_list_values[${i}]`, {
+            initialValue: existingList[i]
+          });
+        }
+        getFieldDecorator(fieldName, { initialValue: fieldKeys });
+      } else {
+        getFieldDecorator(`${fieldName}_list_values[${0}]`, {
+          initialValue: ""
+        });
+        getFieldDecorator(fieldName, { initialValue: [0] });
+      }
 
       const field_value = getFieldValue(fieldName);
       const inputs = field_value.map((field_value_idx, index) => (
@@ -415,6 +456,13 @@ class ReviewForm extends Component {
         {renderedReviewFields}
 
         <Form.Item {...formItemLayoutWithOutLabel}>
+          <Button
+            type="primary"
+            onClick={this.prev_step}
+            style={{ width: "40%" }}
+          >
+            <Icon type="left" /> Metadata
+          </Button>
           <Button
             type="primary"
             onClick={this.next_step}
