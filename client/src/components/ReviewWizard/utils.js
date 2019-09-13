@@ -113,7 +113,7 @@ export function notEmpty(x) {
       empty = false;
     }
   }
-  return empty;
+  return !empty;
 }
 
 export function getFormItemLayout() {
