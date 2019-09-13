@@ -8,6 +8,12 @@ const app = express();
 const port = 5000;
 
 mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true });
+
+// from https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
+mongoose.set("useUnifiedTopology", true);
+
 app.use(bodyParser.json());
 
 require("./routes/paperRoutes")(app);
