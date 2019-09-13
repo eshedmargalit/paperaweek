@@ -127,6 +127,14 @@ class PaperSearchBar extends Component {
       })
     ).filter(name => name !== "");
 
+    if (author_names === undefined || author_names.length === 0) {
+      author_names = [""];
+    }
+
+    if (institutions === undefined || institutions.length === 0) {
+      institutions = [""];
+    }
+
     // dispatch action to begin the review
     const review = {
       metadata: {
@@ -147,6 +155,7 @@ class PaperSearchBar extends Component {
         other_points: [""]
       }
     };
+
     this.props.dispatch(start_review(review));
 
     // reset the search bar and results
