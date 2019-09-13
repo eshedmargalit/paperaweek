@@ -166,7 +166,7 @@ class ReviewForm extends Component {
         {renderedFields}
         <Form.Item {...formItemLayoutWithOutLabel}>
           <Button type="primary" htmlType="submit" style={{ width: "30%" }}>
-            Next: Enter Review
+            Submit Review
           </Button>
         </Form.Item>
       </Form>
