@@ -69,8 +69,12 @@ class MetadataForm extends Component {
 
           if (fieldName === "keywords") {
             if (values.keywords && notEmpty(values.keywords)) {
+              let keywords = values.keywords;
+              if (Array.isArray(values.keywords)) {
+                keywords = values.keywords.join(",");
+              }
               metadataValue = _.uniq(
-                values.keywords.split(",").map(item => {
+                keywords.split(",").map(item => {
                   return item.trim();
                 })
               );
