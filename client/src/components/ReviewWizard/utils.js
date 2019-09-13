@@ -100,12 +100,42 @@ export function getReviewFields() {
   return review_fields;
 }
 
-export function notEmpty(arr) {
+export function notEmpty(x) {
   let empty = true;
-  arr.forEach(item => {
-    if (item !== "") {
+  if (Array.isArray(x)) {
+    x.forEach(item => {
+      if (item !== "") {
+        empty = false;
+      }
+    });
+  } else {
+    if (x !== "") {
       empty = false;
     }
-  });
+  }
   return empty;
+}
+
+export function getFormItemLayout() {
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 4 },
+      sm: { span: 6 }
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 }
+    }
+  };
+  return formItemLayout;
+}
+
+export function getFormItemLayoutWithOutLabel() {
+  const formItemLayoutWithOutLabel = {
+    wrapperCol: {
+      xs: { span: 24, offset: 0 },
+      sm: { span: 18, offset: 6 }
+    }
+  };
+  return formItemLayoutWithOutLabel;
 }

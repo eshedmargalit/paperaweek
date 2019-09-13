@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Form, Icon } from "antd";
+import { Button, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
-import ReviewForm from "../ReviewForm/ReviewForm";
+import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
 
 import "./Home.css";
@@ -63,9 +63,6 @@ class Home extends Component {
   };
 
   render() {
-    // need to use Form.create to inject this.props.form in the ReviewForm component
-    const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
-
     const home_render = (
       <div>
         <div className="width80">
@@ -99,7 +96,7 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <WrappedReviewForm refreshPapers={this.refreshPapers} />
+          <ReviewWizard refreshPapers={this.refreshPapers} />
         </div>
       </div>
     );
