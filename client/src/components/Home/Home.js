@@ -36,6 +36,14 @@ class Home extends Component {
         {
           title: "Item 3",
           authors: "Anonymous"
+        },
+        {
+          title: "Item 4",
+          authors: "The March of the Penguins"
+        },
+        {
+          title: "Item 5",
+          authors: "Episode V"
         }
       ]
     });

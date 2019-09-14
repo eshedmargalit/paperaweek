@@ -5,25 +5,64 @@ import {
   sortableElement,
   sortableHandle
 } from "react-sortable-hoc";
-import { Icon, List, PageHeader } from "antd";
+import { Button, Icon, List, PageHeader } from "antd";
+import Infinite from "react-infinite";
+
+const LIST_HEIGHT = 300;
+const ITEM_HEIGHT = 100;
 
 const DragHandle = sortableHandle(() => (
   <Icon
-    style={{ fontSize: "14pt", marginBottom: "5px", marginRight: "5px" }}
+    style={{ fontSize: "14pt", marginBottom: "5px", marginRight: "15px" }}
     type="menu"
   />
 ));
 
-const SortableItem = sortableElement(({ value }) => (
-  <List.Item>
+const SortableItem = sortableElement(({ height, value, sortIndex }) => (
+  <List.Item style={{ height }}>
     <DragHandle />
-    <h4>{value.title}</h4>
-    <em>{value.authors}</em>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        justifyContent: "space-between"
+      }}
+    >
+      <div>
+        <List.Item.Meta
+          title={`#${sortIndex + 1}: ${value.title}`}
+          description={value.authors}
+        />
+      </div>
+      <div>
+        <Button
+          onClick={() => {
+            console.log(value);
+          }}
+        >
+          Start Review <Icon type="form" />
+        </Button>
+      </div>
+    </div>
   </List.Item>
 ));
 
-const SortableContainer = sortableContainer(({ children }) => {
-  return <List bordered={true}>{children}</List>;
+const SortableInfiniteList = sortableContainer(({ items }) => {
+  return (
+    <List bordered={true}>
+      <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
+        {items.map((value, index) => (
+          <SortableItem
+            key={`item-${value.title}`}
+            index={index}
+            sortIndex={index}
+            value={value}
+            height={ITEM_HEIGHT}
+          />
+        ))}
+      </Infinite>
+    </List>
+  );
 });
 
 class ReadingList extends Component {
@@ -31,16 +70,12 @@ class ReadingList extends Component {
     return (
       <div>
         <br />
-        <PageHeader title="Reading List" avatar={{ icon: "read" }} />
-        <SortableContainer onSortEnd={this.props.onSortEnd} useDragHandle>
-          {this.props.items.map((value, index) => (
-            <SortableItem
-              key={`item-${value.title}`}
-              index={index}
-              value={value}
-            />
-          ))}
-        </SortableContainer>
+        <PageHeader title="Reading List" avatar={{ icon: "ordered-list" }} />
+        <SortableInfiniteList
+          onSortEnd={this.props.onSortEnd}
+          items={this.props.items}
+          useDragHandle
+        />
       </div>
     );
   }
