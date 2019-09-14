@@ -6,10 +6,13 @@ import {
   sortableHandle
 } from "react-sortable-hoc";
 import { Button, Icon, List, PageHeader } from "antd";
+import moment from "moment";
 import Infinite from "react-infinite";
+import { shortenAuthors, shortenString } from "../utils";
 
 const LIST_HEIGHT = 300;
 const ITEM_HEIGHT = 100;
+const MAX_TITLE_LENGTH = 80; // characters
 
 const DragHandle = sortableHandle(() => (
   <Icon
@@ -30,8 +33,14 @@ const SortableItem = sortableElement(({ height, value, sortIndex }) => (
     >
       <div>
         <List.Item.Meta
-          title={`#${sortIndex + 1}: ${value.title}`}
-          description={value.authors}
+          title={`#${sortIndex + 1}: ${shortenString(
+            value.metadata.title,
+            MAX_TITLE_LENGTH
+          )}`}
+          description={`${shortenAuthors(value.metadata.authors)}, ${moment(
+            value.metadata.date,
+            "YYYY-MM"
+          ).format("YYYY")}`}
         />
       </div>
       <div>
@@ -53,7 +62,7 @@ const SortableInfiniteList = sortableContainer(({ items }) => {
       <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
         {items.map((value, index) => (
           <SortableItem
-            key={`item-${value.title}`}
+            key={`item-${value.metadata.title}`}
             index={index}
             sortIndex={index}
             value={value}
