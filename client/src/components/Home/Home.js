@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import { Button, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
+import ReadingList from "../ReadingList/ReadingList";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
+import arrayMove from "array-move";
 
 import "./Home.css";
 
@@ -15,15 +17,39 @@ class Home extends Component {
 
     this.state = {
       loading: true,
-      papers: []
+      papers: [],
+      readingList: []
     };
   }
 
   componentDidMount() {
+    this.setState({
+      readingList: [
+        {
+          title: "Item 1",
+          authors: "Eshed Margalit, Arad Margalit, and Jenna Morris"
+        },
+        {
+          title: "Item 2",
+          authors: "Author A, Author B, Author C"
+        },
+        {
+          title: "Item 3",
+          authors: "Anonymous"
+        }
+      ]
+    });
+
     fetch("/api/papers")
       .then(response => response.json())
       .then(data => this.setState({ papers: data, loading: false }));
   }
+
+  onReadingListSort = ({ oldIndex, newIndex }) => {
+    this.setState({
+      readingList: arrayMove(this.state.readingList, oldIndex, newIndex)
+    });
+  };
 
   signIn = () => {
     this.props.auth.getSession();
@@ -46,17 +72,28 @@ class Home extends Component {
   render() {
     const home_render = (
       <div>
-        <div className="width80">
-          <PaperSearchBar />
-          <Button
-            size="small"
-            shape="round"
-            type="dashed"
-            style={{ marginTop: "2px" }}
-            onClick={this.startBlankReview}
-          >
-            Create Manual Entry <Icon className="shifted-icon" type="plus" />
-          </Button>
+        <div
+          style={{ display: "flex", justifyContent: "space-between" }}
+          className="width80"
+        >
+          <div style={{ width: "60%" }}>
+            <PaperSearchBar />
+            <Button
+              size="small"
+              shape="round"
+              type="dashed"
+              style={{ marginTop: "2px" }}
+              onClick={this.startBlankReview}
+            >
+              Create Manual Entry <Icon className="shifted-icon" type="plus" />
+            </Button>
+          </div>
+          <div style={{ width: "35%" }}>
+            <ReadingList
+              onSortEnd={this.onReadingListSort}
+              items={this.state.readingList}
+            />
+          </div>
         </div>
         <div className="width80">
           {this.state.loading ? (
