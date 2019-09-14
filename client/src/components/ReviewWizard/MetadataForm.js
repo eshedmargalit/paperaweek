@@ -24,15 +24,12 @@ var dynamicFieldCounters = {
 const metaFields = getMetaFields();
 
 class MetadataForm extends Component {
-  constructor(props) {
-    super(props);
-    this.reviewFromStore = this.props.data.review_data.review_object;
-  }
-
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var fieldName of Object.keys(dynamicFieldCounters)) {
-      let existingMetadata = this.reviewFromStore.metadata[fieldName];
+      let existingMetadata = this.props.data.review_data.review_object.metadata[
+        fieldName
+      ];
 
       if (existingMetadata) {
         dynamicFieldCounters[fieldName] = existingMetadata.length;
@@ -111,7 +108,7 @@ class MetadataForm extends Component {
   }
 
   render() {
-    const existingMeta = this.reviewFromStore.metadata;
+    const existingMeta = this.props.data.review_data.review_object.metadata;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     // construct fields for metadata
