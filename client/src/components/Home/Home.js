@@ -23,34 +23,11 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      readingList: [
-        {
-          title: "Item 1",
-          authors: "Eshed Margalit, Arad Margalit, and Jenna Morris"
-        },
-        {
-          title: "Item 2",
-          authors: "Author A, Author B, Author C"
-        },
-        {
-          title: "Item 3",
-          authors: "Anonymous"
-        },
-        {
-          title: "Item 4",
-          authors: "The March of the Penguins"
-        },
-        {
-          title: "Item 5",
-          authors: "Episode V"
-        }
-      ]
-    });
-
     fetch("/api/papers")
       .then(response => response.json())
-      .then(data => this.setState({ papers: data, loading: false }));
+      .then(data =>
+        this.setState({ papers: data, readingList: data, loading: false })
+      );
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
