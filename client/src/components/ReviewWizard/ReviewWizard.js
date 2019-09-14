@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Icon, Modal, PageHeader, Tag, Steps } from "antd";
+import { Button, Icon, PageHeader, Tag, Steps } from "antd";
 import moment from "moment";
 import MetadataForm from "./MetadataForm";
 import ReviewForm from "./ReviewForm";
