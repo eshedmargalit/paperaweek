@@ -10,7 +10,7 @@ import moment from "moment";
 import Infinite from "react-infinite";
 import { shortenAuthors, shortenString } from "../utils";
 
-const LIST_HEIGHT = 300;
+const LIST_HEIGHT = 330;
 const ITEM_HEIGHT = 100;
 const MAX_TITLE_LENGTH = 80; // characters
 
