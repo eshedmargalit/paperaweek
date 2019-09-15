@@ -40,21 +40,11 @@ class ReviewForm extends Component {
 
   validateFields = e => {
     e.preventDefault();
-    var reviewFieldNames = [];
-    reviewFields.forEach(field => {
-      let { fieldName, list } = field;
-      reviewFieldNames.push(fieldName);
-      if (list) {
-        reviewFieldNames.push(`${fieldName}_list_values`);
-      }
-    });
 
-    this.props.form.validateFields(reviewFieldNames, (err, values) => {
+    this.props.form.validateFields((err, values) => {
       if (!err) {
         let review = {};
-        reviewFields.forEach(reviewField => {
-          let { fieldName } = reviewField;
-
+        reviewFields.forEach(({ fieldName }) => {
           let mergedValues = values[fieldName].map(idx => {
             return values[`${fieldName}_list_values`][idx];
           });
