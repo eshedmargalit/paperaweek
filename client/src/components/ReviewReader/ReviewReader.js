@@ -9,6 +9,8 @@ import {
   Tag,
   List
 } from "antd";
+import { start_review } from "../../actions/index";
+import { connect } from "react-redux";
 import moment from "moment";
 import Fuse from "fuse.js";
 import { render_comma_sep_list } from "../utils.js";
@@ -136,6 +138,18 @@ class ReviewReader extends Component {
               />
             </Button>
           </div>
+          <div>
+            <Button
+              type="dashed"
+              size="small"
+              style={{ marginTop: "2px", float: "right" }}
+              onClick={() => {
+                this.editReview(paper);
+              }}
+            >
+              Edit <Icon type="edit" />
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -213,6 +227,10 @@ class ReviewReader extends Component {
     });
   };
 
+  editReview = review => {
+    this.props.dispatch(start_review(review));
+  };
+
   render_papers = papers => {
     return (
       <List
@@ -268,16 +286,22 @@ class ReviewReader extends Component {
     ];
 
     const review = fields.map(field => {
-      return (
+      let empty = true;
+      let to_render = (
         <div key={field.heading}>
           <strong>{field.heading}</strong>
           <ul>
             {paper.review[field.review_key].map(point => {
+              if (point !== "") {
+                empty = false;
+              }
               return <li key={point}>{point}</li>;
             })}
           </ul>
         </div>
       );
+
+      return empty ? null : to_render;
     });
 
     return (
@@ -375,4 +399,4 @@ class ReviewReader extends Component {
   }
 }
 
-export default ReviewReader;
+export default connect()(ReviewReader);

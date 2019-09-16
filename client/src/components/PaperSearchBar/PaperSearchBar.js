@@ -127,17 +127,36 @@ class PaperSearchBar extends Component {
       })
     ).filter(name => name !== "");
 
+    if (author_names === undefined || author_names.length === 0) {
+      author_names = [""];
+    }
+
+    if (institutions === undefined || institutions.length === 0) {
+      institutions = [""];
+    }
+
     // dispatch action to begin the review
-    const paper_metadata = {
-      title: ent.DN,
-      author_names: author_names,
-      institution_names: institutions,
-      date: new Date(ent.D),
-      doi: ent.DOI,
-      journal: ent.BV,
-      url: ent.S ? ent.S[0].U : ""
+    const review = {
+      metadata: {
+        title: ent.DN,
+        authors: author_names,
+        institutions: institutions,
+        date: new Date(ent.D),
+        doi: ent.DOI,
+        journal: ent.BV,
+        url: ent.S ? ent.S[0].U : ""
+      },
+      review: {
+        summary_points: [""],
+        background_points: [""],
+        approach_points: [""],
+        results_points: [""],
+        conclusions_points: [""],
+        other_points: [""]
+      }
     };
-    this.props.dispatch(start_review(paper_metadata));
+
+    this.props.dispatch(start_review(review));
 
     // reset the search bar and results
     this.setState({
@@ -166,7 +185,7 @@ class PaperSearchBar extends Component {
         author_names,
         "author_results"
       );
-      let journal_name = ent.BV + ", ";
+      let journal_name = ent.BV ? ent.BV + ", " : "";
       let year = ent.Y;
 
       return (

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Form, Icon } from "antd";
+import { Button, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
-import ReviewForm from "../ReviewForm/ReviewForm";
+import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
 
 import "./Home.css";
@@ -40,22 +40,10 @@ class Home extends Component {
   };
 
   startBlankReview = () => {
-    const blank_metadata = {
-      title: "",
-      author_names: [""],
-      institution_names: [""],
-      date: new Date(),
-      doi: "",
-      journal: "",
-      url: ""
-    };
-    this.props.dispatch(start_review(blank_metadata));
+    this.props.dispatch(start_review(null));
   };
 
   render() {
-    // need to use Form.create to inject this.props.form in the ReviewForm component
-    const WrappedReviewForm = Form.create({ name: "review_form" })(ReviewForm);
-
     const home_render = (
       <div>
         <div className="width80">
@@ -89,14 +77,14 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <WrappedReviewForm refreshPapers={this.refreshPapers} />
+          <ReviewWizard refreshPapers={this.refreshPapers} />
         </div>
       </div>
     );
 
     return (
       <div>
-        {this.props.data.review.displayForm ? form_render : home_render}
+        {this.props.data.review_data.displayForm ? form_render : home_render}
         <div className="width80">
           <Button onClick={this.signIn}>Sign In</Button>
           <Button onClick={this.signOut}>Sign Out</Button>
