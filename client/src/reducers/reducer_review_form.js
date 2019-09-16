@@ -1,7 +1,7 @@
 import { START_REVIEW, EXIT_FORM } from "../actions/index";
 
 const initialState = {
-  metadata: {},
+  review: {},
   displayForm: false
 };
 
@@ -9,7 +9,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case START_REVIEW:
       return Object.assign({}, state, {
-        metadata: action.metadata,
+        review_object: action.review,
         displayForm: true
       });
     case EXIT_FORM:
