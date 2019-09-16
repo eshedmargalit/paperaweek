@@ -28,9 +28,7 @@ class ReviewForm extends Component {
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var fieldName of Object.keys(dynamicFieldCounters)) {
-      let existingReview = this.props.data.review_data.review_object.review[
-        fieldName
-      ];
+      let existingReview = this.props.review[fieldName];
 
       if (existingReview) {
         dynamicFieldCounters[fieldName] = existingReview.length;
@@ -78,7 +76,7 @@ class ReviewForm extends Component {
   }
 
   render() {
-    const existingReview = this.props.data.review_data.review_object.review;
+    const existingReview = this.props.review;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     // create a list of step 2 fields

@@ -11,6 +11,26 @@ import "./ReviewWizard.css";
 
 const { Step } = Steps;
 
+const blankReview = {
+  metadata: {
+    title: "",
+    author_names: [""],
+    institution_names: [""],
+    date: new Date(),
+    doi: "",
+    journal: "",
+    url: ""
+  },
+  review: {
+    summary_points: [""],
+    background_points: [""],
+    approach_points: [""],
+    results_points: [""],
+    conclusions_points: [""],
+    other_points: [""]
+  }
+};
+
 class ReviewWizard extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +39,9 @@ class ReviewWizard extends Component {
       submit_loading: false,
       step: 0
     };
-    this.reviewFromStore = this.props.data.review_data.review_object;
+
+    this.reviewFromStore =
+      this.props.data.review_data.review_object || blankReview;
   }
 
   confirmSuccess = () => {
@@ -191,8 +213,18 @@ class ReviewWizard extends Component {
   };
 
   render() {
-    const step0 = <MetadataForm onSubmit={this.getMetadata} />;
-    const step1 = <ReviewForm onSubmit={this.getReview} />;
+    const step0 = (
+      <MetadataForm
+        metadata={this.reviewFromStore.metadata}
+        onSubmit={this.getMetadata}
+      />
+    );
+    const step1 = (
+      <ReviewForm
+        review={this.reviewFromStore.review}
+        onSubmit={this.getReview}
+      />
+    );
     const step2 = (
       <div>
         {this.renderReview(this.state.metadata, this.state.review)}
