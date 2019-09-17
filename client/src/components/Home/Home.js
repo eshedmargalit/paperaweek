@@ -25,9 +25,7 @@ class Home extends Component {
   componentDidMount() {
     fetch("/api/papers")
       .then(response => response.json())
-      .then(data =>
-        this.setState({ papers: data, readingList: data, loading: false })
-      );
+      .then(data => this.setState({ papers: data, loading: false }));
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
@@ -54,6 +52,13 @@ class Home extends Component {
     this.props.dispatch(start_review(null));
   };
 
+  addToReadingList = review => {
+    // TODO: prevent dupes
+    let currReadingList = this.state.readingList;
+    let newReadingList = currReadingList.concat(review);
+    this.setState({ readingList: newReadingList });
+  };
+
   render() {
     const home_render = (
       <div>
@@ -62,7 +67,7 @@ class Home extends Component {
           className="width80"
         >
           <div style={{ width: "60%" }}>
-            <PaperSearchBar />
+            <PaperSearchBar addToReadingListHandler={this.addToReadingList} />
             <Button
               size="small"
               shape="round"
