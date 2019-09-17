@@ -99,7 +99,7 @@ class PaperSearchBar extends Component {
     );
   };
 
-  handlePaperClick = paperid => {
+  processEntity(paperid) {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
 
@@ -155,7 +155,11 @@ class PaperSearchBar extends Component {
         other_points: [""]
       }
     };
+    return review;
+  }
 
+  handlePaperClick = paperid => {
+    let review = this.processEntity(paperid);
     this.props.dispatch(start_review(review));
 
     // reset the search bar and results
@@ -163,6 +167,11 @@ class PaperSearchBar extends Component {
       query: "",
       entities: []
     });
+  };
+
+  addToReadingList = paperid => {
+    let review = this.processEntity(paperid);
+    this.props.addToReadingListHandler(review);
   };
 
   renderHits() {
@@ -210,14 +219,25 @@ class PaperSearchBar extends Component {
               <br />
               {author_names_list}
             </div>
-            <div>
-              <Button
-                onClick={() => {
-                  this.handlePaperClick(ent.Id);
-                }}
-              >
-                Start Review <Icon type="form" />
-              </Button>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                <Button
+                  onClick={() => {
+                    this.handlePaperClick(ent.Id);
+                  }}
+                >
+                  Start Review <Icon type="form" />
+                </Button>
+              </div>
+
+              <div style={{ marginLeft: "5px" }}>
+                <Button
+                  onClick={() => {
+                    this.addToReadingList(ent.Id);
+                  }}
+                  icon="plus"
+                />
+              </div>
             </div>
           </div>
           <em>

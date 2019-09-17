@@ -6,12 +6,13 @@ import {
   sortableElement,
   sortableHandle
 } from "react-sortable-hoc";
-import { Button, Icon, List, PageHeader } from "antd";
+import { Button, Empty, Icon, List, PageHeader } from "antd";
 import moment from "moment";
 import Infinite from "react-infinite";
 import { shortenAuthors } from "../utils";
+import "./ReadingList.css";
 
-const LIST_HEIGHT = 330;
+const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 100;
 
 const DragHandle = sortableHandle(() => (
@@ -74,16 +75,36 @@ class ReadingList extends Component {
   }
 
   render() {
+    let sortableList = (
+      <SortableInfiniteList
+        onSortEnd={this.props.onSortEnd}
+        items={this.props.items}
+        clickHandler={this.handleClick.bind(this)}
+        useDragHandle
+      />
+    );
+
+    let noList = (
+      <div
+        className="empty-list ant-list-bordered"
+        style={{ height: LIST_HEIGHT }}
+      >
+        <Empty
+          description={
+            <span>
+              Add papers to your reading list from the search bar, just press
+              the <Icon type="plus" /> button!
+            </span>
+          }
+        />
+      </div>
+    );
+
     return (
       <div>
         <br />
         <PageHeader title="Reading List" avatar={{ icon: "ordered-list" }} />
-        <SortableInfiniteList
-          onSortEnd={this.props.onSortEnd}
-          items={this.props.items}
-          clickHandler={this.handleClick.bind(this)}
-          useDragHandle
-        />
+        {this.props.items.length > 0 ? sortableList : noList}
       </div>
     );
   }
