@@ -69,13 +69,10 @@ class Home extends Component {
           <div style={{ width: "60%" }}>
             <PaperSearchBar addToReadingListHandler={this.addToReadingList} />
             <Button
-              size="small"
-              shape="round"
-              type="dashed"
               style={{ marginTop: "2px" }}
               onClick={this.startBlankReview}
             >
-              Create Manual Entry <Icon className="shifted-icon" type="plus" />
+              Create Manual Entry <Icon type="plus-circle" />
             </Button>
           </div>
           <div style={{ width: "35%" }}>
