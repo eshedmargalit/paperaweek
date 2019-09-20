@@ -29,8 +29,10 @@ const SortableItem = sortableElement(
       <div
         style={{
           display: "flex",
+          height: "100%",
           width: "100%",
-          justifyContent: "space-between"
+          justifyContent: "space-between",
+          overflow: "auto"
         }}
       >
         <div>
