@@ -93,6 +93,7 @@ class ReviewReader extends Component {
               e.stopPropagation();
               this.handleSearch(`${e.target.innerHTML}`);
             }}
+            style={{ marginBottom: "8px" }}
             key={tag}
           >
             {tag}
@@ -127,9 +128,6 @@ class ReviewReader extends Component {
     return results;
   };
 
-  // deleteReview = review => {
-  // };
-
   editReview = review => {
     this.props.dispatch(start_review(review));
   };
@@ -144,10 +142,7 @@ class ReviewReader extends Component {
       {
         title: "Authors",
         dataIndex: "metadata.authors",
-        render: authorList => <span>{shortenAuthors(authorList)}</span>,
-        sorter: (a, b) => {
-          return moment(a.metadata.date).diff(moment(b.metadata.date));
-        }
+        render: authorList => <span>{shortenAuthors(authorList)}</span>
       },
       {
         title: "Year Published",
