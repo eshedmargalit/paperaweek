@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Icon, Button, Input, PageHeader } from "antd";
+import { Carousel, Icon, Button, Input, PageHeader } from "antd";
 import { start_review } from "../../actions/index";
 import { BeatLoader } from "react-spinners";
 import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
+import "./PaperSearchBar.css";
 
 const cognitiveServices = require("cognitive-services");
 
@@ -99,7 +100,7 @@ class PaperSearchBar extends Component {
     );
   };
 
-  handlePaperClick = paperid => {
+  processEntity(paperid) {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
 
@@ -155,7 +156,11 @@ class PaperSearchBar extends Component {
         other_points: [""]
       }
     };
+    return review;
+  }
 
+  handlePaperClick = paperid => {
+    let review = this.processEntity(paperid);
     this.props.dispatch(start_review(review));
 
     // reset the search bar and results
@@ -163,6 +168,11 @@ class PaperSearchBar extends Component {
       query: "",
       entities: []
     });
+  };
+
+  addToReadingList = paperid => {
+    let review = this.processEntity(paperid);
+    this.props.addToReadingListHandler(review);
   };
 
   renderHits() {
@@ -191,7 +201,7 @@ class PaperSearchBar extends Component {
       return (
         <div
           style={{
-            border: "1px solid gray",
+            border: "1px solid lightgray",
             borderRadius: "5px",
             marginTop: "5px",
             padding: "10px"
@@ -210,14 +220,25 @@ class PaperSearchBar extends Component {
               <br />
               {author_names_list}
             </div>
-            <div>
-              <Button
-                onClick={() => {
-                  this.handlePaperClick(ent.Id);
-                }}
-              >
-                Start Review <Icon type="form" />
-              </Button>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>
+                <Button
+                  onClick={() => {
+                    this.handlePaperClick(ent.Id);
+                  }}
+                >
+                  Start Review <Icon type="form" />
+                </Button>
+              </div>
+
+              <div style={{ marginLeft: "5px" }}>
+                <Button
+                  onClick={() => {
+                    this.addToReadingList(ent.Id);
+                  }}
+                  icon="plus"
+                />
+              </div>
             </div>
           </div>
           <em>
@@ -232,6 +253,20 @@ class PaperSearchBar extends Component {
   }
 
   render() {
+    const carouselContent = [
+      "A paper a week keeps the literature review on fleek",
+      "Believe first and foremost in yourself!",
+      "I'm trapped in here, please help me! It's been weeks...",
+      "Reading papers is fun AND nutritious! 🤪"
+    ];
+    const filler = (
+      <Carousel autoplay speed={1000}>
+        {carouselContent.map(item => {
+          return <h3 key={`carousel ${item}`}>{item}</h3>;
+        })}
+      </Carousel>
+    );
+
     let spinner = null;
     if (this.state.resultsAreLoading) {
       spinner = (
@@ -262,7 +297,7 @@ class PaperSearchBar extends Component {
       </div>
     );
 
-    let results = this.state.entities.length > 0 ? this.renderHits() : null;
+    let results = this.state.entities.length ? this.renderHits() : filler;
 
     return (
       <div>

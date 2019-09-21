@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 import { Button, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
+import ReadingList from "../ReadingList/ReadingList";
 import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
+import arrayMove from "array-move";
 
 import "./Home.css";
 
@@ -15,7 +17,8 @@ class Home extends Component {
 
     this.state = {
       loading: true,
-      papers: []
+      papers: [],
+      readingList: []
     };
   }
 
@@ -24,6 +27,12 @@ class Home extends Component {
       .then(response => response.json())
       .then(data => this.setState({ papers: data, loading: false }));
   }
+
+  onReadingListSort = ({ oldIndex, newIndex }) => {
+    this.setState({
+      readingList: arrayMove(this.state.readingList, oldIndex, newIndex)
+    });
+  };
 
   signIn = () => {
     this.props.auth.getSession();
@@ -43,20 +52,43 @@ class Home extends Component {
     this.props.dispatch(start_review(null));
   };
 
+  addToReadingList = review => {
+    // TODO: prevent dupes
+    let currReadingList = this.state.readingList;
+    let newReadingList = currReadingList.concat(review);
+    this.setState({ readingList: newReadingList });
+  };
+
+  removeFromReadingList = review => {
+    let newReadingList = this.state.readingList.filter(currReview => {
+      return currReview !== review;
+    });
+    this.setState({ readingList: newReadingList });
+  };
+
   render() {
     const home_render = (
       <div>
-        <div className="width80">
-          <PaperSearchBar />
-          <Button
-            size="small"
-            shape="round"
-            type="dashed"
-            style={{ marginTop: "2px" }}
-            onClick={this.startBlankReview}
-          >
-            Create Manual Entry <Icon className="shifted-icon" type="plus" />
-          </Button>
+        <div
+          style={{ display: "flex", justifyContent: "space-between" }}
+          className="width80"
+        >
+          <div style={{ width: "60%" }}>
+            <PaperSearchBar addToReadingListHandler={this.addToReadingList} />
+            <Button
+              style={{ marginTop: "2px" }}
+              onClick={this.startBlankReview}
+            >
+              Create Manual Entry <Icon type="plus-circle" />
+            </Button>
+          </div>
+          <div style={{ width: "35%" }}>
+            <ReadingList
+              onSortEnd={this.onReadingListSort}
+              removeItemHandler={this.removeFromReadingList}
+              items={this.state.readingList}
+            />
+          </div>
         </div>
         <div className="width80">
           {this.state.loading ? (

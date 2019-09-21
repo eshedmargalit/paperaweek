@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import Fuse from "fuse.js";
 import { render_comma_sep_list } from "../utils.js";
+import "./ReviewReader.css";
 
 const { confirm } = Modal;
 
