@@ -1,3 +1,7 @@
 .ant-tag:hover {
   cursor: pointer;
 }
+
+.ant-table-row:hover {
+  cursor: pointer;
+}
