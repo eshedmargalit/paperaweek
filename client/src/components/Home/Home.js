@@ -59,6 +59,13 @@ class Home extends Component {
     this.setState({ readingList: newReadingList });
   };
 
+  removeFromReadingList = review => {
+    let newReadingList = this.state.readingList.filter(currReview => {
+      return currReview !== review;
+    });
+    this.setState({ readingList: newReadingList });
+  };
+
   render() {
     const home_render = (
       <div>
@@ -78,6 +85,7 @@ class Home extends Component {
           <div style={{ width: "35%" }}>
             <ReadingList
               onSortEnd={this.onReadingListSort}
+              removeItemHandler={this.removeFromReadingList}
               items={this.state.readingList}
             />
           </div>

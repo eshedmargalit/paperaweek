@@ -13,7 +13,7 @@ import { shortenAuthors } from "../utils";
 import "./ReadingList.css";
 
 const LIST_HEIGHT = 340;
-const ITEM_HEIGHT = 100;
+const ITEM_HEIGHT = 130;
 
 const DragHandle = sortableHandle(() => (
   <Icon
@@ -23,57 +23,71 @@ const DragHandle = sortableHandle(() => (
 ));
 
 const SortableItem = sortableElement(
-  ({ height, value, sortIndex, clickHandler }) => (
+  ({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (
     <List.Item style={{ height }}>
-      <DragHandle />
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          width: "100%",
-          justifyContent: "space-between",
-          overflow: "auto"
-        }}
-      >
-        <div>
-          <List.Item.Meta
-            title={`#${sortIndex + 1}: ${value.metadata.title}`}
-            description={`${shortenAuthors(value.metadata.authors)}, ${moment(
-              value.metadata.date,
-              "YYYY-MM"
-            ).format("YYYY")}`}
-          />
-        </div>
-        <div>
-          <Button onClick={() => clickHandler(value)} icon="form" />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <DragHandle />
+        <div
+          style={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            justifyContent: "space-between",
+            overflow: "auto"
+          }}
+        >
+          <div>
+            <List.Item.Meta
+              title={`#${sortIndex + 1}: ${value.metadata.title}`}
+              description={`${shortenAuthors(value.metadata.authors)}, ${moment(
+                value.metadata.date,
+                "YYYY-MM"
+              ).format("YYYY")}`}
+            />
+          </div>
+          <div>
+            <div>
+              <Button onClick={() => editClickHandler(value)} icon="form" />
+            </div>
+            <div>
+              <Button onClick={() => deleteClickHandler(value)} icon="delete" />
+            </div>
+          </div>
         </div>
       </div>
     </List.Item>
   )
 );
 
-const SortableInfiniteList = sortableContainer(({ items, clickHandler }) => {
-  return (
-    <List bordered={true}>
-      <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
-        {items.map((value, index) => (
-          <SortableItem
-            key={`item-${value.metadata.title}`}
-            index={index}
-            sortIndex={index}
-            value={value}
-            height={ITEM_HEIGHT}
-            clickHandler={clickHandler}
-          />
-        ))}
-      </Infinite>
-    </List>
-  );
-});
+const SortableInfiniteList = sortableContainer(
+  ({ items, editClickHandler, deleteClickHandler }) => {
+    return (
+      <List bordered={true}>
+        <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
+          {items.map((value, index) => (
+            <SortableItem
+              key={`item-${value.metadata.title}`}
+              index={index}
+              sortIndex={index}
+              value={value}
+              height={ITEM_HEIGHT}
+              editClickHandler={editClickHandler}
+              deleteClickHandler={deleteClickHandler}
+            />
+          ))}
+        </Infinite>
+      </List>
+    );
+  }
+);
 
 class ReadingList extends Component {
-  handleClick(value) {
+  handleEditClick(value) {
     this.props.dispatch(start_review(value));
+  }
+
+  handleDeleteClick(index) {
+    this.props.removeItemHandler(index);
   }
 
   render() {
@@ -81,7 +95,8 @@ class ReadingList extends Component {
       <SortableInfiniteList
         onSortEnd={this.props.onSortEnd}
         items={this.props.items}
-        clickHandler={this.handleClick.bind(this)}
+        editClickHandler={this.handleEditClick.bind(this)}
+        deleteClickHandler={this.handleDeleteClick.bind(this)}
         useDragHandle
       />
     );
