@@ -1,19 +1,11 @@
 import React, { Component } from "react";
-import {
-  Modal,
-  PageHeader,
-  Button,
-  Icon,
-  Select,
-  Input,
-  Tag,
-  List
-} from "antd";
+import { Button, Row, Col, Modal, Table, Input, PageHeader, Tag } from "antd";
 import { start_review } from "../../actions/index";
 import { connect } from "react-redux";
 import moment from "moment";
 import Fuse from "fuse.js";
-import { render_comma_sep_list } from "../utils.js";
+import { shortenAuthors } from "../utils.js";
+import ReviewModal from "../ReviewModal/ReviewModal";
 import "./ReviewReader.css";
 
 const { confirm } = Modal;
@@ -24,12 +16,12 @@ class ReviewReader extends Component {
 
     this.state = {
       query: "",
-      active_paper: null,
-      sort_mode: "review-date-descending"
+      selectedReview: null,
+      showModal: false
     };
   }
 
-  get_tag_color = tag => {
+  getTagColor = tag => {
     var hash = 0;
     for (var i = 0; i < tag.length; i++) {
       hash = tag.charCodeAt(i) + ((hash << 5) - hash);
@@ -41,13 +33,52 @@ class ReviewReader extends Component {
     return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
   };
 
-  handleSearch = search_term => {
+  handleSearch = query => {
+    this.setState({ query });
+  };
+
+  reviewClicked = review => {
     this.setState({
-      query: search_term
+      selectedReview: review,
+      showModal: true
     });
   };
 
-  render_tags = tags => {
+  handleModalClose = () => {
+    this.setState({
+      selectedReview: null,
+      showModal: false
+    });
+  };
+
+  handleModalEdit = () => {
+    this.props.dispatch(start_review(this.state.selectedReview));
+  };
+
+  handleModalDelete = () => {
+    confirm({
+      title: "Are you sure delete this review?",
+      content: "Once it's gone, it's gone forever!",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: () => {
+        fetch("/api/papers", {
+          method: "delete",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(this.state.selectedReview)
+        })
+          .then(response => response.json())
+          .then(() => {
+            this.props.refreshPapers();
+            this.handleModalClose();
+          });
+      },
+      onCancel() {}
+    });
+  };
+
+  renderTags = tags => {
     let tag_render = null;
 
     if (tags && tags.length > 0) {
@@ -57,10 +88,9 @@ class ReviewReader extends Component {
         }
         return (
           <Tag
-            color={this.get_tag_color(tag)}
+            color={this.getTagColor(tag)}
             onClick={e => {
               e.stopPropagation();
-              e.preventDefault();
               this.handleSearch(`${e.target.innerHTML}`);
             }}
             key={tag}
@@ -73,110 +103,7 @@ class ReviewReader extends Component {
     return tag_render;
   };
 
-  render_paper_in_list = paper => {
-    const meta = paper.metadata;
-    const time_created = paper.createdAt;
-    const review_date_render = moment(time_created).format("MMMM Do, YYYY");
-    const publication_date_render = moment(meta.date, "YYYY-MM").format(
-      "MMMM YYYY"
-    );
-
-    let tldr = null;
-    if (meta.one_sentence && meta.one_sentence !== "") {
-      tldr = (
-        <div>
-          <em>{"In a sentence: " + meta.one_sentence}</em>
-        </div>
-      );
-    }
-
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%"
-        }}
-      >
-        <div>
-          <h6>{meta.title}</h6>
-          <div>
-            {render_comma_sep_list(meta.authors, "authors")}
-            Published {publication_date_render}
-          </div>
-          <div>{this.render_tags(meta.keywords)}</div>
-          <div>
-            <em>Read on {review_date_render}</em>
-          </div>
-          {tldr}
-        </div>
-        <div>
-          <div>
-            <Button
-              type="default"
-              size="large"
-              style={{ display: "flex", alignItems: "center" }}
-              onClick={e => {
-                this.review_clicked(paper);
-              }}
-            >
-              Read Review <Icon type="right-circle" />
-            </Button>
-          </div>
-          <div>
-            <Button
-              type="dashed"
-              size="small"
-              style={{ marginTop: "2px", float: "right" }}
-              onClick={() => {
-                this.deleteReview(paper);
-              }}
-            >
-              <Icon
-                type="delete"
-                className="shifted-icon"
-                style={{ color: "red" }}
-              />
-            </Button>
-          </div>
-          <div>
-            <Button
-              type="dashed"
-              size="small"
-              style={{ marginTop: "2px", float: "right" }}
-              onClick={() => {
-                this.editReview(paper);
-              }}
-            >
-              Edit <Icon type="edit" />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  sort_reviews = reviews => {
-    if (this.state.sort_mode === "review-date-descending") {
-      return reviews.sort(
-        (a, b) => -moment(a.createdAt).diff(moment(b.createdAt))
-      );
-    } else if (this.state.sort_mode === "review-date-ascending") {
-      return reviews.sort((a, b) =>
-        moment(a.createdAt).diff(moment(b.createdAt))
-      );
-    } else if (this.state.sort_mode === "pub-date-descending") {
-      return reviews.sort(
-        (a, b) => -moment(a.metadata.date).diff(moment(b.metadata.date))
-      );
-    } else if (this.state.sort_mode === "pub-date-ascending") {
-      return reviews.sort((a, b) =>
-        moment(a.metadata.date).diff(moment(b.metadata.date))
-      );
-    }
-  };
-
-  trim_reviews = reviews => {
+  fuzzyFilterReviews = reviews => {
     if (this.state.query === "") {
       return reviews;
     }
@@ -200,203 +127,145 @@ class ReviewReader extends Component {
     return results;
   };
 
-  review_clicked = review => {
-    this.setState({
-      active_paper: review
-    });
-  };
-
-  deleteReview = review => {
-    confirm({
-      title: "Are you sure delete this reivew?",
-      content: "Once it's gone, it's gone forever!",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk: () => {
-        fetch("/api/papers", {
-          method: "delete",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(review)
-        })
-          .then(response => response.json())
-          .then(() => {
-            this.props.refreshPapers();
-          });
-      },
-      onCancel() {}
-    });
-  };
+  // deleteReview = review => {
+  // };
 
   editReview = review => {
     this.props.dispatch(start_review(review));
   };
 
-  render_papers = papers => {
+  renderReviews = papers => {
+    const columns = [
+      {
+        title: "Title",
+        dataIndex: "metadata.title",
+        render: text => <span>{text}</span>
+      },
+      {
+        title: "Authors",
+        dataIndex: "metadata.authors",
+        render: authorList => <span>{shortenAuthors(authorList)}</span>,
+        sorter: (a, b) => {
+          return moment(a.metadata.date).diff(moment(b.metadata.date));
+        }
+      },
+      {
+        title: "Year Published",
+        dataIndex: "metadata.date",
+        render: date => <span>{moment(date, "YYYY-MM").format("YYYY")}</span>,
+        sorter: (a, b) => {
+          return moment(a.metadata.date).diff(moment(b.metadata.date));
+        }
+      },
+      {
+        title: "Review Date",
+        dataIndex: "createdAt",
+        render: date => <span>{moment(date).format("MMMM Do, YYYY")}</span>,
+        sorter: (a, b) => {
+          return moment(a.createdAt).diff(moment(b.createdAt));
+        },
+        defaultSortOrder: "descend"
+      },
+      {
+        title: "Keywords",
+        dataIndex: "metadata.keywords",
+        render: keywords => this.renderTags(keywords)
+      }
+    ];
+
     return (
-      <List
-        itemLayout="horizontal"
+      <Table
+        onRow={(review, reviewIndex) => {
+          return {
+            onClick: () => {
+              this.reviewClicked(review);
+            }
+          };
+        }}
+        rowKey={review => review._id}
+        columns={columns}
         dataSource={papers}
-        renderItem={paper => (
-          <List.Item>{this.render_paper_in_list(paper)}</List.Item>
-        )}
+        page_size={10}
+        pagination={papers.length > 10}
       />
     );
   };
 
-  render_review = paper => {
-    const date_str = moment(paper.metadata.date, "YYYY-MM").format("MMMM YYYY");
-    let doi_tag = null;
-    if (paper.metadata.doi) {
-      doi_tag = (
-        <a
-          href={"http://dx.doi.org/" + paper.metadata.doi}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ({paper.metadata.doi})
-        </a>
-      );
-    }
-
-    const fields = [
-      {
-        heading: "General Summary",
-        review_key: "summary_points"
-      },
-      {
-        heading: "Background",
-        review_key: "background_points"
-      },
-      {
-        heading: "Approach",
-        review_key: "approach_points"
-      },
-      {
-        heading: "Results",
-        review_key: "results_points"
-      },
-      {
-        heading: "Conclusions",
-        review_key: "conclusions_points"
-      },
-      {
-        heading: "Other Information",
-        review_key: "other_points"
-      }
-    ];
-
-    const review = fields.map(field => {
-      let empty = true;
-      let to_render = (
-        <div key={field.heading}>
-          <strong>{field.heading}</strong>
-          <ul>
-            {paper.review[field.review_key].map(point => {
-              if (point !== "") {
-                empty = false;
-              }
-              return <li key={point}>{point}</li>;
-            })}
-          </ul>
-        </div>
-      );
-
-      return empty ? null : to_render;
-    });
-
-    return (
-      <div>
-        <PageHeader
-          tags={this.render_tags(paper.metadata.keywords)}
-          title={paper.metadata.title}
-          onBack={() => this.setState({ active_paper: null })}
-        />
-        <div>
-          {render_comma_sep_list(paper.metadata.authors)}
-          {render_comma_sep_list(paper.metadata.institutions)}
-          Published in {paper.metadata.journal} in {date_str}
-          {` `}
-          {doi_tag}
-        </div>
-        <hr />
-        {review}
-      </div>
-    );
-  };
-
   render() {
-    const directory = (
-      <div>
-        <PageHeader title="Read Your Reviews" avatar={{ icon: "read" }} />
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between"
-          }}
-        >
-          <div style={{ width: "100%" }}>
-            <div>Filter by author, year, title, or keyword:</div>
+    const modalFooter = [
+      <Button
+        key="edit"
+        type="dashed"
+        icon="edit"
+        onClick={this.handleModalEdit}
+      >
+        Edit this Review
+      </Button>,
+      <Button
+        key="delete"
+        type="dashed"
+        icon="delete"
+        onClick={this.handleModalDelete}
+      >
+        Delete this Review
+      </Button>
+    ];
+    return (
+      <>
+        <Row>
+          <Col lg={6} sm={24}>
+            <PageHeader title="Read Your Reviews" avatar={{ icon: "read" }} />
+          </Col>
+          <Col lg={18} sm={24}>
             <div
               style={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
+                padding: "24px"
               }}
             >
-              <div style={{ width: "100%", marginRight: "100px" }}>
-                <Input
-                  type="text"
-                  width="500px"
-                  onChange={e => this.handleSearch(`${e.target.value}`)}
-                  placeholder="e.g., orthogonal"
-                  value={this.state.query}
-                  allowClear
-                />
-              </div>
-              <div>
-                <Select
-                  defaultValue="review-date-descending"
-                  style={{ width: 220 }}
-                  id="sort_input"
-                  onChange={e => {
-                    this.setState({ sort_mode: e });
+              <div style={{ width: "100%" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between"
                   }}
                 >
-                  <Select.Option value="review-date-descending">
-                    review date (descending)
-                  </Select.Option>
-                  <Select.Option value="review-date-ascending">
-                    review date (ascending){" "}
-                  </Select.Option>
-                  <Select.Option value="pub-date-ascending">
-                    publication date (ascending)
-                  </Select.Option>
-                  <Select.Option value="pub-date-descending">
-                    publication date (descending)
-                  </Select.Option>
-                </Select>
+                  <div
+                    style={{
+                      width: "100%",
+                      marginRight: "100px",
+                      marginBottom: "20px"
+                    }}
+                  >
+                    <Input
+                      type="text"
+                      onChange={e => this.handleSearch(`${e.target.value}`)}
+                      placeholder="Filter by title, author, or journal"
+                      value={this.state.query}
+                      allowClear
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </Col>
+        </Row>
         <div>
           <div>
-            {this.render_papers(
-              this.sort_reviews(this.trim_reviews(this.props.papers))
-            )}
+            {this.renderReviews(this.fuzzyFilterReviews(this.props.papers))}
           </div>
         </div>
-      </div>
+        <ReviewModal
+          review={this.state.selectedReview}
+          visible={this.state.showModal}
+          onClose={this.handleModalClose}
+          footer={modalFooter}
+        />
+      </>
     );
-
-    let to_render = directory;
-    if (this.state.active_paper) {
-      to_render = this.render_review(this.state.active_paper);
-    }
-
-    return <div>{to_render}</div>;
   }
 }
 

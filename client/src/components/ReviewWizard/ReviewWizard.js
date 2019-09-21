@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { Button, Icon, PageHeader, Tag, Steps } from "antd";
-import moment from "moment";
+import { Button, Icon, PageHeader, Steps } from "antd";
 import MetadataForm from "./MetadataForm";
 import ReviewForm from "./ReviewForm";
+import ReviewModal from "../ReviewModal/ReviewModal";
 
 import { connect } from "react-redux";
 import { start_review, exit_form } from "../../actions/index";
-import { render_comma_sep_list } from "../utils.js";
 import "./ReviewWizard.css";
 
 const { Step } = Steps;
@@ -36,7 +35,8 @@ class ReviewWizard extends Component {
     super(props);
 
     this.state = {
-      submit_loading: false,
+      showModal: false,
+      submitLoading: false,
       step: 0
     };
 
@@ -45,7 +45,7 @@ class ReviewWizard extends Component {
   }
 
   confirmSuccess = () => {
-    this.setState({ submit_loading: false }, () => {
+    this.setState({ submitLoading: false }, () => {
       this.props.refreshPapers();
       this.props.dispatch(exit_form());
     });
@@ -60,6 +60,10 @@ class ReviewWizard extends Component {
     this.setState({ step: 0 }, () => {
       this.props.dispatch(start_review(reviewObject));
     });
+  };
+
+  handleModalClose = () => {
+    this.setState({ showModal: false, step: 0 });
   };
 
   handleSubmission = () => {
@@ -77,7 +81,7 @@ class ReviewWizard extends Component {
       headers = { "content-type": "application/json", id: review_id };
     }
 
-    this.setState({ submit_loading: true }, () => {
+    this.setState({ submitLoading: true }, () => {
       fetch("/api/papers", {
         method: fetch_method,
         headers: headers,
@@ -96,120 +100,7 @@ class ReviewWizard extends Component {
   };
 
   getReview = review => {
-    this.setState({ review: review, step: 2 });
-  };
-
-  getTagColor = tag => {
-    var hash = 0;
-    for (var i = 0; i < tag.length; i++) {
-      hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    var shortened = hash % 360;
-    const saturation = "80%";
-    const lightness = "30%";
-    return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
-  };
-
-  renderTags = tags => {
-    let tagRender = null;
-
-    if (tags && tags.length > 0) {
-      tagRender = tags.map(tag => {
-        if (tag === "") {
-          return null;
-        }
-        return (
-          <Tag color={this.getTagColor(tag)} key={tag}>
-            {tag}
-          </Tag>
-        );
-      });
-    }
-    return tagRender;
-  };
-
-  renderReview = (metadata, review) => {
-    if (!review || !metadata) {
-      return null;
-    }
-    const date_str = moment(metadata.date, "YYYY-MM").format("MMMM YYYY");
-    let doi_tag = null;
-    if (metadata.doi) {
-      doi_tag = (
-        <a
-          href={"http://dx.doi.org/" + metadata.doi}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ({metadata.doi})
-        </a>
-      );
-    }
-
-    const fields = [
-      {
-        heading: "General Summary",
-        review_key: "summary_points"
-      },
-      {
-        heading: "Background",
-        review_key: "background_points"
-      },
-      {
-        heading: "Approach",
-        review_key: "approach_points"
-      },
-      {
-        heading: "Results",
-        review_key: "results_points"
-      },
-      {
-        heading: "Conclusions",
-        review_key: "conclusions_points"
-      },
-      {
-        heading: "Other Information",
-        review_key: "other_points"
-      }
-    ];
-
-    const reviewBody = fields.map(field => {
-      let empty = true;
-      let to_render = (
-        <div key={field.heading}>
-          <strong>{field.heading}</strong>
-          <ul>
-            {review[field.review_key].map(point => {
-              if (point !== "") {
-                empty = false;
-              }
-              return <li key={point}>{point}</li>;
-            })}
-          </ul>
-        </div>
-      );
-
-      return empty ? null : to_render;
-    });
-
-    return (
-      <div>
-        <PageHeader
-          tags={this.renderTags(metadata.keywords)}
-          title={metadata.title}
-        />
-        <div>
-          {render_comma_sep_list(metadata.authors)}
-          {render_comma_sep_list(metadata.institutions)}
-          Published in {metadata.journal} in {date_str}
-          {` `}
-          {doi_tag}
-        </div>
-        <hr />
-        {reviewBody}
-      </div>
-    );
+    this.setState({ review: review, step: 2, showModal: true });
   };
 
   render() {
@@ -225,13 +116,38 @@ class ReviewWizard extends Component {
         onSubmit={this.getReview}
       />
     );
+
+    const modalFooter = [
+      <Button
+        key="submit"
+        type="primary"
+        icon="check"
+        onClick={this.handleSubmission}
+      >
+        Looks good, submit!
+      </Button>,
+      <Button
+        key="cancel"
+        icon="close"
+        onClick={this.handleCancel}
+        style={{ borderColor: "red" }}
+      >
+        Cancel
+      </Button>
+    ];
+
     const step2 = (
       <div>
-        {this.renderReview(this.state.metadata, this.state.review)}
+        <ReviewModal
+          review={this.reviewFromStore}
+          visible={this.state.showModal}
+          onClose={this.handleModalClose}
+          footer={modalFooter}
+        />
         <Button
           type="primary"
           onClick={this.handleSubmission}
-          loading={this.state.submit_loading}
+          loading={this.state.submitLoading}
         >
           Looks good! Submit
         </Button>{" "}
