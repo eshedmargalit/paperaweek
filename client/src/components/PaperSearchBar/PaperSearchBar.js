@@ -262,7 +262,7 @@ class PaperSearchBar extends Component {
     const filler = (
       <Carousel autoplay speed={1000}>
         {carouselContent.map(item => {
-          return <h3>{item}</h3>;
+          return <h3 key={`carousel ${item}`}>{item}</h3>;
         })}
       </Carousel>
     );
