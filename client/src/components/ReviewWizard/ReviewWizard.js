@@ -34,14 +34,16 @@ class ReviewWizard extends Component {
   constructor(props) {
     super(props);
 
+    this.reviewFromStore =
+      this.props.data.review_data.review_object || blankReview;
+
     this.state = {
       showModal: false,
       submitLoading: false,
-      step: 0
+      step: 0,
+      metadata: this.reviewFromStore.metadata,
+      review: this.reviewFromStore.review
     };
-
-    this.reviewFromStore =
-      this.props.data.review_data.review_object || blankReview;
   }
 
   confirmSuccess = () => {
@@ -57,13 +59,9 @@ class ReviewWizard extends Component {
       review: this.state.review
     };
 
-    this.setState({ step: 0 }, () => {
+    this.setState({ step: 0, showModal: false }, () => {
       this.props.dispatch(start_review(reviewObject));
     });
-  };
-
-  handleModalClose = () => {
-    this.setState({ showModal: false, step: 0 });
   };
 
   handleSubmission = () => {
@@ -99,22 +97,22 @@ class ReviewWizard extends Component {
     this.setState({ metadata: metadata, step: 1 });
   };
 
+  // TODO: state not being stashed properly at each step?
   getReview = review => {
-    this.setState({ review: review, step: 2, showModal: true });
+    this.setState({ review: review, step: 2 }, () => {
+      this.setState({ showModal: true });
+    });
   };
 
   render() {
     const step0 = (
       <MetadataForm
-        metadata={this.reviewFromStore.metadata}
+        metadata={this.state.metadata}
         onSubmit={this.getMetadata}
       />
     );
     const step1 = (
-      <ReviewForm
-        review={this.reviewFromStore.review}
-        onSubmit={this.getReview}
-      />
+      <ReviewForm review={this.state.review} onSubmit={this.getReview} />
     );
 
     const modalFooter = [
@@ -136,12 +134,17 @@ class ReviewWizard extends Component {
       </Button>
     ];
 
+    const reviewFromState = {
+      metadata: this.state.metadata,
+      review: this.state.review
+    };
+
     const step2 = (
       <div>
         <ReviewModal
-          review={this.reviewFromStore}
+          review={reviewFromState}
           visible={this.state.showModal}
-          onClose={this.handleModalClose}
+          onClose={this.handleCancel}
           footer={modalFooter}
         />
         <Button
