@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Icon } from "antd";
+import { Button, Carousel, Icon } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import ReadingList from "../ReadingList/ReadingList";
@@ -8,6 +8,7 @@ import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
 import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
 import arrayMove from "array-move";
+import moment from "moment";
 
 import "./Home.css";
 
@@ -66,6 +67,33 @@ class Home extends Component {
     this.setState({ readingList: newReadingList });
   };
 
+  renderCarousel() {
+    let numberOfDaysSinceLastReview = "forever! Get reviewing!";
+    console.log(
+      moment.max(this.state.papers.map(paper => moment(paper.createdAt)))
+    );
+    if (this.state.papers.length > 0) {
+      numberOfDaysSinceLastReview = moment().diff(
+        moment.max(this.state.papers.map(paper => moment(paper.createdAt))),
+        "days"
+      );
+    }
+    const carouselContent = [
+      "A paper a week keeps the literature review on fleek",
+      "Believe first and foremost in yourself!",
+      "I'm trapped in here, please help me! It's been weeks...",
+      "Reading papers is fun AND nutritious! 🤪",
+      `Number of days since last review: ${numberOfDaysSinceLastReview}`
+    ];
+    return (
+      <Carousel autoplay speed={1000}>
+        {carouselContent.map(item => {
+          return <h3 key={`carousel ${item}`}>{item}</h3>;
+        })}
+      </Carousel>
+    );
+  }
+
   render() {
     const home_render = (
       <div>
@@ -74,7 +102,10 @@ class Home extends Component {
           className="width80"
         >
           <div style={{ width: "60%" }}>
-            <PaperSearchBar addToReadingListHandler={this.addToReadingList} />
+            <PaperSearchBar
+              addToReadingListHandler={this.addToReadingList}
+              carousel={this.renderCarousel()}
+            />
             <Button
               style={{ marginTop: "2px" }}
               onClick={this.startBlankReview}
