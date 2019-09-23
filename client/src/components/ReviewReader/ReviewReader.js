@@ -4,11 +4,16 @@ import { start_review } from "../../actions/index";
 import { connect } from "react-redux";
 import moment from "moment";
 import Fuse from "fuse.js";
-import { shortenAuthors } from "../utils.js";
+import { shortenAuthors, shortenString } from "../utils.js";
 import ReviewModal from "../ReviewModal/ReviewModal";
 import "./ReviewReader.css";
 
 const { confirm } = Modal;
+
+const displaySettings = {
+  titleStringLengthLimit: 200,
+  journalStringLengthLimit: 30
+};
 
 class ReviewReader extends Component {
   constructor(props) {
@@ -137,7 +142,11 @@ class ReviewReader extends Component {
       {
         title: "Title",
         dataIndex: "metadata.title",
-        render: text => <span>{text}</span>
+        render: title => (
+          <span>
+            {shortenString(title, displaySettings.titleStringLengthLimit)}
+          </span>
+        )
       },
       {
         title: "Authors",
@@ -151,6 +160,15 @@ class ReviewReader extends Component {
         sorter: (a, b) => {
           return moment(a.metadata.date).diff(moment(b.metadata.date));
         }
+      },
+      {
+        title: "Journal",
+        dataIndex: "metadata.journal",
+        render: journal => (
+          <span>
+            {shortenString(journal, displaySettings.journalStringLengthLimit)}
+          </span>
+        )
       },
       {
         title: "Review Date",
