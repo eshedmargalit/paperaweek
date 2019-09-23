@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Carousel, Icon, Button, Input, PageHeader } from "antd";
+import { Icon, Button, Input, PageHeader } from "antd";
 import { start_review } from "../../actions/index";
 import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
@@ -258,19 +258,7 @@ class PaperSearchBar extends Component {
   }
 
   render() {
-    const carouselContent = [
-      "A paper a week keeps the literature review on fleek",
-      "Believe first and foremost in yourself!",
-      "I'm trapped in here, please help me! It's been weeks...",
-      "Reading papers is fun AND nutritious! 🤪"
-    ];
-    const filler = (
-      <Carousel autoplay speed={1000}>
-        {carouselContent.map(item => {
-          return <h3 key={`carousel ${item}`}>{item}</h3>;
-        })}
-      </Carousel>
-    );
+    const { carousel } = this.props;
 
     const search_area = (
       <div>
@@ -292,7 +280,7 @@ class PaperSearchBar extends Component {
       </div>
     );
 
-    let results = this.state.entities.length ? this.renderHits() : filler;
+    let results = this.state.entities.length ? this.renderHits() : carousel;
 
     return (
       <div>
