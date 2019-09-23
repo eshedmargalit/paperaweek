@@ -11,7 +11,7 @@ import "./ReviewReader.css";
 const { confirm } = Modal;
 
 const displaySettings = {
-  titleStringLengthLimit: 200,
+  titleStringLengthLimit: 150,
   journalStringLengthLimit: 30
 };
 
