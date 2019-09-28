@@ -226,10 +226,10 @@ class ReviewReader extends Component {
     return (
       <>
         <Row>
-          <Col lg={6} sm={24}>
+          <Col lg={8} sm={24}>
             <PageHeader title="Read Your Reviews" avatar={{ icon: "read" }} />
           </Col>
-          <Col lg={18} sm={24}>
+          <Col lg={16} sm={24}>
             <div
               style={{
                 width: "100%",
