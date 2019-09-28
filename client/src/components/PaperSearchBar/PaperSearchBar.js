@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Carousel, Icon, Button, Input, PageHeader } from "antd";
+import { Icon, Button, Input, PageHeader } from "antd";
 import { start_review } from "../../actions/index";
-import { BeatLoader } from "react-spinners";
 import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
 import "./PaperSearchBar.css";
@@ -25,7 +24,6 @@ class PaperSearchBar extends Component {
   async academicSearch(query) {
     // bail out if no query
     if (query.length === 0) {
-      this.setState({ resultsAreLoading: false });
       return;
     }
 
@@ -42,9 +40,14 @@ class PaperSearchBar extends Component {
       parameters
     });
 
-    var resp = await response;
+    try {
+      var resp = await response;
+    } catch (error) {
+      console.error(error);
+    }
+
     if (resp.interpretations.length === 0) {
-      this.setState({ entities: [], resultsAreLoading: false });
+      this.setState({ entities: [] });
       return;
     }
     var value = resp.interpretations[0].rules[0].output.value;
@@ -70,11 +73,15 @@ class PaperSearchBar extends Component {
     response = client.evaluate({
       parameters
     });
-    resp = await response;
+    try {
+      resp = await response;
+    } catch (error) {
+      console.error(error);
+      resp.entities = [];
+    }
 
     this.setState({
-      entities: resp.entities,
-      resultsAreLoading: false
+      entities: resp.entities
     });
   }
 
@@ -82,7 +89,6 @@ class PaperSearchBar extends Component {
     if (search_term === "") {
       this.setState({
         entities: [],
-        resultsAreLoading: false,
         query: search_term
       });
       return;
@@ -91,8 +97,7 @@ class PaperSearchBar extends Component {
     // update searchbar value, start spinner, and only then run the search
     this.setState(
       {
-        query: search_term,
-        resultsAreLoading: true
+        query: search_term
       },
       () => {
         this.academicSearchThrottled(search_term);
@@ -253,28 +258,7 @@ class PaperSearchBar extends Component {
   }
 
   render() {
-    const carouselContent = [
-      "A paper a week keeps the literature review on fleek",
-      "Believe first and foremost in yourself!",
-      "I'm trapped in here, please help me! It's been weeks...",
-      "Reading papers is fun AND nutritious! 🤪"
-    ];
-    const filler = (
-      <Carousel autoplay speed={1000}>
-        {carouselContent.map(item => {
-          return <h3 key={`carousel ${item}`}>{item}</h3>;
-        })}
-      </Carousel>
-    );
-
-    let spinner = null;
-    if (this.state.resultsAreLoading) {
-      spinner = (
-        <div>
-          Searching <BeatLoader size={4} />
-        </div>
-      );
-    }
+    const { carousel } = this.props;
 
     const search_area = (
       <div>
@@ -293,11 +277,10 @@ class PaperSearchBar extends Component {
           value={this.state.query}
           allowClear
         />
-        {spinner}
       </div>
     );
 
-    let results = this.state.entities.length ? this.renderHits() : filler;
+    let results = this.state.entities.length ? this.renderHits() : carousel;
 
     return (
       <div>

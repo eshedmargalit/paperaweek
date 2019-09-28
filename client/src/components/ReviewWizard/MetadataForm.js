@@ -78,7 +78,7 @@ class MetadataForm extends Component {
     }
     return _uniq(
       keywords.split(",").map(item => {
-        return item.trim();
+        return item.trim().toLowerCase();
       })
     );
   }
