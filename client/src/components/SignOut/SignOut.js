@@ -11,7 +11,7 @@ class SignOut extends Component {
     };
   }
   componentDidMount() {
-    let secondsToGo = 3;
+    let secondsToGo = 2;
     const modal = Modal.success({
       title: "Sign out successful!",
       content: `Taking you home in ${secondsToGo}...`

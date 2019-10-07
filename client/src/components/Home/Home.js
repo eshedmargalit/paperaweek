@@ -11,8 +11,6 @@ import arrayMove from "array-move";
 import moment from "moment";
 import "./Home.css";
 
-const { SubMenu } = Menu;
-
 class Home extends Component {
   constructor(props) {
     super(props);
