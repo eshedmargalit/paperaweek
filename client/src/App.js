@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
-import Dashboard from "./components/Dashboard/Dashboard";
+import Login from "./components/Login/Login";
 import SignOut from "./components/SignOut/SignOut";
 import { CognitoAuth } from "amazon-cognito-auth-js";
 import { getAuthData } from "./utils.js";
@@ -26,12 +26,12 @@ function App() {
         <Route
           exact
           path="/"
-          render={props => <Home {...props} auth={auth} />}
+          render={props => <Login {...props} auth={auth} />}
         />
         <Route
           exact
           path="/dashboard"
-          render={props => <Dashboard {...props} auth={auth} />}
+          render={props => <Home {...props} auth={auth} />}
         />
         <Route exact path="/signout" component={SignOut} />
       </div>

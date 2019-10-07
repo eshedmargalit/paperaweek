@@ -9,7 +9,6 @@ const cognitoExpress = new CognitoExpress({
 module.exports = app => {
   app.get("/api/auth", (req, res) => {
     let idTokenFromClient = req.headers.idtoken;
-    console.log(idTokenFromClient);
     if (!idTokenFromClient) return res.status(401).send("No ID Token received");
 
     cognitoExpress.validate(idTokenFromClient, function(err, response) {
