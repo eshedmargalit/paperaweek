@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button } from "antd";
+import { Button } from "antd";
 import LazyHero from "react-lazy-hero";
 import { connect } from "react-redux";
 
@@ -26,9 +26,7 @@ class Login extends Component {
           <Button
             onClick={this.signIn}
             style={{
-              background: "transparent",
-              outline: "none",
-              color: "white"
+              outline: "none"
             }}
           >
             {" "}
@@ -42,7 +40,7 @@ class Login extends Component {
                 margin: "auto"
               }}
             >
-              Reading papers regularly is hard. Paper a week is here to help.
+              Because remembering to read papers is harder than it should be.
             </h6>
           </div>
           <div style={{ width: "40%", marginLeft: "25px" }}>
