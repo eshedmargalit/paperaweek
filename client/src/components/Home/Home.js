@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Carousel, Icon } from "antd";
+import { Button, Carousel, Icon, Menu } from "antd";
 import { FadeLoader } from "react-spinners";
 import ReviewReader from "../ReviewReader/ReviewReader";
 import ReadingList from "../ReadingList/ReadingList";
@@ -9,7 +9,6 @@ import ReviewWizard from "../ReviewWizard/ReviewWizard";
 import { start_review } from "../../actions/index";
 import arrayMove from "array-move";
 import moment from "moment";
-
 import "./Home.css";
 
 class Home extends Component {
@@ -17,6 +16,7 @@ class Home extends Component {
     super(props);
 
     this.state = {
+      displayName: "Unidentified. Show yourself!",
       loading: true,
       papers: [],
       readingList: []
@@ -27,16 +27,27 @@ class Home extends Component {
     fetch("/api/papers")
       .then(response => response.json())
       .then(data => this.setState({ papers: data, loading: false }));
+
+    let { auth } = this.props;
+
+    // parse return URL from cognito
+    auth.parseCognitoWebResponse(window.location.href);
+
+    // send JWT to backend
+    fetch("/api/auth", {
+      headers: {
+        "content-type": "application/json",
+        idToken: auth.signInUserSession.idToken.jwtToken
+      }
+    })
+      .then(response => response.json())
+      .then(({ name }) => this.setState({ displayName: name }));
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
     this.setState({
       readingList: arrayMove(this.state.readingList, oldIndex, newIndex)
     });
-  };
-
-  signIn = () => {
-    this.props.auth.getSession();
   };
 
   signOut = () => {
@@ -97,6 +108,17 @@ class Home extends Component {
   render() {
     const home_render = (
       <div>
+        <Menu mode="horizontal">
+          <Menu.Item>
+            <h5>
+              <Icon type="user" />
+              Hi there, {this.state.displayName}!
+            </h5>
+          </Menu.Item>
+          <Menu.Item>
+            <Button onClick={this.signOut}>Sign Out</Button>
+          </Menu.Item>
+        </Menu>
         <div
           style={{ display: "flex", justifyContent: "space-between" }}
           className="width80"
@@ -148,10 +170,6 @@ class Home extends Component {
     return (
       <div>
         {this.props.data.review_data.displayForm ? form_render : home_render}
-        <div className="width80">
-          <Button onClick={this.signIn}>Sign In</Button>
-          <Button onClick={this.signOut}>Sign Out</Button>
-        </div>
       </div>
     );
   }
