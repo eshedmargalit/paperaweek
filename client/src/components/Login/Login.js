@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Icon, Row } from "antd";
+import { Button, Card, Col, Icon, notification, Row } from "antd";
 import LazyHero from "react-lazy-hero";
 import { connect } from "react-redux";
 
@@ -7,6 +7,22 @@ class Login extends Component {
   signIn = () => {
     this.props.auth.getSession();
   };
+
+  openNotification = () => {
+    notification.open({
+      message: "Logout successful, see you soon!",
+      icon: <Icon type="smile" />,
+      onClick: () => {
+        console.log("Notification Clicked!");
+      }
+    });
+  };
+
+  componentDidMount() {
+    if (this.props.justSignedOut) {
+      this.openNotification();
+    }
+  }
 
   render() {
     return (
@@ -30,7 +46,7 @@ class Login extends Component {
             }}
           >
             {" "}
-            Unleash your Inner Blockchain{" "}
+            Sign in with <Icon type="google" />{" "}
           </Button>
         </LazyHero>
         <div style={{ background: "#ECECEC", padding: "30px" }}>
