@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "antd";
+import { Button, Card, Col, Icon, Row } from "antd";
 import LazyHero from "react-lazy-hero";
 import { connect } from "react-redux";
 
@@ -19,8 +19,8 @@ class Login extends Component {
           imageSrc="https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1661&q=80"
           style={{ overflow: "hidden", color: "white" }}
         >
-          <h1>Paper a Week</h1>
-          <h5 style={{ textAlign: "center" }}>
+          <h1 style={{ color: "white" }}>Paper a Week</h1>
+          <h5 style={{ color: "white", textAlign: "center" }}>
             Read a paper a week. That's it.
           </h5>
           <Button
@@ -33,28 +33,37 @@ class Login extends Component {
             Unleash your Inner Blockchain{" "}
           </Button>
         </LazyHero>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ width: "40%", marginLeft: "25px" }}>
-            <h6
-              style={{
-                margin: "auto"
-              }}
-            >
-              Because remembering to read papers is harder than it should be.
-            </h6>
-          </div>
-          <div style={{ width: "40%", marginLeft: "25px" }}>
-            <h6
-              style={{
-                margin: "auto"
-              }}
-            >
-              Some text that the PR team can fill in later, but I assume it will
-              be approximately this length, if not a little bit longer.
-            </h6>
-          </div>
+        <div style={{ background: "#ECECEC", padding: "30px" }}>
+          <Row gutter={16} type="flex">
+            <Col span={8}>
+              <Card style={{ height: "100%" }}>
+                <Card.Meta
+                  avatar={<Icon type="calendar" />}
+                  title="Because reading papers is hard"
+                  description="Make it easy with Paper-a-week. Use our search feature and wizard to write one detailed review per week. Future you will thank you!"
+                />
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card style={{ height: "100%" }}>
+                <Card.Meta
+                  avatar={<Icon type="team" />}
+                  title="Because you're smart"
+                  description="Make your profile public to allow others to learn from your summaries and insights!"
+                />
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card style={{ height: "100%" }}>
+                <Card.Meta
+                  avatar={<Icon type="dashboard" />}
+                  title="Because we could all use some motivation"
+                  description="Earn points by writing reviews on time and commenting on others!"
+                />
+              </Card>
+            </Col>
+          </Row>
         </div>
-        <div style={{ float: "left", clear: "both" }} />
       </div>
     );
   }
