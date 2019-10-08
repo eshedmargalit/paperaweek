@@ -55,19 +55,17 @@ class PaperSearchBar extends Component {
     // Attributes:
     // key     | meaning
     // -----------------
-    // AA.DAuN | Author Name
+    // AA.AuN | Author Name
     // AA.AfN  | Author affiliation
     // AA.S    | Author position
-    // E.DOI   | Paper DOI
-    // E.DN    | Paper title
-    // E.BV    | Journal name
-    // E.S     | Paper source
+    // Ti    | Paper title
+    // JN    | Journal name
     // Y       | Paper year
     // D       | Paper publication date
     // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
     parameters = {
       expr: value,
-      attributes: "AA.DAuN,AA.AfN,AA.S,E.DOI,E.DN,E.BV,E.S,Y,D",
+      attributes: "AA.AuN,AA.AfN,AA.S,Ti,JN,Y,D,Id",
       count: 5
     };
     response = client.evaluate({
@@ -108,6 +106,7 @@ class PaperSearchBar extends Component {
   processEntity(paperid) {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
+    console.log(ent);
 
     // sort authors by position (first author first, etc)
     let authors = _.sortBy(ent.AA, [
@@ -119,7 +118,7 @@ class PaperSearchBar extends Component {
     // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
-        return author.DAuN.split(".").join("");
+        return capital_case(author.AuN.split(".").join(""));
       })
     ).filter(name => name !== "");
 
@@ -142,15 +141,16 @@ class PaperSearchBar extends Component {
     }
 
     // dispatch action to begin the review
+    console.log(ent);
     const review = {
       metadata: {
-        title: ent.DN,
+        title: capital_case(ent.Ti),
         authors: author_names,
         institutions: institutions,
         date: new Date(ent.D),
-        doi: ent.DOI,
-        journal: ent.BV,
-        url: ent.S ? ent.S[0].U : ""
+        doi: "",
+        journal: ent.JN,
+        url: ""
       },
       review: {
         summary_points: [""],
@@ -182,6 +182,7 @@ class PaperSearchBar extends Component {
 
   renderHits() {
     const rendered_entities = this.state.entities.map(ent => {
+      console.log(ent);
       let authors = ent.AA;
 
       // sort by author order
@@ -191,28 +192,20 @@ class PaperSearchBar extends Component {
         }
       ]);
 
-      let unique_authors = _.uniqBy(authors, "DAuN");
+      let unique_authors = _.uniqBy(authors, "AuN");
       let author_names = unique_authors.map(author => {
-        return author.DAuN;
+        return capital_case(author.AuN);
       });
 
       let author_names_list = render_comma_sep_list(
         author_names,
         "author_results"
       );
-      let journal_name = ent.BV ? ent.BV + ", " : "";
+      let journal_name = ent.JN ? ent.JN + ", " : "";
       let year = ent.Y;
 
       return (
-        <div
-          style={{
-            border: "1px solid lightgray",
-            borderRadius: "5px",
-            marginTop: "5px",
-            padding: "10px"
-          }}
-          key={ent.Id}
-        >
+        <div className="searchResult" key={ent.Id}>
           <div
             style={{
               display: "flex",
@@ -221,7 +214,7 @@ class PaperSearchBar extends Component {
             }}
           >
             <div>
-              <strong>{ent.DN}</strong>
+              <strong>{capital_case(ent.Ti)}</strong>
               <br />
               {author_names_list}
             </div>
