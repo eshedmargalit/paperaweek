@@ -205,12 +205,16 @@ class PaperSearchBar extends Component {
       let year = ent.Y;
 
       return (
-        <div className="searchResult" key={ent.Id}>
+        <div
+          className="searchResult"
+          key={ent.Id}
+          onClick={() => {
+            this.addToReadingList(ent.Id);
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between"
+              width: "100%"
             }}
           >
             <div>
@@ -218,31 +222,22 @@ class PaperSearchBar extends Component {
               <br />
               {author_names_list}
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <Button
-                  onClick={() => {
-                    this.handlePaperClick(ent.Id);
-                  }}
-                >
-                  Start Review <Icon type="form" />
-                </Button>
-              </div>
-
-              <div style={{ marginLeft: "5px" }}>
-                <Button
-                  onClick={() => {
-                    this.addToReadingList(ent.Id);
-                  }}
-                  icon="plus"
-                />
-              </div>
-            </div>
           </div>
           <em>
             {journal_name}
             {year}
           </em>
+          <div>
+            <Button
+              size="small"
+              onClick={e => {
+                e.stopPropagation();
+                this.handlePaperClick(ent.Id);
+              }}
+            >
+              Start Review Now <Icon type="form" />
+            </Button>
+          </div>
         </div>
       );
     });
