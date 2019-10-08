@@ -18,3 +18,8 @@
   margin-top: 5px;
   padding: 10px;
 }
+
+.searchResult:hover {
+  background: #eee;
+  cursor: pointer;
+}
