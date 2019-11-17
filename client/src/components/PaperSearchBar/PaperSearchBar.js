@@ -27,60 +27,29 @@ class PaperSearchBar extends Component {
       return;
     }
 
-    const client = new cognitiveServices.academicKnowledge({
-      apiKey: process.env.REACT_APP_MSCOG_KEY1,
-      endpoint: "api.labs.cognitive.microsoft.com"
-    });
+    const attrs = "DN,D,DOI,AA.AfN,AA.AuN,J.JN,S,Y,Id";
+    let interpret_query = `https://api.labs.cognitive.microsoft.com/academic/v1.0/interpret?query=${query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
+    fetch(interpret_query)
+      .then(response => response.json())
+      .then(data => {
+        console.log("success!");
+        console.log(JSON.stringify(data));
 
-    var parameters = {
-      query: query
-    };
-
-    var response = client.interpret({
-      parameters
-    });
-
-    try {
-      var resp = await response;
-    } catch (error) {
-      console.error(error);
-    }
-
-    if (resp.interpretations.length === 0) {
-      this.setState({ entities: [] });
-      return;
-    }
-    var value = resp.interpretations[0].rules[0].output.value;
-
-    // Attributes:
-    // key     | meaning
-    // -----------------
-    // AA.AuN | Author Name
-    // AA.AfN  | Author affiliation
-    // AA.S    | Author position
-    // Ti    | Paper title
-    // JN    | Journal name
-    // Y       | Paper year
-    // D       | Paper publication date
-    // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
-    parameters = {
-      expr: value,
-      attributes: "AA.AuN,AA.AfN,AA.S,Ti,JN,Y,D,Id",
-      count: 5
-    };
-    response = client.evaluate({
-      parameters
-    });
-    try {
-      resp = await response;
-    } catch (error) {
-      console.error(error);
-      resp.entities = [];
-    }
-
-    this.setState({
-      entities: resp.entities
-    });
+        if (data.interpretations.length === 0) {
+          this.setState({ entities: [] });
+          return;
+        } else {
+          console.log(data.interpretations);
+          var top_interpretation =
+            data.interpretations[0].rules[0].output.value;
+          var eval_query = `https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?expr=${top_interpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
+          fetch(eval_query)
+            .then(response => response.json())
+            .then(data => {
+              this.setState({ entities: data.entities });
+            });
+        }
+      });
   }
 
   handleSearch = search_term => {
@@ -144,7 +113,7 @@ class PaperSearchBar extends Component {
     console.log(ent);
     const review = {
       metadata: {
-        title: capital_case(ent.Ti),
+        title: capital_case(ent.DN),
         authors: author_names,
         institutions: institutions,
         date: new Date(ent.D),
@@ -218,7 +187,7 @@ class PaperSearchBar extends Component {
             }}
           >
             <div>
-              <strong>{capital_case(ent.Ti)}</strong>
+              <strong>{capital_case(ent.DN)}</strong>
               <br />
               {author_names_list}
             </div>
