@@ -6,7 +6,7 @@ import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
 import "./PaperSearchBar.css";
 
-const cognitiveServices = require("cognitive-services");
+const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 
 class PaperSearchBar extends Component {
   constructor(props) {
@@ -21,68 +21,39 @@ class PaperSearchBar extends Component {
     };
   }
 
+  async interpret(query) {
+    let interpret_query = `${endpoint}/interpret?query=${query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
+
+    let response = await fetch(interpret_query);
+    let data = await response.json();
+    return data;
+  }
+
+  async evaluate(interpretation, attrs) {
+    let eval_query = `${endpoint}/evaluate?expr=${interpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
+
+    let response = await fetch(eval_query);
+    let data = await response.json();
+    return data;
+  }
+
   async academicSearch(query) {
     // bail out if no query
     if (query.length === 0) {
       return;
     }
 
-    const client = new cognitiveServices.academicKnowledge({
-      apiKey: process.env.REACT_APP_MSCOG_KEY1,
-      endpoint: "api.labs.cognitive.microsoft.com"
-    });
-
-    var parameters = {
-      query: query
-    };
-
-    var response = client.interpret({
-      parameters
-    });
-
-    try {
-      var resp = await response;
-    } catch (error) {
-      console.error(error);
-    }
-
-    if (resp.interpretations.length === 0) {
+    const attrs = "DN,D,DOI,AA.AfN,AA.AuN,J.JN,S,Y,Id";
+    let interpret_response = await this.interpret(query, attrs);
+    if (interpret_response.interpretations.length === 0) {
       this.setState({ entities: [] });
       return;
+    } else {
+      var top_interpretation =
+        interpret_response.interpretations[0].rules[0].output.value;
+      let evaluate_response = await this.evaluate(top_interpretation, attrs);
+      this.setState({ entities: evaluate_response.entities });
     }
-    var value = resp.interpretations[0].rules[0].output.value;
-
-    // Attributes:
-    // key     | meaning
-    // -----------------
-    // AA.DAuN | Author Name
-    // AA.AfN  | Author affiliation
-    // AA.S    | Author position
-    // E.DOI   | Paper DOI
-    // E.DN    | Paper title
-    // E.BV    | Journal name
-    // E.S     | Paper source
-    // Y       | Paper year
-    // D       | Paper publication date
-    // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
-    parameters = {
-      expr: value,
-      attributes: "AA.DAuN,AA.AfN,AA.S,E.DOI,E.DN,E.BV,E.S,Y,D",
-      count: 5
-    };
-    response = client.evaluate({
-      parameters
-    });
-    try {
-      resp = await response;
-    } catch (error) {
-      console.error(error);
-      resp.entities = [];
-    }
-
-    this.setState({
-      entities: resp.entities
-    });
   }
 
   handleSearch = search_term => {
@@ -119,7 +90,7 @@ class PaperSearchBar extends Component {
     // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
-        return author.DAuN.split(".").join("");
+        return capital_case(author.AuN.split(".").join(""));
       })
     ).filter(name => name !== "");
 
@@ -141,16 +112,26 @@ class PaperSearchBar extends Component {
       institutions = [""];
     }
 
+    let ent_url = "";
+    if (ent.S.length !== 0) {
+      ent_url = ent.S[0].U;
+    }
+
+    let journal_name = "";
+    if (ent.J) {
+      journal_name = capital_case(ent.J.JN);
+    }
+
     // dispatch action to begin the review
     const review = {
       metadata: {
-        title: ent.DN,
+        title: capital_case(ent.DN),
         authors: author_names,
         institutions: institutions,
         date: new Date(ent.D),
         doi: ent.DOI,
-        journal: ent.BV,
-        url: ent.S ? ent.S[0].U : ""
+        journal: journal_name,
+        url: ent_url
       },
       review: {
         summary_points: [""],
@@ -191,65 +172,57 @@ class PaperSearchBar extends Component {
         }
       ]);
 
-      let unique_authors = _.uniqBy(authors, "DAuN");
+      let unique_authors = _.uniqBy(authors, "AuN");
       let author_names = unique_authors.map(author => {
-        return author.DAuN;
+        return capital_case(author.AuN);
       });
 
       let author_names_list = render_comma_sep_list(
         author_names,
         "author_results"
       );
-      let journal_name = ent.BV ? ent.BV + ", " : "";
+      let journal_name = "";
+      if (ent.J) {
+        journal_name = capital_case(ent.J.JN);
+      }
+
       let year = ent.Y;
 
       return (
         <div
-          style={{
-            border: "1px solid lightgray",
-            borderRadius: "5px",
-            marginTop: "5px",
-            padding: "10px"
-          }}
+          className="searchResult"
           key={ent.Id}
+          onClick={() => {
+            this.addToReadingList(ent.Id);
+          }}
         >
           <div
             style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between"
+              width: "100%"
             }}
           >
             <div>
-              <strong>{ent.DN}</strong>
+              <strong>{capital_case(ent.DN)}</strong>
               <br />
               {author_names_list}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <Button
-                  onClick={() => {
-                    this.handlePaperClick(ent.Id);
-                  }}
-                >
-                  Start Review <Icon type="form" />
-                </Button>
-              </div>
-
-              <div style={{ marginLeft: "5px" }}>
-                <Button
-                  onClick={() => {
-                    this.addToReadingList(ent.Id);
-                  }}
-                  icon="plus"
-                />
-              </div>
             </div>
           </div>
           <em>
             {journal_name}
+            {` `}
             {year}
           </em>
+          <div>
+            <Button
+              size="small"
+              onClick={e => {
+                e.stopPropagation();
+                this.handlePaperClick(ent.Id);
+              }}
+            >
+              Start Review Now <Icon type="form" />
+            </Button>
+          </div>
         </div>
       );
     });
