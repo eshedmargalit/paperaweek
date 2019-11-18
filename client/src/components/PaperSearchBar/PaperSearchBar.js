@@ -6,7 +6,7 @@ import _ from "lodash";
 import { render_comma_sep_list, capital_case } from "../utils.js";
 import "./PaperSearchBar.css";
 
-const cognitiveServices = require("cognitive-services");
+const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 
 class PaperSearchBar extends Component {
   constructor(props) {
@@ -21,6 +21,22 @@ class PaperSearchBar extends Component {
     };
   }
 
+  async interpret(query) {
+    let interpret_query = `${endpoint}/interpret?query=${query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
+
+    let response = await fetch(interpret_query);
+    let data = await response.json();
+    return data;
+  }
+
+  async evaluate(interpretation, attrs) {
+    let eval_query = `${endpoint}/evaluate?expr=${interpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
+
+    let response = await fetch(eval_query);
+    let data = await response.json();
+    return data;
+  }
+
   async academicSearch(query) {
     // bail out if no query
     if (query.length === 0) {
@@ -28,28 +44,16 @@ class PaperSearchBar extends Component {
     }
 
     const attrs = "DN,D,DOI,AA.AfN,AA.AuN,J.JN,S,Y,Id";
-    let interpret_query = `https://api.labs.cognitive.microsoft.com/academic/v1.0/interpret?query=${query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
-    fetch(interpret_query)
-      .then(response => response.json())
-      .then(data => {
-        console.log("success!");
-        console.log(JSON.stringify(data));
-
-        if (data.interpretations.length === 0) {
-          this.setState({ entities: [] });
-          return;
-        } else {
-          console.log(data.interpretations);
-          var top_interpretation =
-            data.interpretations[0].rules[0].output.value;
-          var eval_query = `https://api.labs.cognitive.microsoft.com/academic/v1.0/evaluate?expr=${top_interpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
-          fetch(eval_query)
-            .then(response => response.json())
-            .then(data => {
-              this.setState({ entities: data.entities });
-            });
-        }
-      });
+    let interpret_response = await this.interpret(query, attrs);
+    if (interpret_response.interpretations.length === 0) {
+      this.setState({ entities: [] });
+      return;
+    } else {
+      var top_interpretation =
+        interpret_response.interpretations[0].rules[0].output.value;
+      let evaluate_response = await this.evaluate(top_interpretation, attrs);
+      this.setState({ entities: evaluate_response.entities });
+    }
   }
 
   handleSearch = search_term => {
@@ -75,7 +79,6 @@ class PaperSearchBar extends Component {
   processEntity(paperid) {
     // find the provided ID in entities
     let ent = _.find(this.state.entities, { Id: paperid });
-    console.log(ent);
 
     // sort authors by position (first author first, etc)
     let authors = _.sortBy(ent.AA, [
@@ -110,7 +113,6 @@ class PaperSearchBar extends Component {
     }
 
     // dispatch action to begin the review
-    console.log(ent);
     const review = {
       metadata: {
         title: capital_case(ent.DN),
@@ -151,7 +153,6 @@ class PaperSearchBar extends Component {
 
   renderHits() {
     const rendered_entities = this.state.entities.map(ent => {
-      console.log(ent);
       let authors = ent.AA;
 
       // sort by author order
