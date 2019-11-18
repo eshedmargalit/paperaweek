@@ -11,3 +11,15 @@
   background: lightgray;
   overflow: hidden;
 }
+
+.searchResult {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+.searchResult:hover {
+  background: #eee;
+  cursor: pointer;
+}

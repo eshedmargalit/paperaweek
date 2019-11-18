@@ -2,8 +2,17 @@ import React, { Component } from "react";
 import { Button, Card, Col, Icon, notification, Row } from "antd";
 import LazyHero from "react-lazy-hero";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirectHome: false
+    };
+  }
+
   signIn = () => {
     this.props.auth.getSession();
   };
@@ -22,9 +31,25 @@ class Login extends Component {
     if (this.props.justSignedOut) {
       this.openNotification();
     }
+
+    let token = this.props.auth.signInUserSession.idToken.jwtToken;
+    fetch("/api/auth", {
+      headers: {
+        "content-type": "application/json",
+        idToken: token
+      }
+    }).then(response => {
+      if (response.ok) {
+        this.setState({ redirectHome: true });
+      }
+    });
   }
 
   render() {
+    if (this.state.redirectHome) {
+      return <Redirect to="/dashboard" push />;
+    }
+
     return (
       <div>
         <LazyHero
