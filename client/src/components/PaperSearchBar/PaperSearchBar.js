@@ -112,6 +112,16 @@ class PaperSearchBar extends Component {
       institutions = [""];
     }
 
+    let ent_url = "";
+    if (ent.S.length !== 0) {
+      ent_url = ent.S[0].U;
+    }
+
+    let journal_name = "";
+    if (ent.J) {
+      journal_name = capital_case(ent.J.JN);
+    }
+
     // dispatch action to begin the review
     const review = {
       metadata: {
@@ -119,9 +129,9 @@ class PaperSearchBar extends Component {
         authors: author_names,
         institutions: institutions,
         date: new Date(ent.D),
-        doi: "",
-        journal: ent.JN,
-        url: ""
+        doi: ent.DOI,
+        journal: journal_name,
+        url: ent_url
       },
       review: {
         summary_points: [""],
@@ -171,7 +181,11 @@ class PaperSearchBar extends Component {
         author_names,
         "author_results"
       );
-      let journal_name = ent.JN ? ent.JN + ", " : "";
+      let journal_name = "";
+      if (ent.J) {
+        journal_name = capital_case(ent.J.JN);
+      }
+
       let year = ent.Y;
 
       return (
