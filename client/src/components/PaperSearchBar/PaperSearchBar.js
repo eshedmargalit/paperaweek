@@ -209,6 +209,7 @@ class PaperSearchBar extends Component {
           </div>
           <em>
             {journal_name}
+            {` `}
             {year}
           </em>
           <div>
