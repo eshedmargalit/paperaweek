@@ -22,7 +22,7 @@ class PaperSearchBar extends Component {
   }
 
   async interpret(query) {
-    let interpret_query = `${endpoint}/interpret?query=${query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
+    let interpret_query = `${endpoint}/interpret?query=${query}&complete=1&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
 
     let response = await fetch(interpret_query);
     let data = await response.json();
@@ -43,15 +43,15 @@ class PaperSearchBar extends Component {
       return;
     }
 
-    const attrs = "DN,D,DOI,AA.AfN,AA.AuN,J.JN,S,Y,Id";
+    const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,J.JN,S,Y,Id";
     // Attributes:
     // key     | meaning
     // -----------------
     // DN      | 'Display Name' (Title)
     // D       | Date
     // DOI     | Digital Object Identifier
-    // AA.AfN  | Author Affiliation
-    // AA.AuN  | Author Name
+    // AA.DAfN | Author Affiliation
+    // AA.DAuN | Author Name
     // J.JN    | Journal Name
     // S       | Sources (includes URLs)
     // Y       | Year (should be part of D but whatever)
@@ -64,6 +64,9 @@ class PaperSearchBar extends Component {
     } else {
       var top_interpretation =
         interpret_response.interpretations[0].rules[0].output.value;
+      for (let i = 0; i < interpret_response.interpretations.length; i++) {
+        console.log(interpret_response.interpretations[i].rules);
+      }
       let evaluate_response = await this.evaluate(top_interpretation, attrs);
       this.setState({ entities: evaluate_response.entities });
     }
@@ -103,14 +106,14 @@ class PaperSearchBar extends Component {
     // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
-        return capital_case(author.AuN.split(".").join(""));
+        return capital_case(author.DAuN.split(".").join(""));
       })
     ).filter(name => name !== "");
 
     // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
       authors.map(author => {
-        return capital_case(author.AfN)
+        return capital_case(author.DAfN)
           .split(".")
           .join("")
           .trim();
@@ -185,9 +188,9 @@ class PaperSearchBar extends Component {
         }
       ]);
 
-      let unique_authors = _.uniqBy(authors, "AuN");
+      let unique_authors = _.uniqBy(authors, "DAuN");
       let author_names = unique_authors.map(author => {
-        return capital_case(author.AuN);
+        return capital_case(author.DAuN);
       });
 
       let author_names_list = render_comma_sep_list(
