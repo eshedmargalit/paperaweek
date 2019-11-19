@@ -43,7 +43,7 @@ class PaperSearchBar extends Component {
       return;
     }
 
-    const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,J.JN,S,Y,Id";
+    const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
     // Attributes:
     // key     | meaning
     // -----------------
@@ -52,10 +52,10 @@ class PaperSearchBar extends Component {
     // DOI     | Digital Object Identifier
     // AA.DAfN | Author Affiliation
     // AA.DAuN | Author Name
-    // J.JN    | Journal Name
     // S       | Sources (includes URLs)
     // Y       | Year (should be part of D but whatever)
     // Id      | Unique identifier for entity
+    // VFN    | Journal Name
     // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
     let interpret_response = await this.interpret(query, attrs);
     if (interpret_response.interpretations.length === 0) {
@@ -64,9 +64,7 @@ class PaperSearchBar extends Component {
     } else {
       var top_interpretation =
         interpret_response.interpretations[0].rules[0].output.value;
-      for (let i = 0; i < interpret_response.interpretations.length; i++) {
-        console.log(interpret_response.interpretations[i].rules);
-      }
+      for (let i = 0; i < interpret_response.interpretations.length; i++) {}
       let evaluate_response = await this.evaluate(top_interpretation, attrs);
       this.setState({ entities: evaluate_response.entities });
     }
@@ -95,6 +93,7 @@ class PaperSearchBar extends Component {
   processEntity(paperid) {
     // find the provided ID in entities
     let entity = _.find(this.state.entities, { Id: paperid });
+    console.log(entity);
 
     // sort authors by position (first author first, etc)
     let authors = _.sortBy(entity.AA, [
@@ -133,15 +132,12 @@ class PaperSearchBar extends Component {
       entity_url = entity.S[0].U;
     }
 
-    let journal_name = "";
-    if (entity.J) {
-      journal_name = capital_case(entity.J.JN);
-    }
+    let journal_name = entity.VFN ? entity.VFN : "";
 
     // dispatch action to begin the review
     const review = {
       metadata: {
-        title: capital_case(entity.DN),
+        title: entity.DN,
         authors: author_names,
         institutions: institutions,
         date: new Date(entity.D),
@@ -197,10 +193,7 @@ class PaperSearchBar extends Component {
         author_names,
         "author_results"
       );
-      let journal_name = "";
-      if (entity.J) {
-        journal_name = capital_case(entity.J.JN);
-      }
+      let journal_name = entity.VFN ? entity.VFN : "";
 
       let year = entity.Y;
 
@@ -218,7 +211,7 @@ class PaperSearchBar extends Component {
             }}
           >
             <div>
-              <strong>{capital_case(entity.DN)}</strong>
+              <strong>{entity.DN}</strong>
               <br />
               {author_names_list}
             </div>
