@@ -115,7 +115,7 @@ class Home extends Component {
               Hi there, {this.state.displayName}!
             </h5>
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item style={{ float: "right" }}>
             <Button onClick={this.signOut}>Sign Out</Button>
           </Menu.Item>
         </Menu>
