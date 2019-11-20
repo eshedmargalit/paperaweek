@@ -66,17 +66,24 @@ class ReviewWizard extends Component {
 
   handleSubmission = () => {
     const reviewObject = {
-      metadata: this.state.metadata,
+      paper: this.state.metadata,
       review: this.state.review
     };
 
     // post or put object, refresh papers in Home.js, and exit the form
     let review_id = this.reviewFromStore._id;
     let fetch_method = "post";
-    let headers = { "content-type": "application/json" };
+    let headers = {
+      "content-type": "application/json",
+      userid: this.props.userid
+    };
     if (review_id) {
       fetch_method = "put";
-      headers = { "content-type": "application/json", id: review_id };
+      headers = {
+        "content-type": "application/json",
+        id: review_id,
+        userid: this.props.userid
+      };
     }
 
     this.setState({ submitLoading: true }, () => {

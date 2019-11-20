@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 require("./models/Paper");
+require("./models/User");
+require("./models/Review");
 
 const app = express();
 const port = 5000;

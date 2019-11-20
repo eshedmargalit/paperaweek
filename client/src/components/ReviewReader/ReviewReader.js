@@ -137,7 +137,7 @@ class ReviewReader extends Component {
     this.props.dispatch(start_review(review));
   };
 
-  renderReviews = papers => {
+  renderReviews = reviews => {
     const columns = [
       {
         title: "Title",
@@ -197,9 +197,9 @@ class ReviewReader extends Component {
         }}
         rowKey={review => review._id}
         columns={columns}
-        dataSource={papers}
+        dataSource={reviews}
         page_size={10}
-        pagination={papers.length > 10}
+        pagination={reviews.length > 10}
       />
     );
   };
@@ -268,7 +268,7 @@ class ReviewReader extends Component {
         </Row>
         <div>
           <div>
-            {this.renderReviews(this.fuzzyFilterReviews(this.props.papers))}
+            {this.renderReviews(this.fuzzyFilterReviews(this.props.reviews))}
           </div>
         </div>
         <ReviewModal

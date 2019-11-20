@@ -17,31 +17,35 @@ class Home extends Component {
 
     this.state = {
       displayName: "Unidentified. Show yourself!",
+      userid: null,
       loading: true,
-      papers: [],
+      reviews: [],
       readingList: []
     };
   }
 
-  componentDidMount() {
-    fetch("/api/papers")
-      .then(response => response.json())
-      .then(data => this.setState({ papers: data, loading: false }));
-
+  async componentDidMount() {
     let { auth } = this.props;
 
     // parse return URL from cognito
     auth.parseCognitoWebResponse(window.location.href);
 
     // send JWT to backend
-    fetch("/api/auth", {
+    let auth_data = await fetch("/api/auth", {
       headers: {
         "content-type": "application/json",
         idToken: auth.signInUserSession.idToken.jwtToken
       }
-    })
-      .then(response => response.json())
-      .then(({ name }) => this.setState({ displayName: name }));
+    }).then(response => response.json());
+    console.log(auth_data);
+
+    // finally, set state
+    this.setState({
+      displayName: auth_data.display_name,
+      userid: auth_data._id,
+      loading: false,
+      reviews: auth_data.reviews
+    });
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
@@ -55,9 +59,11 @@ class Home extends Component {
   };
 
   refreshPapers = () => {
-    fetch("/api/papers")
+    fetch("/api/papers", {
+      headers: { userid: this.state.userid }
+    })
       .then(response => response.json())
-      .then(data => this.setState({ papers: data, loading: false }));
+      .then(data => this.setState({ reviews: data.reviews, loading: false }));
   };
 
   startBlankReview = () => {
@@ -80,12 +86,9 @@ class Home extends Component {
 
   renderCarousel() {
     let numberOfDaysSinceLastReview = "forever! Get reviewing!";
-    console.log(
-      moment.max(this.state.papers.map(paper => moment(paper.createdAt)))
-    );
-    if (this.state.papers.length > 0) {
+    if (this.state.reviews.length > 0) {
       numberOfDaysSinceLastReview = moment().diff(
-        moment.max(this.state.papers.map(paper => moment(paper.createdAt))),
+        moment.max(this.state.reviews.map(paper => moment(paper.createdAt))),
         "days"
       );
     }
@@ -152,7 +155,7 @@ class Home extends Component {
           ) : (
             <ReviewReader
               refreshPapers={this.refreshPapers}
-              papers={this.state.papers}
+              reviews={this.state.reviews}
             />
           )}
         </div>
@@ -162,7 +165,10 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <ReviewWizard refreshPapers={this.refreshPapers} />
+          <ReviewWizard
+            userid={this.state.userid}
+            refreshPapers={this.refreshPapers}
+          />
         </div>
       </div>
     );
