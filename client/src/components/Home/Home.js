@@ -156,6 +156,7 @@ class Home extends Component {
             </div>
           ) : (
             <ReviewReader
+              userid={this.state.userid}
               refreshPapers={this.refreshPapers}
               reviews={this.state.reviews}
             />

@@ -70,7 +70,10 @@ class ReviewReader extends Component {
       onOk: () => {
         fetch("/api/papers", {
           method: "delete",
-          headers: { "content-type": "application/json" },
+          headers: {
+            "content-type": "application/json",
+            userid: this.props.userid
+          },
           body: JSON.stringify(this.state.selectedReview)
         })
           .then(response => response.json())

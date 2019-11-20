@@ -35,7 +35,6 @@ module.exports = app => {
         },
         { new: true } // return updated post
       );
-      console.log(review);
       if (!review) {
         res.status(404).send("No item found");
       } else {
@@ -48,12 +47,22 @@ module.exports = app => {
 
   app.delete("/api/papers", async (req, res) => {
     try {
-      const paper = await Paper.findByIdAndDelete(req.body._id);
-      if (!paper) {
-        res.status(404).send("No item found");
-      } else {
-        res.send(JSON.stringify(paper));
-      }
+      User.findOneAndUpdate(
+        { _id: req.headers.userid },
+        {
+          $pull: {
+            reviews: { _id: new mongoose.Types.ObjectId(req.body._id) }
+          }
+        },
+        { new: true },
+        function(err, review) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send(JSON.stringify(review));
+          }
+        }
+      );
     } catch (err) {
       res.status(500).send(err);
     }
