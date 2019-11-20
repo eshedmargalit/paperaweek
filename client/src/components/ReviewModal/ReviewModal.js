@@ -35,18 +35,18 @@ class ReviewModal extends Component {
   };
   render() {
     if (!this.props.review) return null;
-    let { metadata, review } = this.props.review;
-    const date_str = moment(metadata.date, "YYYY-MM").format("MMMM YYYY");
+    let { paper, review } = this.props.review;
+    const date_str = moment(paper.date, "YYYY-MM").format("MMMM YYYY");
 
     let doi_tag = null;
-    if (metadata.doi) {
+    if (paper.doi) {
       doi_tag = (
         <a
-          href={"http://dx.doi.org/" + metadata.doi}
+          href={"http://dx.doi.org/" + paper.doi}
           target="_blank"
           rel="noopener noreferrer"
         >
-          ({metadata.doi})
+          ({paper.doi})
         </a>
       );
     }
@@ -99,8 +99,8 @@ class ReviewModal extends Component {
 
     const titleDiv = (
       <div>
-        <div>{metadata.title}</div>
-        <div>{this.renderTags(metadata.keywords)}</div>
+        <div>{paper.title}</div>
+        <div>{this.renderTags(paper.keywords)}</div>
       </div>
     );
 
@@ -114,9 +114,9 @@ class ReviewModal extends Component {
           width="80%"
         >
           <div>
-            {render_comma_sep_list(metadata.authors)}
-            {render_comma_sep_list(metadata.institutions)}
-            Published in {metadata.journal} in {date_str}
+            {render_comma_sep_list(paper.authors)}
+            {render_comma_sep_list(paper.institutions)}
+            Published in {paper.journal} in {date_str}
             {` `}
             {doi_tag}
           </div>

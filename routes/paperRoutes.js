@@ -1,23 +1,41 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
+const Paper = mongoose.model("papers");
 const Review = mongoose.model("papers");
 
 module.exports = app => {
   app.get("/api", (req, res) => res.send(JSON.stringify("Hello World")));
 
   app.post("/api/papers", async (req, res) => {
-    let newReview = await new Review(req.body).save();
+    let newPaper = new Paper(req.body.paper);
+    let newReview = {
+      paper: newPaper,
+      review: req.body.review,
+      _id: new mongoose.Types.ObjectId()
+    };
     let user = await User.findOne({ _id: req.headers.userid });
     user.reviews.push(newReview);
-    let review = user.save();
-    res.send(JSON.stringify(review));
+    user.save();
+    res.send(JSON.stringify(newReview));
   });
 
   app.put("/api/papers", async (req, res) => {
     try {
-      const review = await User.findById(req.headers.userid).populate(
-        "reviews"
+      let newPaper = new Paper(req.body.paper);
+      let review = await User.findOneAndUpdate(
+        {
+          _id: req.headers.userid,
+          "reviews._id": mongoose.Types.ObjectId(req.headers.id)
+        },
+        {
+          $set: {
+            "reviews.$.paper": newPaper,
+            "reviews.$.review": req.body.review
+          }
+        },
+        { new: true } // return updated post
       );
+      console.log(review);
       if (!review) {
         res.status(404).send("No item found");
       } else {
@@ -43,7 +61,6 @@ module.exports = app => {
 
   app.get("/api/papers", async (req, res) => {
     let user = await User.findById(req.headers.userid);
-    console.log(user.reviews);
     res.send(JSON.stringify(user.reviews));
   });
 };

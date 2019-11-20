@@ -12,7 +12,8 @@ var ReviewSchema = new Schema(
       results_points: [{ type: String }],
       conclusions_points: [{ type: String }],
       other_points: [{ type: String }]
-    }
+    },
+    _id: Schema.Types.ObjectId
   },
   {
     timestamps: { createdAt: true, updatedAt: true }

@@ -37,7 +37,6 @@ class Home extends Component {
         idToken: auth.signInUserSession.idToken.jwtToken
       }
     }).then(response => response.json());
-    console.log(auth_data);
 
     // finally, set state
     this.setState({
@@ -63,7 +62,10 @@ class Home extends Component {
       headers: { userid: this.state.userid }
     })
       .then(response => response.json())
-      .then(data => this.setState({ reviews: data.reviews, loading: false }));
+      .then(data => {
+        console.log(data);
+        this.setState({ reviews: data, loading: false });
+      });
   };
 
   startBlankReview = () => {

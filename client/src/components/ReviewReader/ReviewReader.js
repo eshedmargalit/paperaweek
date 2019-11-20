@@ -120,12 +120,7 @@ class ReviewReader extends Component {
       distance: 5000,
       maxPatternLength: 32,
       minMatchCharLength: 4,
-      keys: [
-        "metadata.title",
-        "metadata.authors",
-        "metadata.keywords",
-        "metadata.date"
-      ]
+      keys: ["paper.title", "paper.authors", "paper.keywords", "paper.date"]
     };
 
     var fuse = new Fuse(reviews, options);
@@ -141,7 +136,7 @@ class ReviewReader extends Component {
     const columns = [
       {
         title: "Title",
-        dataIndex: "metadata.title",
+        dataIndex: "paper.title",
         render: title => (
           <span>
             {shortenString(title, displaySettings.titleStringLengthLimit)}
@@ -150,20 +145,20 @@ class ReviewReader extends Component {
       },
       {
         title: "Authors",
-        dataIndex: "metadata.authors",
+        dataIndex: "paper.authors",
         render: authorList => <span>{shortenAuthors(authorList)}</span>
       },
       {
         title: "Year Published",
-        dataIndex: "metadata.date",
+        dataIndex: "paper.date",
         render: date => <span>{moment(date, "YYYY-MM").format("YYYY")}</span>,
         sorter: (a, b) => {
-          return moment(a.metadata.date).diff(moment(b.metadata.date));
+          return moment(a.paper.date).diff(moment(b.paper.date));
         }
       },
       {
         title: "Journal",
-        dataIndex: "metadata.journal",
+        dataIndex: "paper.journal",
         render: journal => (
           <span>
             {shortenString(journal, displaySettings.journalStringLengthLimit)}
@@ -181,7 +176,7 @@ class ReviewReader extends Component {
       },
       {
         title: "Keywords",
-        dataIndex: "metadata.keywords",
+        dataIndex: "paper.keywords",
         render: keywords => this.renderTags(keywords)
       }
     ];

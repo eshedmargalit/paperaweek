@@ -136,7 +136,7 @@ class PaperSearchBar extends Component {
 
     // dispatch action to begin the review
     const review = {
-      metadata: {
+      paper: {
         title: entity.DN,
         authors: author_names,
         institutions: institutions,

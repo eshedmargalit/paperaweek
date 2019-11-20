@@ -27,7 +27,7 @@ class MetadataForm extends Component {
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var fieldName of Object.keys(dynamicFieldCounters)) {
-      let existingMetadata = this.props.metadata[fieldName];
+      let existingMetadata = this.props.paper[fieldName];
 
       if (existingMetadata) {
         dynamicFieldCounters[fieldName] = existingMetadata.length;
@@ -42,32 +42,32 @@ class MetadataForm extends Component {
     // run antd validation for all fields
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        let metadata = {};
+        let paper = {};
 
         metaFields.forEach(({ fieldName, isList }) => {
           // get field value
-          let metadataValue;
+          let paperValue;
           if (isList) {
             let listValues = values[fieldName].map(itemIdx => {
               return values[`${fieldName}_list_values`][itemIdx];
             });
-            metadataValue = listValues;
+            paperValue = listValues;
           } else {
-            metadataValue = values[fieldName];
+            paperValue = values[fieldName];
           }
 
           // special fields: deal with keywords or date
           if (fieldName === "keywords") {
             if (values.keywords && notEmpty(values.keywords)) {
-              metadataValue = this.handleKeywords(values.keywords);
+              paperValue = this.handleKeywords(values.keywords);
             }
           } else if (fieldName === "date") {
-            metadataValue = values.date.format("YYYY-MM");
+            paperValue = values.date.format("YYYY-MM");
           }
 
-          metadata[fieldName] = metadataValue;
+          paper[fieldName] = paperValue;
         });
-        this.props.onSubmit(metadata);
+        this.props.onSubmit(paper);
       }
     });
   };
@@ -104,10 +104,10 @@ class MetadataForm extends Component {
   }
 
   render() {
-    const existingMeta = this.props.metadata;
+    const existingMeta = this.props.paper;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
-    // construct fields for metadata
+    // construct fields for paper
     const renderedFields = metaFields.map(
       ({ fieldName, label, required, isList }) => {
         let renderedField;
