@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const Paper = require("./Paper.js");
-const Review = require("./Review.js");
+const PaperSchema = require("./Paper.js");
+const ReviewSchema = require("./Review.js");
 
 var UserSchema = new Schema(
   {
     unique_id: String,
     display_name: String,
-    reading_list: [Paper],
-    reviews: [Review]
+    reading_list: [PaperSchema],
+    reviews: [ReviewSchema]
   },
   {
     timestamps: { createdAt: true, updatedAt: true }

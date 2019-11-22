@@ -21,3 +21,5 @@ var ReviewSchema = new Schema(
 );
 
 mongoose.model("reviews", ReviewSchema);
+
+module.exports = ReviewSchema;

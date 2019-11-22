@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const Paper = mongoose.model("papers");
-const Review = mongoose.model("papers");
 
 module.exports = app => {
   app.get("/api", (req, res) => res.send(JSON.stringify("Hello World")));

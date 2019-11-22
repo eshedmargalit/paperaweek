@@ -20,3 +20,5 @@ var PaperSchema = new Schema(
 );
 
 mongoose.model("papers", PaperSchema);
+
+module.exports = PaperSchema;
