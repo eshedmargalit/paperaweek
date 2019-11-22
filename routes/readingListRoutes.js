@@ -14,14 +14,7 @@ module.exports = app => {
 
   app.put("/api/readingList", async (req, res) => {
     let user = await User.findOne({ _id: req.headers.userid });
-    let reading_list = user.reading_list;
-    let doc_1 = reading_list[req.headers.index_1];
-    let doc_2 = reading_list[req.headers.index_2];
-
-    // deepcopy doc_1
-    let tmp = JSON.parse(JSON.stringify(doc_1));
-    doc_1.set(doc_2);
-    doc_2.set(tmp);
+    user.reading_list = req.body;
     user.save();
     res.send(JSON.stringify(user.reading_list));
   });

@@ -58,9 +58,7 @@ class Home extends Component {
       () => {
         let headers = {
           "content-type": "application/json",
-          userid: this.state.userid,
-          index_1: oldIndex,
-          index_2: newIndex
+          userid: this.state.userid
         };
 
         // Update the backend with this new readinglist
@@ -241,7 +239,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Home);
+export default connect(mapStateToProps, null)(Home);
