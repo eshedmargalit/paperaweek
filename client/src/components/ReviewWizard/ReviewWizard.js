@@ -88,12 +88,6 @@ class ReviewWizard extends Component {
       };
     }
 
-    //TODO: need way to reidentify reviews
-    console.log(reviewObject);
-    console.log(this.reviewFromStore);
-    console.log(review_id);
-    console.log(fetch_method);
-
     this.setState({ submitLoading: true }, () => {
       fetch("/api/papers", {
         method: fetch_method,

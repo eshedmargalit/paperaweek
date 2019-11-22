@@ -38,9 +38,9 @@ const SortableItem = sortableElement(
         >
           <div>
             <List.Item.Meta
-              title={`#${sortIndex + 1}: ${value.metadata.title}`}
-              description={`${shortenAuthors(value.metadata.authors)}, ${moment(
-                value.metadata.date,
+              title={`#${sortIndex + 1}: ${value.title}`}
+              description={`${shortenAuthors(value.authors)}, ${moment(
+                value.date,
                 "YYYY-MM"
               ).format("YYYY")}`}
             />
@@ -66,7 +66,7 @@ const SortableInfiniteList = sortableContainer(
         <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
           {items.map((value, index) => (
             <SortableItem
-              key={`item-${value.metadata.title}`}
+              key={`item-${value.title}`}
               index={index}
               sortIndex={index}
               value={value}

@@ -38,18 +38,21 @@ class Home extends Component {
       }
     }).then(response => response.json());
 
+    console.log(auth_data);
     // finally, set state
     this.setState({
       displayName: auth_data.display_name,
       userid: auth_data._id,
       loading: false,
-      reviews: auth_data.reviews
+      reviews: auth_data.reviews,
+      readingList: auth_data.reading_list
     });
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
+    let newReadingList = arrayMove(this.state.readingList, oldIndex, newIndex);
     this.setState({
-      readingList: arrayMove(this.state.readingList, oldIndex, newIndex)
+      readingList: newReadingList
     });
   };
 
@@ -73,17 +76,48 @@ class Home extends Component {
   };
 
   addToReadingList = review => {
-    // TODO: prevent dupes
+    const paper = review.paper;
+    console.log(paper);
     let currReadingList = this.state.readingList;
-    let newReadingList = currReadingList.concat(review);
-    this.setState({ readingList: newReadingList });
+
+    let newReadingList = currReadingList.concat(paper);
+    this.setState({ readingList: newReadingList }, () => {
+      let headers = {
+        "content-type": "application/json",
+        userid: this.state.userid
+      };
+      fetch("/api/readingList", {
+        method: "post",
+        headers: headers,
+        body: JSON.stringify(paper)
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ readingList: data });
+        });
+    });
   };
 
-  removeFromReadingList = review => {
-    let newReadingList = this.state.readingList.filter(currReview => {
-      return currReview !== review;
+  removeFromReadingList = paper => {
+    let newReadingList = this.state.readingList.filter(currPaper => {
+      return currPaper !== paper;
     });
-    this.setState({ readingList: newReadingList });
+
+    this.setState({ readingList: newReadingList }, () => {
+      let headers = {
+        "content-type": "application/json",
+        userid: this.state.userid
+      };
+      fetch("/api/readingList", {
+        method: "delete",
+        headers: headers,
+        body: JSON.stringify(paper)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        });
+    });
   };
 
   renderCarousel() {
