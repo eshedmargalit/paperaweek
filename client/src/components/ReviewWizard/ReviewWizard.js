@@ -37,8 +37,6 @@ class ReviewWizard extends Component {
     this.reviewFromStore =
       this.props.data.review_data.review_object || blankReview;
 
-    console.log(this.reviewFromStore);
-
     this.state = {
       showModal: false,
       submitLoading: false,

@@ -92,7 +92,6 @@ class Home extends Component {
 
   addToReadingList = review => {
     const paper = review.paper;
-    console.log(paper);
     let currReadingList = this.state.readingList;
 
     let newReadingList = currReadingList.concat(paper);
@@ -239,4 +238,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Home);
+export default connect(
+  mapStateToProps,
+  null
+)(Home);

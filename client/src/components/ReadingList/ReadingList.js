@@ -83,7 +83,18 @@ const SortableInfiniteList = sortableContainer(
 
 class ReadingList extends Component {
   handleEditClick(value) {
-    this.props.dispatch(start_review(value));
+    const review = {
+      paper: value,
+      review: {
+        summary_points: [""],
+        background_points: [""],
+        approach_points: [""],
+        results_points: [""],
+        conclusions_points: [""],
+        other_points: [""]
+      }
+    };
+    this.props.dispatch(start_review(review));
   }
 
   handleDeleteClick(index) {
