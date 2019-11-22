@@ -51,9 +51,24 @@ class Home extends Component {
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
     let newReadingList = arrayMove(this.state.readingList, oldIndex, newIndex);
-    this.setState({
-      readingList: newReadingList
-    });
+    this.setState(
+      {
+        readingList: newReadingList
+      },
+      () => {
+        let headers = {
+          "content-type": "application/json",
+          userid: this.state.userid
+        };
+
+        // Update the backend with this new readinglist
+        fetch("/api/readingList", {
+          method: "put",
+          headers: headers,
+          body: JSON.stringify(this.state.readingList)
+        });
+      }
+    );
   };
 
   signOut = () => {
@@ -224,7 +239,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Home);
+export default connect(mapStateToProps, null)(Home);

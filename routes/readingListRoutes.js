@@ -12,6 +12,13 @@ module.exports = app => {
     res.send(JSON.stringify(user.reading_list));
   });
 
+  app.put("/api/readingList", async (req, res) => {
+    let user = await User.findOne({ _id: req.headers.userid });
+    user.reading_list = req.body;
+    user.save();
+    res.send(JSON.stringify(user.reading_list));
+  });
+
   app.delete("/api/readingList", async (req, res) => {
     try {
       User.findOneAndUpdate(
