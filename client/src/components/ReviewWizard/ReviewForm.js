@@ -3,14 +3,12 @@ import { Icon, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
 import './ReviewWizard.css';
 import {
-  getReviewFields,
-  getFormItemLayout,
-  getFormItemLayoutWithOutLabel,
+  reviewFields,
+  formItemLayout,
+  formItemLayoutWithoutLabel,
 } from './utils.js';
 
 const { TextArea } = Input;
-const formItemLayout = getFormItemLayout();
-const formItemLayoutWithOutLabel = getFormItemLayoutWithOutLabel();
 
 // set counters for which field number is next for dynamic fields
 var dynamicFieldCounters = {
@@ -21,8 +19,6 @@ var dynamicFieldCounters = {
   conclusions_points: 1,
   other_points: 1,
 };
-
-const reviewFields = getReviewFields();
 
 class ReviewForm extends Component {
   componentDidMount() {
@@ -107,7 +103,7 @@ class ReviewForm extends Component {
       const field_value = getFieldValue(fieldName);
       const inputs = field_value.map((field_value_idx, index) => (
         <Form.Item
-          {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+          {...(index === 0 ? formItemLayout : formItemLayoutWithoutLabel)}
           label={index === 0 ? label : ''}
           required={required}
           key={fieldName + field_value_idx}
@@ -130,7 +126,7 @@ class ReviewForm extends Component {
       return (
         <div key={'field name' + fieldName}>
           {inputs}
-          <Form.Item {...formItemLayoutWithOutLabel}>
+          <Form.Item {...formItemLayoutWithoutLabel}>
             <Button
               type="dashed"
               onClick={() => {
@@ -149,7 +145,7 @@ class ReviewForm extends Component {
     return (
       <Form layout="vertical" onSubmit={this.validateFields}>
         {renderedFields}
-        <Form.Item {...formItemLayoutWithOutLabel}>
+        <Form.Item {...formItemLayoutWithoutLabel}>
           <Button type="primary" htmlType="submit" style={{ width: '30%' }}>
             Next: Preview and Submit
           </Button>
