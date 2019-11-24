@@ -1,26 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Button, Carousel, Icon, Menu } from "antd";
-import { FadeLoader } from "react-spinners";
-import ReviewReader from "../ReviewReader/ReviewReader";
-import ReadingList from "../ReadingList/ReadingList";
-import PaperSearchBar from "../PaperSearchBar/PaperSearchBar";
-import ReviewWizard from "../ReviewWizard/ReviewWizard";
-import { start_review } from "../../actions/index";
-import arrayMove from "array-move";
-import moment from "moment";
-import "./Home.css";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Button, Carousel, Icon, Menu } from 'antd';
+import { FadeLoader } from 'react-spinners';
+import ReviewReader from '../ReviewReader/ReviewReader';
+import ReadingList from '../ReadingList/ReadingList';
+import PaperSearchBar from '../PaperSearchBar/PaperSearchBar';
+import ReviewWizard from '../ReviewWizard/ReviewWizard';
+import { start_review } from '../../actions/index';
+import arrayMove from 'array-move';
+import moment from 'moment';
+import './Home.css';
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      displayName: "Unidentified. Show yourself!",
+      displayName: 'Unidentified. Show yourself!',
       userid: null,
       loading: true,
       reviews: [],
-      readingList: []
+      readingList: [],
     };
   }
 
@@ -31,11 +31,11 @@ class Home extends Component {
     auth.parseCognitoWebResponse(window.location.href);
 
     // send JWT to backend
-    let auth_data = await fetch("/api/auth", {
+    let auth_data = await fetch('/api/auth', {
       headers: {
-        "content-type": "application/json",
-        idToken: auth.signInUserSession.idToken.jwtToken
-      }
+        'content-type': 'application/json',
+        idToken: auth.signInUserSession.idToken.jwtToken,
+      },
     }).then(response => response.json());
 
     console.log(auth_data);
@@ -45,7 +45,7 @@ class Home extends Component {
       userid: auth_data._id,
       loading: false,
       reviews: auth_data.reviews,
-      readingList: auth_data.reading_list
+      readingList: auth_data.reading_list,
     });
   }
 
@@ -53,19 +53,19 @@ class Home extends Component {
     let newReadingList = arrayMove(this.state.readingList, oldIndex, newIndex);
     this.setState(
       {
-        readingList: newReadingList
+        readingList: newReadingList,
       },
       () => {
         let headers = {
-          "content-type": "application/json",
-          userid: this.state.userid
+          'content-type': 'application/json',
+          userid: this.state.userid,
         };
 
         // Update the backend with this new readinglist
-        fetch("/api/readingList", {
-          method: "put",
+        fetch('/api/readingList', {
+          method: 'put',
           headers: headers,
-          body: JSON.stringify(this.state.readingList)
+          body: JSON.stringify(this.state.readingList),
         });
       }
     );
@@ -76,8 +76,8 @@ class Home extends Component {
   };
 
   refreshPapers = () => {
-    fetch("/api/papers", {
-      headers: { userid: this.state.userid }
+    fetch('/api/papers', {
+      headers: { userid: this.state.userid },
     })
       .then(response => response.json())
       .then(data => {
@@ -97,13 +97,13 @@ class Home extends Component {
     let newReadingList = currReadingList.concat(paper);
     this.setState({ readingList: newReadingList }, () => {
       let headers = {
-        "content-type": "application/json",
-        userid: this.state.userid
+        'content-type': 'application/json',
+        userid: this.state.userid,
       };
-      fetch("/api/readingList", {
-        method: "post",
+      fetch('/api/readingList', {
+        method: 'post',
         headers: headers,
-        body: JSON.stringify(paper)
+        body: JSON.stringify(paper),
       })
         .then(response => response.json())
         .then(data => {
@@ -119,13 +119,13 @@ class Home extends Component {
 
     this.setState({ readingList: newReadingList }, () => {
       let headers = {
-        "content-type": "application/json",
-        userid: this.state.userid
+        'content-type': 'application/json',
+        userid: this.state.userid,
       };
-      fetch("/api/readingList", {
-        method: "delete",
+      fetch('/api/readingList', {
+        method: 'delete',
         headers: headers,
-        body: JSON.stringify(paper)
+        body: JSON.stringify(paper),
       })
         .then(response => response.json())
         .then(data => {
@@ -135,19 +135,19 @@ class Home extends Component {
   };
 
   renderCarousel() {
-    let numberOfDaysSinceLastReview = "forever! Get reviewing!";
+    let numberOfDaysSinceLastReview = 'forever! Get reviewing!';
     if (this.state.reviews.length > 0) {
       numberOfDaysSinceLastReview = moment().diff(
         moment.max(this.state.reviews.map(paper => moment(paper.createdAt))),
-        "days"
+        'days'
       );
     }
     const carouselContent = [
-      "A paper a week keeps the literature review on fleek",
-      "Believe first and foremost in yourself!",
+      'A paper a week keeps the literature review on fleek',
+      'Believe first and foremost in yourself!',
       "I'm trapped in here, please help me! It's been weeks...",
-      "Reading papers is fun AND nutritious! 🤪",
-      `Number of days since last review: ${numberOfDaysSinceLastReview}`
+      'Reading papers is fun AND nutritious! 🤪',
+      `Number of days since last review: ${numberOfDaysSinceLastReview}`,
     ];
     return (
       <Carousel autoplay speed={1000}>
@@ -168,27 +168,27 @@ class Home extends Component {
               Hi there, {this.state.displayName}!
             </h5>
           </Menu.Item>
-          <Menu.Item style={{ float: "right" }}>
+          <Menu.Item style={{ float: 'right' }}>
             <Button onClick={this.signOut}>Sign Out</Button>
           </Menu.Item>
         </Menu>
         <div
-          style={{ display: "flex", justifyContent: "space-between" }}
+          style={{ display: 'flex', justifyContent: 'space-between' }}
           className="width80"
         >
-          <div style={{ width: "60%" }}>
+          <div style={{ width: '60%' }}>
             <PaperSearchBar
               addToReadingListHandler={this.addToReadingList}
               carousel={this.renderCarousel()}
             />
             <Button
-              style={{ marginTop: "2px" }}
+              style={{ marginTop: '2px' }}
               onClick={this.startBlankReview}
             >
               Create Manual Entry <Icon type="plus-circle" />
             </Button>
           </div>
-          <div style={{ width: "35%" }}>
+          <div style={{ width: '35%' }}>
             <ReadingList
               onSortEnd={this.onReadingListSort}
               removeItemHandler={this.removeFromReadingList}
@@ -234,11 +234,8 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state
+    data: state,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Home);
+export default connect(mapStateToProps, null)(Home);

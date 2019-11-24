@@ -3,3 +3,13 @@
   flex-direction: column;
   justify-content: center;
 }
+
+.reading-list__item {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+.reading-list__form-button {
+  padding-bottom: 4px;
+}
