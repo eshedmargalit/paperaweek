@@ -155,7 +155,7 @@ class MetadataForm extends Component {
               )}
               {fieldValue.length > 1 ? (
                 <Icon
-                  className="dynamic-delete-button shifted-icon"
+                  className="dynamic-delete-button"
                   type="close"
                   onClick={() => this.removeItem(fieldName, listIdx)}
                 />
@@ -173,7 +173,7 @@ class MetadataForm extends Component {
                   }}
                   style={{ width: '150px' }}
                 >
-                  <Icon type="plus" className="shifted-icon" /> Add New
+                  <Icon type="plus" /> Add New
                 </Button>
               </Form.Item>
               <br />
