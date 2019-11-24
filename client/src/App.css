@@ -1,4 +1,4 @@
-@import "~antd/dist/antd.css";
+@import '~antd/dist/antd.css';
 
 .App {
   text-align: left;
@@ -41,6 +41,12 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes App-logo-spin {
