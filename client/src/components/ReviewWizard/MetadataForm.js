@@ -5,14 +5,12 @@ import moment from 'moment';
 import { uniq as _uniq } from 'lodash';
 import './ReviewWizard.css';
 import {
-  getMetaFields,
+  metaFields,
   notEmpty,
-  getFormItemLayout,
-  getFormItemLayoutWithOutLabel,
+  formItemLayout,
+  formItemLayoutWithoutLabel,
 } from './utils.js';
 
-const formItemLayout = getFormItemLayout();
-const formItemLayoutWithOutLabel = getFormItemLayoutWithOutLabel();
 const { MonthPicker } = DatePicker;
 
 // set counters for which field number is next for dynamic fields
@@ -20,8 +18,6 @@ var dynamicFieldCounters = {
   authors: 1,
   institutions: 1,
 };
-
-const metaFields = getMetaFields();
 
 class MetadataForm extends Component {
   componentDidMount() {
@@ -133,7 +129,7 @@ class MetadataForm extends Component {
           const fieldValue = getFieldValue(fieldName);
           renderedField = fieldValue.map((listIdx, mapIdx) => (
             <Form.Item
-              {...(mapIdx === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+              {...(mapIdx === 0 ? formItemLayout : formItemLayoutWithoutLabel)}
               label={mapIdx === 0 ? label : ''}
               required={required}
               key={label + listIdx}
@@ -165,7 +161,7 @@ class MetadataForm extends Component {
           return (
             <div key={'field name' + fieldName}>
               {renderedField}
-              <Form.Item {...formItemLayoutWithOutLabel}>
+              <Form.Item {...formItemLayoutWithoutLabel}>
                 <Button
                   type="dashed"
                   onClick={() => {
@@ -220,7 +216,7 @@ class MetadataForm extends Component {
     return (
       <Form layout="vertical" onSubmit={this.validateFields}>
         {renderedFields}
-        <Form.Item {...formItemLayoutWithOutLabel}>
+        <Form.Item {...formItemLayoutWithoutLabel}>
           <Button type="primary" htmlType="submit" style={{ width: '30%' }}>
             Next: Enter Review
           </Button>
