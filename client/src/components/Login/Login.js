@@ -69,6 +69,7 @@ class Login extends Component {
             style={{
               outline: "none"
             }}
+            size={"large"}
           >
             {" "}
             Sign in with <Icon type="google" />{" "}

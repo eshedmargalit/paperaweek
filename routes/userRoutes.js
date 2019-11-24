@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const User = mongoose.model("users");
 const CognitoExpress = require("cognito-express");
 const cognitoExpress = new CognitoExpress({
   region: "us-west-2",
@@ -7,13 +9,28 @@ const cognitoExpress = new CognitoExpress({
 });
 
 module.exports = app => {
-  app.get("/api/auth", (req, res) => {
+  app.get("/api/auth", async (req, res) => {
     let idTokenFromClient = req.headers.idtoken;
     if (!idTokenFromClient) return res.status(401).send("No ID Token received");
 
-    cognitoExpress.validate(idTokenFromClient, function(err, response) {
+    cognitoExpress.validate(idTokenFromClient, async function(err, response) {
       if (err) return res.status(401).send(err);
-      res.send(JSON.stringify(response));
+      const userExists = await User.exists({ unique_id: response.sub });
+
+      if (userExists) {
+        let user = await User.findOne({ unique_id: response.sub });
+        res.send(JSON.stringify(user));
+      } else {
+        // make a new user
+        let userData = {
+          unique_id: response.sub,
+          display_name: response.name,
+          reading_list: [],
+          reviews: []
+        };
+        let newUser = await new User(userData).save();
+        res.send(JSON.stringify(newUser));
+      }
     });
   });
 };
