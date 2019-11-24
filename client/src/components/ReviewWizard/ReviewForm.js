@@ -138,7 +138,7 @@ class ReviewForm extends Component {
               }}
               style={{ width: '150px' }}
             >
-              <Icon type="plus" className="shifted-icon" /> Add Point
+              <Icon type="plus" /> Add Point
             </Button>
           </Form.Item>
           <br />
