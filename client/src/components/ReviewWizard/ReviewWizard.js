@@ -11,7 +11,7 @@ import "./ReviewWizard.css";
 const { Step } = Steps;
 
 const blankReview = {
-  metadata: {
+  paper: {
     title: "",
     author_names: [""],
     institution_names: [""],
@@ -41,7 +41,7 @@ class ReviewWizard extends Component {
       showModal: false,
       submitLoading: false,
       step: 0,
-      metadata: this.reviewFromStore.metadata,
+      paper: this.reviewFromStore.paper,
       review: this.reviewFromStore.review
     };
   }
@@ -55,7 +55,7 @@ class ReviewWizard extends Component {
 
   handleCancel = () => {
     const reviewObject = {
-      metadata: this.state.metadata,
+      paper: this.state.paper,
       review: this.state.review
     };
 
@@ -66,17 +66,24 @@ class ReviewWizard extends Component {
 
   handleSubmission = () => {
     const reviewObject = {
-      metadata: this.state.metadata,
+      paper: this.state.paper,
       review: this.state.review
     };
 
     // post or put object, refresh papers in Home.js, and exit the form
     let review_id = this.reviewFromStore._id;
     let fetch_method = "post";
-    let headers = { "content-type": "application/json" };
+    let headers = {
+      "content-type": "application/json",
+      userid: this.props.userid
+    };
     if (review_id) {
       fetch_method = "put";
-      headers = { "content-type": "application/json", id: review_id };
+      headers = {
+        "content-type": "application/json",
+        id: review_id,
+        userid: this.props.userid
+      };
     }
 
     this.setState({ submitLoading: true }, () => {
@@ -93,11 +100,10 @@ class ReviewWizard extends Component {
     });
   };
 
-  getMetadata = metadata => {
-    this.setState({ metadata: metadata, step: 1 });
+  getMetadata = paper => {
+    this.setState({ paper: paper, step: 1 });
   };
 
-  // TODO: state not being stashed properly at each step?
   getReview = review => {
     this.setState({ review: review, step: 2 }, () => {
       this.setState({ showModal: true });
@@ -106,10 +112,7 @@ class ReviewWizard extends Component {
 
   render() {
     const step0 = (
-      <MetadataForm
-        metadata={this.state.metadata}
-        onSubmit={this.getMetadata}
-      />
+      <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />
     );
     const step1 = (
       <ReviewForm review={this.state.review} onSubmit={this.getReview} />
@@ -135,7 +138,7 @@ class ReviewWizard extends Component {
     ];
 
     const reviewFromState = {
-      metadata: this.state.metadata,
+      paper: this.state.paper,
       review: this.state.review
     };
 

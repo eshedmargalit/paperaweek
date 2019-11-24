@@ -17,37 +17,58 @@ class Home extends Component {
 
     this.state = {
       displayName: "Unidentified. Show yourself!",
+      userid: null,
       loading: true,
-      papers: [],
+      reviews: [],
       readingList: []
     };
   }
 
-  componentDidMount() {
-    fetch("/api/papers")
-      .then(response => response.json())
-      .then(data => this.setState({ papers: data, loading: false }));
-
+  async componentDidMount() {
     let { auth } = this.props;
 
     // parse return URL from cognito
     auth.parseCognitoWebResponse(window.location.href);
 
     // send JWT to backend
-    fetch("/api/auth", {
+    let auth_data = await fetch("/api/auth", {
       headers: {
         "content-type": "application/json",
         idToken: auth.signInUserSession.idToken.jwtToken
       }
-    })
-      .then(response => response.json())
-      .then(({ name }) => this.setState({ displayName: name }));
+    }).then(response => response.json());
+
+    console.log(auth_data);
+    // finally, set state
+    this.setState({
+      displayName: auth_data.display_name,
+      userid: auth_data._id,
+      loading: false,
+      reviews: auth_data.reviews,
+      readingList: auth_data.reading_list
+    });
   }
 
   onReadingListSort = ({ oldIndex, newIndex }) => {
-    this.setState({
-      readingList: arrayMove(this.state.readingList, oldIndex, newIndex)
-    });
+    let newReadingList = arrayMove(this.state.readingList, oldIndex, newIndex);
+    this.setState(
+      {
+        readingList: newReadingList
+      },
+      () => {
+        let headers = {
+          "content-type": "application/json",
+          userid: this.state.userid
+        };
+
+        // Update the backend with this new readinglist
+        fetch("/api/readingList", {
+          method: "put",
+          headers: headers,
+          body: JSON.stringify(this.state.readingList)
+        });
+      }
+    );
   };
 
   signOut = () => {
@@ -55,9 +76,14 @@ class Home extends Component {
   };
 
   refreshPapers = () => {
-    fetch("/api/papers")
+    fetch("/api/papers", {
+      headers: { userid: this.state.userid }
+    })
       .then(response => response.json())
-      .then(data => this.setState({ papers: data, loading: false }));
+      .then(data => {
+        console.log(data);
+        this.setState({ reviews: data, loading: false });
+      });
   };
 
   startBlankReview = () => {
@@ -65,27 +91,54 @@ class Home extends Component {
   };
 
   addToReadingList = review => {
-    // TODO: prevent dupes
+    const paper = review.paper;
     let currReadingList = this.state.readingList;
-    let newReadingList = currReadingList.concat(review);
-    this.setState({ readingList: newReadingList });
+
+    let newReadingList = currReadingList.concat(paper);
+    this.setState({ readingList: newReadingList }, () => {
+      let headers = {
+        "content-type": "application/json",
+        userid: this.state.userid
+      };
+      fetch("/api/readingList", {
+        method: "post",
+        headers: headers,
+        body: JSON.stringify(paper)
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ readingList: data });
+        });
+    });
   };
 
-  removeFromReadingList = review => {
-    let newReadingList = this.state.readingList.filter(currReview => {
-      return currReview !== review;
+  removeFromReadingList = paper => {
+    let newReadingList = this.state.readingList.filter(currPaper => {
+      return currPaper !== paper;
     });
-    this.setState({ readingList: newReadingList });
+
+    this.setState({ readingList: newReadingList }, () => {
+      let headers = {
+        "content-type": "application/json",
+        userid: this.state.userid
+      };
+      fetch("/api/readingList", {
+        method: "delete",
+        headers: headers,
+        body: JSON.stringify(paper)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        });
+    });
   };
 
   renderCarousel() {
     let numberOfDaysSinceLastReview = "forever! Get reviewing!";
-    console.log(
-      moment.max(this.state.papers.map(paper => moment(paper.createdAt)))
-    );
-    if (this.state.papers.length > 0) {
+    if (this.state.reviews.length > 0) {
       numberOfDaysSinceLastReview = moment().diff(
-        moment.max(this.state.papers.map(paper => moment(paper.createdAt))),
+        moment.max(this.state.reviews.map(paper => moment(paper.createdAt))),
         "days"
       );
     }
@@ -151,8 +204,9 @@ class Home extends Component {
             </div>
           ) : (
             <ReviewReader
+              userid={this.state.userid}
               refreshPapers={this.refreshPapers}
-              papers={this.state.papers}
+              reviews={this.state.reviews}
             />
           )}
         </div>
@@ -162,7 +216,10 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <ReviewWizard refreshPapers={this.refreshPapers} />
+          <ReviewWizard
+            userid={this.state.userid}
+            refreshPapers={this.refreshPapers}
+          />
         </div>
       </div>
     );

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 require("./models/Paper");
+require("./models/User");
+require("./models/Review");
 
 const app = express();
 const port = 5000;
@@ -17,6 +19,7 @@ mongoose.set("useUnifiedTopology", true);
 app.use(bodyParser.json());
 
 require("./routes/paperRoutes")(app);
+require("./routes/readingListRoutes")(app);
 require("./routes/userRoutes")(app);
 
 const PORT = process.env.PORT || port;
