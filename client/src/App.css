@@ -1,23 +1,13 @@
-@import "~antd/dist/antd.css";
+@import '~antd/dist/antd.css';
 
 .App {
   text-align: left;
-}
-
-.shifted-icon {
-  position: relative;
-  top: -5px;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
   pointer-events: none;
-}
-
-.shifted-icon {
-  position: relative;
-  top: -5px;
 }
 
 .ant-page-header {
@@ -41,6 +31,12 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @keyframes App-logo-spin {

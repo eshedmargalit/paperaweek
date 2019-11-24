@@ -1,8 +1,8 @@
-import { START_REVIEW, EXIT_FORM } from "../actions/index";
+import { START_REVIEW, EXIT_FORM } from '../actions/index';
 
 const initialState = {
   review: {},
-  displayForm: false
+  displayForm: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -10,11 +10,11 @@ const reducer = (state = initialState, action) => {
     case START_REVIEW:
       return Object.assign({}, state, {
         review_object: action.review,
-        displayForm: true
+        displayForm: true,
       });
     case EXIT_FORM:
       return Object.assign({}, state, {
-        displayForm: false
+        displayForm: false,
       });
     default:
       return state;

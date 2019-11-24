@@ -1,27 +1,27 @@
-import React from "react";
+import React from 'react';
 
 export function capital_case(input_str) {
   if (!input_str) {
-    return "";
+    return '';
   }
   input_str = input_str.toLowerCase();
-  const words = input_str.split(" ");
+  const words = input_str.split(' ');
 
-  var new_str = "";
+  var new_str = '';
   for (let i = 0; i < words.length; i++) {
     var word = words[i];
     if (
-      word === "and" ||
-      word === "or" ||
-      word === "in" ||
-      word === "of" ||
-      word === "the" ||
-      word === "an" ||
-      word === "at"
+      word === 'and' ||
+      word === 'or' ||
+      word === 'in' ||
+      word === 'of' ||
+      word === 'the' ||
+      word === 'an' ||
+      word === 'at'
     ) {
-      new_str += " " + word;
+      new_str += ' ' + word;
     } else {
-      new_str += " " + word[0].toUpperCase() + word.substr(1).toLowerCase();
+      new_str += ' ' + word[0].toUpperCase() + word.substr(1).toLowerCase();
     }
   }
 
@@ -73,11 +73,11 @@ export function shortenAuthors(authors) {
 
   if (authors.length === 2) {
     author_string =
-      authors[0].split(" ").pop() + " and " + authors[1].split(" ").pop();
+      authors[0].split(' ').pop() + ' and ' + authors[1].split(' ').pop();
   } else if (authors.length === 1) {
-    author_string = authors[0].split(" ").pop();
+    author_string = authors[0].split(' ').pop();
   } else {
-    author_string = authors[0].split(" ").pop() + " et al.";
+    author_string = authors[0].split(' ').pop() + ' et al.';
   }
 
   return author_string;
@@ -85,7 +85,7 @@ export function shortenAuthors(authors) {
 
 export function shortenString(str, cutoff) {
   if (str.length >= cutoff) {
-    str = str.substring(0, cutoff) + "...";
+    str = str.substring(0, cutoff) + '...';
   }
   return str;
 }
