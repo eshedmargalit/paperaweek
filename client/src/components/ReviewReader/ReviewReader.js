@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Button, Row, Col, Modal, Table, Input, PageHeader, Tag } from "antd";
-import { start_review } from "../../actions/index";
-import { connect } from "react-redux";
-import moment from "moment";
-import Fuse from "fuse.js";
-import { shortenAuthors, shortenString } from "../utils.js";
-import ReviewModal from "../ReviewModal/ReviewModal";
-import "./ReviewReader.css";
+import React, { Component } from 'react';
+import { Button, Row, Col, Modal, Table, Input, PageHeader, Tag } from 'antd';
+import { start_review } from '../../actions/index';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import Fuse from 'fuse.js';
+import { shortenAuthors, shortenString } from '../utils.js';
+import ReviewModal from '../ReviewModal/ReviewModal';
+import './ReviewReader.css';
 
 const { confirm } = Modal;
 
 const displaySettings = {
   titleStringLengthLimit: 150,
-  journalStringLengthLimit: 30
+  journalStringLengthLimit: 30,
 };
 
 class ReviewReader extends Component {
@@ -20,9 +20,9 @@ class ReviewReader extends Component {
     super(props);
 
     this.state = {
-      query: "",
+      query: '',
       selectedReview: null,
-      showModal: false
+      showModal: false,
     };
   }
 
@@ -33,9 +33,9 @@ class ReviewReader extends Component {
     }
 
     var shortened = hash % 360;
-    const saturation = "80%";
-    const lightness = "30%";
-    return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
+    const saturation = '80%';
+    const lightness = '30%';
+    return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
   };
 
   handleSearch = query => {
@@ -45,14 +45,14 @@ class ReviewReader extends Component {
   reviewClicked = review => {
     this.setState({
       selectedReview: review,
-      showModal: true
+      showModal: true,
     });
   };
 
   handleModalClose = () => {
     this.setState({
       selectedReview: null,
-      showModal: false
+      showModal: false,
     });
   };
 
@@ -62,19 +62,19 @@ class ReviewReader extends Component {
 
   handleModalDelete = () => {
     confirm({
-      title: "Are you sure delete this review?",
+      title: 'Are you sure delete this review?',
       content: "Once it's gone, it's gone forever!",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
       onOk: () => {
-        fetch("/api/papers", {
-          method: "delete",
+        fetch('/api/papers', {
+          method: 'delete',
           headers: {
-            "content-type": "application/json",
-            userid: this.props.userid
+            'content-type': 'application/json',
+            userid: this.props.userid,
           },
-          body: JSON.stringify(this.state.selectedReview)
+          body: JSON.stringify(this.state.selectedReview),
         })
           .then(response => response.json())
           .then(() => {
@@ -82,7 +82,7 @@ class ReviewReader extends Component {
             this.handleModalClose();
           });
       },
-      onCancel() {}
+      onCancel() {},
     });
   };
 
@@ -91,7 +91,7 @@ class ReviewReader extends Component {
 
     if (tags && tags.length > 0) {
       tag_render = tags.map(tag => {
-        if (tag === "") {
+        if (tag === '') {
           return null;
         }
         return (
@@ -101,7 +101,7 @@ class ReviewReader extends Component {
               e.stopPropagation();
               this.handleSearch(`${e.target.innerHTML}`);
             }}
-            style={{ marginBottom: "8px" }}
+            style={{ marginBottom: '8px' }}
             key={tag}
           >
             {tag}
@@ -113,7 +113,7 @@ class ReviewReader extends Component {
   };
 
   fuzzyFilterReviews = reviews => {
-    if (this.state.query === "") {
+    if (this.state.query === '') {
       return reviews;
     }
     var options = {
@@ -123,7 +123,7 @@ class ReviewReader extends Component {
       distance: 5000,
       maxPatternLength: 32,
       minMatchCharLength: 4,
-      keys: ["paper.title", "paper.authors", "paper.keywords", "paper.date"]
+      keys: ['paper.title', 'paper.authors', 'paper.keywords', 'paper.date'],
     };
 
     var fuse = new Fuse(reviews, options);
@@ -138,50 +138,50 @@ class ReviewReader extends Component {
   renderReviews = reviews => {
     const columns = [
       {
-        title: "Title",
-        dataIndex: "paper.title",
+        title: 'Title',
+        dataIndex: 'paper.title',
         render: title => (
           <span>
             {shortenString(title, displaySettings.titleStringLengthLimit)}
           </span>
-        )
+        ),
       },
       {
-        title: "Authors",
-        dataIndex: "paper.authors",
-        render: authorList => <span>{shortenAuthors(authorList)}</span>
+        title: 'Authors',
+        dataIndex: 'paper.authors',
+        render: authorList => <span>{shortenAuthors(authorList)}</span>,
       },
       {
-        title: "Year Published",
-        dataIndex: "paper.date",
-        render: date => <span>{moment(date, "YYYY-MM").format("YYYY")}</span>,
+        title: 'Year Published',
+        dataIndex: 'paper.date',
+        render: date => <span>{moment(date, 'YYYY-MM').format('YYYY')}</span>,
         sorter: (a, b) => {
           return moment(a.paper.date).diff(moment(b.paper.date));
-        }
+        },
       },
       {
-        title: "Journal",
-        dataIndex: "paper.journal",
+        title: 'Journal',
+        dataIndex: 'paper.journal',
         render: journal => (
           <span>
             {shortenString(journal, displaySettings.journalStringLengthLimit)}
           </span>
-        )
+        ),
       },
       {
-        title: "Review Date",
-        dataIndex: "createdAt",
-        render: date => <span>{moment(date).format("MMMM Do, YYYY")}</span>,
+        title: 'Review Date',
+        dataIndex: 'createdAt',
+        render: date => <span>{moment(date).format('MMMM Do, YYYY')}</span>,
         sorter: (a, b) => {
           return moment(a.createdAt).diff(moment(b.createdAt));
         },
-        defaultSortOrder: "descend"
+        defaultSortOrder: 'descend',
       },
       {
-        title: "Keywords",
-        dataIndex: "paper.keywords",
-        render: keywords => this.renderTags(keywords)
-      }
+        title: 'Keywords',
+        dataIndex: 'paper.keywords',
+        render: keywords => this.renderTags(keywords),
+      },
     ];
 
     return (
@@ -190,7 +190,7 @@ class ReviewReader extends Component {
           return {
             onClick: () => {
               this.reviewClicked(review);
-            }
+            },
           };
         }}
         rowKey={review => review._id}
@@ -219,36 +219,36 @@ class ReviewReader extends Component {
         onClick={this.handleModalDelete}
       >
         Delete this Review
-      </Button>
+      </Button>,
     ];
     return (
       <>
         <Row>
           <Col lg={8} sm={24}>
-            <PageHeader title="Read Your Reviews" avatar={{ icon: "read" }} />
+            <PageHeader title="Read Your Reviews" avatar={{ icon: 'read' }} />
           </Col>
           <Col lg={16} sm={24}>
             <div
               style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "24px"
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: '24px',
               }}
             >
-              <div style={{ width: "100%" }}>
+              <div style={{ width: '100%' }}>
                 <div
                   style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-between"
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
                   }}
                 >
                   <div
                     style={{
-                      width: "100%",
-                      marginRight: "100px",
-                      marginBottom: "20px"
+                      width: '100%',
+                      marginRight: '100px',
+                      marginBottom: '20px',
                     }}
                   >
                     <Input

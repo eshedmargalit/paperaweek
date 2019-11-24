@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import ReducerReviewForm from "./reducer_review_form";
+import { combineReducers } from 'redux';
+import ReducerReviewForm from './reducer_review_form';
 
 const rootReducer = combineReducers({
-  review_data: ReducerReviewForm
+  review_data: ReducerReviewForm,
 });
 
 export default rootReducer;

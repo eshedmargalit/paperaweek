@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { start_review } from "../../actions/index";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { start_review } from '../../actions/index';
 import {
   sortableContainer,
   sortableElement,
-  sortableHandle
-} from "react-sortable-hoc";
-import { Button, Empty, Icon, List, PageHeader } from "antd";
-import moment from "moment";
-import Infinite from "react-infinite";
-import { shortenAuthors } from "../utils";
-import "./ReadingList.css";
+  sortableHandle,
+} from 'react-sortable-hoc';
+import { Button, Empty, Icon, List, PageHeader } from 'antd';
+import moment from 'moment';
+import Infinite from 'react-infinite';
+import { shortenAuthors } from '../utils';
+import './ReadingList.css';
 
 const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 130;
 
 const DragHandle = sortableHandle(() => (
   <Icon
-    style={{ fontSize: "14pt", marginBottom: "5px", marginRight: "15px" }}
+    style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }}
     type="menu"
   />
 ));
@@ -25,15 +25,15 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement(
   ({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (
     <List.Item style={{ height }}>
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <DragHandle />
         <div
           style={{
-            display: "flex",
-            height: "100%",
-            width: "100%",
-            justifyContent: "space-between",
-            overflow: "auto"
+            display: 'flex',
+            height: '100%',
+            width: '100%',
+            justifyContent: 'space-between',
+            overflow: 'auto',
           }}
         >
           <div>
@@ -41,8 +41,8 @@ const SortableItem = sortableElement(
               title={`#${sortIndex + 1}: ${value.title}`}
               description={`${shortenAuthors(value.authors)}, ${moment(
                 value.date,
-                "YYYY-MM"
-              ).format("YYYY")}`}
+                'YYYY-MM'
+              ).format('YYYY')}`}
             />
           </div>
           <div>
@@ -86,13 +86,13 @@ class ReadingList extends Component {
     const review = {
       paper: value,
       review: {
-        summary_points: [""],
-        background_points: [""],
-        approach_points: [""],
-        results_points: [""],
-        conclusions_points: [""],
-        other_points: [""]
-      }
+        summary_points: [''],
+        background_points: [''],
+        approach_points: [''],
+        results_points: [''],
+        conclusions_points: [''],
+        other_points: [''],
+      },
     };
     this.props.dispatch(start_review(review));
   }
@@ -131,7 +131,7 @@ class ReadingList extends Component {
     return (
       <div>
         <br />
-        <PageHeader title="Reading List" avatar={{ icon: "ordered-list" }} />
+        <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
         {this.props.items.length > 0 ? sortableList : noList}
       </div>
     );

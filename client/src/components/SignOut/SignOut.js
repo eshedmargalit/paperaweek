@@ -1,32 +1,32 @@
-import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import { Modal } from "antd";
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Modal } from 'antd';
 
 class SignOut extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      returnHome: false
+      returnHome: false,
     };
   }
   componentDidMount() {
     let secondsToGo = 2;
     const modal = Modal.success({
-      title: "Sign out successful!",
-      content: `Taking you home in ${secondsToGo}...`
+      title: 'Sign out successful!',
+      content: `Taking you home in ${secondsToGo}...`,
     });
     const timer = setInterval(() => {
       secondsToGo -= 1;
       modal.update({
-        content: `Taking you home in ${secondsToGo}...`
+        content: `Taking you home in ${secondsToGo}...`,
       });
     }, 1000);
     setTimeout(() => {
       clearInterval(timer);
       modal.destroy();
       this.setState({
-        returnHome: true
+        returnHome: true,
       });
     }, secondsToGo * 1000);
   }

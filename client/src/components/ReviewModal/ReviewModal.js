@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Modal, Tag } from "antd";
-import moment from "moment";
-import { render_comma_sep_list } from "../utils.js";
+import React, { Component } from 'react';
+import { Modal, Tag } from 'antd';
+import moment from 'moment';
+import { render_comma_sep_list } from '../utils.js';
 
 class ReviewModal extends Component {
   getTagColor = tag => {
@@ -11,9 +11,9 @@ class ReviewModal extends Component {
     }
 
     var shortened = hash % 360;
-    const saturation = "80%";
-    const lightness = "30%";
-    return "hsl(" + shortened + "," + saturation + "," + lightness + ")";
+    const saturation = '80%';
+    const lightness = '30%';
+    return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
   };
 
   renderTags = tags => {
@@ -21,7 +21,7 @@ class ReviewModal extends Component {
 
     if (tags && tags.length > 0) {
       tag_render = tags.map(tag => {
-        if (tag === "") {
+        if (tag === '') {
           return null;
         }
         return (
@@ -36,13 +36,13 @@ class ReviewModal extends Component {
   render() {
     if (!this.props.review) return null;
     let { paper, review } = this.props.review;
-    const date_str = moment(paper.date, "YYYY-MM").format("MMMM YYYY");
+    const date_str = moment(paper.date, 'YYYY-MM').format('MMMM YYYY');
 
     let doi_tag = null;
     if (paper.doi) {
       doi_tag = (
         <a
-          href={"http://dx.doi.org/" + paper.doi}
+          href={'http://dx.doi.org/' + paper.doi}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -53,29 +53,29 @@ class ReviewModal extends Component {
 
     const fields = [
       {
-        heading: "General Summary",
-        review_key: "summary_points"
+        heading: 'General Summary',
+        review_key: 'summary_points',
       },
       {
-        heading: "Background",
-        review_key: "background_points"
+        heading: 'Background',
+        review_key: 'background_points',
       },
       {
-        heading: "Approach",
-        review_key: "approach_points"
+        heading: 'Approach',
+        review_key: 'approach_points',
       },
       {
-        heading: "Results",
-        review_key: "results_points"
+        heading: 'Results',
+        review_key: 'results_points',
       },
       {
-        heading: "Conclusions",
-        review_key: "conclusions_points"
+        heading: 'Conclusions',
+        review_key: 'conclusions_points',
       },
       {
-        heading: "Other Information",
-        review_key: "other_points"
-      }
+        heading: 'Other Information',
+        review_key: 'other_points',
+      },
     ];
 
     const reviewBody = fields.map(field => {
@@ -85,7 +85,7 @@ class ReviewModal extends Component {
           <strong>{field.heading}</strong>
           <ul>
             {review[field.review_key].map(point => {
-              if (point !== "") {
+              if (point !== '') {
                 empty = false;
               }
               return <li key={point}>{point}</li>;

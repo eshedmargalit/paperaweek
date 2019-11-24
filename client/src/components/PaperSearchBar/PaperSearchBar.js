@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Icon, Button, Input, PageHeader } from "antd";
-import { start_review } from "../../actions/index";
-import _ from "lodash";
-import { render_comma_sep_list, capital_case } from "../utils.js";
-import "./PaperSearchBar.css";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Icon, Button, Input, PageHeader } from 'antd';
+import { start_review } from '../../actions/index';
+import _ from 'lodash';
+import { render_comma_sep_list, capital_case } from '../utils.js';
+import './PaperSearchBar.css';
 
-const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
+const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
 class PaperSearchBar extends Component {
   constructor(props) {
@@ -16,8 +16,8 @@ class PaperSearchBar extends Component {
     this.academicSearchThrottled = _.debounce(this.academicSearch, 200);
 
     this.state = {
-      query: "",
-      entities: []
+      query: '',
+      entities: [],
     };
   }
 
@@ -43,7 +43,7 @@ class PaperSearchBar extends Component {
       return;
     }
 
-    const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
+    const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
     // Attributes:
     // key     | meaning
     // -----------------
@@ -71,10 +71,10 @@ class PaperSearchBar extends Component {
   }
 
   handleSearch = search_term => {
-    if (search_term === "") {
+    if (search_term === '') {
       this.setState({
         entities: [],
-        query: search_term
+        query: search_term,
       });
       return;
     }
@@ -82,7 +82,7 @@ class PaperSearchBar extends Component {
     // update searchbar value, start spinner, and only then run the search
     this.setState(
       {
-        query: search_term
+        query: search_term,
       },
       () => {
         this.academicSearchThrottled(search_term);
@@ -99,40 +99,40 @@ class PaperSearchBar extends Component {
     let authors = _.sortBy(entity.AA, [
       function(o) {
         return o.S;
-      }
+      },
     ]);
 
     // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
-        return capital_case(author.DAuN.split(".").join(""));
+        return capital_case(author.DAuN.split('.').join(''));
       })
-    ).filter(name => name !== "");
+    ).filter(name => name !== '');
 
     // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
       authors.map(author => {
         return capital_case(author.DAfN)
-          .split(".")
-          .join("")
+          .split('.')
+          .join('')
           .trim();
       })
-    ).filter(name => name !== "");
+    ).filter(name => name !== '');
 
     if (author_names === undefined || author_names.length === 0) {
-      author_names = [""];
+      author_names = [''];
     }
 
     if (institutions === undefined || institutions.length === 0) {
-      institutions = [""];
+      institutions = [''];
     }
 
-    let entity_url = "";
+    let entity_url = '';
     if (entity.S.length !== 0) {
       entity_url = entity.S[0].U;
     }
 
-    let journal_name = entity.VFN ? entity.VFN : "";
+    let journal_name = entity.VFN ? entity.VFN : '';
 
     // dispatch action to begin the review
     const review = {
@@ -143,16 +143,16 @@ class PaperSearchBar extends Component {
         date: new Date(entity.D),
         doi: entity.DOI,
         journal: journal_name,
-        url: entity_url
+        url: entity_url,
       },
       review: {
-        summary_points: [""],
-        background_points: [""],
-        approach_points: [""],
-        results_points: [""],
-        conclusions_points: [""],
-        other_points: [""]
-      }
+        summary_points: [''],
+        background_points: [''],
+        approach_points: [''],
+        results_points: [''],
+        conclusions_points: [''],
+        other_points: [''],
+      },
     };
     return review;
   }
@@ -163,8 +163,8 @@ class PaperSearchBar extends Component {
 
     // reset the search bar and results
     this.setState({
-      query: "",
-      entities: []
+      query: '',
+      entities: [],
     });
   };
 
@@ -181,19 +181,19 @@ class PaperSearchBar extends Component {
       authors = _.sortBy(authors, [
         function(o) {
           return o.S;
-        }
+        },
       ]);
 
-      let unique_authors = _.uniqBy(authors, "DAuN");
+      let unique_authors = _.uniqBy(authors, 'DAuN');
       let author_names = unique_authors.map(author => {
         return capital_case(author.DAuN);
       });
 
       let author_names_list = render_comma_sep_list(
         author_names,
-        "author_results"
+        'author_results'
       );
-      let journal_name = entity.VFN ? entity.VFN : "";
+      let journal_name = entity.VFN ? entity.VFN : '';
 
       let year = entity.Y;
 
@@ -207,7 +207,7 @@ class PaperSearchBar extends Component {
         >
           <div
             style={{
-              width: "100%"
+              width: '100%',
             }}
           >
             <div>
@@ -248,7 +248,7 @@ class PaperSearchBar extends Component {
           <PageHeader
             title="Write a Review"
             subTitle="Search online for papers"
-            avatar={{ icon: "file-search" }}
+            avatar={{ icon: 'file-search' }}
           />
         </div>
         <Input

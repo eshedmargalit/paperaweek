@@ -1,33 +1,33 @@
-import React, { Component } from "react";
-import { Button, Icon, PageHeader, Steps } from "antd";
-import MetadataForm from "./MetadataForm";
-import ReviewForm from "./ReviewForm";
-import ReviewModal from "../ReviewModal/ReviewModal";
+import React, { Component } from 'react';
+import { Button, Icon, PageHeader, Steps } from 'antd';
+import MetadataForm from './MetadataForm';
+import ReviewForm from './ReviewForm';
+import ReviewModal from '../ReviewModal/ReviewModal';
 
-import { connect } from "react-redux";
-import { start_review, exit_form } from "../../actions/index";
-import "./ReviewWizard.css";
+import { connect } from 'react-redux';
+import { start_review, exit_form } from '../../actions/index';
+import './ReviewWizard.css';
 
 const { Step } = Steps;
 
 const blankReview = {
   paper: {
-    title: "",
-    author_names: [""],
-    institution_names: [""],
+    title: '',
+    author_names: [''],
+    institution_names: [''],
     date: new Date(),
-    doi: "",
-    journal: "",
-    url: ""
+    doi: '',
+    journal: '',
+    url: '',
   },
   review: {
-    summary_points: [""],
-    background_points: [""],
-    approach_points: [""],
-    results_points: [""],
-    conclusions_points: [""],
-    other_points: [""]
-  }
+    summary_points: [''],
+    background_points: [''],
+    approach_points: [''],
+    results_points: [''],
+    conclusions_points: [''],
+    other_points: [''],
+  },
 };
 
 class ReviewWizard extends Component {
@@ -42,7 +42,7 @@ class ReviewWizard extends Component {
       submitLoading: false,
       step: 0,
       paper: this.reviewFromStore.paper,
-      review: this.reviewFromStore.review
+      review: this.reviewFromStore.review,
     };
   }
 
@@ -56,7 +56,7 @@ class ReviewWizard extends Component {
   handleCancel = () => {
     const reviewObject = {
       paper: this.state.paper,
-      review: this.state.review
+      review: this.state.review,
     };
 
     this.setState({ step: 0, showModal: false }, () => {
@@ -67,30 +67,30 @@ class ReviewWizard extends Component {
   handleSubmission = () => {
     const reviewObject = {
       paper: this.state.paper,
-      review: this.state.review
+      review: this.state.review,
     };
 
     // post or put object, refresh papers in Home.js, and exit the form
     let review_id = this.reviewFromStore._id;
-    let fetch_method = "post";
+    let fetch_method = 'post';
     let headers = {
-      "content-type": "application/json",
-      userid: this.props.userid
+      'content-type': 'application/json',
+      userid: this.props.userid,
     };
     if (review_id) {
-      fetch_method = "put";
+      fetch_method = 'put';
       headers = {
-        "content-type": "application/json",
+        'content-type': 'application/json',
         id: review_id,
-        userid: this.props.userid
+        userid: this.props.userid,
       };
     }
 
     this.setState({ submitLoading: true }, () => {
-      fetch("/api/papers", {
+      fetch('/api/papers', {
         method: fetch_method,
         headers: headers,
-        body: JSON.stringify(reviewObject)
+        body: JSON.stringify(reviewObject),
       })
         .then(response => response.json())
         .then(data => {
@@ -131,15 +131,15 @@ class ReviewWizard extends Component {
         key="cancel"
         icon="close"
         onClick={this.handleCancel}
-        style={{ borderColor: "red" }}
+        style={{ borderColor: 'red' }}
       >
         Cancel
-      </Button>
+      </Button>,
     ];
 
     const reviewFromState = {
       paper: this.state.paper,
-      review: this.state.review
+      review: this.state.review,
     };
 
     const step2 = (
@@ -156,7 +156,7 @@ class ReviewWizard extends Component {
           loading={this.state.submitLoading}
         >
           Looks good! Submit
-        </Button>{" "}
+        </Button>{' '}
         <Button type="danger" onClick={this.handleCancel}>
           Cancel <Icon type="close-circle" />
         </Button>
@@ -188,11 +188,8 @@ class ReviewWizard extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state
+    data: state,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ReviewWizard);
+export default connect(mapStateToProps, null)(ReviewWizard);
