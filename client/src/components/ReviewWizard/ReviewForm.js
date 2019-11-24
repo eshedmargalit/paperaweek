@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { Icon, Button, Input, Form } from "antd";
-import { connect } from "react-redux";
-import "./ReviewWizard.css";
+import React, { Component } from 'react';
+import { Icon, Button, Input, Form } from 'antd';
+import { connect } from 'react-redux';
+import './ReviewWizard.css';
 import {
   getReviewFields,
   getFormItemLayout,
-  getFormItemLayoutWithOutLabel
-} from "./utils.js";
+  getFormItemLayoutWithOutLabel,
+} from './utils.js';
 
 const { TextArea } = Input;
 const formItemLayout = getFormItemLayout();
@@ -19,7 +19,7 @@ var dynamicFieldCounters = {
   approach_points: 1,
   results_points: 1,
   conclusions_points: 1,
-  other_points: 1
+  other_points: 1,
 };
 
 const reviewFields = getReviewFields();
@@ -62,7 +62,7 @@ class ReviewForm extends Component {
       return;
     }
     form.setFieldsValue({
-      [`${fieldName}`]: items.filter(item => item !== k)
+      [`${fieldName}`]: items.filter(item => item !== k),
     });
   }
 
@@ -71,7 +71,7 @@ class ReviewForm extends Component {
     const items = form.getFieldValue(fieldName);
     const nextItems = items.concat(dynamicFieldCounters[fieldName]++);
     form.setFieldsValue({
-      [`${fieldName}`]: nextItems
+      [`${fieldName}`]: nextItems,
     });
   }
 
@@ -93,13 +93,13 @@ class ReviewForm extends Component {
         for (let i = 0; i < existingList.length; i++) {
           fieldKeys.push(i);
           getFieldDecorator(`${fieldName}_list_values[${i}]`, {
-            initialValue: existingList[i]
+            initialValue: existingList[i],
           });
         }
         getFieldDecorator(fieldName, { initialValue: fieldKeys });
       } else {
         getFieldDecorator(`${fieldName}_list_values[${0}]`, {
-          initialValue: ""
+          initialValue: '',
         });
         getFieldDecorator(fieldName, { initialValue: [0] });
       }
@@ -108,15 +108,15 @@ class ReviewForm extends Component {
       const inputs = field_value.map((field_value_idx, index) => (
         <Form.Item
           {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-          label={index === 0 ? label : ""}
+          label={index === 0 ? label : ''}
           required={required}
           key={fieldName + field_value_idx}
         >
           {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
             rules: [
-              { required: required, message: `${label} point cannot be blank` }
-            ]
-          })(<TextArea style={{ width: "90%" }} />)}
+              { required: required, message: `${label} point cannot be blank` },
+            ],
+          })(<TextArea style={{ width: '90%' }} />)}
           {field_value.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
@@ -128,7 +128,7 @@ class ReviewForm extends Component {
       ));
 
       return (
-        <div key={"field name" + fieldName}>
+        <div key={'field name' + fieldName}>
           {inputs}
           <Form.Item {...formItemLayoutWithOutLabel}>
             <Button
@@ -136,7 +136,7 @@ class ReviewForm extends Component {
               onClick={() => {
                 this.addItem(fieldName);
               }}
-              style={{ width: "150px" }}
+              style={{ width: '150px' }}
             >
               <Icon type="plus" className="shifted-icon" /> Add Point
             </Button>
@@ -150,7 +150,7 @@ class ReviewForm extends Component {
       <Form layout="vertical" onSubmit={this.validateFields}>
         {renderedFields}
         <Form.Item {...formItemLayoutWithOutLabel}>
-          <Button type="primary" htmlType="submit" style={{ width: "30%" }}>
+          <Button type="primary" htmlType="submit" style={{ width: '30%' }}>
             Next: Preview and Submit
           </Button>
         </Form.Item>
@@ -161,11 +161,8 @@ class ReviewForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state
+    data: state,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Form.create({})(ReviewForm));
+export default connect(mapStateToProps, null)(Form.create({})(ReviewForm));

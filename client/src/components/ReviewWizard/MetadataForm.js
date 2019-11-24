@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { Icon, DatePicker, Button, Input, Form } from "antd";
-import { connect } from "react-redux";
-import moment from "moment";
-import { uniq as _uniq } from "lodash";
-import "./ReviewWizard.css";
+import React, { Component } from 'react';
+import { Icon, DatePicker, Button, Input, Form } from 'antd';
+import { connect } from 'react-redux';
+import moment from 'moment';
+import { uniq as _uniq } from 'lodash';
+import './ReviewWizard.css';
 import {
   getMetaFields,
   notEmpty,
   getFormItemLayout,
-  getFormItemLayoutWithOutLabel
-} from "./utils.js";
+  getFormItemLayoutWithOutLabel,
+} from './utils.js';
 
 const formItemLayout = getFormItemLayout();
 const formItemLayoutWithOutLabel = getFormItemLayoutWithOutLabel();
@@ -18,7 +18,7 @@ const { MonthPicker } = DatePicker;
 // set counters for which field number is next for dynamic fields
 var dynamicFieldCounters = {
   authors: 1,
-  institutions: 1
+  institutions: 1,
 };
 
 const metaFields = getMetaFields();
@@ -57,12 +57,12 @@ class MetadataForm extends Component {
           }
 
           // special fields: deal with keywords or date
-          if (fieldName === "keywords") {
+          if (fieldName === 'keywords') {
             if (values.keywords && notEmpty(values.keywords)) {
               paperValue = this.handleKeywords(values.keywords);
             }
-          } else if (fieldName === "date") {
-            paperValue = values.date.format("YYYY-MM");
+          } else if (fieldName === 'date') {
+            paperValue = values.date.format('YYYY-MM');
           }
 
           paper[fieldName] = paperValue;
@@ -74,10 +74,10 @@ class MetadataForm extends Component {
 
   handleKeywords(keywords) {
     if (Array.isArray(keywords)) {
-      keywords = keywords.join(",");
+      keywords = keywords.join(',');
     }
     return _uniq(
-      keywords.split(",").map(item => {
+      keywords.split(',').map(item => {
         return item.trim().toLowerCase();
       })
     );
@@ -90,7 +90,7 @@ class MetadataForm extends Component {
       return;
     }
     form.setFieldsValue({
-      [`${fieldName}`]: items.filter(item => item !== k)
+      [`${fieldName}`]: items.filter(item => item !== k),
     });
   }
 
@@ -99,7 +99,7 @@ class MetadataForm extends Component {
     const items = form.getFieldValue(fieldName);
     const nextItems = items.concat(dynamicFieldCounters[fieldName]++);
     form.setFieldsValue({
-      [`${fieldName}`]: nextItems
+      [`${fieldName}`]: nextItems,
     });
   }
 
@@ -120,13 +120,13 @@ class MetadataForm extends Component {
             for (let i = 0; i < existingList.length; i++) {
               fieldKeys.push(i);
               getFieldDecorator(`${fieldName}_list_values[${i}]`, {
-                initialValue: existingList[i]
+                initialValue: existingList[i],
               });
             }
             getFieldDecorator(fieldName, { initialValue: fieldKeys });
           } else {
             getFieldDecorator(`${fieldName}_list_values[${0}]`, {
-              initialValue: ""
+              initialValue: '',
             });
             getFieldDecorator(fieldName, { initialValue: [0] });
           }
@@ -134,23 +134,23 @@ class MetadataForm extends Component {
           renderedField = fieldValue.map((listIdx, mapIdx) => (
             <Form.Item
               {...(mapIdx === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-              label={mapIdx === 0 ? label : ""}
+              label={mapIdx === 0 ? label : ''}
               required={required}
               key={label + listIdx}
             >
               {getFieldDecorator(`${fieldName}_list_values[${listIdx}]`, {
-                validateTrigger: ["onChange", "onBlur"],
+                validateTrigger: ['onChange', 'onBlur'],
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: "Field cannot be blank"
-                  }
-                ]
+                    message: 'Field cannot be blank',
+                  },
+                ],
               })(
                 <Input
                   placeholder={label}
-                  style={{ width: "60%", marginRight: 8 }}
+                  style={{ width: '60%', marginRight: 8 }}
                 />
               )}
               {fieldValue.length > 1 ? (
@@ -163,7 +163,7 @@ class MetadataForm extends Component {
             </Form.Item>
           ));
           return (
-            <div key={"field name" + fieldName}>
+            <div key={'field name' + fieldName}>
               {renderedField}
               <Form.Item {...formItemLayoutWithOutLabel}>
                 <Button
@@ -171,7 +171,7 @@ class MetadataForm extends Component {
                   onClick={() => {
                     this.addItem(fieldName);
                   }}
-                  style={{ width: "150px" }}
+                  style={{ width: '150px' }}
                 >
                   <Icon type="plus" className="shifted-icon" /> Add New
                 </Button>
@@ -181,33 +181,33 @@ class MetadataForm extends Component {
           );
         } else {
           // not a list
-          if (fieldName === "date") {
+          if (fieldName === 'date') {
             return (
-              <div key={"field name" + fieldName}>
+              <div key={'field name' + fieldName}>
                 <Form.Item {...formItemLayout} label="Publication Date">
-                  {getFieldDecorator("date", {
+                  {getFieldDecorator('date', {
                     rules: [
                       {
                         required: true,
-                        message: "Please provide the month of publication"
-                      }
+                        message: 'Please provide the month of publication',
+                      },
                     ],
-                    initialValue: moment(existingMeta.date, "YYYY-MM")
+                    initialValue: moment(existingMeta.date, 'YYYY-MM'),
                   })(<MonthPicker />)}
                 </Form.Item>
               </div>
             );
           } else {
             let existingValue = existingMeta[fieldName];
-            const init = existingValue ? existingValue : "";
+            const init = existingValue ? existingValue : '';
             return (
-              <div key={"field name" + fieldName}>
+              <div key={'field name' + fieldName}>
                 <Form.Item {...formItemLayout} label={label}>
                   {getFieldDecorator(fieldName, {
                     rules: [
-                      { required: required, message: "Field cannot be blank" }
+                      { required: required, message: 'Field cannot be blank' },
                     ],
-                    initialValue: init
+                    initialValue: init,
                   })(<Input />)}
                 </Form.Item>
               </div>
@@ -221,7 +221,7 @@ class MetadataForm extends Component {
       <Form layout="vertical" onSubmit={this.validateFields}>
         {renderedFields}
         <Form.Item {...formItemLayoutWithOutLabel}>
-          <Button type="primary" htmlType="submit" style={{ width: "30%" }}>
+          <Button type="primary" htmlType="submit" style={{ width: '30%' }}>
             Next: Enter Review
           </Button>
         </Form.Item>
@@ -232,11 +232,8 @@ class MetadataForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state
+    data: state,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Form.create({})(MetadataForm));
+export default connect(mapStateToProps, null)(Form.create({})(MetadataForm));

@@ -19,6 +19,14 @@ Create `client/.env.local` and add:
 REACT_APP_MSCOG_KEY1=<MSCOG API key goes here>
 ```
 
+### Code Style
+
+[![styled with perttier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
+The `client/` directory is styled using prettier. The settings are defined in [our prettier config file](./client/.prettierrc.json). Staged changes are automatically formatted based on a pre-commit hook using `husky` and `pretty-quick`.
+
+You can format the files yourself by running `yarn pretty-quick` from the `client` directory.
+
 ### Dependencies :package:
 
 From the top-level directory, run `yarn install`.
