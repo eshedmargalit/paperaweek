@@ -25,7 +25,7 @@ const DragHandle = sortableHandle(() => (
 const SortableItem = sortableElement(
   ({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (
     <List.Item style={{ height }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="reading-list__item">
         <DragHandle />
         <div
           style={{
@@ -46,7 +46,7 @@ const SortableItem = sortableElement(
             />
           </div>
           <div>
-            <div>
+            <div className="reading-list__form-button">
               <Button onClick={() => editClickHandler(value)} icon="form" />
             </div>
             <div>
