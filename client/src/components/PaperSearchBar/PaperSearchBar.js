@@ -251,14 +251,22 @@ class PaperSearchBar extends Component {
             avatar={{ icon: 'file-search' }}
           />
         </div>
-        <Input
-          type="text"
-          width="50%"
-          onChange={e => this.handleSearch(`${e.target.value}`)}
-          placeholder="e.g., Retinal waves nature 2012"
-          value={this.state.query}
-          allowClear
-        />
+        <div style={{ display: 'inline-flex', width: '100%' }}>
+          <Input
+            type="text"
+            width="50%"
+            onChange={e => this.handleSearch(`${e.target.value}`)}
+            placeholder="e.g., Retinal waves nature 2012"
+            value={this.state.query}
+            allowClear
+          />
+          <Button
+            style={{ marginLeft: '5px' }}
+            onClick={this.props.startBlankReview}
+          >
+            Create Manual Entry <Icon type="plus-circle" />
+          </Button>
+        </div>
       </div>
     );
 

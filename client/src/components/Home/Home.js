@@ -150,9 +150,13 @@ class Home extends Component {
       `Number of days since last review: ${numberOfDaysSinceLastReview}`,
     ];
     return (
-      <Carousel autoplay speed={1000}>
+      <Carousel className="carousel" autoplay speed={1000}>
         {carouselContent.map(item => {
-          return <h3 key={`carousel ${item}`}>{item}</h3>;
+          return (
+            <h3 className="carousel__content" key={`carousel ${item}`}>
+              {item}
+            </h3>
+          );
         })}
       </Carousel>
     );
@@ -161,7 +165,7 @@ class Home extends Component {
   render() {
     const home_render = (
       <div>
-        <Menu mode="horizontal">
+        <Menu className="menu" mode="horizontal">
           <Menu.Item>
             <h5>
               <Icon type="user" />
@@ -178,15 +182,10 @@ class Home extends Component {
         >
           <div style={{ width: '60%' }}>
             <PaperSearchBar
+              startBlankReview={this.startBlankReview}
               addToReadingListHandler={this.addToReadingList}
               carousel={this.renderCarousel()}
             />
-            <Button
-              style={{ marginTop: '2px' }}
-              onClick={this.startBlankReview}
-            >
-              Create Manual Entry <Icon type="plus-circle" />
-            </Button>
           </div>
           <div style={{ width: '35%' }}>
             <ReadingList
