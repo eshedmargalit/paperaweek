@@ -3,6 +3,7 @@ import { Button, Card, Col, Icon, notification, Row } from 'antd';
 import LazyHero from 'react-lazy-hero';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import './Login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -53,29 +54,21 @@ class Login extends Component {
     return (
       <div>
         <LazyHero
+          className="login__lazy-hero"
           minHeight="80vh"
           opacity={0.7}
           parallaxOffset={100}
           color="gray"
           imageSrc="https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1661&q=80"
-          style={{ overflow: 'hidden', color: 'white' }}
         >
-          <h1 style={{ color: 'white' }}>Paper a Week</h1>
-          <h5 style={{ color: 'white', textAlign: 'center' }}>
-            Read a paper a week. That's it.
-          </h5>
-          <Button
-            onClick={this.signIn}
-            style={{
-              outline: 'none',
-            }}
-            size={'large'}
-          >
+          <h1>Paper a Week</h1>
+          <h5>Read a paper a week. That's it.</h5>
+          <Button onClick={this.signIn} size={'large'}>
             {' '}
             Sign in with <Icon type="google" />{' '}
           </Button>
         </LazyHero>
-        <div style={{ background: '#ECECEC', padding: '30px' }}>
+        <div className="login__bottom-tray">
           <Row gutter={16} type="flex">
             <Col span={8}>
               <Card style={{ height: '100%' }}>
@@ -87,7 +80,7 @@ class Login extends Component {
               </Card>
             </Col>
             <Col span={8}>
-              <Card style={{ height: '100%' }}>
+              <Card>
                 <Card.Meta
                   avatar={<Icon type="team" />}
                   title="Because you're smart"
@@ -96,7 +89,7 @@ class Login extends Component {
               </Card>
             </Col>
             <Col span={8}>
-              <Card style={{ height: '100%' }}>
+              <Card>
                 <Card.Meta
                   avatar={<Icon type="dashboard" />}
                   title="Because we could all use some motivation"

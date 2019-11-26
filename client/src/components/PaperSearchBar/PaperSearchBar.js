@@ -205,11 +205,7 @@ class PaperSearchBar extends Component {
             this.addToReadingList(entity.Id);
           }}
         >
-          <div
-            style={{
-              width: '100%',
-            }}
-          >
+          <div className="paperSearch__result">
             <div>
               <strong>{entity.DN}</strong>
               <br />
@@ -251,7 +247,7 @@ class PaperSearchBar extends Component {
             avatar={{ icon: 'file-search' }}
           />
         </div>
-        <div style={{ display: 'inline-flex', width: '100%' }}>
+        <div className="paperSearch__input">
           <Input
             type="text"
             width="50%"
@@ -260,10 +256,7 @@ class PaperSearchBar extends Component {
             value={this.state.query}
             allowClear
           />
-          <Button
-            style={{ marginLeft: '5px' }}
-            onClick={this.props.startBlankReview}
-          >
+          <Button onClick={this.props.startBlankReview}>
             Create Manual Entry <Icon type="plus-circle" />
           </Button>
         </div>
