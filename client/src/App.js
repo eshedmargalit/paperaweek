@@ -22,25 +22,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Route
-          exact
-          path="/"
-          render={props => (
-            <Login {...props} auth={auth} justSignedOut={false} />
-          )}
-        />
-        <Route
-          exact
-          path="/signout"
-          render={props => (
-            <Login {...props} auth={auth} justSignedOut={true} />
-          )}
-        />
-        <Route
-          exact
-          path="/dashboard"
-          render={props => <Home {...props} auth={auth} />}
-        />
+        <Route exact path="/" render={props => <Login {...props} auth={auth} justSignedOut={false} />} />
+        <Route exact path="/signout" render={props => <Login {...props} auth={auth} justSignedOut={true} />} />
+        <Route exact path="/dashboard" render={props => <Home {...props} auth={auth} />} />
       </div>
     </BrowserRouter>
   );

@@ -41,11 +41,7 @@ class ReviewModal extends Component {
     let doi_tag = null;
     if (paper.doi) {
       doi_tag = (
-        <a
-          href={'http://dx.doi.org/' + paper.doi}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={'http://dx.doi.org/' + paper.doi} target="_blank" rel="noopener noreferrer">
           ({paper.doi})
         </a>
       );

@@ -34,8 +34,7 @@ class ReviewWizard extends Component {
   constructor(props) {
     super(props);
 
-    this.reviewFromStore =
-      this.props.data.review_data.review_object || blankReview;
+    this.reviewFromStore = this.props.data.review_data.review_object || blankReview;
 
     this.state = {
       showModal: false,
@@ -111,28 +110,14 @@ class ReviewWizard extends Component {
   };
 
   render() {
-    const step0 = (
-      <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />
-    );
-    const step1 = (
-      <ReviewForm review={this.state.review} onSubmit={this.getReview} />
-    );
+    const step0 = <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />;
+    const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} />;
 
     const modalFooter = [
-      <Button
-        key="submit"
-        type="primary"
-        icon="check"
-        onClick={this.handleSubmission}
-      >
+      <Button key="submit" type="primary" icon="check" onClick={this.handleSubmission}>
         Looks good, submit!
       </Button>,
-      <Button
-        key="cancel"
-        icon="close"
-        onClick={this.handleCancel}
-        style={{ borderColor: 'red' }}
-      >
+      <Button key="cancel" icon="close" onClick={this.handleCancel} style={{ borderColor: 'red' }}>
         Cancel
       </Button>,
     ];
@@ -150,11 +135,7 @@ class ReviewWizard extends Component {
           onClose={this.handleCancel}
           footer={modalFooter}
         />
-        <Button
-          type="primary"
-          onClick={this.handleSubmission}
-          loading={this.state.submitLoading}
-        >
+        <Button type="primary" onClick={this.handleSubmission} loading={this.state.submitLoading}>
           Looks good! Submit
         </Button>{' '}
         <Button type="danger" onClick={this.handleCancel}>
