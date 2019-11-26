@@ -3,6 +3,11 @@
   margin: auto;
 }
 
+.searchbar {
+  display: flex;
+  justify-content: space-between;
+}
+
 .menu {
   background: rgb(100, 149, 237);
   background: linear-gradient(
@@ -14,6 +19,10 @@
 
 .menu > li > h5 {
   color: white;
+}
+
+.menu__item {
+  float: right;
 }
 
 .carousel .slick-slide {

@@ -172,14 +172,11 @@ class Home extends Component {
               Hi there, {this.state.displayName}!
             </h5>
           </Menu.Item>
-          <Menu.Item style={{ float: 'right' }}>
+          <Menu.Item className="menu__item">
             <Button onClick={this.signOut}>Sign Out</Button>
           </Menu.Item>
         </Menu>
-        <div
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-          className="width80"
-        >
+        <div className="searchbar width80">
           <div style={{ width: '60%' }}>
             <PaperSearchBar
               startBlankReview={this.startBlankReview}
