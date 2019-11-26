@@ -140,11 +140,7 @@ class ReviewReader extends Component {
       {
         title: 'Title',
         dataIndex: 'paper.title',
-        render: title => (
-          <span>
-            {shortenString(title, displaySettings.titleStringLengthLimit)}
-          </span>
-        ),
+        render: title => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
       },
       {
         title: 'Authors',
@@ -162,11 +158,7 @@ class ReviewReader extends Component {
       {
         title: 'Journal',
         dataIndex: 'paper.journal',
-        render: journal => (
-          <span>
-            {shortenString(journal, displaySettings.journalStringLengthLimit)}
-          </span>
-        ),
+        render: journal => <span>{shortenString(journal, displaySettings.journalStringLengthLimit)}</span>,
       },
       {
         title: 'Review Date',
@@ -204,20 +196,10 @@ class ReviewReader extends Component {
 
   render() {
     const modalFooter = [
-      <Button
-        key="edit"
-        type="dashed"
-        icon="edit"
-        onClick={this.handleModalEdit}
-      >
+      <Button key="edit" type="dashed" icon="edit" onClick={this.handleModalEdit}>
         Edit this Review
       </Button>,
-      <Button
-        key="delete"
-        type="dashed"
-        icon="delete"
-        onClick={this.handleModalDelete}
-      >
+      <Button key="delete" type="dashed" icon="delete" onClick={this.handleModalDelete}>
         Delete this Review
       </Button>,
     ];
@@ -263,9 +245,7 @@ class ReviewReader extends Component {
           </Col>
         </Row>
         <div>
-          <div>
-            {this.renderReviews(this.fuzzyFilterReviews(this.props.reviews))}
-          </div>
+          <div>{this.renderReviews(this.fuzzyFilterReviews(this.props.reviews))}</div>
         </div>
         <ReviewModal
           review={this.state.selectedReview}

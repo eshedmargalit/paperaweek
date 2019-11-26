@@ -199,11 +199,7 @@ class Home extends Component {
               <FadeLoader />
             </div>
           ) : (
-            <ReviewReader
-              userid={this.state.userid}
-              refreshPapers={this.refreshPapers}
-              reviews={this.state.reviews}
-            />
+            <ReviewReader userid={this.state.userid} refreshPapers={this.refreshPapers} reviews={this.state.reviews} />
           )}
         </div>
       </div>
@@ -212,19 +208,12 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <ReviewWizard
-            userid={this.state.userid}
-            refreshPapers={this.refreshPapers}
-          />
+          <ReviewWizard userid={this.state.userid} refreshPapers={this.refreshPapers} />
         </div>
       </div>
     );
 
-    return (
-      <div>
-        {this.props.data.review_data.displayForm ? form_render : home_render}
-      </div>
-    );
+    return <div>{this.props.data.review_data.displayForm ? form_render : home_render}</div>;
   }
 }
 

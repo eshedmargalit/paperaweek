@@ -72,8 +72,7 @@ export function shortenAuthors(authors) {
   let author_string;
 
   if (authors.length === 2) {
-    author_string =
-      authors[0].split(' ').pop() + ' and ' + authors[1].split(' ').pop();
+    author_string = authors[0].split(' ').pop() + ' and ' + authors[1].split(' ').pop();
   } else if (authors.length === 1) {
     author_string = authors[0].split(' ').pop();
   } else {

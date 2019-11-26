@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import { Icon, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
 import './ReviewWizard.css';
-import {
-  reviewFields,
-  formItemLayout,
-  formItemLayoutWithoutLabel,
-} from './utils.js';
+import { reviewFields, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
 
 const { TextArea } = Input;
 
@@ -109,9 +105,7 @@ class ReviewForm extends Component {
           key={fieldName + field_value_idx}
         >
           {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
-            rules: [
-              { required: required, message: `${label} point cannot be blank` },
-            ],
+            rules: [{ required: required, message: `${label} point cannot be blank` }],
           })(<TextArea style={{ width: '90%' }} />)}
           {field_value.length > 1 ? (
             <Icon
