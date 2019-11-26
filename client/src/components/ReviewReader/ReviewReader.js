@@ -223,7 +223,7 @@ class ReviewReader extends Component {
     ];
     return (
       <>
-        <Row>
+        <Row className="review-reader">
           <Col lg={8} sm={24}>
             <PageHeader title="Read Your Reviews" avatar={{ icon: 'read' }} />
           </Col>
@@ -233,7 +233,6 @@ class ReviewReader extends Component {
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
-                padding: '24px',
               }}
             >
               <div style={{ width: '100%' }}>
@@ -246,9 +245,8 @@ class ReviewReader extends Component {
                 >
                   <div
                     style={{
+                      padding: '24px',
                       width: '100%',
-                      marginRight: '100px',
-                      marginBottom: '20px',
                     }}
                   >
                     <Input
