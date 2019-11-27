@@ -62,8 +62,7 @@ class PaperSearchBar extends Component {
       this.setState({ entities: [] });
       return;
     } else {
-      var top_interpretation =
-        interpret_response.interpretations[0].rules[0].output.value;
+      var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
       for (let i = 0; i < interpret_response.interpretations.length; i++) {}
       let evaluate_response = await this.evaluate(top_interpretation, attrs);
       this.setState({ entities: evaluate_response.entities });
@@ -189,10 +188,7 @@ class PaperSearchBar extends Component {
         return capital_case(author.DAuN);
       });
 
-      let author_names_list = render_comma_sep_list(
-        author_names,
-        'author_results'
-      );
+      let author_names_list = render_comma_sep_list(author_names, 'author_results');
       let journal_name = entity.VFN ? entity.VFN : '';
 
       let year = entity.Y;
@@ -205,11 +201,7 @@ class PaperSearchBar extends Component {
             this.addToReadingList(entity.Id);
           }}
         >
-          <div
-            style={{
-              width: '100%',
-            }}
-          >
+          <div className="paperSearch__result">
             <div>
               <strong>{entity.DN}</strong>
               <br />
@@ -245,20 +237,21 @@ class PaperSearchBar extends Component {
     const search_area = (
       <div>
         <div>
-          <PageHeader
-            title="Write a Review"
-            subTitle="Search online for papers"
-            avatar={{ icon: 'file-search' }}
-          />
+          <PageHeader title="Write a Review" subTitle="Search online for papers" avatar={{ icon: 'file-search' }} />
         </div>
-        <Input
-          type="text"
-          width="50%"
-          onChange={e => this.handleSearch(`${e.target.value}`)}
-          placeholder="e.g., Retinal waves nature 2012"
-          value={this.state.query}
-          allowClear
-        />
+        <div className="paperSearch__input">
+          <Input
+            type="text"
+            width="50%"
+            onChange={e => this.handleSearch(`${e.target.value}`)}
+            placeholder="e.g., Retinal waves nature 2012"
+            value={this.state.query}
+            allowClear
+          />
+          <Button onClick={this.props.startBlankReview}>
+            Create Manual Entry <Icon type="plus-circle" />
+          </Button>
+        </div>
       </div>
     );
 

@@ -23,3 +23,16 @@
   background: #eee;
   cursor: pointer;
 }
+
+.paperSearch__result {
+  width: 100%;
+}
+
+.paperSearch__input {
+  display: inline-flex;
+  width: 100%;
+}
+
+.ant-btn {
+  margin-left: 5px;
+}

@@ -150,9 +150,13 @@ class Home extends Component {
       `Number of days since last review: ${numberOfDaysSinceLastReview}`,
     ];
     return (
-      <Carousel autoplay speed={1000}>
+      <Carousel className="carousel" autoplay speed={1000}>
         {carouselContent.map(item => {
-          return <h3 key={`carousel ${item}`}>{item}</h3>;
+          return (
+            <h3 className="carousel__content" key={`carousel ${item}`}>
+              {item}
+            </h3>
+          );
         })}
       </Carousel>
     );
@@ -161,32 +165,24 @@ class Home extends Component {
   render() {
     const home_render = (
       <div>
-        <Menu mode="horizontal">
+        <Menu className="menu" mode="horizontal">
           <Menu.Item>
             <h5>
               <Icon type="user" />
               Hi there, {this.state.displayName}!
             </h5>
           </Menu.Item>
-          <Menu.Item style={{ float: 'right' }}>
+          <Menu.Item className="menu__item">
             <Button onClick={this.signOut}>Sign Out</Button>
           </Menu.Item>
         </Menu>
-        <div
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-          className="width80"
-        >
+        <div className="searchbar width80">
           <div style={{ width: '60%' }}>
             <PaperSearchBar
+              startBlankReview={this.startBlankReview}
               addToReadingListHandler={this.addToReadingList}
               carousel={this.renderCarousel()}
             />
-            <Button
-              style={{ marginTop: '2px' }}
-              onClick={this.startBlankReview}
-            >
-              Create Manual Entry <Icon type="plus-circle" />
-            </Button>
           </div>
           <div style={{ width: '35%' }}>
             <ReadingList
@@ -203,11 +199,7 @@ class Home extends Component {
               <FadeLoader />
             </div>
           ) : (
-            <ReviewReader
-              userid={this.state.userid}
-              refreshPapers={this.refreshPapers}
-              reviews={this.state.reviews}
-            />
+            <ReviewReader userid={this.state.userid} refreshPapers={this.refreshPapers} reviews={this.state.reviews} />
           )}
         </div>
       </div>
@@ -216,19 +208,12 @@ class Home extends Component {
     const form_render = (
       <div>
         <div className="width80">
-          <ReviewWizard
-            userid={this.state.userid}
-            refreshPapers={this.refreshPapers}
-          />
+          <ReviewWizard userid={this.state.userid} refreshPapers={this.refreshPapers} />
         </div>
       </div>
     );
 
-    return (
-      <div>
-        {this.props.data.review_data.displayForm ? form_render : home_render}
-      </div>
-    );
+    return <div>{this.props.data.review_data.displayForm ? form_render : home_render}</div>;
   }
 }
 
