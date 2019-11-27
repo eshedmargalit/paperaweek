@@ -17,20 +17,22 @@
   border-radius: 5px;
   margin-top: 5px;
   padding: 10px;
+
+  &:hover {
+    background: #eee;
+    cursor: pointer;
+  }
 }
 
-.searchResult:hover {
-  background: #eee;
-  cursor: pointer;
-}
+.paperSearch {
+  &__result {
+    width: 100%;
+  }
 
-.paperSearch__result {
-  width: 100%;
-}
-
-.paperSearch__input {
-  display: inline-flex;
-  width: 100%;
+  &__input {
+    display: inline-flex;
+    width: 100%;
+  }
 }
 
 .ant-btn {

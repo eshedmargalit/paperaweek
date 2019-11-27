@@ -3,15 +3,16 @@
   font-size: 18px;
   color: #999;
   transition: all 0.3s;
-}
 
-.dynamic-delete-button:hover {
-  color: red;
+  &:hover {
+    color: red;
+  }
 }
 
 .ant-form-item {
   margin-bottom: 2px;
 }
+
 label {
   font-weight: bold;
 }
