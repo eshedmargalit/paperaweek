@@ -58,7 +58,6 @@ class Login extends Component {
           minHeight="80vh"
           opacity={0.7}
           parallaxOffset={100}
-          color="gray"
           imageSrc="https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1661&q=80"
         >
           <h1>Paper a Week</h1>
