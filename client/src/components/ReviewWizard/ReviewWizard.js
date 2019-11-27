@@ -6,7 +6,7 @@ import ReviewModal from '../ReviewModal/ReviewModal';
 
 import { connect } from 'react-redux';
 import { start_review, exit_form } from '../../actions/index';
-import './ReviewWizard.css';
+import './ReviewWizard.scss';
 
 const { Step } = Steps;
 

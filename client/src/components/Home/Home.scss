@@ -1,0 +1,36 @@
+$blue-light: rgba(100, 149, 237, 1);
+$blue-dark: rgba(73, 132, 238, 1);
+
+.width80 {
+  width: 80%;
+  margin: auto;
+}
+
+.searchbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu {
+  background: $blue-light;
+  background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
+
+  &__item {
+    float: right;
+  }
+
+  li > h5 {
+    color: white;
+  }
+}
+
+.carousel {
+  & .slick-slide {
+    text-align: center;
+    background: white;
+  }
+
+  &__content {
+    padding: 30px;
+  }
+}

@@ -19,6 +19,7 @@
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "mongoose": "^5.6.11",
+    "node-sass": "^4.13.0",
     "nodemon": "^1.19.2",
     "react-infinite": "^0.13.0",
     "react-lazy-hero": "^2.0.0",
