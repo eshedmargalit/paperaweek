@@ -1,32 +1,35 @@
-const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
 const expect = require("chai").expect;
+const request = require("supertest");
+const createApp = require("../../utils").createApp;
+const { testReview, testUser, testUserId } = require("../testData");
+const { setupMongoMock, tearDownMongoMock } = require("../testUtils");
 
-let mongoServer;
-const opts = { useNewUrlParser: true };
+const app = createApp(5001);
 
 before(done => {
-  mongoServer = new MongoMemoryServer();
-  mongoServer
-    .getConnectionString()
-    .then(mongoUri => {
-      return mongoose.connect(mongoUri, opts, err => {
-        if (err) done(err);
-      });
-    })
-    .then(() => done());
+  setupMongoMock(done);
 });
 
 after(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
+  await tearDownMongoMock();
 });
 
-describe("Paper Routes", () => {
-  describe("GET", () => {
-    it("does math...?", async () => {
-      const arr = [1, 2, 3];
-      expect(arr).to.have.lengthOf(3);
-    });
+describe("GET /api/papers", function() {
+  before(() => {
+    testUser.reviews.push(testReview);
+    testUser.save();
+  });
+
+  it("responds with correct reviews for the user", done => {
+    request(app)
+      .get("/api/papers")
+      .set("Content-Type", "application/json")
+      .set("userid", testUserId)
+      .expect(200)
+      .end((err, { text }) => {
+        let returnedReview = JSON.parse(text)[0];
+        expect(testReview.review).to.eql(returnedReview.review);
+        done();
+      });
   });
 });

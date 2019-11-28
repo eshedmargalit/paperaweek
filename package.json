@@ -8,7 +8,7 @@
     "server": "nodemon index.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "mocha --timeout 60000 test/**/*.js"
+    "test": "mocha --timeout 60000 --exit test/**/*.js "
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
-    "mongodb-memory-server": "^6.0.1"
+    "mongodb-memory-server": "^6.0.1",
+    "supertest": "^4.0.2"
   }
 }
