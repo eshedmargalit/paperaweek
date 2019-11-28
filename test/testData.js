@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+
+require("../models/Paper");
+require("../models/User");
+require("../models/Review");
+
 const User = mongoose.model("users");
 
 const testReview = {

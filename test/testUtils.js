@@ -1,6 +1,10 @@
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require("mongoose");
 
+require("../models/Paper");
+require("../models/User");
+require("../models/Review");
+
 let mongoServer;
 const opts = { useNewUrlParser: true };
 
