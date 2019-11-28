@@ -3,7 +3,7 @@ import { Button, Card, Col, Icon, notification, Row } from 'antd';
 import LazyHero from 'react-lazy-hero';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import './Login.css';
+import './Login.scss';
 
 class Login extends Component {
   constructor(props) {

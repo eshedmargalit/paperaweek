@@ -4,7 +4,7 @@ import { Icon, Button, Input, PageHeader } from 'antd';
 import { start_review } from '../../actions/index';
 import _ from 'lodash';
 import { render_comma_sep_list, capital_case } from '../utils.js';
-import './PaperSearchBar.css';
+import './PaperSearchBar.scss';
 
 const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 

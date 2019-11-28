@@ -6,7 +6,7 @@ import moment from 'moment';
 import Fuse from 'fuse.js';
 import { shortenAuthors, shortenString } from '../utils.js';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import './ReviewReader.css';
+import './ReviewReader.scss';
 
 const { confirm } = Modal;
 

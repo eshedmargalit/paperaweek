@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
-import './ReviewWizard.css';
+import './ReviewWizard.scss';
 import { reviewFields, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
 
 const { TextArea } = Input;
