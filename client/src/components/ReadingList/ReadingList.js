@@ -6,7 +6,7 @@ import { Button, Empty, Icon, List, PageHeader } from 'antd';
 import moment from 'moment';
 import Infinite from 'react-infinite';
 import { shortenAuthors } from '../utils';
-import './ReadingList.css';
+import './ReadingList.scss';
 
 const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 130;

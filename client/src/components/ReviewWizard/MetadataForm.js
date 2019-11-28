@@ -3,7 +3,7 @@ import { Icon, DatePicker, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { uniq as _uniq } from 'lodash';
-import './ReviewWizard.css';
+import './ReviewWizard.scss';
 import { metaFields, notEmpty, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
 
 const { MonthPicker } = DatePicker;

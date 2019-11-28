@@ -9,7 +9,7 @@ import ReviewWizard from '../ReviewWizard/ReviewWizard';
 import { start_review } from '../../actions/index';
 import arrayMove from 'array-move';
 import moment from 'moment';
-import './Home.css';
+import './Home.scss';
 
 class Home extends Component {
   constructor(props) {
