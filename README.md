@@ -47,3 +47,7 @@ You'll need the following installed (maybe globally) if you want hot-reloading a
   ```
 
 To start the server and client together, just run `yarn run dev` from the top-level directory.
+
+### Run Tests
+
+To run the tests for the application, run `yarn test` from the top-level directory. No credentials or environment variables are required for running tests.
