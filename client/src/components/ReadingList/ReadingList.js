@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { start_review } from '../../actions/index';
+import { startReview } from '../../actions/index';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import { Button, Empty, Icon, List, PageHeader } from 'antd';
 import moment from 'moment';
@@ -69,18 +69,7 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
 
 class ReadingList extends Component {
   handleEditClick(value) {
-    const review = {
-      paper: value,
-      review: {
-        summary_points: [''],
-        background_points: [''],
-        approach_points: [''],
-        results_points: [''],
-        conclusions_points: [''],
-        other_points: [''],
-      },
-    };
-    this.props.dispatch(start_review(review));
+    this.props.dispatch(startReview(value._id));
   }
 
   handleDeleteClick(index) {

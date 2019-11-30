@@ -1,87 +1,114 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button, Icon, PageHeader, Steps } from 'antd';
 import MetadataForm from './MetadataForm';
 import ReviewForm from './ReviewForm';
 import ReviewModal from '../ReviewModal/ReviewModal';
 
 import { connect } from 'react-redux';
-import { start_review, exit_form } from '../../actions/index';
+import _ from 'lodash';
+import { startReview, endReview, updateReadingList, updateReviews } from '../../actions/index';
 import './ReviewWizard.scss';
+import { blankPaper, blankReview } from './utils.js';
 
 const { Step } = Steps;
-
-const blankReview = {
-  paper: {
-    title: '',
-    author_names: [''],
-    institution_names: [''],
-    date: new Date(),
-    doi: '',
-    journal: '',
-    url: '',
-  },
-  review: {
-    summary_points: [''],
-    background_points: [''],
-    approach_points: [''],
-    results_points: [''],
-    conclusions_points: [''],
-    other_points: [''],
-  },
-};
 
 class ReviewWizard extends Component {
   constructor(props) {
     super(props);
 
-    this.reviewFromStore = this.props.data.review_data.review_object || blankReview;
+    let { activeReview, readingList } = this.props;
+    let { paperId, reviewContent } = activeReview;
+
+    let paper;
+    let review;
+
+    // NB: always use the paperId if it exists, if not fall back on provided content
+    if (paperId) {
+      paper = _.find(readingList, { _id: paperId });
+    } else if (reviewContent) {
+      ({ paper, review } = reviewContent);
+    }
 
     this.state = {
       showModal: false,
       submitLoading: false,
       step: 0,
-      paper: this.reviewFromStore.paper,
-      review: this.reviewFromStore.review,
+      paper: paper || blankPaper,
+      review: review || blankReview,
     };
   }
 
+  removeFromReadingList = () => {
+    let { activeReview } = this.props;
+    let { paperId } = activeReview;
+    if (!paperId) {
+      return;
+    }
+
+    let newReadingList = this.props.readingList.filter(currPaper => {
+      return currPaper._id !== paperId;
+    });
+
+    this.props.dispatch(updateReadingList(newReadingList));
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: this.props.user.userid,
+    };
+
+    fetch('/api/readingList', {
+      method: 'put',
+      headers: headers,
+      body: JSON.stringify(newReadingList),
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.props.dispatch(updateReadingList(data));
+      });
+  };
+
   confirmSuccess = () => {
     this.setState({ submitLoading: false }, () => {
-      this.props.refreshPapers();
-      this.props.dispatch(exit_form());
+      this.removeFromReadingList();
+      this.props.dispatch(endReview());
     });
   };
 
   handleCancel = () => {
-    const reviewObject = {
+    const reviewContent = {
       paper: this.state.paper,
       review: this.state.review,
     };
 
     this.setState({ step: 0, showModal: false }, () => {
-      this.props.dispatch(start_review(reviewObject));
+      this.props.dispatch(startReview(null, reviewContent));
     });
   };
 
   handleSubmission = () => {
+    let { user, activeReview } = this.props;
     const reviewObject = {
       paper: this.state.paper,
       review: this.state.review,
     };
 
     // post or put object, refresh papers in Home.js, and exit the form
-    let review_id = this.reviewFromStore._id;
+    let review_id;
+    if (activeReview.reviewContent) {
+      review_id = activeReview.reviewContent._id;
+    }
     let fetch_method = 'post';
     let headers = {
       'content-type': 'application/json',
-      userid: this.props.userid,
+      userid: user.userid,
     };
     if (review_id) {
       fetch_method = 'put';
       headers = {
         'content-type': 'application/json',
         id: review_id,
-        userid: this.props.userid,
+        userid: user.userid,
       };
     }
 
@@ -92,8 +119,8 @@ class ReviewWizard extends Component {
         body: JSON.stringify(reviewObject),
       })
         .then(response => response.json())
-        .then(data => {
-          console.log(JSON.stringify(data));
+        .then(newReviewList => {
+          this.props.dispatch(updateReviews(newReviewList));
           this.confirmSuccess();
         });
     });
@@ -110,6 +137,7 @@ class ReviewWizard extends Component {
   };
 
   render() {
+    let { activeReview } = this.props;
     const step0 = <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />;
     const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} />;
 
@@ -144,14 +172,16 @@ class ReviewWizard extends Component {
       </div>
     );
     const step_content = [step0, step1, step2];
-    return (
-      <div>
+
+    let homeRedirect = <Redirect to="/dashboard" push />;
+    let wizardRender = (
+      <div className="width80">
         <div>
           <PageHeader
             title="Write a Review"
             subTitle="Search online for papers"
             onBack={() => {
-              this.props.dispatch(exit_form());
+              this.props.dispatch(endReview());
             }}
           />
           <Steps current={this.state.step}>
@@ -164,13 +194,20 @@ class ReviewWizard extends Component {
         <div>{step_content[this.state.step]}</div>
       </div>
     );
+    return <div>{activeReview.showForm ? wizardRender : homeRedirect}</div>;
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ activeReview, readingList, reviews, user }) => {
   return {
-    data: state,
+    activeReview,
+    readingList,
+    reviews,
+    user,
   };
 };
 
-export default connect(mapStateToProps, null)(ReviewWizard);
+export default connect(
+  mapStateToProps,
+  null
+)(ReviewWizard);

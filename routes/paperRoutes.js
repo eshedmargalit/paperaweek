@@ -15,13 +15,13 @@ module.exports = app => {
     let user = await User.findOne({ _id: req.headers.userid });
     user.reviews.push(newReview);
     user.save();
-    res.send(JSON.stringify(newReview));
+    res.send(JSON.stringify(user.reviews));
   });
 
   app.put("/api/papers", async (req, res) => {
     try {
       let newPaper = new Paper(req.body.paper);
-      let review = await User.findOneAndUpdate(
+      let user = await User.findOneAndUpdate(
         {
           _id: req.headers.userid,
           "reviews._id": mongoose.Types.ObjectId(req.headers.id)
@@ -34,10 +34,10 @@ module.exports = app => {
         },
         { new: true } // return updated post
       );
-      if (!review) {
+      if (!user) {
         res.status(404).send("No item found");
       } else {
-        res.send(JSON.stringify(review));
+        res.send(JSON.stringify(user.reviews));
       }
     } catch (err) {
       res.status(500).send(err);

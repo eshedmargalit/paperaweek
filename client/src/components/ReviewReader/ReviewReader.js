@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Row, Col, Modal, Table, Input, PageHeader, Tag } from 'antd';
-import { start_review } from '../../actions/index';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Fuse from 'fuse.js';
 import { shortenAuthors, shortenString } from '../utils.js';
 import ReviewModal from '../ReviewModal/ReviewModal';
+import { startReview, updateReviews } from '../../actions/index';
 import './ReviewReader.scss';
 
 const { confirm } = Modal;
@@ -57,10 +57,11 @@ class ReviewReader extends Component {
   };
 
   handleModalEdit = () => {
-    this.props.dispatch(start_review(this.state.selectedReview));
+    this.props.dispatch(startReview(null, this.state.selectedReview));
   };
 
   handleModalDelete = () => {
+    let { user } = this.props;
     confirm({
       title: 'Are you sure delete this review?',
       content: "Once it's gone, it's gone forever!",
@@ -72,13 +73,17 @@ class ReviewReader extends Component {
           method: 'delete',
           headers: {
             'content-type': 'application/json',
-            userid: this.props.userid,
+            userid: user.userid,
           },
           body: JSON.stringify(this.state.selectedReview),
         })
           .then(response => response.json())
           .then(() => {
-            this.props.refreshPapers();
+            let { reviewList } = this.props.reviews;
+            let newReviews = reviewList.filter(rev => {
+              return rev !== this.state.selectedReview;
+            });
+            this.props.dispatch(updateReviews(newReviews));
             this.handleModalClose();
           });
       },
@@ -129,10 +134,6 @@ class ReviewReader extends Component {
     var fuse = new Fuse(reviews, options);
     const results = fuse.search(this.state.query);
     return results;
-  };
-
-  editReview = review => {
-    this.props.dispatch(start_review(review));
   };
 
   renderReviews = reviews => {
@@ -195,6 +196,8 @@ class ReviewReader extends Component {
   };
 
   render() {
+    let { reviews } = this.props;
+    let { reviewList } = reviews;
     const modalFooter = [
       <Button key="edit" type="dashed" icon="edit" onClick={this.handleModalEdit}>
         Edit this Review
@@ -245,7 +248,7 @@ class ReviewReader extends Component {
           </Col>
         </Row>
         <div>
-          <div>{this.renderReviews(this.fuzzyFilterReviews(this.props.reviews))}</div>
+          <div>{this.renderReviews(this.fuzzyFilterReviews(reviewList))}</div>
         </div>
         <ReviewModal
           review={this.state.selectedReview}
@@ -258,4 +261,14 @@ class ReviewReader extends Component {
   }
 }
 
-export default connect()(ReviewReader);
+const mapStateToProps = ({ user, reviews }) => {
+  return {
+    user,
+    reviews,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(ReviewReader);

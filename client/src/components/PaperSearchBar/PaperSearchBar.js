@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Icon, Button, Input, PageHeader } from 'antd';
-import { start_review } from '../../actions/index';
+import { startReview } from '../../actions/index';
 import _ from 'lodash';
 import { render_comma_sep_list, capital_case } from '../utils.js';
 import './PaperSearchBar.scss';
@@ -134,42 +134,37 @@ class PaperSearchBar extends Component {
     let journal_name = entity.VFN ? entity.VFN : '';
 
     // dispatch action to begin the review
+    const paper = {
+      title: entity.DN,
+      authors: author_names,
+      institutions: institutions,
+      date: new Date(entity.D),
+      doi: entity.DOI,
+      journal: journal_name,
+      url: entity_url,
+    };
     const review = {
-      paper: {
-        title: entity.DN,
-        authors: author_names,
-        institutions: institutions,
-        date: new Date(entity.D),
-        doi: entity.DOI,
-        journal: journal_name,
-        url: entity_url,
-      },
-      review: {
-        summary_points: [''],
-        background_points: [''],
-        approach_points: [''],
-        results_points: [''],
-        conclusions_points: [''],
-        other_points: [''],
-      },
+      paper: paper,
+      review: null,
     };
     return review;
   }
 
-  handlePaperClick = paperid => {
-    let review = this.processEntity(paperid);
-    this.props.dispatch(start_review(review));
+  async handlePaperClick(paperid) {
+    let reviewContent = this.processEntity(paperid);
+    this.props.dispatch(startReview(null, reviewContent));
 
     // reset the search bar and results
     this.setState({
       query: '',
       entities: [],
     });
-  };
+  }
 
   addToReadingList = paperid => {
     let review = this.processEntity(paperid);
-    this.props.addToReadingListHandler(review);
+    let newId = this.props.addToReadingListHandler(review);
+    return newId;
   };
 
   renderHits() {

@@ -127,3 +127,22 @@ export const formItemLayoutWithoutLabel = {
     sm: { span: 18, offset: 6 },
   },
 };
+
+export const blankPaper = {
+  title: '',
+  author_names: [''],
+  institution_names: [''],
+  date: new Date(),
+  doi: '',
+  journal: '',
+  url: '',
+};
+
+export const blankReview = {
+  summary_points: [''],
+  background_points: [''],
+  approach_points: [''],
+  results_points: [''],
+  conclusions_points: [''],
+  other_points: [''],
+};

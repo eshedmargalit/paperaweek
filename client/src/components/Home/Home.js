@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Carousel, Icon, Menu } from 'antd';
 import { FadeLoader } from 'react-spinners';
 import ReviewReader from '../ReviewReader/ReviewReader';
 import ReadingList from '../ReadingList/ReadingList';
 import PaperSearchBar from '../PaperSearchBar/PaperSearchBar';
-import ReviewWizard from '../ReviewWizard/ReviewWizard';
-import { start_review } from '../../actions/index';
+import {
+  updateReadingList,
+  updateReviews,
+  login_failed,
+  login_success,
+  login_pending,
+  startReview,
+} from '../../actions/index';
 import arrayMove from 'array-move';
 import moment from 'moment';
 import './Home.scss';
@@ -14,133 +21,85 @@ import './Home.scss';
 class Home extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      displayName: 'Unidentified. Show yourself!',
-      userid: null,
-      loading: true,
-      reviews: [],
-      readingList: [],
-    };
   }
 
   async componentDidMount() {
+    this.props.dispatch(login_pending());
+
     let { auth } = this.props;
 
     // parse return URL from cognito
     auth.parseCognitoWebResponse(window.location.href);
 
     // send JWT to backend
-    let auth_data = await fetch('/api/auth', {
-      headers: {
-        'content-type': 'application/json',
-        idToken: auth.signInUserSession.idToken.jwtToken,
-      },
-    }).then(response => response.json());
-
-    console.log(auth_data);
-    // finally, set state
-    this.setState({
-      displayName: auth_data.display_name,
-      userid: auth_data._id,
-      loading: false,
-      reviews: auth_data.reviews,
-      readingList: auth_data.reading_list,
-    });
-  }
-
-  onReadingListSort = ({ oldIndex, newIndex }) => {
-    let newReadingList = arrayMove(this.state.readingList, oldIndex, newIndex);
-    this.setState(
-      {
-        readingList: newReadingList,
-      },
-      () => {
-        let headers = {
+    let auth_data;
+    try {
+      auth_data = await fetch('/api/auth', {
+        headers: {
           'content-type': 'application/json',
-          userid: this.state.userid,
-        };
-
-        // Update the backend with this new readinglist
-        fetch('/api/readingList', {
-          method: 'put',
-          headers: headers,
-          body: JSON.stringify(this.state.readingList),
-        });
-      }
-    );
-  };
+          idToken: auth.signInUserSession.idToken.jwtToken,
+        },
+      }).then(response => response.json());
+      this.props.dispatch(login_success(auth_data.display_name, auth_data._id));
+      this.props.dispatch(updateReviews(auth_data.reviews));
+      this.props.dispatch(updateReadingList(auth_data.reading_list));
+    } catch (error) {
+      this.props.dispatch(login_failed(error));
+    }
+  }
 
   signOut = () => {
     this.props.auth.signOut();
   };
 
-  refreshPapers = () => {
-    fetch('/api/papers', {
-      headers: { userid: this.state.userid },
+  _updateReadingList = newReadingList => {
+    this.props.dispatch(updateReadingList(newReadingList));
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: this.props.user.userid,
+    };
+
+    fetch('/api/readingList', {
+      method: 'put',
+      headers: headers,
+      body: JSON.stringify(newReadingList),
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        this.setState({ reviews: data, loading: false });
+        this.props.dispatch(updateReadingList(data));
       });
-  };
-
-  startBlankReview = () => {
-    this.props.dispatch(start_review(null));
   };
 
   addToReadingList = review => {
     const paper = review.paper;
-    let currReadingList = this.state.readingList;
 
+    let currReadingList = this.props.readingList;
     let newReadingList = currReadingList.concat(paper);
-    this.setState({ readingList: newReadingList }, () => {
-      let headers = {
-        'content-type': 'application/json',
-        userid: this.state.userid,
-      };
-      fetch('/api/readingList', {
-        method: 'post',
-        headers: headers,
-        body: JSON.stringify(paper),
-      })
-        .then(response => response.json())
-        .then(data => {
-          this.setState({ readingList: data });
-        });
-    });
+    this._updateReadingList(newReadingList);
+  };
+
+  onReadingListSort = ({ oldIndex, newIndex }) => {
+    let newReadingList = arrayMove(this.props.readingList, oldIndex, newIndex);
+    this._updateReadingList(newReadingList);
   };
 
   removeFromReadingList = paper => {
-    let newReadingList = this.state.readingList.filter(currPaper => {
+    let newReadingList = this.props.readingList.filter(currPaper => {
       return currPaper !== paper;
     });
+    this._updateReadingList(newReadingList);
+  };
 
-    this.setState({ readingList: newReadingList }, () => {
-      let headers = {
-        'content-type': 'application/json',
-        userid: this.state.userid,
-      };
-      fetch('/api/readingList', {
-        method: 'delete',
-        headers: headers,
-        body: JSON.stringify(paper),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-        });
-    });
+  startBlankReview = () => {
+    this.props.dispatch(startReview(null));
   };
 
   renderCarousel() {
+    let { reviewList } = this.props.reviews;
     let numberOfDaysSinceLastReview = 'forever! Get reviewing!';
-    if (this.state.reviews.length > 0) {
-      numberOfDaysSinceLastReview = moment().diff(
-        moment.max(this.state.reviews.map(paper => moment(paper.createdAt))),
-        'days'
-      );
+    if (reviewList.length > 0) {
+      numberOfDaysSinceLastReview = moment().diff(moment.max(reviewList.map(paper => moment(paper.createdAt))), 'days');
     }
     const carouselContent = [
       'A paper a week keeps the literature review on fleek',
@@ -163,13 +122,16 @@ class Home extends Component {
   }
 
   render() {
+    let formRedirect = <Redirect to="/form" push />;
+    let { user, reviews, readingList, activeReview } = this.props;
+    let { reviewList, loading } = reviews;
     const home_render = (
       <div>
         <Menu className="menu" mode="horizontal">
           <Menu.Item>
             <h5>
               <Icon type="user" />
-              Hi there, {this.state.displayName}!
+              Hi there, {user.displayName}!
             </h5>
           </Menu.Item>
           <Menu.Item className="menu__item">
@@ -188,39 +150,37 @@ class Home extends Component {
             <ReadingList
               onSortEnd={this.onReadingListSort}
               removeItemHandler={this.removeFromReadingList}
-              items={this.state.readingList}
+              items={readingList}
             />
           </div>
         </div>
         <div className="width80">
-          {this.state.loading ? (
+          {loading ? (
             <div>
               <h6> Loading Reviews </h6>
               <FadeLoader />
             </div>
           ) : (
-            <ReviewReader userid={this.state.userid} refreshPapers={this.refreshPapers} reviews={this.state.reviews} />
+            <ReviewReader />
           )}
         </div>
       </div>
     );
 
-    const form_render = (
-      <div>
-        <div className="width80">
-          <ReviewWizard userid={this.state.userid} refreshPapers={this.refreshPapers} />
-        </div>
-      </div>
-    );
-
-    return <div>{this.props.data.review_data.displayForm ? form_render : home_render}</div>;
+    return <div>{activeReview.showForm ? formRedirect : home_render}</div>;
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ reviews, readingList, user, activeReview }) => {
   return {
-    data: state,
+    reviews,
+    readingList,
+    user,
+    activeReview,
   };
 };
 
-export default connect(mapStateToProps, null)(Home);
+export default connect(
+  mapStateToProps,
+  null
+)(Home);
