@@ -102,7 +102,7 @@ class PaperSearchBarContainer extends Component {
       }
 
       let entity_url = '';
-      if (entity.S && entity.S.length != 0) {
+      if (entity.S && entity.S.length !== 0) {
         entity_url = entity.S[0].U;
       }
 

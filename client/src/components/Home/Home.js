@@ -18,10 +18,6 @@ import {
 import './Home.scss';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   async componentDidMount() {
     this.props.dispatch(loginPending());
 
@@ -53,8 +49,9 @@ class Home extends Component {
 
   render() {
     let formRedirect = <Redirect to="/form" push />;
-    let { user, reviews, readingList, activeReview } = this.props;
-    let { reviewList, loading } = reviews;
+    let { user, reviews, activeReview } = this.props;
+    let { loading } = reviews;
+
     const home_render = (
       <div>
         <Menu className="menu" mode="horizontal">
