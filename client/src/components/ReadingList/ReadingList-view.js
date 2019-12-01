@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Empty, Icon, List, PageHeader } from 'antd';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
@@ -65,38 +65,35 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
   );
 });
 
-class ReadingListView extends Component {
-  render() {
-    let sortableList = (
-      <SortableInfiniteList
-        onSortEnd={this.props.onSortEnd}
-        items={this.props.items}
-        editClickHandler={this.props.handleEditClick}
-        deleteClickHandler={this.props.handleDeleteClick}
-        useDragHandle
+function ReadingListView(props) {
+  const noList = (
+    <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
+      <Empty
+        description={
+          <span>
+            Add papers to your reading list from the search bar, just press the <Icon type="plus" /> button!
+          </span>
+        }
       />
-    );
+    </div>
+  );
 
-    let noList = (
-      <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
-        <Empty
-          description={
-            <span>
-              Add papers to your reading list from the search bar, just press the <Icon type="plus" /> button!
-            </span>
-          }
-        />
-      </div>
-    );
-
-    return (
-      <div>
-        <br />
-        <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
-        {this.props.items.length > 0 ? sortableList : noList}
-      </div>
-    );
-  }
+  const sortableList = (
+    <SortableInfiniteList
+      onSortEnd={props.onSortEnd}
+      items={props.items}
+      editClickHandler={props.handleEditClick}
+      deleteClickHandler={props.handleDeleteClick}
+      useDragHandle
+    />
+  );
+  return (
+    <div>
+      <br />
+      <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
+      {props.items.length > 0 ? sortableList : noList}
+    </div>
+  );
 }
 
 export default ReadingListView;
