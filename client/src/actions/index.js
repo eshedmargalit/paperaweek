@@ -7,7 +7,7 @@ export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 
-export function login_success(name, id) {
+export function loginSuccess(name, id) {
   return {
     type: LOGIN_SUCCESS,
     payload: {
@@ -17,23 +17,17 @@ export function login_success(name, id) {
   };
 }
 
-export function login_failed(error) {
+export function loginFailed(error) {
   return {
     type: LOGIN_FAILURE,
     payload: error,
   };
 }
 
-export function login_pending() {
+export function loginPending() {
   return {
     type: LOGIN_PENDING,
     payload: null,
-  };
-}
-
-export function exit_form() {
-  return {
-    type: EXIT_FORM,
   };
 }
 

@@ -9,9 +9,9 @@ import PaperSearchBar from '../PaperSearchBar/PaperSearchBar';
 import {
   updateReadingList,
   updateReviews,
-  login_failed,
-  login_success,
-  login_pending,
+  loginFailed,
+  loginSuccess,
+  loginPending,
   startReview,
 } from '../../actions/index';
 import arrayMove from 'array-move';
@@ -24,7 +24,7 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    this.props.dispatch(login_pending());
+    this.props.dispatch(loginPending());
 
     let { auth } = this.props;
 
@@ -40,11 +40,11 @@ class Home extends Component {
           idToken: auth.signInUserSession.idToken.jwtToken,
         },
       }).then(response => response.json());
-      this.props.dispatch(login_success(auth_data.display_name, auth_data._id));
+      this.props.dispatch(loginSuccess(auth_data.display_name, auth_data._id));
       this.props.dispatch(updateReviews(auth_data.reviews));
       this.props.dispatch(updateReadingList(auth_data.reading_list));
     } catch (error) {
-      this.props.dispatch(login_failed(error));
+      this.props.dispatch(loginFailed(error));
     }
   }
 
