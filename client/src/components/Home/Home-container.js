@@ -3,7 +3,8 @@ import HomeView from './Home-view';
 
 class HomeContainer extends Component {
   render() {
-    return <HomeView user={this.props.user} showForm={this.props.showForm} signOut={this.props.signOut} />;
+    let { user, showForm, signOut } = this.props;
+    return <HomeView user={user} showForm={showForm} signOut={signOut} />;
   }
 }
 
