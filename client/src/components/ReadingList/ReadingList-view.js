@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { startReview } from '../../actions/index';
-import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import { Button, Empty, Icon, List, PageHeader } from 'antd';
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
 import { shortenAuthors } from '../utils';
@@ -67,22 +65,14 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
   );
 });
 
-class ReadingList extends Component {
-  handleEditClick(value) {
-    this.props.dispatch(startReview(value._id));
-  }
-
-  handleDeleteClick(index) {
-    this.props.removeItemHandler(index);
-  }
-
+class ReadingListView extends Component {
   render() {
     let sortableList = (
       <SortableInfiniteList
         onSortEnd={this.props.onSortEnd}
         items={this.props.items}
-        editClickHandler={this.handleEditClick.bind(this)}
-        deleteClickHandler={this.handleDeleteClick.bind(this)}
+        editClickHandler={this.props.handleEditClick}
+        deleteClickHandler={this.props.handleDeleteClick}
         useDragHandle
       />
     );
@@ -109,4 +99,4 @@ class ReadingList extends Component {
   }
 }
 
-export default connect()(ReadingList);
+export default ReadingListView;

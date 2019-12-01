@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Carousel, Icon, Menu } from 'antd';
+import { Button, Icon, Menu } from 'antd';
 import { FadeLoader } from 'react-spinners';
 import ReviewReader from '../ReviewReader/ReviewReader';
-import ReadingList from '../ReadingList/ReadingList';
-import PaperSearchBar from '../PaperSearchBar/PaperSearchBar';
+import ReadingList from '../ReadingList';
+import PaperSearchBar from '../PaperSearchBar';
+
 import {
   updateReadingList,
   updateReviews,
@@ -14,8 +15,6 @@ import {
   loginPending,
   startReview,
 } from '../../actions/index';
-import arrayMove from 'array-move';
-import moment from 'moment';
 import './Home.scss';
 
 class Home extends Component {
@@ -48,78 +47,9 @@ class Home extends Component {
     }
   }
 
-  signOut = () => {
-    this.props.auth.signOut();
-  };
-
-  _updateReadingList = newReadingList => {
-    this.props.dispatch(updateReadingList(newReadingList));
-
-    let headers = {
-      'content-type': 'application/json',
-      userid: this.props.user.userid,
-    };
-
-    fetch('/api/readingList', {
-      method: 'put',
-      headers: headers,
-      body: JSON.stringify(newReadingList),
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.props.dispatch(updateReadingList(data));
-      });
-  };
-
-  addToReadingList = review => {
-    const paper = review.paper;
-
-    let currReadingList = this.props.readingList;
-    let newReadingList = currReadingList.concat(paper);
-    this._updateReadingList(newReadingList);
-  };
-
-  onReadingListSort = ({ oldIndex, newIndex }) => {
-    let newReadingList = arrayMove(this.props.readingList, oldIndex, newIndex);
-    this._updateReadingList(newReadingList);
-  };
-
-  removeFromReadingList = paper => {
-    let newReadingList = this.props.readingList.filter(currPaper => {
-      return currPaper !== paper;
-    });
-    this._updateReadingList(newReadingList);
-  };
-
   startBlankReview = () => {
     this.props.dispatch(startReview(null));
   };
-
-  renderCarousel() {
-    let { reviewList } = this.props.reviews;
-    let numberOfDaysSinceLastReview = 'forever! Get reviewing!';
-    if (reviewList.length > 0) {
-      numberOfDaysSinceLastReview = moment().diff(moment.max(reviewList.map(paper => moment(paper.createdAt))), 'days');
-    }
-    const carouselContent = [
-      'A paper a week keeps the literature review on fleek',
-      'Believe first and foremost in yourself!',
-      "I'm trapped in here, please help me! It's been weeks...",
-      'Reading papers is fun AND nutritious! 🤪',
-      `Number of days since last review: ${numberOfDaysSinceLastReview}`,
-    ];
-    return (
-      <Carousel className="carousel" autoplay speed={1000}>
-        {carouselContent.map(item => {
-          return (
-            <h3 className="carousel__content" key={`carousel ${item}`}>
-              {item}
-            </h3>
-          );
-        })}
-      </Carousel>
-    );
-  }
 
   render() {
     let formRedirect = <Redirect to="/form" push />;
@@ -135,23 +65,15 @@ class Home extends Component {
             </h5>
           </Menu.Item>
           <Menu.Item className="menu__item">
-            <Button onClick={this.signOut}>Sign Out</Button>
+            <Button onClick={this.props.auth.signOut}>Sign Out</Button>
           </Menu.Item>
         </Menu>
         <div className="searchbar width80">
           <div style={{ width: '60%' }}>
-            <PaperSearchBar
-              startBlankReview={this.startBlankReview}
-              addToReadingListHandler={this.addToReadingList}
-              carousel={this.renderCarousel()}
-            />
+            <PaperSearchBar />
           </div>
           <div style={{ width: '35%' }}>
-            <ReadingList
-              onSortEnd={this.onReadingListSort}
-              removeItemHandler={this.removeFromReadingList}
-              items={readingList}
-            />
+            <ReadingList />
           </div>
         </div>
         <div className="width80">
