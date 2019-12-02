@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { Icon, Button, Menu } from 'antd';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
-import ReviewReader from '../ReviewReader/ReviewReader';
+import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 

@@ -25,6 +25,10 @@ class ReadingListRedux extends Component {
       });
   };
 
+  handleModalEdit = review => {
+    this.props.dispatch(startReview(null, review));
+  };
+
   handleEditClick(value) {
     this.props.dispatch(startReview(value._id));
   }
