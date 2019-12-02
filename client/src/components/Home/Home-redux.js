@@ -31,7 +31,8 @@ class HomeRedux extends Component {
 
   render() {
     let { user, activeReview, auth } = this.props;
-    return <HomeContainer user={user} showForm={activeReview.showForm} signOut={auth.signOut} />;
+    let boundSignOut = auth.signOut.bind(auth);
+    return <HomeContainer user={user} showForm={activeReview.showForm} signOut={boundSignOut} />;
   }
 }
 
@@ -42,7 +43,4 @@ const mapStateToProps = ({ user, activeReview }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(HomeRedux);
+export default connect(mapStateToProps, null)(HomeRedux);
