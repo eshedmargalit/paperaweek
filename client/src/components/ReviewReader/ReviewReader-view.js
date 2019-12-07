@@ -32,6 +32,11 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
       render: title => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
     },
     {
+      title: 'One Sentence',
+      dataIndex: 'paper.one_sentence',
+      render: one_sentence => <span>{one_sentence}</span>,
+    },
+    {
       title: 'Authors',
       dataIndex: 'paper.authors',
       render: authorList => <span>{shortenAuthors(authorList)}</span>,
