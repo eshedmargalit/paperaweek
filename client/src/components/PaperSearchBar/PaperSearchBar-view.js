@@ -22,7 +22,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
   const renderedSearchResults = searchResults.map(result => {
     let { paper, id } = result;
     let { title, journal, date, authors } = paper;
-    let year = date.getYear();
+    let year = date.getFullYear();
     let author_names_list = render_comma_sep_list(authors, 'author_names');
     return (
       <div
