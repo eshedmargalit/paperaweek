@@ -16,7 +16,7 @@ class ReviewWizardRedux extends Component {
     this.props.dispatch(endReview());
   };
 
-  removeFromReadingList = () => {
+  exitReview = () => {
     let { activeReview, readingList, user } = this.props;
     let { paperId } = activeReview;
     if (!paperId) {
@@ -44,10 +44,11 @@ class ReviewWizardRedux extends Component {
       .then(response => response.json())
       .then(data => {
         this.props.dispatch(updateReadingList(data));
+        this.props.dispatch(endReview());
       });
   };
 
-  submitReview = (reviewObject, reviewId) => {
+  submitReview = async (reviewObject, reviewId) => {
     let { user } = this.props;
 
     let fetchMethod = reviewId ? 'put' : 'post';
@@ -69,8 +70,7 @@ class ReviewWizardRedux extends Component {
         .then(response => response.json())
         .then(newReviewList => {
           this.props.dispatch(updateReviews(newReviewList));
-          this.removeFromReadingList();
-          this.props.dispatch(endReview());
+          this.exitReview();
         });
     });
   };

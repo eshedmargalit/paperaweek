@@ -46,6 +46,7 @@ export function endReview() {
 }
 
 export function updateReadingList(newReadingList) {
+  console.log('Yeah, this is reading list actions/index.js here. I was asked to update the reading list?');
   return {
     type: UPDATE_READING_LIST,
     payload: newReadingList,
