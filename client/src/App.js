@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login/Login';
-import ReviewWizard from './components/ReviewWizard/ReviewWizard';
+import ReviewWizard from './components/ReviewWizard';
 import { CognitoAuth } from 'amazon-cognito-auth-js';
 import { getAuthData } from './utils.js';
 
