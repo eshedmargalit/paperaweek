@@ -5,7 +5,7 @@ import MetadataForm from './MetadataForm';
 import ReviewForm from './ReviewForm';
 import { blankPaper, blankReview } from './utils.js';
 
-import { Button, Icon } from 'antd';
+import { Button } from 'antd';
 import _ from 'lodash';
 
 class ReviewWizardContainer extends Component {
@@ -74,7 +74,13 @@ class ReviewWizardContainer extends Component {
     const step0 = <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />;
     const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} />;
     const modalFooter = [
-      <Button key="submit" type="primary" icon="check" onClick={this.handleSubmission}>
+      <Button
+        key="submit"
+        type="primary"
+        icon="check"
+        onClick={this.handleSubmission}
+        loading={this.props.submitLoading}
+      >
         Looks good, submit!
       </Button>,
       <Button key="cancel" icon="close" onClick={this.onModalCancel} style={{ borderColor: 'red' }}>
@@ -95,12 +101,6 @@ class ReviewWizardContainer extends Component {
           onClose={this.onModalCancel}
           footer={modalFooter}
         />
-        <Button type="primary" onClick={this.handleSubmission} loading={this.props.submitLoading}>
-          Looks good! Submit
-        </Button>{' '}
-        <Button type="danger" onClick={this.handleCancel}>
-          Cancel <Icon type="close-circle" />
-        </Button>
       </div>
     );
     const stepContent = [step0, step1, modal];

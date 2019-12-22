@@ -19,14 +19,12 @@ class ReviewWizardRedux extends Component {
   exitReview = () => {
     let { activeReview, readingList, user } = this.props;
     let { paperId } = activeReview;
-    if (!paperId) {
-      return;
+    let newReadingList = readingList;
+    if (paperId) {
+      newReadingList = readingList.filter(currPaper => {
+        return currPaper._id !== paperId;
+      });
     }
-
-    // new reading list is old reading list with active review id removed
-    let newReadingList = readingList.filter(currPaper => {
-      return currPaper._id !== paperId;
-    });
 
     // update reading list in global state
     this.props.dispatch(updateReadingList(newReadingList));
@@ -48,7 +46,7 @@ class ReviewWizardRedux extends Component {
       });
   };
 
-  submitReview = async (reviewObject, reviewId) => {
+  submitReview = (reviewObject, reviewId) => {
     let { user } = this.props;
 
     let fetchMethod = reviewId ? 'put' : 'post';
