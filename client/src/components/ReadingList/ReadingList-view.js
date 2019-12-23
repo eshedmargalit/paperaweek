@@ -55,7 +55,6 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
             index={index}
             sortIndex={index}
             value={value}
-            height={ITEM_HEIGHT}
             editClickHandler={editClickHandler}
             deleteClickHandler={deleteClickHandler}
           />
