@@ -73,6 +73,11 @@ class ReviewWizardRedux extends Component {
     });
   };
 
+  saveDraft = draft => {
+    // todo: actually put/post the draft
+    return fetch('https://jsonplaceholder.typicode.com/todos/1');
+  };
+
   restartReview = reviewContent => {
     this.props.dispatch(startReview(null, reviewContent));
   };
@@ -84,6 +89,7 @@ class ReviewWizardRedux extends Component {
         onPageBack={this.onPageBack}
         restartReview={this.restartReview}
         submitReview={this.submitReview}
+        saveDraft={this.saveDraft}
         activeReview={activeReview}
         readingList={readingList}
         submitLoading={this.state.submitLoading}

@@ -25,9 +25,15 @@ class ReviewWizardContainer extends Component {
       ({ paper, review } = reviewContent);
     }
 
+    // only autosave at most every 2 seconds
+    // Note: this should probably be closer to every 20 seconds or something, value is low here for
+    // testing purposes
+    this.debouncedAutosave = _.debounce(this.autosave, 2 * 1000);
+
     this.state = {
       step: 0,
       showModal: false,
+      autosaveStatus: 'unsaved',
       paper: paper || blankPaper,
       review: review || blankReview,
     };
@@ -70,9 +76,27 @@ class ReviewWizardContainer extends Component {
     });
   };
 
+  autosave = () => {
+    const reviewFromState = {
+      paper: this.state.paper,
+      review: this.state.review,
+    };
+
+    this.setState({ autosaveStatus: 'saving' }, async () => {
+      const response = await this.props.saveDraft(reviewFromState);
+      if (response.status === 200) {
+        this.setState({ autosaveStatus: 'saved' });
+      } else {
+        this.setState({ autosaveStatus: 'saveFailed' });
+      }
+    });
+  };
+
   render() {
-    const step0 = <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />;
-    const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} />;
+    const step0 = (
+      <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} onChange={this.debouncedAutosave} />
+    );
+    const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} onChange={this.debouncedAutosave} />;
     const modalFooter = [
       <Button
         key="submit"
@@ -107,7 +131,7 @@ class ReviewWizardContainer extends Component {
 
     return (
       <ReviewWizardView
-        autosaveStatus="saving"
+        autosaveStatus={this.state.autosaveStatus}
         showWizard={this.props.activeReview.showForm}
         onPageBack={this.props.onPageBack}
         currentStep={this.state.step}

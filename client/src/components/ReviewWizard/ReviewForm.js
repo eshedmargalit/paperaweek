@@ -28,6 +28,10 @@ class ReviewForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.props.onChange();
+  }
+
   validateFields = e => {
     e.preventDefault();
 
@@ -155,4 +159,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Form.create({})(ReviewForm));
+export default connect(
+  mapStateToProps,
+  null
+)(Form.create({})(ReviewForm));

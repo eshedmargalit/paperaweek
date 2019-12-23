@@ -26,6 +26,10 @@ class MetadataForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    this.props.onChange();
+  }
+
   validateFields = e => {
     // prevent HTML form submit
     e.preventDefault();
@@ -218,4 +222,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Form.create({})(MetadataForm));
+export default connect(
+  mapStateToProps,
+  null
+)(Form.create({})(MetadataForm));
