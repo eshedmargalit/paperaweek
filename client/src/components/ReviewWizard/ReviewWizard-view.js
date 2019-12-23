@@ -28,6 +28,14 @@ function ReviewWizardView({ autosaveStatus, showWizard, currentStep, stepContent
         </div>
       );
       break;
+    case 'saveFailed':
+      autosaveIcon = (
+        <div key="autosave" className="save-icon">
+          <Icon type="save" theme="twoTone" twoToneColor="#f5222d" />
+          {` `} Failed to save
+        </div>
+      );
+      break;
     default:
     // do nothing
   }
