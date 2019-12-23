@@ -14,6 +14,7 @@ $blue-dark: rgba(73, 132, 238, 1);
 .menu {
   background: $blue-light;
   background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
+  color: white;
 
   &__item {
     float: right;
