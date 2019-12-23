@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { start_review } from '../../actions/index';
-import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
+import React from 'react';
 import { Button, Empty, Icon, List, PageHeader } from 'antd';
+import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
 import { shortenAuthors } from '../utils';
@@ -66,57 +64,35 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
   );
 });
 
-class ReadingList extends Component {
-  handleEditClick(value) {
-    const review = {
-      paper: value,
-      review: {
-        summary_points: [''],
-        background_points: [''],
-        approach_points: [''],
-        results_points: [''],
-        conclusions_points: [''],
-        other_points: [''],
-      },
-    };
-    this.props.dispatch(start_review(review));
-  }
-
-  handleDeleteClick(index) {
-    this.props.removeItemHandler(index);
-  }
-
-  render() {
-    let sortableList = (
-      <SortableInfiniteList
-        onSortEnd={this.props.onSortEnd}
-        items={this.props.items}
-        editClickHandler={this.handleEditClick.bind(this)}
-        deleteClickHandler={this.handleDeleteClick.bind(this)}
-        useDragHandle
+function ReadingListView(props) {
+  const noList = (
+    <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
+      <Empty
+        description={
+          <span>
+            Add papers to your reading list from the search bar, just press the <Icon type="plus" /> button!
+          </span>
+        }
       />
-    );
+    </div>
+  );
 
-    let noList = (
-      <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
-        <Empty
-          description={
-            <span>
-              Add papers to your reading list from the search bar, just press the <Icon type="plus" /> button!
-            </span>
-          }
-        />
-      </div>
-    );
-
-    return (
-      <div>
-        <br />
-        <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
-        {this.props.items.length > 0 ? sortableList : noList}
-      </div>
-    );
-  }
+  const sortableList = (
+    <SortableInfiniteList
+      onSortEnd={props.onSortEnd}
+      items={props.items}
+      editClickHandler={props.handleEditClick}
+      deleteClickHandler={props.handleDeleteClick}
+      useDragHandle
+    />
+  );
+  return (
+    <div>
+      <br />
+      <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
+      {props.items.length > 0 ? sortableList : noList}
+    </div>
+  );
 }
 
-export default connect()(ReadingList);
+export default ReadingListView;

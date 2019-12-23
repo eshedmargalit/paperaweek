@@ -88,3 +88,15 @@ export function shortenString(str, cutoff) {
   }
   return str;
 }
+
+export function getTagColor(tag) {
+  var hash = 0;
+  for (var i = 0; i < tag.length; i++) {
+    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  var shortened = hash % 360;
+  const saturation = '80%';
+  const lightness = '30%';
+  return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
+}

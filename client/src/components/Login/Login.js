@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, Col, Icon, notification, Row } from 'antd';
 import LazyHero from 'react-lazy-hero';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import './Login.scss';
 
@@ -103,10 +102,4 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    data: state,
-  };
-};
-
-export default connect(mapStateToProps, null)(Login);
+export default Login;
