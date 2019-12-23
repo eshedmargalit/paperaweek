@@ -28,6 +28,8 @@ function ReviewWizardView({ autosaveStatus, showWizard, currentStep, stepContent
         </div>
       );
       break;
+    default:
+    // do nothing
   }
 
   let wizardRender = (
