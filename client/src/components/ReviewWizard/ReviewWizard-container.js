@@ -107,6 +107,7 @@ class ReviewWizardContainer extends Component {
 
     return (
       <ReviewWizardView
+        autosaveStatus="saving"
         showWizard={this.props.activeReview.showForm}
         onPageBack={this.props.onPageBack}
         currentStep={this.state.step}
