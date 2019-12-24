@@ -14,14 +14,28 @@ $blue-dark: rgba(73, 132, 238, 1);
 .menu {
   background: $blue-light;
   background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
-  color: white;
+
+  .ant-menu-item > a {
+    color: white;
+  }
 
   &__item {
     float: right;
   }
 
+  &__badge {
+    color: green;
+    box-shadow: 5px;
+  }
+
   li > h5 {
     color: white;
+  }
+
+  &__badge .ant-badge-count {
+    background-color: #fff;
+    color: #222;
+    opacity: 0.5;
   }
 }
 

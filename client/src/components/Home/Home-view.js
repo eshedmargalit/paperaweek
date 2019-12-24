@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Badge, Icon, Button, Menu } from 'antd';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
@@ -12,8 +12,10 @@ function HomeView({ user, numberOfDrafts, showForm, signOut }) {
   if (numberOfDrafts > 0) {
     draftMenuItem = (
       <Menu.Item className="menu__item">
-        Drafts{` `}
-        <Badge count={numberOfDrafts} style={{ backgroundColor: '#fff', color: '#999' }} />
+        <Link to="/drafts">
+          Drafts{` `}
+          <Badge count={numberOfDrafts} className="menu__badge" />
+        </Link>
       </Menu.Item>
     );
   }

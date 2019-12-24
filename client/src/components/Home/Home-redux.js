@@ -32,7 +32,7 @@ class HomeRedux extends Component {
   render() {
     let { user, activeReview, auth } = this.props;
     let boundSignOut = auth.signOut.bind(auth);
-    return <HomeContainer user={user} showForm={activeReview.showForm} signOut={boundSignOut} numberOfDrafts={1} />;
+    return <HomeContainer user={user} showForm={activeReview.showForm} signOut={boundSignOut} numberOfDrafts={2} />;
   }
 }
 
