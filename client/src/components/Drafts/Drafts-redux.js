@@ -4,14 +4,14 @@ import DraftsContainer from './Drafts-container';
 
 class DraftsRedux extends Component {
   render() {
-    return <DraftsContainer />;
+    return <DraftsContainer {...this.props} />;
   }
 }
 
-const mapStateToProps = ({ user, activeReview }) => {
+const mapStateToProps = ({ user, drafts }) => {
   return {
     user,
-    activeReview,
+    drafts,
   };
 };
 

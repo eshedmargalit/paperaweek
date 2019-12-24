@@ -27,7 +27,40 @@ class MetadataForm extends Component {
   }
 
   componentDidUpdate() {
-    this.props.onChange();
+    const paper = this.getValues();
+    this.props.onChange(paper);
+  }
+
+  getValues() {
+    // run antd validation for all fields
+    let paper = {};
+    this.props.form.validateFields((err, values) => {
+      metaFields.forEach(({ fieldName, isList }) => {
+        // get field value
+        let paperValue;
+        if (isList) {
+          let listValues = values[fieldName].map(itemIdx => {
+            return values[`${fieldName}_list_values`][itemIdx];
+          });
+          paperValue = listValues;
+        } else {
+          paperValue = values[fieldName];
+        }
+
+        // special fields: deal with keywords or date
+        if (fieldName === 'keywords') {
+          if (values.keywords && notEmpty(values.keywords)) {
+            paperValue = this.handleKeywords(values.keywords);
+          }
+        } else if (fieldName === 'date') {
+          paperValue = values.date.format('YYYY-MM');
+        }
+
+        paper[fieldName] = paperValue;
+      });
+      console.log(paper);
+    });
+    return paper;
   }
 
   validateFields = e => {
@@ -100,6 +133,7 @@ class MetadataForm extends Component {
 
   render() {
     const existingMeta = this.props.paper;
+    console.log(existingMeta);
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     // construct fields for paper

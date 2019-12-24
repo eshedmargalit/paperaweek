@@ -74,8 +74,24 @@ class ReviewWizardRedux extends Component {
   };
 
   saveDraft = draft => {
-    // todo: actually put/post the draft
-    return fetch('https://jsonplaceholder.typicode.com/todos/1');
+    let { user } = this.props;
+
+    // let fetchMethod = reviewId ? 'put' : 'post';
+    let fetchMethod = 'post';
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
+    // if (reviewId) {
+    //   headers.id = reviewId;
+    // }
+
+    return fetch('/api/drafts', {
+      method: fetchMethod,
+      headers: headers,
+      body: JSON.stringify(draft),
+    });
   };
 
   restartReview = reviewContent => {

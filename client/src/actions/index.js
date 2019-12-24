@@ -2,6 +2,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGIN_PENDING = 'LOGIN_PENDING';
 export const EXIT_FORM = 'EXIT_FORM';
+export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
 export const UPDATE_READING_LIST = 'UPDATE_READING_LIST';
 export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
@@ -49,6 +50,13 @@ export function updateReadingList(newReadingList) {
   return {
     type: UPDATE_READING_LIST,
     payload: newReadingList,
+  };
+}
+
+export function updateDrafts(newDrafts) {
+  return {
+    type: UPDATE_DRAFTS,
+    payload: newDrafts,
   };
 }
 
