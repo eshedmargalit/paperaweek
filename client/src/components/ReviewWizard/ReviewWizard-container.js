@@ -77,6 +77,9 @@ class ReviewWizardContainer extends Component {
   };
 
   autosave = () => {
+    // TODO: right now paper and review are both empty. Problem: if the children update these state variables
+    // on change, we enter an infinite update loop
+    // Probably easily fixable if paper and review live in redux state!
     const reviewFromState = {
       paper: this.state.paper,
       review: this.state.review,
