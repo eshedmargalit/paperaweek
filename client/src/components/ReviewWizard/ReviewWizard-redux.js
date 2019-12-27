@@ -73,20 +73,21 @@ class ReviewWizardRedux extends Component {
     });
   };
 
-  saveDraft = draft => {
+  saveDraft = (draft, draftId) => {
     let { user } = this.props;
 
-    // let fetchMethod = reviewId ? 'put' : 'post';
-    let fetchMethod = 'post';
+    let fetchMethod = draftId ? 'put' : 'post';
     let headers = {
       'content-type': 'application/json',
       userid: user.userid,
     };
 
-    // if (reviewId) {
-    //   headers.id = reviewId;
-    // }
+    if (draftId) {
+      headers.id = draftId;
+    }
 
+    console.log(fetchMethod);
+    console.log(headers);
     return fetch('/api/drafts', {
       method: fetchMethod,
       headers: headers,

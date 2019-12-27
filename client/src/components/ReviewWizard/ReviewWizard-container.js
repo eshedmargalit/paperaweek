@@ -38,6 +38,7 @@ class ReviewWizardContainer extends Component {
       autosaveStatus: 'unsaved',
       paper: blankPaper,
       review: blankReview,
+      draftId: null,
     };
   }
 
@@ -79,19 +80,19 @@ class ReviewWizardContainer extends Component {
   };
 
   autosave = () => {
-    // TODO: right now paper and review are both empty. Problem: if the children update these state variables
-    // on change, we enter an infinite update loop
-    // Probably easily fixable if paper and review live in redux state!
-
+    // TODO: once autosaved, the server should return the id for this draft so we can PUT instead of
+    // only POSTING
     const reviewFromState = {
       paper: this.state.paper,
       review: this.state.review,
     };
 
     this.setState({ autosaveStatus: 'saving' }, async () => {
-      const response = await this.props.saveDraft(reviewFromState);
+      const response = await this.props.saveDraft(reviewFromState, this.state.draftId);
       if (response.status === 200) {
-        this.setState({ autosaveStatus: 'saved' });
+        const json = await response.json();
+        const draftId = json._id;
+        this.setState({ autosaveStatus: 'saved', draftId: draftId });
       } else {
         this.setState({ autosaveStatus: 'saveFailed' });
       }
