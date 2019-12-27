@@ -104,11 +104,15 @@ class ReviewWizardContainer extends Component {
     });
   };
 
+  updateReview = review => {
+    this.setState({ review }, () => {
+      this.debouncedAutosave();
+    });
+  };
+
   render() {
     const step0 = <MetadataForm paper={this.initialPaper} onSubmit={this.getMetadata} onChange={this.updatePaper} />;
-    const step1 = (
-      <ReviewForm review={this.initialReview} onSubmit={this.getReview} onChange={this.debouncedAutosave} />
-    );
+    const step1 = <ReviewForm review={this.initialReview} onSubmit={this.getReview} onChange={this.updateReview} />;
     const modalFooter = [
       <Button
         key="submit"

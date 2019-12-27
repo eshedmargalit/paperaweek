@@ -29,7 +29,16 @@ class ReviewForm extends Component {
   }
 
   componentDidUpdate() {
-    this.props.onChange();
+    const reviewFromState = this.getValues();
+    this.props.onChange(reviewFromState);
+  }
+
+  getValues() {
+    let review = {};
+    reviewFields.forEach(({ fieldName }) => {
+      review[fieldName] = this.props.form.getFieldValue(fieldName);
+    });
+    return review;
   }
 
   validateFields = e => {
