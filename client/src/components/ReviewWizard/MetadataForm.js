@@ -27,38 +27,27 @@ class MetadataForm extends Component {
   }
 
   componentDidUpdate() {
-    const paper = this.getValues();
-    this.props.onChange(paper);
+    const paperFromState = this.getValues();
+    this.props.onChange(paperFromState);
   }
 
   getValues() {
     // run antd validation for all fields
     let paper = {};
-    this.props.form.validateFields((err, values) => {
-      metaFields.forEach(({ fieldName, isList }) => {
-        // get field value
-        let paperValue;
-        if (isList) {
-          let listValues = values[fieldName].map(itemIdx => {
-            return values[`${fieldName}_list_values`][itemIdx];
-          });
-          paperValue = listValues;
-        } else {
-          paperValue = values[fieldName];
-        }
+    metaFields.forEach(({ fieldName }) => {
+      // get field value
+      let paperValue = this.props.form.getFieldValue(fieldName);
 
-        // special fields: deal with keywords or date
-        if (fieldName === 'keywords') {
-          if (values.keywords && notEmpty(values.keywords)) {
-            paperValue = this.handleKeywords(values.keywords);
-          }
-        } else if (fieldName === 'date') {
-          paperValue = values.date.format('YYYY-MM');
+      // special fields: deal with keywords or date
+      if (fieldName === 'keywords') {
+        if (paperValue && notEmpty(paperValue)) {
+          paperValue = this.handleKeywords(paperValue);
         }
+      } else if (fieldName === 'date') {
+        paperValue = paperValue.format('YYYY-MM');
+      }
 
-        paper[fieldName] = paperValue;
-      });
-      console.log(paper);
+      paper[fieldName] = paperValue;
     });
     return paper;
   }
@@ -133,7 +122,6 @@ class MetadataForm extends Component {
 
   render() {
     const existingMeta = this.props.paper;
-    console.log(existingMeta);
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     // construct fields for paper

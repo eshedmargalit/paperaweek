@@ -115,7 +115,9 @@ const renderTags = (tags, handleSearch) => {
 };
 
 function ReviewReaderView({ handleSearch, reviewClicked, query, reviews, modalProps }) {
-  let { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
+  if (modalProps) {
+    var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview, modalText } = modalProps;
+  }
 
   const searchRow = (
     <Row className="review-reader">
@@ -159,18 +161,20 @@ function ReviewReaderView({ handleSearch, reviewClicked, query, reviews, modalPr
     </Row>
   );
 
-  const modalFooter = [
-    <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
-      Edit this Review
-    </Button>,
-    <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
-      Delete this Review
-    </Button>,
-  ];
-
-  const reviewModal = (
-    <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={modalFooter} />
-  );
+  let reviewModal = null;
+  if (modalProps) {
+    const modalFooter = [
+      <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
+        Edit this Review
+      </Button>,
+      <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
+        Delete this Review
+      </Button>,
+    ];
+    reviewModal = (
+      <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={modalFooter} />
+    );
+  }
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 

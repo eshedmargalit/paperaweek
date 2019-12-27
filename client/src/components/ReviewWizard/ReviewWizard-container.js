@@ -29,13 +29,15 @@ class ReviewWizardContainer extends Component {
     // Note: this should probably be closer to every 20 seconds or something, value is low here for
     // testing purposes
     this.debouncedAutosave = _.debounce(this.autosave, 2 * 1000);
+    this.initialPaper = paper || blankPaper;
+    this.initialReview = review || blankReview;
 
     this.state = {
       step: 0,
       showModal: false,
       autosaveStatus: 'unsaved',
-      paper: paper || blankPaper,
-      review: review || blankReview,
+      paper: blankPaper,
+      review: blankReview,
     };
   }
 
@@ -80,6 +82,7 @@ class ReviewWizardContainer extends Component {
     // TODO: right now paper and review are both empty. Problem: if the children update these state variables
     // on change, we enter an infinite update loop
     // Probably easily fixable if paper and review live in redux state!
+
     const reviewFromState = {
       paper: this.state.paper,
       review: this.state.review,
@@ -95,11 +98,17 @@ class ReviewWizardContainer extends Component {
     });
   };
 
+  updatePaper = paper => {
+    this.setState({ paper }, () => {
+      this.debouncedAutosave();
+    });
+  };
+
   render() {
-    const step0 = (
-      <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} onChange={this.debouncedAutosave} />
+    const step0 = <MetadataForm paper={this.initialPaper} onSubmit={this.getMetadata} onChange={this.updatePaper} />;
+    const step1 = (
+      <ReviewForm review={this.initialReview} onSubmit={this.getReview} onChange={this.debouncedAutosave} />
     );
-    const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} onChange={this.debouncedAutosave} />;
     const modalFooter = [
       <Button
         key="submit"

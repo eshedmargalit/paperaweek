@@ -1,9 +1,26 @@
 import React, { Component } from 'react';
-import DraftsView from './Drafts-view';
+import ReviewReaderView from '../ReviewReader/ReviewReader-view';
 
 class DraftsContainer extends Component {
+  handleSearch = () => {
+    console.log('LOL Nope');
+  };
+
+  reviewClicked = () => {
+    console.log('Forget about it');
+  };
+
   render() {
-    return <DraftsView {...this.props} />;
+    const drafts = []; // for now
+    return (
+      <ReviewReaderView
+        handleSearch={this.handleSearch}
+        reviewClicked={this.reviewClicked}
+        query=""
+        reviews={drafts}
+        modalProps={null}
+      />
+    );
   }
 }
 
