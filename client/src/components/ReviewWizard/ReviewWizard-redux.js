@@ -86,8 +86,6 @@ class ReviewWizardRedux extends Component {
       headers.id = draftId;
     }
 
-    console.log(fetchMethod);
-    console.log(headers);
     return fetch('/api/drafts', {
       method: fetchMethod,
       headers: headers,
