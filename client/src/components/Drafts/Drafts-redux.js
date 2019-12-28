@@ -5,6 +5,14 @@ import { updateDrafts, startReview } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 class DraftsRedux extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      redirectHome: false,
+    };
+  }
+
   deleteDraft = draftToDelete => {
     let { drafts, user } = this.props;
     let newDrafts = drafts.filter(draft => {
@@ -33,17 +41,32 @@ class DraftsRedux extends Component {
     this.props.dispatch(startReview(null, draftId, draftContent));
   };
 
+  redirectHome = () => {
+    this.setState({ redirectHome: true });
+  };
+
   render() {
+    const pageHeaderProps = {
+      pageHeaderTitle: 'Read Your Drafts',
+      onPageBack: this.redirectHome,
+    };
     const { activeReview, drafts } = this.props;
     let { showForm } = activeReview;
-    const formRedirect = <Redirect to="/form" push />;
-    return showForm ? (
-      formRedirect
-    ) : (
+
+    if (showForm) {
+      return <Redirect to="/form" push />;
+    }
+
+    if (this.state.redirectHome) {
+      return <Redirect to="/dashboard" push />;
+    }
+
+    return (
       <SearchableReviewDisplay
         reviews={drafts}
         deleteReview={this.deleteDraft}
         handleModalEdit={this.handleModalEdit}
+        pageHeaderProps={pageHeaderProps}
       />
     );
   }

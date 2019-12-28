@@ -114,15 +114,24 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
-function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, reviews, modalProps }) {
+function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, reviews, modalProps, pageHeaderProps }) {
   if (modalProps) {
-    var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview, modalText } = modalProps;
+    var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
+  }
+
+  const { pageHeaderTitle, onPageBack } = pageHeaderProps;
+
+  let pageHeader;
+  if (onPageBack) {
+    pageHeader = <PageHeader title={pageHeaderTitle} onBack={onPageBack} />;
+  } else {
+    pageHeader = <PageHeader title={pageHeaderTitle} avatar={{ icon: 'read' }} />;
   }
 
   const searchRow = (
     <Row className="review-reader">
       <Col lg={8} sm={24}>
-        <PageHeader title="Read Your Reviews" avatar={{ icon: 'read' }} />
+        {pageHeader}
       </Col>
       <Col lg={16} sm={24}>
         <div

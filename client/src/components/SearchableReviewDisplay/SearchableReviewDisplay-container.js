@@ -69,6 +69,7 @@ class SearchableReviewDisplayContainer extends Component {
       showModal: this.state.showModal,
       modalReview: this.state.selectedReview,
     };
+    const { pageHeaderProps } = this.props;
     let filteredReviews = this.fuzzyFilterReviews(this.props.reviews);
     return (
       <SearchableReviewDisplayView
@@ -77,6 +78,7 @@ class SearchableReviewDisplayContainer extends Component {
         query={this.state.query}
         reviews={filteredReviews}
         modalProps={modalProps}
+        pageHeaderProps={pageHeaderProps}
       />
     );
   }
