@@ -3,7 +3,7 @@ import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { shortenAuthors, shortenString, getTagColor } from '../utils.js';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import './ReviewReader.scss';
+import './SearchableReviewDisplay.scss';
 
 const { confirm } = Modal;
 
@@ -114,7 +114,7 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
-function ReviewReaderView({ handleSearch, reviewClicked, query, reviews, modalProps }) {
+function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, reviews, modalProps }) {
   if (modalProps) {
     var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview, modalText } = modalProps;
   }
@@ -187,4 +187,4 @@ function ReviewReaderView({ handleSearch, reviewClicked, query, reviews, modalPr
   );
 }
 
-export default ReviewReaderView;
+export default SearchableReviewDisplayView;

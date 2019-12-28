@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { startReview, updateReviews } from '../../actions';
-import ReviewReaderContainer from './ReviewReader-container';
+import SearchableReviewDisplayContainer from '../SearchableReviewDisplay';
 
 class ReviewReaderRedux extends Component {
   deleteReview = reviewToDelete => {
@@ -25,13 +25,13 @@ class ReviewReaderRedux extends Component {
   };
 
   handleModalEdit = reviewContent => {
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(startReview(null, null, reviewContent));
   };
 
   render() {
     let { user, reviews } = this.props;
     return (
-      <ReviewReaderContainer
+      <SearchableReviewDisplayContainer
         reviews={reviews.reviewList}
         user={user}
         deleteReview={this.deleteReview}

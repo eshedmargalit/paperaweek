@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ReviewReaderView from './ReviewReader-view';
+import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import Fuse from 'fuse.js';
 
-class ReviewReaderContainer extends Component {
+class SearchableReviewDisplayContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -71,7 +71,7 @@ class ReviewReaderContainer extends Component {
     };
     let filteredReviews = this.fuzzyFilterReviews(this.props.reviews);
     return (
-      <ReviewReaderView
+      <SearchableReviewDisplayView
         handleSearch={this.handleSearch}
         reviewClicked={this.reviewClicked}
         query={this.state.query}
@@ -82,4 +82,4 @@ class ReviewReaderContainer extends Component {
   }
 }
 
-export default ReviewReaderContainer;
+export default SearchableReviewDisplayContainer;

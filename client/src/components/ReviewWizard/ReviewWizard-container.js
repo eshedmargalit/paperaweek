@@ -13,7 +13,7 @@ class ReviewWizardContainer extends Component {
     super(props);
 
     let { readingList, activeReview } = this.props;
-    let { paperId, reviewContent } = activeReview;
+    let { paperId, draftId, reviewContent } = activeReview;
 
     // always use the paperId if it exists, if not fall back to raw review (without a paper id)
     let paper;
@@ -38,7 +38,7 @@ class ReviewWizardContainer extends Component {
       autosaveStatus: 'unsaved',
       paper: blankPaper,
       review: blankReview,
-      draftId: null,
+      draftId: draftId,
     };
   }
 

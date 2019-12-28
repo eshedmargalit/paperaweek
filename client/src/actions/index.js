@@ -32,10 +32,10 @@ export function loginPending() {
   };
 }
 
-export function startReview(paperId, reviewContent) {
+export function startReview(paperId, draftId, reviewContent) {
   return {
     type: START_REVIEW,
-    payload: { paperId, reviewContent },
+    payload: { paperId, draftId, reviewContent },
   };
 }
 

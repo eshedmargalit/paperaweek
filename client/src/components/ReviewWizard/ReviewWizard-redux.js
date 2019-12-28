@@ -94,7 +94,7 @@ class ReviewWizardRedux extends Component {
   };
 
   restartReview = reviewContent => {
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(startReview(null, null, reviewContent));
   };
 
   render() {

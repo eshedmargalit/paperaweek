@@ -36,7 +36,11 @@ class ReviewForm extends Component {
   getValues() {
     let review = {};
     reviewFields.forEach(({ fieldName }) => {
-      review[fieldName] = this.props.form.getFieldValue(fieldName);
+      let reviewValue = this.props.form.getFieldValue(fieldName);
+      let listValues = reviewValue.map(itemIdx => {
+        return this.props.form.getFieldValue(`${fieldName}_list_values`)[itemIdx];
+      });
+      review[fieldName] = listValues;
     });
     return review;
   }

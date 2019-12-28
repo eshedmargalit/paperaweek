@@ -34,9 +34,15 @@ class MetadataForm extends Component {
   getValues() {
     // run antd validation for all fields
     let paper = {};
-    metaFields.forEach(({ fieldName }) => {
+    metaFields.forEach(({ fieldName, isList }) => {
       // get field value
       let paperValue = this.props.form.getFieldValue(fieldName);
+      if (isList) {
+        let listValues = paperValue.map(itemIdx => {
+          return this.props.form.getFieldValue(`${fieldName}_list_values`)[itemIdx];
+        });
+        paperValue = listValues;
+      }
 
       // special fields: deal with keywords or date
       if (fieldName === 'keywords') {
