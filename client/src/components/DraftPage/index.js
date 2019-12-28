@@ -1,1 +1,1 @@
-export { default } from './DraftPage-view';
+export { default } from './DraftPage-redux';
