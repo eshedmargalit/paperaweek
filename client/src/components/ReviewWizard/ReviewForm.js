@@ -28,6 +28,23 @@ class ReviewForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const reviewFromState = this.getValues();
+    this.props.onChange(reviewFromState);
+  }
+
+  getValues() {
+    let review = {};
+    reviewFields.forEach(({ fieldName }) => {
+      let reviewValue = this.props.form.getFieldValue(fieldName);
+      let listValues = reviewValue.map(itemIdx => {
+        return this.props.form.getFieldValue(`${fieldName}_list_values`)[itemIdx];
+      });
+      review[fieldName] = listValues;
+    });
+    return review;
+  }
+
   validateFields = e => {
     e.preventDefault();
 
@@ -155,4 +172,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Form.create({})(ReviewForm));
+export default connect(
+  mapStateToProps,
+  null
+)(Form.create({})(ReviewForm));

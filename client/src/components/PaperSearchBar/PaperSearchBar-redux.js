@@ -5,7 +5,7 @@ import PaperSearchBarContainer from './PaperSearchBar-container';
 
 class PaperSearchBarRedux extends Component {
   startBlankReview = () => {
-    this.props.dispatch(startReview(null, null));
+    this.props.dispatch(startReview(null, null, null));
   };
 
   updateReadingList = newReadingList => {
@@ -38,7 +38,7 @@ class PaperSearchBarRedux extends Component {
       paper: paper,
       review: null,
     };
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(startReview(null, null, reviewContent));
   };
 
   render() {

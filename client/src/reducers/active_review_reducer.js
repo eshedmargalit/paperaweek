@@ -10,8 +10,7 @@ const reducer = (state = initialState, action) => {
   let { type, payload } = action;
   switch (type) {
     case START_REVIEW:
-      let { paperId, reviewContent } = payload;
-      return { paperId: paperId, reviewContent: reviewContent, showForm: true };
+      return { ...payload, showForm: true };
     case END_REVIEW:
       return { paperId: null, reviewContent: null, showForm: false };
     default:

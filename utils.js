@@ -9,6 +9,7 @@ const createApp = (port = 5000) => {
   require("./routes/paperRoutes")(app);
   require("./routes/readingListRoutes")(app);
   require("./routes/userRoutes")(app);
+  require("./routes/draftRoutes")(app);
 
   const PORT = process.env.PORT || port;
   app.listen(PORT, () => {
