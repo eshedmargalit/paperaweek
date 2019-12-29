@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { startReview, updateReviews } from '../../actions';
-import ReviewReaderContainer from './ReviewReader-container';
+import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 class ReviewReaderRedux extends Component {
   deleteReview = reviewToDelete => {
@@ -25,17 +25,22 @@ class ReviewReaderRedux extends Component {
   };
 
   handleModalEdit = reviewContent => {
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(startReview(null, null, reviewContent));
   };
 
   render() {
     let { user, reviews } = this.props;
+    const pageHeaderProps = {
+      pageHeaderTitle: 'Read Your Reviews',
+      onPageBack: null,
+    };
     return (
-      <ReviewReaderContainer
+      <SearchableReviewDisplay
         reviews={reviews.reviewList}
         user={user}
         deleteReview={this.deleteReview}
         handleModalEdit={this.handleModalEdit}
+        pageHeaderProps={pageHeaderProps}
       />
     );
   }

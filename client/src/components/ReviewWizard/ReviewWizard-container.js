@@ -13,7 +13,7 @@ class ReviewWizardContainer extends Component {
     super(props);
 
     let { readingList, activeReview } = this.props;
-    let { paperId, reviewContent } = activeReview;
+    let { paperId, draftId, reviewContent } = activeReview;
 
     // always use the paperId if it exists, if not fall back to raw review (without a paper id)
     let paper;
@@ -25,11 +25,20 @@ class ReviewWizardContainer extends Component {
       ({ paper, review } = reviewContent);
     }
 
+    // only autosave at most every 2 seconds
+    // Note: this should probably be closer to every 20 seconds or something, value is low here for
+    // testing purposes
+    this.debouncedAutosave = _.debounce(this.autosave, 2 * 1000);
+    this.initialPaper = paper || blankPaper;
+    this.initialReview = review || blankReview;
+
     this.state = {
       step: 0,
       showModal: false,
-      paper: paper || blankPaper,
-      review: review || blankReview,
+      autosaveStatus: 'unsaved',
+      paper: blankPaper,
+      review: blankReview,
+      draftId: draftId,
     };
   }
 
@@ -70,9 +79,41 @@ class ReviewWizardContainer extends Component {
     });
   };
 
+  autosave = () => {
+    // TODO: once autosaved, the server should return the id for this draft so we can PUT instead of
+    // only POSTING
+    const reviewFromState = {
+      paper: this.state.paper,
+      review: this.state.review,
+    };
+
+    this.setState({ autosaveStatus: 'saving' }, async () => {
+      const response = await this.props.saveDraft(reviewFromState, this.state.draftId);
+      if (response.status === 200) {
+        const json = await response.json();
+        const draftId = json._id;
+        this.setState({ autosaveStatus: 'saved', draftId: draftId });
+      } else {
+        this.setState({ autosaveStatus: 'saveFailed' });
+      }
+    });
+  };
+
+  updatePaper = paper => {
+    this.setState({ paper }, () => {
+      this.debouncedAutosave();
+    });
+  };
+
+  updateReview = review => {
+    this.setState({ review }, () => {
+      this.debouncedAutosave();
+    });
+  };
+
   render() {
-    const step0 = <MetadataForm paper={this.state.paper} onSubmit={this.getMetadata} />;
-    const step1 = <ReviewForm review={this.state.review} onSubmit={this.getReview} />;
+    const step0 = <MetadataForm paper={this.initialPaper} onSubmit={this.getMetadata} onChange={this.updatePaper} />;
+    const step1 = <ReviewForm review={this.initialReview} onSubmit={this.getReview} onChange={this.updateReview} />;
     const modalFooter = [
       <Button
         key="submit"
@@ -107,6 +148,7 @@ class ReviewWizardContainer extends Component {
 
     return (
       <ReviewWizardView
+        autosaveStatus={this.state.autosaveStatus}
         showWizard={this.props.activeReview.showForm}
         onPageBack={this.props.onPageBack}
         currentStep={this.state.step}

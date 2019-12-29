@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateReadingList, updateReviews, loginSuccess, loginFailed, loginPending } from '../../actions';
+import { updateReadingList, updateReviews, updateDrafts, loginSuccess, loginFailed, loginPending } from '../../actions';
 import HomeContainer from './Home-container';
 
 class HomeRedux extends Component {
@@ -24,23 +24,35 @@ class HomeRedux extends Component {
       this.props.dispatch(loginSuccess(auth_data.display_name, auth_data._id));
       this.props.dispatch(updateReviews(auth_data.reviews));
       this.props.dispatch(updateReadingList(auth_data.reading_list));
+      this.props.dispatch(updateDrafts(auth_data.drafts));
     } catch (error) {
       this.props.dispatch(loginFailed(error));
     }
   }
 
   render() {
-    let { user, activeReview, auth } = this.props;
+    let { user, activeReview, auth, drafts } = this.props;
     let boundSignOut = auth.signOut.bind(auth);
-    return <HomeContainer user={user} showForm={activeReview.showForm} signOut={boundSignOut} />;
+    return (
+      <HomeContainer
+        user={user}
+        showForm={activeReview.showForm}
+        signOut={boundSignOut}
+        numberOfDrafts={drafts.length}
+      />
+    );
   }
 }
 
-const mapStateToProps = ({ user, activeReview }) => {
+const mapStateToProps = ({ user, activeReview, drafts }) => {
   return {
     user,
     activeReview,
+    drafts,
   };
 };
 
-export default connect(mapStateToProps, null)(HomeRedux);
+export default connect(
+  mapStateToProps,
+  null
+)(HomeRedux);

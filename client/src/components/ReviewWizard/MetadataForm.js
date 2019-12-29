@@ -26,6 +26,38 @@ class MetadataForm extends Component {
     }
   }
 
+  componentDidUpdate() {
+    const paperFromState = this.getValues();
+    this.props.onChange(paperFromState);
+  }
+
+  getValues() {
+    // run antd validation for all fields
+    let paper = {};
+    metaFields.forEach(({ fieldName, isList }) => {
+      // get field value
+      let paperValue = this.props.form.getFieldValue(fieldName);
+      if (isList) {
+        let listValues = paperValue.map(itemIdx => {
+          return this.props.form.getFieldValue(`${fieldName}_list_values`)[itemIdx];
+        });
+        paperValue = listValues;
+      }
+
+      // special fields: deal with keywords or date
+      if (fieldName === 'keywords') {
+        if (paperValue && notEmpty(paperValue)) {
+          paperValue = this.handleKeywords(paperValue);
+        }
+      } else if (fieldName === 'date') {
+        paperValue = paperValue.format('YYYY-MM');
+      }
+
+      paper[fieldName] = paperValue;
+    });
+    return paper;
+  }
+
   validateFields = e => {
     // prevent HTML form submit
     e.preventDefault();
@@ -218,4 +250,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Form.create({})(MetadataForm));
+export default connect(
+  mapStateToProps,
+  null
+)(Form.create({})(MetadataForm));

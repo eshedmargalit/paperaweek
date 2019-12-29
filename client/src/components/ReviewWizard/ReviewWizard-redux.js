@@ -73,8 +73,28 @@ class ReviewWizardRedux extends Component {
     });
   };
 
+  saveDraft = (draft, draftId) => {
+    let { user } = this.props;
+
+    let fetchMethod = draftId ? 'put' : 'post';
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
+    if (draftId) {
+      headers.id = draftId;
+    }
+
+    return fetch('/api/drafts', {
+      method: fetchMethod,
+      headers: headers,
+      body: JSON.stringify(draft),
+    });
+  };
+
   restartReview = reviewContent => {
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(startReview(null, null, reviewContent));
   };
 
   render() {
@@ -84,6 +104,7 @@ class ReviewWizardRedux extends Component {
         onPageBack={this.onPageBack}
         restartReview={this.restartReview}
         submitReview={this.submitReview}
+        saveDraft={this.saveDraft}
         activeReview={activeReview}
         readingList={readingList}
         submitLoading={this.state.submitLoading}

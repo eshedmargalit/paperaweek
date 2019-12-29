@@ -1,13 +1,25 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { Icon, Button, Menu } from 'antd';
+import { Redirect, Link } from 'react-router-dom';
+import { Badge, Icon, Button, Menu } from 'antd';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 
-function HomeView({ user, showForm, signOut }) {
+function HomeView({ user, numberOfDrafts, showForm, signOut }) {
+  let draftMenuItem = null;
+  if (numberOfDrafts > 0) {
+    draftMenuItem = (
+      <Menu.Item className="menu__item">
+        <Link to="/drafts">
+          Drafts{` `}
+          <Badge count={numberOfDrafts} className="menu__badge" />
+        </Link>
+      </Menu.Item>
+    );
+  }
+
   const formRedirect = <Redirect to="/form" push />;
   const home_render = (
     <div>
@@ -21,6 +33,7 @@ function HomeView({ user, showForm, signOut }) {
         <Menu.Item className="menu__item">
           <Button onClick={signOut}>Sign Out</Button>
         </Menu.Item>
+        {draftMenuItem}
       </Menu>
       <div className="searchbar width80">
         <div style={{ width: '60%' }}>
