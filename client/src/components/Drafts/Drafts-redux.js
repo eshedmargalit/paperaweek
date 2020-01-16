@@ -68,6 +68,7 @@ class DraftsRedux extends Component {
         deleteReview={this.deleteDraft}
         handleModalEdit={this.handleModalEdit}
         pageHeaderProps={pageHeaderProps}
+        itemName="Draft"
       />
     );
   }
