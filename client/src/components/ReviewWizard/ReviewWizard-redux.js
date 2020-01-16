@@ -99,7 +99,7 @@ class ReviewWizardRedux extends Component {
   };
 
   render() {
-    let { activeReview, readingList } = this.props;
+    let { activeReview, activeDraft, readingList } = this.props;
     return (
       <ReviewWizardContainer
         onPageBack={this.onPageBack}
@@ -107,6 +107,7 @@ class ReviewWizardRedux extends Component {
         submitReview={this.submitReview}
         saveDraft={this.saveDraft}
         activeReview={activeReview}
+        activeDraft={activeDraft}
         readingList={readingList}
         submitLoading={this.state.submitLoading}
       />
@@ -114,9 +115,10 @@ class ReviewWizardRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ activeReview, readingList, reviews, user }) => {
+const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, user }) => {
   return {
     activeReview,
+    activeDraft,
     readingList,
     reviews,
     user,

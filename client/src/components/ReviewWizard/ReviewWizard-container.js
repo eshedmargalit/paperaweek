@@ -12,8 +12,9 @@ class ReviewWizardContainer extends Component {
   constructor(props) {
     super(props);
 
-    let { readingList, activeReview } = this.props;
-    let { paperId, draftId, reviewContent } = activeReview;
+    let { readingList, activeReview, activeDraft } = this.props;
+    let { paperId, reviewContent } = activeReview;
+    let { draftId } = activeDraft;
 
     // always use the paperId if it exists, if not fall back to raw review (without a paper id)
     let paper;
@@ -40,11 +41,6 @@ class ReviewWizardContainer extends Component {
       review: blankReview,
       draftId: draftId,
     };
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('Container updated, prevProps:', prevProps);
-    console.log('currProps:', this.props);
   }
 
   onModalCancel = () => {
