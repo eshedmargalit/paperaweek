@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { startReview, endReview, updateReadingList, updateReviews } from '../../actions/index';
+import { startReview, endReview, updateReadingList, updateDraftId, updateReviews } from '../../actions/index';
 
 class ReviewWizardRedux extends Component {
   constructor(props) {
@@ -84,6 +84,7 @@ class ReviewWizardRedux extends Component {
 
     if (draftId) {
       headers.id = draftId;
+      this.props.dispatch(updateDraftId(draftId));
     }
 
     return fetch('/api/drafts', {
