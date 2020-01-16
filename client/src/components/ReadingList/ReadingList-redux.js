@@ -26,7 +26,7 @@ class ReadingListRedux extends Component {
   };
 
   handleEditClick(value) {
-    this.props.dispatch(startReview(value._id, null, null));
+    this.props.dispatch(startReview(value._id, null));
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {

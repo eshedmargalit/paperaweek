@@ -42,6 +42,11 @@ class ReviewWizardContainer extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log('Container updated, prevProps:', prevProps);
+    console.log('currProps:', this.props);
+  }
+
   onModalCancel = () => {
     const reviewContent = {
       paper: this.state.paper,
@@ -80,8 +85,6 @@ class ReviewWizardContainer extends Component {
   };
 
   autosave = () => {
-    // TODO: once autosaved, the server should return the id for this draft so we can PUT instead of
-    // only POSTING
     const reviewFromState = {
       paper: this.state.paper,
       review: this.state.review,
