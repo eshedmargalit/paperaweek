@@ -33,6 +33,7 @@ class Login extends Component {
     }
 
     let token = this.props.auth.signInUserSession.idToken.jwtToken;
+    console.log(token);
     fetch('/api/auth', {
       headers: {
         'content-type': 'application/json',

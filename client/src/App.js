@@ -10,6 +10,8 @@ import { getAuthData } from './utils.js';
 
 function App() {
   let auth = new CognitoAuth(getAuthData());
+  auth.useCodeGrantFlow(); // Allows for token refresh
+
   auth.userhandler = {
     onSuccess: function(result) {
       console.log('Sign in successful');

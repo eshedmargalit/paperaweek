@@ -14,6 +14,15 @@ class HomeRedux extends Component {
 
     // send JWT to backend
     let auth_data;
+
+    // Check if the token has expired
+    const tokenExp = auth.signInUserSession.accessToken.payload.exp;
+    const deadLine = Math.floor(new Date().getTime() / 1000);
+
+    if (tokenExp && deadLine >= tokenExp) {
+      auth.refreshSession(auth.signInUserSession.refreshToken.refreshToken);
+    }
+
     try {
       auth_data = await fetch('/api/auth', {
         headers: {
@@ -52,7 +61,4 @@ const mapStateToProps = ({ user, activeReview, drafts }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(HomeRedux);
+export default connect(mapStateToProps, null)(HomeRedux);
