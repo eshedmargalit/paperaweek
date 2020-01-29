@@ -11,11 +11,12 @@ class PaperSearchBarContainer extends Component {
     super(props);
 
     // debounce search to avoid repeated calls to API
-    this.academicSearchThrottled = _.debounce(this.academicSearch, 200);
+    this.academicSearchThrottled = _.debounce(this.academicSearch, 350);
     this.handleSearch.bind(this);
 
     this.state = {
       query: '',
+      loading: false,
       searchResults: [],
     };
   }
@@ -56,14 +57,15 @@ class PaperSearchBarContainer extends Component {
     // Id      | Unique identifier for entity
     // VFN    | Journal Name
     // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
+    this.setState({ loading: true });
     let interpret_response = await this.interpret(query, attrs);
     if (interpret_response.interpretations.length === 0) {
-      this.setState({ searchResults: [] });
+      this.setState({ searchResults: [], loading: false });
     } else {
       var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
       let evaluate_response = await this.evaluate(top_interpretation, attrs);
       let searchResults = this.processEntities(evaluate_response.entities);
-      this.setState({ searchResults });
+      this.setState({ searchResults, loading: false });
     }
   }
 
@@ -123,8 +125,11 @@ class PaperSearchBarContainer extends Component {
   };
 
   handleSearch = searchTerm => {
+    this.academicSearchThrottled.cancel();
+
     if (searchTerm === '') {
       this.setState({
+        loading: false,
         searchResults: [],
         query: searchTerm,
       });
@@ -134,6 +139,7 @@ class PaperSearchBarContainer extends Component {
     // update searchbar value and only then run the search
     this.setState(
       {
+        loading: true,
         query: searchTerm,
       },
       () => {
@@ -151,6 +157,7 @@ class PaperSearchBarContainer extends Component {
         handleClickResultButton={this.props.handleClickResultButton}
         searchResults={this.state.searchResults}
         startBlankReview={this.props.startBlankReview}
+        loading={this.state.loading}
         query={this.state.query}
       />
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Carousel, Icon, Button, Input, PageHeader } from 'antd';
+import { Alert, Carousel, Icon, Button, Input, PageHeader, Spin } from 'antd';
 
 import { render_comma_sep_list } from '../utils';
 import './PaperSearchBar.scss';
@@ -68,6 +68,7 @@ function PaperSearchBarView({
   handleClickResultButton,
   startBlankReview,
   searchResults,
+  loading,
   query,
 }) {
   const carousel = renderCarousel(carouselItems);
@@ -93,11 +94,29 @@ function PaperSearchBarView({
     </div>
   );
 
+  const noResultsAlert = (
+    <Alert
+      className="no-results-alert"
+      message="No Results Found"
+      description="Try searching for a different keyword or with simpler terms"
+      type="info"
+      showIcon
+    />
+  );
+
   return (
     <div>
       <br />
       {search_area}
-      {renderedSearchResults.length ? renderedSearchResults : carousel}
+      {loading ? (
+        <Spin className="searchResult loading-spinner" />
+      ) : renderedSearchResults.length ? (
+        renderedSearchResults
+      ) : query !== '' ? (
+        noResultsAlert
+      ) : (
+        carousel
+      )}
     </div>
   );
 }

@@ -35,6 +35,18 @@
   }
 }
 
+.loading-spinner {
+  width: 100%;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.no-results-alert {
+  margin-top: 5px;
+}
+
 .ant-btn {
   margin-left: 5px;
 }
