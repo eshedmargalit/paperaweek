@@ -35,6 +35,14 @@
   }
 }
 
+.loading-spinner {
+  width: 100%;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
 .ant-btn {
   margin-left: 5px;
 }

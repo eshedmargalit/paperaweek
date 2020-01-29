@@ -1,5 +1,5 @@
 import React from 'react';
-import { Carousel, Icon, Button, Input, PageHeader } from 'antd';
+import { Carousel, Icon, Button, Input, PageHeader, Spin } from 'antd';
 
 import { render_comma_sep_list } from '../utils';
 import './PaperSearchBar.scss';
@@ -68,6 +68,7 @@ function PaperSearchBarView({
   handleClickResultButton,
   startBlankReview,
   searchResults,
+  loading,
   query,
 }) {
   const carousel = renderCarousel(carouselItems);
@@ -97,7 +98,13 @@ function PaperSearchBarView({
     <div>
       <br />
       {search_area}
-      {renderedSearchResults.length ? renderedSearchResults : carousel}
+      {loading ? (
+        <Spin className="searchResult loading-spinner" />
+      ) : renderedSearchResults.length ? (
+        renderedSearchResults
+      ) : (
+        carousel
+      )}
     </div>
   );
 }
