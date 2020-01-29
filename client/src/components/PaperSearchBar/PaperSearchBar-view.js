@@ -96,6 +96,7 @@ function PaperSearchBarView({
 
   const noResultsAlert = (
     <Alert
+      className="no-results-alert"
       message="No Results Found"
       description="Try searching for a different keyword or with simpler terms"
       type="info"
