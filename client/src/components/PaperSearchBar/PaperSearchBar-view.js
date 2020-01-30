@@ -1,22 +1,9 @@
 import React from 'react';
-import { Alert, Carousel, Icon, Button, Input, PageHeader, Spin } from 'antd';
+import { Alert, Icon, Button, Input, PageHeader, Spin } from 'antd';
 
 import { render_comma_sep_list } from '../utils';
+import StatsCarousel from '../StatsCarousel';
 import './PaperSearchBar.scss';
-
-const renderCarousel = carouselItems => {
-  return (
-    <Carousel className="carousel" autoplay speed={1000}>
-      {carouselItems.map(item => {
-        return (
-          <h3 className="carousel__content" key={`carousel ${item}`}>
-            {item}
-          </h3>
-        );
-      })}
-    </Carousel>
-  );
-};
 
 const renderSearchResults = (searchResults, handleClickResult, handleClickResultButton) => {
   const renderedSearchResults = searchResults.map(result => {
@@ -62,7 +49,6 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
 };
 
 function PaperSearchBarView({
-  carouselItems,
   handleSearch,
   handleClickResult,
   handleClickResultButton,
@@ -71,7 +57,6 @@ function PaperSearchBarView({
   loading,
   query,
 }) {
-  const carousel = renderCarousel(carouselItems);
   const renderedSearchResults = renderSearchResults(searchResults, handleClickResult, handleClickResultButton);
   const search_area = (
     <div>
@@ -115,7 +100,7 @@ function PaperSearchBarView({
       ) : query !== '' ? (
         noResultsAlert
       ) : (
-        carousel
+        <StatsCarousel />
       )}
     </div>
   );
