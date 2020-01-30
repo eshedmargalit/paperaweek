@@ -15,21 +15,17 @@ class HomeRedux extends Component {
     // send JWT to backend
     let auth_data;
 
-    // Check if the token has expired
-    const tokenExp = auth.signInUserSession.accessToken.payload.exp;
-    const deadLine = Math.floor(new Date().getTime() / 1000);
-
-    if (tokenExp && deadLine >= tokenExp) {
-      auth.refreshSession(auth.signInUserSession.refreshToken.refreshToken);
-    }
-
     try {
-      auth_data = await fetch('/api/auth', {
-        headers: {
-          'content-type': 'application/json',
-          idToken: auth.signInUserSession.idToken.jwtToken,
-        },
-      }).then(response => response.json());
+      // Only go fetch auth again if I don't have a userid
+      if (!this.props.user.userid || !this.props.user.userid.length) {
+        auth_data = await fetch('/api/auth', {
+          headers: {
+            'content-type': 'application/json',
+            idToken: auth.signInUserSession.idToken.jwtToken,
+          },
+        }).then(response => response.json());
+      }
+
       this.props.dispatch(loginSuccess(auth_data.display_name, auth_data._id));
       this.props.dispatch(updateReviews(auth_data.reviews));
       this.props.dispatch(updateReadingList(auth_data.reading_list));
