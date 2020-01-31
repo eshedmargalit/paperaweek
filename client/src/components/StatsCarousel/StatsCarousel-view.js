@@ -1,6 +1,8 @@
 import React from 'react';
 import { Carousel } from 'antd';
 
+import FrequencyChart from '../FrequencyChart';
+
 import './StatsCarousel.scss';
 
 function StatsCarouselView({ reviews, readingList, drafts }) {
@@ -10,16 +12,17 @@ function StatsCarouselView({ reviews, readingList, drafts }) {
       <Carousel className="carousel" autoplay speed={1000}>
         {carouselItems.map(item => {
           return (
-            <h3 className="carousel__content" key={`carousel ${item}`}>
+            <div className="carousel__content" key={`carousel ${item}`}>
               {item}
-            </h3>
+            </div>
           );
         })}
       </Carousel>
     );
   };
 
-  const carouselItems = ['test', 'test2'];
+  const frequencyChart = FrequencyChart(reviews);
+  const carouselItems = [frequencyChart, 'test'];
   const carousel = renderCarousel(carouselItems);
   return <div>{carousel}</div>;
 }
