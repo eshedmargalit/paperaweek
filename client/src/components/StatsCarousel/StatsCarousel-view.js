@@ -22,7 +22,7 @@ function StatsCarouselView({ reviews, readingList, drafts }) {
   };
 
   const frequencyChart = FrequencyChart(reviews);
-  const carouselItems = [frequencyChart, 'test'];
+  const carouselItems = [frequencyChart];
   const carousel = renderCarousel(carouselItems);
   return <div>{carousel}</div>;
 }
