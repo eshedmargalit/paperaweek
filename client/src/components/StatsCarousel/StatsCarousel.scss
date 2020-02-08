@@ -11,3 +11,11 @@
   background: lightgray;
   overflow: hidden;
 }
+
+.ant-carousel .slick-dots li button {
+  background: lightgray;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+  background: lightgray;
+}
