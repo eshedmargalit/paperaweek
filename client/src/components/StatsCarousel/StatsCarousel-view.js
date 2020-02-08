@@ -9,7 +9,7 @@ function StatsCarouselView({ reviews, readingList, drafts }) {
   // TODO: do something with the real data
   const renderCarousel = carouselItems => {
     return (
-      <Carousel className="carousel" autoplay speed={2000}>
+      <Carousel className="carousel" autoplay autoplaySpeed={10000}>
         {carouselItems.map(item => {
           return (
             <div className="carousel__content" key={`carousel ${item}`}>

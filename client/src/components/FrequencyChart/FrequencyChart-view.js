@@ -49,7 +49,7 @@ function getReviewStats(reviews) {
     diffs.push(diff);
   }
 
-  const meanDiff = _.mean(diffs);
+  const meanDiff = _.mean(diffs).toFixed(2);
   const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0;
   const ppw = Number.parseFloat(sortedDates.length / totalWeeks).toFixed(2);
 
