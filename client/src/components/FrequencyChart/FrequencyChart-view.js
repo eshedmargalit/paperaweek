@@ -1,39 +1,18 @@
 import React from 'react';
-import { Text, Label, ReferenceLine, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import {
+  Text,
+  Label,
+  ReferenceLine,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from 'recharts';
 import { Spin, Icon, Tooltip, Statistic } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-
-function computeDiffHistogram(reviews) {
-  if (reviews.reviewList.length === 0) {
-    return null;
-  }
-
-  const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
-  const sortedDates = reviewDates.sort((a, b) => a.diff(b));
-
-  let diffs = [];
-  for (var i = 0; i < sortedDates.length - 1; i++) {
-    var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
-    diffs.push(diff);
-  }
-
-  // tally histogram
-  const counts = _.countBy(diffs);
-  const maxDiff = _.max(diffs);
-
-  let data = [];
-  for (var d = 0; d < maxDiff - 1; d++) {
-    let diffCount = counts[d];
-    if (diffCount) {
-      data.push({ diff: d, count: diffCount });
-    } else {
-      data.push({ diff: d, count: 0 });
-    }
-  }
-
-  return data;
-}
 
 function getReviewStats(reviews) {
   if (reviews.reviewList.length === 0) {
@@ -49,9 +28,10 @@ function getReviewStats(reviews) {
     diffs.push(diff);
   }
 
-  const meanDiff = _.mean(diffs).toFixed(2);
   const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0;
   const ppw = Number.parseFloat(sortedDates.length / totalWeeks).toFixed(2);
+
+  const ppwColor = ppw >= 1 ? '#237804' : '#a8071a';
 
   return (
     <>
@@ -62,33 +42,32 @@ function getReviewStats(reviews) {
         </div>
 
         <div style={{ width: '50%' }}>
-          <Statistic title="Mean Time Between Reviews" value={meanDiff} suffix="days" />
+          <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
         </div>
       </div>
-      <div style={{ display: 'flex' }}>
-        <div style={{ width: '50%' }}>
-          <Statistic title="Papers per Week" value={ppw} suffix="/ week" />
-        </div>
-      </div>
+      <div style={{ display: 'flex' }}></div>
     </>
   );
 }
 
 function FrequencyChartView(reviews) {
-  const barChart = reviews => {
-    const diffHistogram = computeDiffHistogram(reviews);
+  const lineChart = reviews => {
+    const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
+    const sortedDates = reviewDates.sort((a, b) => a.diff(b));
+
+    let data = [];
+    for (var i = 0; i < sortedDates.length - 1; i++) {
+      var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
+      data.push({ date: sortedDates[i + 1], gap: diff });
+    }
 
     let chart = <Spin />;
-    if (diffHistogram) {
-      const ticks = diffHistogram.map(bar => {
-        return bar.diff;
-      });
-
+    if (data) {
       chart = (
         <div style={{ display: 'block', lineHeight: 0 }}>
           <ResponsiveContainer width="100%" height={180}>
-            <BarChart
-              data={diffHistogram}
+            <LineChart
+              data={data}
               margin={{
                 top: 5,
                 right: 10,
@@ -97,19 +76,19 @@ function FrequencyChartView(reviews) {
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis ticks={ticks}>
-                <Label value="Gap Length" offset={-5} position="insideBottom" />
+              <XAxis>
+                <Label value="Review Number" offset={-5} position="insideBottom" />
               </XAxis>
               <YAxis
                 label={
                   <Text x={0} y={0} dx={40} dy={120} offset={0} angle={-90}>
-                    Number of Gaps
+                    Gap Between Reviews
                   </Text>
                 }
               />
-              <Bar dataKey="count" fill="#4984ee" />
-              <ReferenceLine x={7} strokeWidth={3} />
-            </BarChart>
+              <Line strokeWidth={5} dataKey="gap" stroke="#888888" />
+              <ReferenceLine y={7} strokeDasharray="3 3" strokeWidth={3} stroke="#237804" />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       );
@@ -135,7 +114,7 @@ function FrequencyChartView(reviews) {
     );
   };
 
-  return barChart(reviews);
+  return lineChart(reviews);
 }
 
 export default FrequencyChartView;
