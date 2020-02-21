@@ -10,7 +10,7 @@ import {
   YAxis,
   CartesianGrid,
 } from 'recharts';
-import { Spin, Icon, Tooltip, Statistic } from 'antd';
+import { Spin, Statistic } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -94,17 +94,9 @@ function FrequencyChartView(reviews) {
       );
     }
 
-    const toolTipText =
-      "The height of each bar indicates how often you take a break of that length between reviews. If you review exactly once per week, the only bar will be at 7! Less than 7 means you're reading more than one paper per week, and more than 7 means you're taking longer than a week between papers.";
-    const infoIcon = (
-      <Tooltip title={toolTipText}>
-        <Icon type="info-circle" />
-      </Tooltip>
-    );
-
     return (
       <div style={{ lineHeight: 1 }}>
-        <h5> How Close Are You to One Paper per Week? {infoIcon} </h5>
+        <h5> How Close Are You to One Paper per Week? </h5>
         <hr />
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ width: '100%' }}>{chart}</div>
