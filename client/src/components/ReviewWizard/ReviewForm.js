@@ -123,7 +123,7 @@ class ReviewForm extends Component {
         >
           {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
             rules: [{ required: required, message: `${label} point cannot be blank` }],
-          })(<TextArea style={{ width: '90%' }} />)}
+          })(<TextArea autoFocus style={{ width: '90%' }} />)}
           {field_value.length > 1 ? (
             <Icon
               className="dynamic-delete-button"

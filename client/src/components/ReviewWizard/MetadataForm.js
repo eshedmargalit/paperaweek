@@ -169,7 +169,7 @@ class MetadataForm extends Component {
                   message: 'Field cannot be blank',
                 },
               ],
-            })(<Input placeholder={label} style={{ width: '60%', marginRight: 8 }} />)}
+            })(<Input autoFocus placeholder={label} style={{ width: '60%', marginRight: 8 }} />)}
             {fieldValue.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
