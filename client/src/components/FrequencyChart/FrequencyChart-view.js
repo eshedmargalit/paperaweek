@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  Text,
-  Label,
-  ReferenceLine,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-} from 'recharts';
-import { Spin, Statistic } from 'antd';
+import { Text, Label, ReferenceLine, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
+import { Row, Col, Card, Spin, Statistic } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -35,17 +25,16 @@ function getReviewStats(reviews) {
 
   return (
     <>
-      <h5>Your Stats</h5>
-      <div style={{ display: 'flex' }}>
+      <br />
+      <div style={{ marginLeft: '10px' }}>
         <div style={{ width: '50%' }}>
           <Statistic title="Reviews" value={reviews.reviewList.length} suffix="written" />
         </div>
-
+        <hr />
         <div style={{ width: '50%' }}>
           <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
         </div>
       </div>
-      <div style={{ display: 'flex' }}></div>
     </>
   );
 }
@@ -58,14 +47,14 @@ function FrequencyChartView(reviews) {
     let data = [];
     for (var i = 0; i < sortedDates.length - 1; i++) {
       var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
-      data.push({ date: sortedDates[i + 1], gap: diff });
+      data.push({ reviewIdx: i + 1, date: sortedDates[i + 1], gap: diff });
     }
 
     let chart = <Spin />;
     if (data) {
       chart = (
         <div style={{ display: 'block', lineHeight: 0 }}>
-          <ResponsiveContainer width="100%" height={180}>
+          <ResponsiveContainer width="100%" height={195}>
             <LineChart
               data={data}
               margin={{
@@ -75,19 +64,18 @@ function FrequencyChartView(reviews) {
                 bottom: 15,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis>
-                <Label value="Review Number" offset={-5} position="insideBottom" />
+              <XAxis dataKey="reviewIdx">
+                <Label value="Review Number" offset={-15} position="insideBottom" />
               </XAxis>
               <YAxis
                 label={
-                  <Text x={0} y={0} dx={40} dy={120} offset={0} angle={-90}>
+                  <Text x={0} y={0} dx={40} dy={150} offset={0} angle={-90}>
                     Gap Between Reviews
                   </Text>
                 }
               />
-              <Line strokeWidth={5} dataKey="gap" stroke="#888888" />
               <ReferenceLine y={7} strokeDasharray="3 3" strokeWidth={3} stroke="#237804" />
+              <Line strokeWidth={5} dataKey="gap" stroke="#888888" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -95,14 +83,18 @@ function FrequencyChartView(reviews) {
     }
 
     return (
-      <div style={{ lineHeight: 1 }}>
-        <h5> How Close Are You to One Paper per Week? </h5>
-        <hr />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ width: '100%' }}>{chart}</div>
-          <div style={{ width: '100%' }}>{getReviewStats(reviews)}</div>
-        </div>
-      </div>
+      <Card title="Your Stats" style={{ marginTop: 5 }}>
+        <Row>
+          <Col lg={16} sm={24}>
+            {' '}
+            {chart}
+          </Col>
+          <Col lg={8} sm={24}>
+            {' '}
+            {getReviewStats(reviews)}
+          </Col>
+        </Row>
+      </Card>
     );
   };
 

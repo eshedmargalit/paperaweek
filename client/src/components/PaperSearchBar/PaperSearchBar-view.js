@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Icon, Button, Input, PageHeader, Spin } from 'antd';
 
 import { render_comma_sep_list } from '../utils';
-import StatsCarousel from '../StatsCarousel';
+import StatBox from '../StatBox';
 import './PaperSearchBar.scss';
 
 const renderSearchResults = (searchResults, handleClickResult, handleClickResultButton) => {
@@ -100,7 +100,7 @@ function PaperSearchBarView({
       ) : query !== '' ? (
         noResultsAlert
       ) : (
-        <StatsCarousel />
+        <StatBox />
       )}
     </div>
   );
