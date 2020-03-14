@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, Label, ReferenceLine, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
 import { Row, Col, Card, Spin, Statistic } from 'antd';
 import moment from 'moment';
-import _ from 'lodash';
 
 function getReviewStats(reviews) {
   if (reviews.reviewList.length === 0) {
