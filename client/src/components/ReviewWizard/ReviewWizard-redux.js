@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { startReview, endReview, updateReadingList, updateReviews } from '../../actions/index';
+import {
+  startReview,
+  endReview,
+  updateReadingList,
+  updateDrafts,
+  updateDraftId,
+  updateReviews,
+} from '../../actions/index';
 
 class ReviewWizardRedux extends Component {
   constructor(props) {
@@ -17,23 +24,43 @@ class ReviewWizardRedux extends Component {
   };
 
   exitReview = () => {
-    let { activeReview, readingList, user } = this.props;
+    let { activeReview, activeDraft, drafts, readingList, user } = this.props;
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
     let { paperId } = activeReview;
     let newReadingList = readingList;
+
     if (paperId) {
       newReadingList = readingList.filter(currPaper => {
         return currPaper._id !== paperId;
       });
     }
 
+    let { draftId } = activeDraft;
+    let draftToDelete = drafts.find(draft => draft._id === draftId);
+
+    if (draftId) {
+      let newDrafts = drafts.filter(currDraft => {
+        return currDraft._id !== draftId;
+      });
+      this.props.dispatch(updateDrafts(newDrafts));
+    }
+
     // update reading list in global state
     this.props.dispatch(updateReadingList(newReadingList));
 
+    fetch('/api/drafts', {
+      method: 'delete',
+      headers: headers,
+      body: JSON.stringify(draftToDelete),
+    }).then(response => response.json());
+
     // update reading list in DB and re-update global state
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
-    };
+
     fetch('/api/readingList', {
       method: 'put',
       headers: headers,
@@ -84,6 +111,7 @@ class ReviewWizardRedux extends Component {
 
     if (draftId) {
       headers.id = draftId;
+      this.props.dispatch(updateDraftId(draftId));
     }
 
     return fetch('/api/drafts', {
@@ -98,7 +126,7 @@ class ReviewWizardRedux extends Component {
   };
 
   render() {
-    let { activeReview, readingList } = this.props;
+    let { activeReview, activeDraft, readingList } = this.props;
     return (
       <ReviewWizardContainer
         onPageBack={this.onPageBack}
@@ -106,6 +134,7 @@ class ReviewWizardRedux extends Component {
         submitReview={this.submitReview}
         saveDraft={this.saveDraft}
         activeReview={activeReview}
+        activeDraft={activeDraft}
         readingList={readingList}
         submitLoading={this.state.submitLoading}
       />
@@ -113,11 +142,13 @@ class ReviewWizardRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ activeReview, readingList, reviews, user }) => {
+const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, drafts, user }) => {
   return {
     activeReview,
+    activeDraft,
     readingList,
     reviews,
+    drafts,
     user,
   };
 };

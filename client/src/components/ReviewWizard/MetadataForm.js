@@ -244,13 +244,4 @@ class MetadataForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    data: state,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(Form.create({})(MetadataForm));
+export default connect()(Form.create({})(MetadataForm));

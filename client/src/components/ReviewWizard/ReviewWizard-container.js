@@ -12,8 +12,9 @@ class ReviewWizardContainer extends Component {
   constructor(props) {
     super(props);
 
-    let { readingList, activeReview } = this.props;
-    let { paperId, draftId, reviewContent } = activeReview;
+    let { readingList, activeReview, activeDraft } = this.props;
+    let { paperId, reviewContent } = activeReview;
+    let { draftId } = activeDraft;
 
     // always use the paperId if it exists, if not fall back to raw review (without a paper id)
     let paper;
@@ -80,8 +81,6 @@ class ReviewWizardContainer extends Component {
   };
 
   autosave = () => {
-    // TODO: once autosaved, the server should return the id for this draft so we can PUT instead of
-    // only POSTING
     const reviewFromState = {
       paper: this.state.paper,
       review: this.state.review,

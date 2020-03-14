@@ -68,6 +68,7 @@ class SearchableReviewDisplayContainer extends Component {
       handleModalEdit: this.modalEditHandler,
       showModal: this.state.showModal,
       modalReview: this.state.selectedReview,
+      itemName: this.props.itemName || 'Review',
     };
     const { pageHeaderProps } = this.props;
     let filteredReviews = this.fuzzyFilterReviews(this.props.reviews);

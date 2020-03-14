@@ -166,13 +166,4 @@ class ReviewForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    data: state,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  null
-)(Form.create({})(ReviewForm));
+export default connect()(Form.create({})(ReviewForm));

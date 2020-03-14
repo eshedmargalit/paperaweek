@@ -3,7 +3,10 @@ const User = mongoose.model("users");
 const Paper = mongoose.model("papers");
 
 module.exports = app => {
-  app.get("/api", (req, res) => res.send(JSON.stringify("Hello World")));
+  app.get("/api/papers", async (req, res) => {
+    let user = await User.findById(req.headers.userid);
+    res.send(JSON.stringify(user.reviews));
+  });
 
   app.post("/api/papers", async (req, res) => {
     let newPaper = new Paper(req.body.paper);
@@ -65,10 +68,5 @@ module.exports = app => {
     } catch (err) {
       res.status(500).send(err);
     }
-  });
-
-  app.get("/api/papers", async (req, res) => {
-    let user = await User.findById(req.headers.userid);
-    res.send(JSON.stringify(user.reviews));
   });
 };
