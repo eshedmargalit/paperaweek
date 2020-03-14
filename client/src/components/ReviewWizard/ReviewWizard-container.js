@@ -88,13 +88,7 @@ class ReviewWizardContainer extends Component {
 
     this.setState({ autosaveStatus: 'saving' }, async () => {
       const response = await this.props.saveDraft(reviewFromState, this.state.draftId);
-      if (response.status === 200) {
-        const json = await response.json();
-        const draftId = json._id;
-        this.setState({ autosaveStatus: 'saved', draftId: draftId });
-      } else {
-        this.setState({ autosaveStatus: 'saveFailed' });
-      }
+      this.setState(response);
     });
   };
 

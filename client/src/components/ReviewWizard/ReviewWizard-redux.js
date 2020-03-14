@@ -41,13 +41,14 @@ class ReviewWizardRedux extends Component {
     }
 
     let { draftId } = activeDraft;
-    let draftToDelete = drafts.find(draft => draft._id === draftId);
+    let draftToDelete = { _id: null };
 
     if (draftId) {
       let newDrafts = drafts.filter(currDraft => {
         return currDraft._id !== draftId;
       });
       this.props.dispatch(updateDrafts(newDrafts));
+      draftToDelete._id = draftId;
     }
 
     // update reading list in global state
@@ -60,7 +61,6 @@ class ReviewWizardRedux extends Component {
     }).then(response => response.json());
 
     // update reading list in DB and re-update global state
-
     fetch('/api/readingList', {
       method: 'put',
       headers: headers,
@@ -100,7 +100,7 @@ class ReviewWizardRedux extends Component {
     });
   };
 
-  saveDraft = (draft, draftId) => {
+  saveDraft = async (draft, draftId) => {
     let { user } = this.props;
 
     let fetchMethod = draftId ? 'put' : 'post';
@@ -114,11 +114,19 @@ class ReviewWizardRedux extends Component {
       this.props.dispatch(updateDraftId(draftId));
     }
 
-    return fetch('/api/drafts', {
+    const response = await fetch('/api/drafts', {
       method: fetchMethod,
       headers: headers,
       body: JSON.stringify(draft),
     });
+
+    let autosaveStatus = 'saveFailed';
+    if (response.status === 200) {
+      const json = await response.json();
+      autosaveStatus = 'saved';
+      draftId = json._id;
+    }
+    return { autosaveStatus, draftId };
   };
 
   restartReview = reviewContent => {
@@ -132,6 +140,7 @@ class ReviewWizardRedux extends Component {
         onPageBack={this.onPageBack}
         restartReview={this.restartReview}
         submitReview={this.submitReview}
+        updateActiveDraftId={this.updateActiveDraftId}
         saveDraft={this.saveDraft}
         activeReview={activeReview}
         activeDraft={activeDraft}

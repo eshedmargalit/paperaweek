@@ -3,7 +3,6 @@ import StatBoxView from './StatBox-view';
 
 class StatBoxContainer extends Component {
   render() {
-    console.log(this.props);
     return <StatBoxView {...this.props} />;
   }
 }

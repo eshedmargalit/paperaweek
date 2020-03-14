@@ -69,7 +69,7 @@ function FrequencyChartView(reviews) {
               <YAxis
                 label={
                   <Text x={0} y={0} dx={40} dy={150} offset={0} angle={-90}>
-                    Gap Between Reviews
+                    Days Between Reviews
                   </Text>
                 }
               />
