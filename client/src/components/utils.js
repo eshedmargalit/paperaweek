@@ -6,12 +6,10 @@ export function capital_case(input_str) {
   }
   input_str = input_str.toLowerCase();
   const words = input_str.trim().split(' ');
-  console.log(input_str, words);
 
   var new_str = '';
   for (let i = 0; i < words.length; i++) {
     var word = words[i];
-    console.log(word);
     if (
       word === 'and' ||
       word === 'or' ||
