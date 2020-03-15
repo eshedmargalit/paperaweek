@@ -19,7 +19,19 @@ class ReviewWizardRedux extends Component {
     };
   }
 
-  onPageBack = () => {
+  onPageBack = async () => {
+    let { user } = this.props;
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
+    const draftsFromDB = await fetch('/api/drafts', {
+      headers: headers,
+    }).then(response => response.json());
+
+    this.props.dispatch(updateDrafts(draftsFromDB));
     this.props.dispatch(endReview());
   };
 
@@ -40,25 +52,23 @@ class ReviewWizardRedux extends Component {
       });
     }
 
+    // update drafts
     let { draftId } = activeDraft;
-    let draftToDelete = { _id: null };
 
     if (draftId) {
       let newDrafts = drafts.filter(currDraft => {
         return currDraft._id !== draftId;
       });
       this.props.dispatch(updateDrafts(newDrafts));
-      draftToDelete._id = draftId;
+      fetch('/api/drafts', {
+        method: 'delete',
+        headers: headers,
+        body: JSON.stringify({ _id: draftId }),
+      }).then(response => response.json());
     }
 
     // update reading list in global state
     this.props.dispatch(updateReadingList(newReadingList));
-
-    fetch('/api/drafts', {
-      method: 'delete',
-      headers: headers,
-      body: JSON.stringify(draftToDelete),
-    }).then(response => response.json());
 
     // update reading list in DB and re-update global state
     fetch('/api/readingList', {
@@ -122,10 +132,12 @@ class ReviewWizardRedux extends Component {
 
     let autosaveStatus = 'saveFailed';
     if (response.status === 200) {
-      const json = await response.json();
+      const returnedDraft = await response.json();
       autosaveStatus = 'saved';
-      draftId = json._id;
+      draftId = returnedDraft._id;
+      this.props.dispatch(updateDraftId(draftId));
     }
+
     return { autosaveStatus, draftId };
   };
 
@@ -140,7 +152,6 @@ class ReviewWizardRedux extends Component {
         onPageBack={this.onPageBack}
         restartReview={this.restartReview}
         submitReview={this.submitReview}
-        updateActiveDraftId={this.updateActiveDraftId}
         saveDraft={this.saveDraft}
         activeReview={activeReview}
         activeDraft={activeDraft}
