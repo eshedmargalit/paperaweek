@@ -5,6 +5,7 @@ import DraftsReducer from './reducer_drafts';
 import ReducerReviews from './reducer_reviews';
 import ReducerUser from './reducer_user';
 import ActiveReviewReducer from './active_review_reducer';
+import ActiveDraftReducer from './active_draft_reducer';
 import CarouselItemsReducer from './carousel_items_reducer';
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   readingList: ReadingListReducer,
   drafts: DraftsReducer,
   activeReview: ActiveReviewReducer,
+  activeDraft: ActiveDraftReducer,
   carouselItems: CarouselItemsReducer,
 });
 

@@ -43,6 +43,9 @@ class PaperSearchBarContainer extends Component {
       return;
     }
 
+    // sanitize query
+    query = query.replace(/[-_]/g, ' ').toLowerCase();
+
     const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
     // Attributes:
     // key     | meaning
