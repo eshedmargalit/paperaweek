@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { startReview, endReview, updateReadingList, updateReviews } from '../../actions/index';
+import {
+  startReview,
+  endReview,
+  updateReadingList,
+  updateDrafts,
+  updateDraftId,
+  updateReviews,
+} from '../../actions/index';
 
 class ReviewWizardRedux extends Component {
   constructor(props) {
@@ -12,28 +19,58 @@ class ReviewWizardRedux extends Component {
     };
   }
 
-  onPageBack = () => {
+  onPageBack = async () => {
+    let { user } = this.props;
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
+    const draftsFromDB = await fetch('/api/drafts', {
+      headers: headers,
+    }).then(response => response.json());
+
+    this.props.dispatch(updateDrafts(draftsFromDB));
     this.props.dispatch(endReview());
   };
 
   exitReview = () => {
-    let { activeReview, readingList, user } = this.props;
+    let { activeReview, activeDraft, drafts, readingList, user } = this.props;
+
+    let headers = {
+      'content-type': 'application/json',
+      userid: user.userid,
+    };
+
     let { paperId } = activeReview;
     let newReadingList = readingList;
+
     if (paperId) {
       newReadingList = readingList.filter(currPaper => {
         return currPaper._id !== paperId;
       });
     }
 
+    // update drafts
+    let { draftId } = activeDraft;
+
+    if (draftId) {
+      let newDrafts = drafts.filter(currDraft => {
+        return currDraft._id !== draftId;
+      });
+      this.props.dispatch(updateDrafts(newDrafts));
+      fetch('/api/drafts', {
+        method: 'delete',
+        headers: headers,
+        body: JSON.stringify({ _id: draftId }),
+      }).then(response => response.json());
+    }
+
     // update reading list in global state
     this.props.dispatch(updateReadingList(newReadingList));
 
     // update reading list in DB and re-update global state
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
-    };
     fetch('/api/readingList', {
       method: 'put',
       headers: headers,
@@ -73,7 +110,7 @@ class ReviewWizardRedux extends Component {
     });
   };
 
-  saveDraft = (draft, draftId) => {
+  saveDraft = async (draft, draftId) => {
     let { user } = this.props;
 
     let fetchMethod = draftId ? 'put' : 'post';
@@ -84,13 +121,24 @@ class ReviewWizardRedux extends Component {
 
     if (draftId) {
       headers.id = draftId;
+      this.props.dispatch(updateDraftId(draftId));
     }
 
-    return fetch('/api/drafts', {
+    const response = await fetch('/api/drafts', {
       method: fetchMethod,
       headers: headers,
       body: JSON.stringify(draft),
     });
+
+    let autosaveStatus = 'saveFailed';
+    if (response.status === 200) {
+      const returnedDraft = await response.json();
+      autosaveStatus = 'saved';
+      draftId = returnedDraft._id;
+      this.props.dispatch(updateDraftId(draftId));
+    }
+
+    return { autosaveStatus, draftId };
   };
 
   restartReview = reviewContent => {
@@ -98,7 +146,7 @@ class ReviewWizardRedux extends Component {
   };
 
   render() {
-    let { activeReview, readingList } = this.props;
+    let { activeReview, activeDraft, readingList } = this.props;
     return (
       <ReviewWizardContainer
         onPageBack={this.onPageBack}
@@ -106,6 +154,7 @@ class ReviewWizardRedux extends Component {
         submitReview={this.submitReview}
         saveDraft={this.saveDraft}
         activeReview={activeReview}
+        activeDraft={activeDraft}
         readingList={readingList}
         submitLoading={this.state.submitLoading}
       />
@@ -113,11 +162,13 @@ class ReviewWizardRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ activeReview, readingList, reviews, user }) => {
+const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, drafts, user }) => {
   return {
     activeReview,
+    activeDraft,
     readingList,
     reviews,
+    drafts,
     user,
   };
 };

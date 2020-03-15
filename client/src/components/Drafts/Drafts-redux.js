@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateDrafts, startReview } from '../../actions';
+import { updateDraftId, updateDrafts, startReview } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 class DraftsRedux extends Component {
@@ -38,7 +38,8 @@ class DraftsRedux extends Component {
       paper: draft.paper,
       review: draft.review,
     };
-    this.props.dispatch(startReview(null, draftId, draftContent));
+    this.props.dispatch(updateDraftId(draftId));
+    this.props.dispatch(startReview(null, draftContent));
   };
 
   redirectHome = () => {
@@ -67,6 +68,7 @@ class DraftsRedux extends Component {
         deleteReview={this.deleteDraft}
         handleModalEdit={this.handleModalEdit}
         pageHeaderProps={pageHeaderProps}
+        itemName="Draft"
       />
     );
   }

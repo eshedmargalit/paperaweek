@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { startReview, updateReadingList } from '../../actions';
+import { startReview, updateReadingList, updateDraftId } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
 
 import arrayMove from 'array-move';
@@ -26,7 +26,8 @@ class ReadingListRedux extends Component {
   };
 
   handleEditClick(value) {
-    this.props.dispatch(startReview(value._id, null, null));
+    this.props.dispatch(updateDraftId(null));
+    this.props.dispatch(startReview(value._id, null));
   }
 
   onSortEnd = ({ oldIndex, newIndex }) => {

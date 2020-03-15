@@ -172,12 +172,13 @@ function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, revie
 
   let reviewModal = null;
   if (modalProps) {
+    let itemName = modalProps.itemName || 'Review';
     const modalFooter = [
       <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
-        Edit this Review
+        Edit this {itemName}
       </Button>,
       <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
-        Delete this Review
+        Delete this {itemName}
       </Button>,
     ];
     reviewModal = (
