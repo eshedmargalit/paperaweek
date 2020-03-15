@@ -89,19 +89,22 @@ function PaperSearchBarView({
     />
   );
 
+  let searchRender = null;
+  if (query === '') {
+    searchRender = <StatBox />;
+  } else {
+    if (renderedSearchResults.length) {
+      searchRender = renderedSearchResults;
+    } else {
+      searchRender = noResultsAlert;
+    }
+  }
+
   return (
     <div>
       <br />
       {search_area}
-      {loading ? (
-        <Spin className="searchResult loading-spinner" />
-      ) : renderedSearchResults.length ? (
-        renderedSearchResults
-      ) : query !== '' ? (
-        noResultsAlert
-      ) : (
-        <StatBox />
-      )}
+      {loading ? <Spin className="searchResult loading-spinner" /> : searchRender}
     </div>
   );
 }
