@@ -38,13 +38,18 @@ class PaperSearchBarContainer extends Component {
   }
 
   async academicSearch(query) {
+    // sanitize query
+    // replacing with spaces
+    query = query.replace(/[-_]/g, ' ').toLowerCase();
+
+    // deleting
+    query = query.replace(/['"\/\\]/g, '').toLowerCase();
+
     // bail out if no query
     if (query.length === 0) {
+      this.setState({ searchResults: [], loading: false });
       return;
     }
-
-    // sanitize query
-    query = query.replace(/[-_]/g, ' ').toLowerCase();
 
     const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
     // Attributes:
