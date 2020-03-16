@@ -43,7 +43,7 @@ class PaperSearchBarContainer extends Component {
     query = query.replace(/[-_]/g, ' ').toLowerCase();
 
     // deleting
-    query = query.replace(/['"\/\\]/g, '').toLowerCase();
+    query = query.replace(/['"\/\\]/g, '');
 
     // bail out if no query
     if (query.length === 0) {
