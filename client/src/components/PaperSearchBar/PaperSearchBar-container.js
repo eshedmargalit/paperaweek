@@ -68,17 +68,13 @@ class PaperSearchBarContainer extends Component {
     this.setState({ loading: true });
     let interpret_response = await this.interpret(query, attrs);
     let interpretations = interpret_response.interpretations;
-    if (!interpretations) {
+    if (!interpretations || !interpretations.length) {
       this.setState({ searchResults: [], loading: false });
     } else {
-      if (interpretations.length > 0) {
-        var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
-        let evaluate_response = await this.evaluate(top_interpretation, attrs);
-        let searchResults = this.processEntities(evaluate_response.entities);
-        this.setState({ searchResults, loading: false });
-      } else {
-        this.setState({ searchResults: [], loading: false });
-      }
+      var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
+      let evaluate_response = await this.evaluate(top_interpretation, attrs);
+      let searchResults = this.processEntities(evaluate_response.entities);
+      this.setState({ searchResults, loading: false });
     }
   }
 
