@@ -68,6 +68,22 @@ export function render_comma_sep_list(items, key) {
   });
 }
 
+export function removeMiddleAuthors(authorList, numKeepEitherEnd) {
+  const numAuthors = authorList.length;
+  const numKeepTotal = numKeepEitherEnd * 2;
+  if (numAuthors <= numKeepTotal) {
+    return authorList;
+  }
+
+  let newAuthorList = [];
+  newAuthorList.push(authorList[0]);
+  newAuthorList.push(authorList[1]);
+  newAuthorList.push('...');
+  newAuthorList.push(authorList[authorList.length - 2]);
+  newAuthorList.push(authorList[authorList.length - 1]);
+  return newAuthorList;
+}
+
 export function shortenAuthors(authors) {
   let author_string;
 
