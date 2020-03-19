@@ -17,6 +17,13 @@ var dynamicFieldCounters = {
 };
 
 class ReviewForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      needsFocus: false,
+    };
+  }
+
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var fieldName of Object.keys(dynamicFieldCounters)) {
@@ -31,6 +38,11 @@ class ReviewForm extends Component {
   componentDidUpdate() {
     const reviewFromState = this.getValues();
     this.props.onChange(reviewFromState);
+    if (this.state.needsFocus) {
+      this.setState({ needsFocus: false }, () => {
+        this.focusedInput.focus();
+      });
+    }
   }
 
   getValues() {
@@ -82,6 +94,7 @@ class ReviewForm extends Component {
     form.setFieldsValue({
       [`${fieldName}`]: nextItems,
     });
+    this.setState({ needsFocus: true });
   }
 
   render() {
@@ -123,7 +136,14 @@ class ReviewForm extends Component {
         >
           {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
             rules: [{ required: required, message: `${label} point cannot be blank` }],
-          })(<TextArea autoFocus style={{ width: '90%' }} />)}
+          })(
+            <TextArea
+              ref={input => {
+                this.focusedInput = input;
+              }}
+              style={{ width: '90%' }}
+            />
+          )}
           {field_value.length > 1 ? (
             <Icon
               className="dynamic-delete-button"
