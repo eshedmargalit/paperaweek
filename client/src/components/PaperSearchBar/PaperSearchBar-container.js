@@ -38,13 +38,18 @@ class PaperSearchBarContainer extends Component {
   }
 
   async academicSearch(query) {
+    // sanitize query
+    // replacing with spaces
+    query = query.replace(/[-_]/g, ' ').toLowerCase();
+
+    // deleting
+    query = query.replace(/['"\/\\]/g, '');
+
     // bail out if no query
     if (query.length === 0) {
+      this.setState({ searchResults: [], loading: false });
       return;
     }
-
-    // sanitize query
-    query = query.replace(/[-_]/g, ' ').toLowerCase();
 
     const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
     // Attributes:
@@ -62,7 +67,8 @@ class PaperSearchBarContainer extends Component {
     // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
     this.setState({ loading: true });
     let interpret_response = await this.interpret(query, attrs);
-    if (interpret_response.interpretations.length === 0) {
+    let interpretations = interpret_response.interpretations;
+    if (!interpretations || !interpretations.length) {
       this.setState({ searchResults: [], loading: false });
     } else {
       var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
