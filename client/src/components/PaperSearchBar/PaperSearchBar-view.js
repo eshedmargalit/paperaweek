@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, Icon, Button, Input, PageHeader, Spin } from 'antd';
 
-import { render_comma_sep_list } from '../utils';
+import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
 import './PaperSearchBar.scss';
 
@@ -10,7 +10,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
     let { paper, id } = result;
     let { title, journal, date, authors } = paper;
     let year = date.getFullYear();
-    let author_names_list = render_comma_sep_list(authors, 'author_names');
+    let author_names_list = render_comma_sep_list(removeMiddleAuthors(authors, 4), 'author_names');
     return (
       <div
         className="searchResult"
@@ -89,19 +89,22 @@ function PaperSearchBarView({
     />
   );
 
+  let searchRender = null;
+  if (query === '') {
+    searchRender = <StatBox />;
+  } else {
+    if (renderedSearchResults.length) {
+      searchRender = renderedSearchResults;
+    } else {
+      searchRender = noResultsAlert;
+    }
+  }
+
   return (
     <div>
       <br />
       {search_area}
-      {loading ? (
-        <Spin className="searchResult loading-spinner" />
-      ) : renderedSearchResults.length ? (
-        renderedSearchResults
-      ) : query !== '' ? (
-        noResultsAlert
-      ) : (
-        <StatBox />
-      )}
+      {loading ? <Spin className="searchResult loading-spinner" /> : searchRender}
     </div>
   );
 }

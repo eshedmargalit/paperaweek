@@ -5,7 +5,7 @@ export function capital_case(input_str) {
     return '';
   }
   input_str = input_str.toLowerCase();
-  const words = input_str.split(' ');
+  const words = input_str.trim().split(' ');
 
   var new_str = '';
   for (let i = 0; i < words.length; i++) {
@@ -66,6 +66,22 @@ export function render_comma_sep_list(items, key) {
     }
     return <span key={key + item}>{to_render}</span>;
   });
+}
+
+export function removeMiddleAuthors(authorList, numKeepEitherEnd) {
+  const numAuthors = authorList.length;
+  const numKeepTotal = numKeepEitherEnd * 2;
+  if (numAuthors <= numKeepTotal) {
+    return authorList;
+  }
+
+  let newAuthorList = [];
+  newAuthorList.push(authorList[0]);
+  newAuthorList.push(authorList[1]);
+  newAuthorList.push('...');
+  newAuthorList.push(authorList[authorList.length - 2]);
+  newAuthorList.push(authorList[authorList.length - 1]);
+  return newAuthorList;
 }
 
 export function shortenAuthors(authors) {
