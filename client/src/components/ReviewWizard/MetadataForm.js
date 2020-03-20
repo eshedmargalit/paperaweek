@@ -15,6 +15,13 @@ var dynamicFieldCounters = {
 };
 
 class MetadataForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      needsFocus: false,
+    };
+  }
+
   componentDidMount() {
     // on form load, set the index for dynamic fields that might come from props at the right spot
     for (var fieldName of Object.keys(dynamicFieldCounters)) {
@@ -29,6 +36,11 @@ class MetadataForm extends Component {
   componentDidUpdate() {
     const paperFromState = this.getValues();
     this.props.onChange(paperFromState);
+    if (this.state.needsFocus) {
+      this.setState({ needsFocus: false }, () => {
+        this.focusedInput.focus();
+      });
+    }
   }
 
   getValues() {
@@ -124,6 +136,7 @@ class MetadataForm extends Component {
     form.setFieldsValue({
       [`${fieldName}`]: nextItems,
     });
+    this.setState({ needsFocus: true });
   }
 
   render() {
@@ -169,7 +182,15 @@ class MetadataForm extends Component {
                   message: 'Field cannot be blank',
                 },
               ],
-            })(<Input autoFocus placeholder={label} style={{ width: '60%', marginRight: 8 }} />)}
+            })(
+              <Input
+                ref={input => {
+                  this.focusedInput = input;
+                }}
+                placeholder={label}
+                style={{ width: '60%', marginRight: 8 }}
+              />
+            )}
             {fieldValue.length > 1 ? (
               <Icon
                 className="dynamic-delete-button"
