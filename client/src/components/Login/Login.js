@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Card, Col, Icon, notification, Row } from 'antd';
 import LazyHero from 'react-lazy-hero';
-import { Redirect } from 'react-router-dom';
 import './Login.scss';
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      redirectHome: false,
-    };
-  }
-
-  signIn = () => {
-    this.props.auth.getSession();
-  };
-
   openNotification = () => {
     notification.open({
       message: 'Logout successful, see you soon!',
@@ -31,25 +18,9 @@ class Login extends Component {
     if (this.props.justSignedOut) {
       this.openNotification();
     }
-
-    let token = this.props.auth.signInUserSession.idToken.jwtToken;
-    fetch('/api/auth', {
-      headers: {
-        'content-type': 'application/json',
-        idToken: token,
-      },
-    }).then(response => {
-      if (response.ok) {
-        this.setState({ redirectHome: true });
-      }
-    });
   }
 
   render() {
-    if (this.state.redirectHome) {
-      return <Redirect to="/dashboard" push />;
-    }
-
     return (
       <div>
         <LazyHero
@@ -61,7 +32,7 @@ class Login extends Component {
         >
           <h1>Paper a Week</h1>
           <h5>Read a paper a week. That's it.</h5>
-          <Button onClick={this.signIn} size={'large'}>
+          <Button href="/auth/google" size={'large'}>
             {' '}
             Sign in with <Icon type="google" />{' '}
           </Button>

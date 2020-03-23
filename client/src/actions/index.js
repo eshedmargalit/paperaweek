@@ -9,20 +9,17 @@ export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 
-export function loginSuccess(name, id) {
+export function loginSuccess(name) {
   return {
     type: LOGIN_SUCCESS,
-    payload: {
-      name,
-      id,
-    },
+    payload: { name },
   };
 }
 
-export function loginFailed(error) {
+export function loginFailed() {
   return {
     type: LOGIN_FAILURE,
-    payload: error,
+    payload: null,
   };
 }
 

@@ -6,46 +6,21 @@ import HomeContainer from './Home-container';
 class HomeRedux extends Component {
   async componentDidMount() {
     this.props.dispatch(loginPending());
-
-    let { auth } = this.props;
-
-    // parse return URL from cognito
-    auth.parseCognitoWebResponse(window.location.href);
-
-    // send JWT to backend
-    let auth_data;
+    const user = await fetch('/api/current_user').then(r => r.json());
 
     try {
-      // Only go fetch auth again if I don't have a userid
-      if (!this.props.user.userid || !this.props.user.userid.length) {
-        auth_data = await fetch('/api/auth', {
-          headers: {
-            'content-type': 'application/json',
-            idToken: auth.signInUserSession.idToken.jwtToken,
-          },
-        }).then(response => response.json());
-      }
-
-      this.props.dispatch(loginSuccess(auth_data.display_name, auth_data._id));
-      this.props.dispatch(updateReviews(auth_data.reviews));
-      this.props.dispatch(updateReadingList(auth_data.reading_list));
-      this.props.dispatch(updateDrafts(auth_data.drafts));
+      this.props.dispatch(loginSuccess(user.displayName));
+      this.props.dispatch(updateReviews(user.reviews));
+      this.props.dispatch(updateReadingList(user.readingList));
+      this.props.dispatch(updateDrafts(user.drafts));
     } catch (error) {
-      this.props.dispatch(loginFailed(error));
+      this.props.dispatch(loginFailed());
     }
   }
 
   render() {
-    let { user, activeReview, auth, drafts } = this.props;
-    let boundSignOut = auth.signOut.bind(auth);
-    return (
-      <HomeContainer
-        user={user}
-        showForm={activeReview.showForm}
-        signOut={boundSignOut}
-        numberOfDrafts={drafts.length}
-      />
-    );
+    let { user, activeReview, drafts } = this.props;
+    return <HomeContainer user={user} showForm={activeReview.showForm} numberOfDrafts={drafts.length} />;
   }
 }
 
@@ -57,4 +32,7 @@ const mapStateToProps = ({ user, activeReview, drafts }) => {
   };
 };
 
-export default connect(mapStateToProps, null)(HomeRedux);
+export default connect(
+  mapStateToProps,
+  null
+)(HomeRedux);
