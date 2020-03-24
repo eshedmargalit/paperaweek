@@ -1,16 +1,11 @@
-import { LOGIN_SUCCESS, LOGIN_FAILURE } from '../actions/index';
-const initialState = false;
+import { FETCH_USER } from '../actions/index';
 
-const reducer = (state = initialState, action) => {
-  let { type } = action;
-  switch (type) {
-    case LOGIN_SUCCESS:
-      return true;
-    case LOGIN_FAILURE:
-      return false;
+export default function(state = null, action) {
+  switch (action.type) {
+    case FETCH_USER:
+      console.log(action.payload);
+      return action.payload || false; // "" ==> falsy
     default:
       return state;
   }
-};
-
-export default reducer;
+}

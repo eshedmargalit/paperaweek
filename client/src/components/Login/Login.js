@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, Card, Col, Icon, notification, Row } from 'antd';
+import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import './Login.scss';
 
@@ -21,6 +23,17 @@ class Login extends Component {
   }
 
   render() {
+    if (this.props.auth) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/dashboard',
+            state: { from: this.props.location },
+          }}
+        />
+      );
+    }
+
     return (
       <div>
         <LazyHero
@@ -73,4 +86,11 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = ({ auth }) => {
+  return { auth };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Login);

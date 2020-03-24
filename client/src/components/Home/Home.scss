@@ -11,12 +11,16 @@ $blue-dark: rgba(73, 132, 238, 1);
   justify-content: space-between;
 }
 
-.menu {
+.ant-menu.menu {
   background: $blue-light;
   background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
 
   .ant-menu-item > a {
-    color: white;
+    margin-top: 5px;
+  }
+
+  .ant-menu-item:hover {
+    border-bottom: 2px solid transparent;
   }
 
   &__item {

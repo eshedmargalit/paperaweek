@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS } from '../actions/index';
+import { FETCH_USER } from '../actions/index';
 const initialState = {
   displayName: '',
 };
@@ -6,9 +6,9 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   let { type, payload } = action;
   switch (type) {
-    case LOGIN_SUCCESS:
-      let { name } = payload;
-      return { displayName: name };
+    case FETCH_USER:
+      let { displayName, reviews, readingList, drafts } = payload;
+      return { displayName, reviews, readingList, drafts };
     default:
       return state;
   }
