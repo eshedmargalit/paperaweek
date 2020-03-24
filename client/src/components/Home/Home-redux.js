@@ -5,7 +5,6 @@ import HomeContainer from './Home-container';
 
 class HomeRedux extends Component {
   componentDidMount() {
-    console.log('mounted');
     this.props.dispatch(fetchUser());
   }
 

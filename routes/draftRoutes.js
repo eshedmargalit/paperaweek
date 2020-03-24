@@ -5,7 +5,6 @@ const Paper = mongoose.model("papers");
 module.exports = app => {
   app.get("/api/drafts", async (req, res) => {
     let user = await User.findById(req.user.googleId);
-    console.log(user);
     res.send(JSON.stringify(user.drafts));
   });
 
