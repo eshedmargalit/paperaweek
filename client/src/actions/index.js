@@ -9,6 +9,7 @@ export const END_REVIEW = 'END_REVIEW';
 
 export const fetchUser = () => async dispatch => {
   const user = await fetch('/api/current_user').then(r => r.json());
+  console.log(user);
   dispatch({ type: FETCH_USER, payload: user });
 };
 

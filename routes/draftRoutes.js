@@ -4,7 +4,8 @@ const Paper = mongoose.model("papers");
 
 module.exports = app => {
   app.get("/api/drafts", async (req, res) => {
-    let user = await User.findById(req.headers.userid);
+    let user = await User.findById(req.user.googleId);
+    console.log(user);
     res.send(JSON.stringify(user.drafts));
   });
 
@@ -15,7 +16,7 @@ module.exports = app => {
       review: req.body.review,
       _id: new mongoose.Types.ObjectId()
     };
-    let user = await User.findOne({ _id: req.headers.userid });
+    let user = await User.findOne({ googleId: req.user.googleId });
     user.drafts.push(newReview);
     user.save();
     res.send(JSON.stringify(newReview));
@@ -26,7 +27,7 @@ module.exports = app => {
       let newPaper = new Paper(req.body.paper);
       let user = await User.findOneAndUpdate(
         {
-          _id: req.headers.userid,
+          googleId: req.user.googleId,
           "drafts._id": mongoose.Types.ObjectId(req.headers.id)
         },
         {
@@ -50,7 +51,7 @@ module.exports = app => {
   app.delete("/api/drafts", async (req, res) => {
     try {
       User.findOneAndUpdate(
-        { _id: req.headers.userid },
+        { googleId: req.user.googleId },
         {
           $pull: {
             drafts: { _id: new mongoose.Types.ObjectId(req.body._id) }
