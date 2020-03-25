@@ -9,10 +9,11 @@ module.exports = app => {
   });
 
   app.post("/api/drafts", async (req, res) => {
-    let newPaper = new Paper(req.body.paper);
+    const draft = req.body.draft;
+    let newPaper = new Paper(draft.paper);
     let newReview = {
       paper: newPaper,
-      review: req.body.review,
+      review: draft.review,
       _id: new mongoose.Types.ObjectId()
     };
     let user = await User.findOne({ googleId: req.user.googleId });
@@ -22,17 +23,18 @@ module.exports = app => {
   });
 
   app.put("/api/drafts", async (req, res) => {
+    const draft = req.body.draft;
     try {
-      let newPaper = new Paper(req.body.paper);
+      let newPaper = new Paper(draft.paper);
       let user = await User.findOneAndUpdate(
         {
           googleId: req.user.googleId,
-          "drafts._id": mongoose.Types.ObjectId(req.headers.id)
+          "drafts._id": mongoose.Types.ObjectId(req.body.id)
         },
         {
           $set: {
             "drafts.$.paper": newPaper,
-            "drafts.$.review": req.body.review
+            "drafts.$.review": draft.review
           }
         },
         { new: true } // return updated post
@@ -47,13 +49,13 @@ module.exports = app => {
     }
   });
 
-  app.delete("/api/drafts", async (req, res) => {
+  app.delete("/api/drafts/:id", async (req, res) => {
     try {
       User.findOneAndUpdate(
         { googleId: req.user.googleId },
         {
           $pull: {
-            drafts: { _id: new mongoose.Types.ObjectId(req.body._id) }
+            drafts: { _id: new mongoose.Types.ObjectId(req.params.id) }
           }
         },
         { new: true },

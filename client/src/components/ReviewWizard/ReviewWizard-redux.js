@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
 import {
@@ -23,14 +24,25 @@ class ReviewWizardRedux extends Component {
     this.props.dispatch(endReview());
   };
 
-  exitReview = () => {
-    let { activeReview, activeDraft, drafts, readingList, user } = this.props;
+  deleteActiveDraft = async () => {
+    let { activeDraft, drafts } = this.props;
 
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
-    };
+    // update drafts
+    let { draftId } = activeDraft;
 
+    if (draftId) {
+      let newDrafts = drafts.filter(currDraft => {
+        return currDraft._id !== draftId;
+      });
+
+      this.props.dispatch(updateDrafts(newDrafts));
+      let res = await axios.delete(`api/drafts/${draftId}`);
+      this.props.dispatch(updateDrafts(res.data));
+    }
+  };
+
+  deleteReadingListEntry = async () => {
+    let { activeReview, readingList } = this.props;
     let { paperId } = activeReview;
     let newReadingList = readingList;
 
@@ -40,87 +52,47 @@ class ReviewWizardRedux extends Component {
       });
     }
 
-    // update drafts
-    let { draftId } = activeDraft;
-
-    if (draftId) {
-      let newDrafts = drafts.filter(currDraft => {
-        return currDraft._id !== draftId;
-      });
-      this.props.dispatch(updateDrafts(newDrafts));
-      fetch('/api/drafts', {
-        method: 'delete',
-        headers: headers,
-        body: JSON.stringify({ _id: draftId }),
-      }).then(response => response.json());
-    }
-
     // update reading list in global state
     this.props.dispatch(updateReadingList(newReadingList));
+    let res = await axios.put('api/readingList', newReadingList);
 
     // update reading list in DB and re-update global state
-    fetch('/api/readingList', {
-      method: 'put',
-      headers: headers,
-      body: JSON.stringify(newReadingList),
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.props.dispatch(updateReadingList(data));
-        this.props.dispatch(endReview());
-      });
+    this.props.dispatch(updateReadingList(res.data));
   };
 
-  submitReview = (reviewObject, reviewId) => {
-    let { user } = this.props;
+  submitReview = async (reviewObject, reviewId) => {
+    const method = reviewId ? 'put' : 'post';
+    const url = '/api/papers';
 
-    let fetchMethod = reviewId ? 'put' : 'post';
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
+    const data = {
+      review: reviewObject,
+      id: reviewId,
     };
 
-    if (reviewId) {
-      headers.id = reviewId;
-    }
-
-    this.setState({ submitLoading: true }, () => {
-      fetch('/api/papers', {
-        method: fetchMethod,
-        headers: headers,
-        body: JSON.stringify(reviewObject),
-      })
-        .then(response => response.json())
-        .then(newReviewList => {
-          this.props.dispatch(updateReviews(newReviewList));
-          this.exitReview();
-        });
+    this.setState({ submitLoading: true }, async () => {
+      let res = await axios({ method, url, data });
+      const newReviewList = res.data;
+      this.props.dispatch(updateReviews(newReviewList));
+      this.deleteActiveDraft();
+      this.deleteReadingListEntry();
+      this.props.dispatch(endReview());
     });
   };
 
   saveDraft = async (draft, draftId) => {
-    let { user } = this.props;
+    const method = draftId ? 'put' : 'post';
+    const url = '/api/drafts';
 
-    let fetchMethod = draftId ? 'put' : 'post';
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
+    const data = {
+      draft: draft,
+      id: draftId,
     };
 
-    if (draftId) {
-      headers.id = draftId;
-      this.props.dispatch(updateDraftId(draftId));
-    }
-
-    const response = await fetch('/api/drafts', {
-      method: fetchMethod,
-      headers: headers,
-      body: JSON.stringify(draft),
-    });
+    const res = await axios({ method, url, data });
 
     let autosaveStatus = 'saveFailed';
-    if (response.status === 200) {
-      const returnedDraft = await response.json();
+    if (res.status === 200) {
+      const returnedDraft = res.data;
       autosaveStatus = 'saved';
       draftId = returnedDraft._id;
       this.props.dispatch(updateDraftId(draftId));
@@ -150,14 +122,13 @@ class ReviewWizardRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, drafts, user }) => {
+const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, drafts }) => {
   return {
     activeReview,
     activeDraft,
     readingList,
     reviews,
     drafts,
-    user,
   };
 };
 
