@@ -20,18 +20,6 @@ class ReviewWizardRedux extends Component {
   }
 
   onPageBack = async () => {
-    let { user } = this.props;
-
-    let headers = {
-      'content-type': 'application/json',
-      userid: user.userid,
-    };
-
-    const draftsFromDB = await fetch('/api/drafts', {
-      headers: headers,
-    }).then(response => response.json());
-
-    this.props.dispatch(updateDrafts(draftsFromDB));
     this.props.dispatch(endReview());
   };
 
