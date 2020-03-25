@@ -27,7 +27,7 @@ function HomeView({ user, numberOfDrafts, showForm }) {
         <Menu.Item>
           <h6>
             <Icon type="user" />
-            Logged in as <span class="displayName">{user.displayName}</span>
+            Logged in as <span className="displayName">{user.displayName}</span>
           </h6>
         </Menu.Item>
         <Menu.Item className="menu__item">
