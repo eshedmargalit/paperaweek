@@ -1,3 +1,4 @@
+import axios from 'axios';
 export const FETCH_USER = 'FETCH_USER';
 export const EXIT_FORM = 'EXIT_FORM';
 export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
@@ -8,8 +9,8 @@ export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 
 export const fetchUser = () => async dispatch => {
-  const user = await fetch('/api/current_user').then(r => r.json());
-  dispatch({ type: FETCH_USER, payload: user });
+  const user = await axios.get('/api/current_user');
+  dispatch({ type: FETCH_USER, payload: user.data });
 };
 
 export function startReview(paperId, reviewContent) {

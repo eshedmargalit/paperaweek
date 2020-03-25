@@ -6,6 +6,7 @@
     "amazon-cognito-auth-js": "^1.3.2",
     "amazon-cognito-identity-js": "^3.0.15",
     "array-move": "^2.1.0",
+    "axios": "^0.19.2",
     "bootstrap": "^4.3.1",
     "cognitive-services": "^1.2.3",
     "fuse.js": "^3.4.5",
