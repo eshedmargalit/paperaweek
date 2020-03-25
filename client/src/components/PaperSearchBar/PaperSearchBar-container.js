@@ -160,7 +160,6 @@ class PaperSearchBarContainer extends Component {
   render() {
     return (
       <PaperSearchBarView
-        carouselItems={this.props.carouselItems}
         handleSearch={this.handleSearch}
         handleClickResult={this.props.handleClickResult}
         handleClickResultButton={this.props.handleClickResultButton}

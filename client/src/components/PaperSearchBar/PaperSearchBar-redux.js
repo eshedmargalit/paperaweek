@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { startReview, updateReadingList } from '../../actions';
 import PaperSearchBarContainer from './PaperSearchBar-container';
@@ -8,23 +9,11 @@ class PaperSearchBarRedux extends Component {
     this.props.dispatch(startReview(null, null));
   };
 
-  updateReadingList = newReadingList => {
+  updateReadingList = async newReadingList => {
     this.props.dispatch(updateReadingList(newReadingList));
 
-    let headers = {
-      'content-type': 'application/json',
-      userid: this.props.user.userid,
-    };
-
-    fetch('/api/readingList', {
-      method: 'put',
-      headers: headers,
-      body: JSON.stringify(newReadingList),
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.props.dispatch(updateReadingList(data));
-      });
+    const res = await axios.put('api/readingList', newReadingList);
+    this.props.dispatch(updateReadingList(res.data));
   };
 
   handleClickResult = ({ paper }) => {
@@ -42,10 +31,8 @@ class PaperSearchBarRedux extends Component {
   };
 
   render() {
-    let { carouselItems } = this.props;
     return (
       <PaperSearchBarContainer
-        carouselItems={carouselItems}
         startBlankReview={this.startBlankReview.bind(this)}
         handleClickResult={this.handleClickResult.bind(this)}
         handleClickResultButton={this.handleClickResultButton.bind(this)}
@@ -54,11 +41,9 @@ class PaperSearchBarRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ carouselItems, readingList, user }) => {
+const mapStateToProps = ({ readingList }) => {
   return {
-    carouselItems,
     readingList,
-    user,
   };
 };
 
