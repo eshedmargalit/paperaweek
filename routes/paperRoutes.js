@@ -17,8 +17,6 @@ module.exports = app => {
       _id: new mongoose.Types.ObjectId()
     };
     let user = await User.findOne({ googleId: req.user.googleId });
-    console.log(user);
-    console.log(newReview);
     user.reviews.push(newReview);
     user.save();
     res.send(JSON.stringify(user.reviews));
