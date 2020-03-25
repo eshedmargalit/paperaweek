@@ -5,7 +5,11 @@ const reducer = (state = initialState, action) => {
   let { type, payload } = action;
   switch (type) {
     case FETCH_USER:
-      return payload.drafts;
+      if (payload) {
+        return payload.drafts;
+      } else {
+        return state;
+      }
     case UPDATE_DRAFTS:
       return payload;
     default:
