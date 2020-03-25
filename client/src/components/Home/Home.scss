@@ -32,8 +32,11 @@ $blue-dark: rgba(73, 132, 238, 1);
     box-shadow: 5px;
   }
 
-  li > h5 {
-    color: white;
+  li > h6 {
+    color: #ccc;
+    .displayName {
+      color: #fff;
+    }
   }
 
   &__badge .ant-badge-count {

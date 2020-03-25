@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchUser, updateDrafts } from '../../actions';
+import { fetchUser } from '../../actions';
 import HomeContainer from './Home-container';
 
 class HomeRedux extends Component {

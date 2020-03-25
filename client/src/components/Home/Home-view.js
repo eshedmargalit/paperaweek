@@ -25,10 +25,10 @@ function HomeView({ user, numberOfDrafts, showForm }) {
     <div>
       <Menu className="menu" mode="horizontal">
         <Menu.Item>
-          <h5>
+          <h6>
             <Icon type="user" />
-            Hi there, {user.displayName}!
-          </h5>
+            Logged in as <span class="displayName">{user.displayName}</span>
+          </h6>
         </Menu.Item>
         <Menu.Item className="menu__item">
           <Button href="/api/logout">Sign Out</Button>
