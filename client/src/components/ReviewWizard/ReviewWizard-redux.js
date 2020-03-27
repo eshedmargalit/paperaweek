@@ -30,7 +30,7 @@ class ReviewWizardRedux extends Component {
     // update drafts
     let { draftId } = activeDraft;
 
-    if (draftId) {
+    if (draftId && drafts) {
       let newDrafts = drafts.filter(currDraft => {
         return currDraft._id !== draftId;
       });
