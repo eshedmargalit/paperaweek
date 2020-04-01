@@ -11,6 +11,11 @@ $blue-dark: rgba(73, 132, 238, 1);
   justify-content: space-between;
 }
 
+.menu {
+  .ant-menu-item > a {
+    color: black;
+  }
+}
 .ant-menu.menu {
   background: $blue-light;
   background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
@@ -34,6 +39,7 @@ $blue-dark: rgba(73, 132, 238, 1);
 
   li > h6 {
     color: #ccc;
+    margin-bottom: 12px;
     .displayName {
       color: #fff;
     }
@@ -43,16 +49,5 @@ $blue-dark: rgba(73, 132, 238, 1);
     background-color: #fff;
     color: #222;
     opacity: 0.5;
-  }
-}
-
-.carousel {
-  & .slick-slide {
-    text-align: center;
-    background: white;
-  }
-
-  &__content {
-    padding: 30px;
   }
 }
