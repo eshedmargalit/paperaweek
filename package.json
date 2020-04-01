@@ -8,7 +8,8 @@
     "server": "nodemon server.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "mocha --timeout 60000 --exit test/**/*.js "
+    "test": "mocha --timeout 60000 --exit test/**/*.js ",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "author": "",
   "license": "ISC",
