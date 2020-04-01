@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { startReview, updateReadingList, updateDraftId } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
@@ -6,23 +7,11 @@ import ReadingListContainer from './ReadingList-container';
 import arrayMove from 'array-move';
 
 class ReadingListRedux extends Component {
-  updateReadingList = newReadingList => {
+  updateReadingList = async newReadingList => {
     this.props.dispatch(updateReadingList(newReadingList));
 
-    let headers = {
-      'content-type': 'application/json',
-      userid: this.props.user.userid,
-    };
-
-    fetch('/api/readingList', {
-      method: 'put',
-      headers: headers,
-      body: JSON.stringify(newReadingList),
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.props.dispatch(updateReadingList(data));
-      });
+    const res = await axios.put('api/readingList', newReadingList);
+    this.props.dispatch(updateReadingList(res.data));
   };
 
   handleEditClick(value) {

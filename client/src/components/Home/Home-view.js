@@ -7,7 +7,7 @@ import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 
-function HomeView({ user, numberOfDrafts, showForm, signOut }) {
+function HomeView({ user, numberOfDrafts, showForm }) {
   let draftMenuItem = null;
   if (numberOfDrafts > 0) {
     draftMenuItem = (
@@ -25,13 +25,13 @@ function HomeView({ user, numberOfDrafts, showForm, signOut }) {
     <div>
       <Menu className="menu" mode="horizontal">
         <Menu.Item>
-          <h5>
+          <h6>
             <Icon type="user" />
-            Hi there, {user.displayName}!
-          </h5>
+            Logged in as <span className="displayName">{user.displayName}</span>
+          </h6>
         </Menu.Item>
         <Menu.Item className="menu__item">
-          <Button onClick={signOut}>Sign Out</Button>
+          <Button href="/api/logout">Sign Out</Button>
         </Menu.Item>
         {draftMenuItem}
       </Menu>

@@ -5,9 +5,9 @@ const ReviewSchema = require("./Review.js");
 
 var UserSchema = new Schema(
   {
-    unique_id: String,
-    display_name: String,
-    reading_list: [PaperSchema],
+    googleId: String,
+    displayName: String,
+    readingList: [PaperSchema],
     reviews: [ReviewSchema],
     drafts: [ReviewSchema]
   },

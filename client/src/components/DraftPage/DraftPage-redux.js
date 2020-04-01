@@ -7,10 +7,8 @@ import './DraftPage.scss';
 
 class DraftPageRedux extends Component {
   render() {
-    const homeRedirect = <Redirect to="/dashboard" push />;
-    const { user } = this.props;
-    const hasUser = user.userid !== '';
-    return hasUser ? (
+    const homeRedirect = <Redirect to="/" push />;
+    return this.props.auth ? (
       <div className="width80">
         <Drafts />
       </div>
@@ -20,9 +18,9 @@ class DraftPageRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ auth }) => {
   return {
-    user,
+    auth,
   };
 };
 

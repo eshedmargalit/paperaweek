@@ -1,6 +1,5 @@
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-export const LOGIN_PENDING = 'LOGIN_PENDING';
+import axios from 'axios';
+export const FETCH_USER = 'FETCH_USER';
 export const EXIT_FORM = 'EXIT_FORM';
 export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
 export const UPDATE_DRAFT_ID = 'UPDATE_DRAFT_ID';
@@ -9,29 +8,10 @@ export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 
-export function loginSuccess(name, id) {
-  return {
-    type: LOGIN_SUCCESS,
-    payload: {
-      name,
-      id,
-    },
-  };
-}
-
-export function loginFailed(error) {
-  return {
-    type: LOGIN_FAILURE,
-    payload: error,
-  };
-}
-
-export function loginPending() {
-  return {
-    type: LOGIN_PENDING,
-    payload: null,
-  };
-}
+export const fetchUser = () => async dispatch => {
+  const user = await axios.get('/api/current_user');
+  dispatch({ type: FETCH_USER, payload: user.data });
+};
 
 export function startReview(paperId, reviewContent) {
   return {

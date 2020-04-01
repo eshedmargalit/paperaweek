@@ -91,7 +91,7 @@ function PaperSearchBarView({
 
   let searchRender = null;
   if (query === '') {
-    searchRender = <StatBox />;
+    searchRender = <StatBox startBlankReview={startBlankReview} />;
   } else {
     if (renderedSearchResults.length) {
       searchRender = renderedSearchResults;

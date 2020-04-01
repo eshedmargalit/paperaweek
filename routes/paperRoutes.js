@@ -9,30 +9,32 @@ module.exports = app => {
   });
 
   app.post("/api/papers", async (req, res) => {
-    let newPaper = new Paper(req.body.paper);
+    const review = req.body.review;
+    let newPaper = new Paper(review.paper);
     let newReview = {
       paper: newPaper,
-      review: req.body.review,
+      review: review.review,
       _id: new mongoose.Types.ObjectId()
     };
-    let user = await User.findOne({ _id: req.headers.userid });
+    let user = await User.findOne({ googleId: req.user.googleId });
     user.reviews.push(newReview);
     user.save();
     res.send(JSON.stringify(user.reviews));
   });
 
   app.put("/api/papers", async (req, res) => {
+    const review = req.body.review;
     try {
-      let newPaper = new Paper(req.body.paper);
+      let newPaper = new Paper(review.paper);
       let user = await User.findOneAndUpdate(
         {
-          _id: req.headers.userid,
-          "reviews._id": mongoose.Types.ObjectId(req.headers.id)
+          googleId: req.user.googleId,
+          "reviews._id": mongoose.Types.ObjectId(req.body.id)
         },
         {
           $set: {
             "reviews.$.paper": newPaper,
-            "reviews.$.review": req.body.review
+            "reviews.$.review": review.review
           }
         },
         { new: true } // return updated post
@@ -47,13 +49,13 @@ module.exports = app => {
     }
   });
 
-  app.delete("/api/papers", async (req, res) => {
+  app.delete("/api/papers/:id", async (req, res) => {
     try {
       User.findOneAndUpdate(
-        { _id: req.headers.userid },
+        { googleId: req.user.googleId },
         {
           $pull: {
-            reviews: { _id: new mongoose.Types.ObjectId(req.body._id) }
+            reviews: { _id: new mongoose.Types.ObjectId(req.params.id) }
           }
         },
         { new: true },
