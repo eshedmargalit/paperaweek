@@ -43,12 +43,7 @@ function ReviewWizardView({ autosaveStatus, showWizard, currentStep, stepContent
   let wizardRender = (
     <div className="width80">
       <div style={{ display: 'flex' }}>
-        <PageHeader
-          title="Write a Review"
-          subTitle="Search online for papers"
-          onBack={onPageBack}
-          extra={[autosaveIcon]}
-        />
+        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />
       </div>
       <div>
         <Steps current={currentStep}>

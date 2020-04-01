@@ -1,4 +1,4 @@
-import { UPDATE_READING_LIST } from '../actions/index';
+import { FETCH_USER, UPDATE_READING_LIST } from '../actions/index';
 const initialState = [];
 
 const reducer = (state = initialState, action) => {
@@ -6,6 +6,8 @@ const reducer = (state = initialState, action) => {
   switch (type) {
     case UPDATE_READING_LIST:
       return payload;
+    case FETCH_USER:
+      return payload ? payload.readingList : state;
     default:
       return state;
   }
