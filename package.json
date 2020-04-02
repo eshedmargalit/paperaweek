@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^3.23.0",
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cognito-express": "^2.0.16",
     "concurrently": "^4.1.2",

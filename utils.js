@@ -24,6 +24,7 @@ const createApp = (port = 5000) => {
   require("./routes/readingListRoutes")(app);
   require("./routes/draftRoutes")(app);
   require("./routes/userRoutes")(app);
+  require("./routes/searchBarRoutes")(app);
 
   if (process.env.NODE_ENV === "production") {
     // Express knows how to serve production assets (like main.js)
