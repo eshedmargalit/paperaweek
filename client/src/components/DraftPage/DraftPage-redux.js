@@ -3,8 +3,6 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Drafts from '../Drafts';
 
-import './DraftPage.scss';
-
 class DraftPageRedux extends Component {
   render() {
     const homeRedirect = <Redirect to="/" push />;

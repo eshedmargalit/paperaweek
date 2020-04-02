@@ -31,7 +31,9 @@ function HomeView({ user, numberOfDrafts, showForm }) {
           </h6>
         </Menu.Item>
         <Menu.Item className="menu__item">
-          <Button href="/api/logout">Sign Out</Button>
+          <Button href="/api/logout" className="signout">
+            Sign Out
+          </Button>
         </Menu.Item>
         {draftMenuItem}
       </Menu>

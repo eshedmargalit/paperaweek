@@ -16,36 +16,36 @@ $blue-dark: rgba(73, 132, 238, 1);
     color: black;
   }
 }
+
+.signout {
+  color: red;
+}
+
 .ant-menu.menu {
   background: $blue-light;
   background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
-
-  .ant-menu-item > a {
-    margin-top: 5px;
-  }
 
   .ant-menu-item:hover {
     border-bottom: 2px solid transparent;
   }
 
-  &__item {
+  .menu__item {
     float: right;
+    margin-top: 6px;
   }
 
-  &__badge {
-    color: green;
+  .menu__badge {
     box-shadow: 5px;
   }
 
   li > h6 {
     color: #ccc;
-    margin-bottom: 12px;
     .displayName {
       color: #fff;
     }
   }
 
-  &__badge .ant-badge-count {
+  .menu__badge .ant-badge-count {
     background-color: #fff;
     color: #222;
     opacity: 0.5;
