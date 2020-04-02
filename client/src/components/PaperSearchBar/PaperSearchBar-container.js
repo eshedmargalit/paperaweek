@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
 
 import _ from 'lodash';
 import { capital_case } from '../utils';
-
-const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
 class PaperSearchBarContainer extends Component {
   constructor(props) {
@@ -22,19 +21,15 @@ class PaperSearchBarContainer extends Component {
   }
 
   async interpret(query) {
-    let interpret_query = `${endpoint}/interpret?query=${query}&complete=1&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
-
-    let response = await fetch(interpret_query);
-    let data = await response.json();
-    return data;
+    const response = await axios(`api/searchBar/interpret/${query}`);
+    return response.data;
   }
 
   async evaluate(interpretation, attrs) {
-    let eval_query = `${endpoint}/evaluate?expr=${interpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
-
-    let response = await fetch(eval_query);
-    let data = await response.json();
-    return data;
+    const response = await axios(`api/searchBar/evaluate/${interpretation}/${attrs}`);
+    // let data = await response.json();
+    // return data;
+    return response.data;
   }
 
   async academicSearch(query) {
