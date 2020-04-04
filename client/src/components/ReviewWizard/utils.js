@@ -32,7 +32,7 @@ export const metaFields = [
   {
     fieldName: 'url',
     label: 'URL',
-    required: true,
+    required: false,
     isList: false,
   },
   {
@@ -44,7 +44,7 @@ export const metaFields = [
   {
     fieldName: 'one_sentence',
     label: 'One Sentence Summary',
-    required: true,
+    required: false,
     isList: false,
   },
   {
@@ -59,31 +59,31 @@ export const reviewFields = [
   {
     fieldName: 'summary_points',
     label: 'Paper Summary',
-    required: true,
+    required: false,
     isList: true,
   },
   {
     fieldName: 'background_points',
     label: 'Background Info',
-    required: true,
+    required: false,
     isList: true,
   },
   {
     fieldName: 'approach_points',
     label: 'Approach',
-    required: true,
+    required: false,
     isList: true,
   },
   {
     fieldName: 'results_points',
     label: 'Results',
-    required: true,
+    required: false,
     isList: true,
   },
   {
     fieldName: 'conclusions_points',
     label: 'Conclusions',
-    required: true,
+    required: false,
     isList: true,
   },
   {
