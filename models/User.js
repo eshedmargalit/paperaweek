@@ -9,7 +9,8 @@ var UserSchema = new Schema(
     displayName: String,
     readingList: [PaperSchema],
     reviews: [ReviewSchema],
-    drafts: [ReviewSchema]
+    drafts: [ReviewSchema],
+    points: Number
   },
   {
     timestamps: { createdAt: true, updatedAt: true }
