@@ -20,6 +20,8 @@ function HomeView({ user, numberOfDrafts, showForm }) {
     );
   }
 
+  const pointsMenuItem = <Menu.Item className="menu__item">{user.points} Points</Menu.Item>;
+
   const formRedirect = <Redirect to="/form" push />;
   const home_render = (
     <div>
@@ -36,6 +38,7 @@ function HomeView({ user, numberOfDrafts, showForm }) {
           </Button>
         </Menu.Item>
         {draftMenuItem}
+        {pointsMenuItem}
       </Menu>
       <div className="searchbar width80">
         <div style={{ width: '60%' }}>

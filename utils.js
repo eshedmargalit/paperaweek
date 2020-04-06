@@ -23,7 +23,7 @@ const createApp = (port = 5000) => {
   require("./routes/paperRoutes")(app);
   require("./routes/readingListRoutes")(app);
   require("./routes/draftRoutes")(app);
-  require("./routes/userRoutes")(app);
+  require("./routes/pointsRoutes")(app);
   require("./routes/searchBarRoutes")(app);
 
   if (process.env.NODE_ENV === "production") {

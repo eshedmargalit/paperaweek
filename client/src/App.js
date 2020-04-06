@@ -13,6 +13,7 @@ import './App.css';
 class App extends Component {
   componentDidMount() {
     this.props.fetchUser();
+    this.props.dailyLoginPoints();
   }
 
   render() {
