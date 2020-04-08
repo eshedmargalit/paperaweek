@@ -1,10 +1,10 @@
-import { FETCH_USER, GIVE_POINTS } from '../actions/index';
+import { FETCH_USER } from '../actions/index';
 const initialState = {
   displayName: '',
-  points: 0,
   reviews: [],
   readingList: [],
   drafts: [],
+  lastLogin: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,15 +13,11 @@ const reducer = (state = initialState, action) => {
     case FETCH_USER:
       if (payload) {
         // maybe just return payload?
-        let { displayName, reviews, readingList, drafts, points } = payload;
-        points = points || 0;
-        return { displayName, reviews, readingList, drafts, points };
+        let { displayName, reviews, readingList, drafts, lastLogin } = payload;
+        return { displayName, reviews, readingList, drafts, lastLogin };
       } else {
         return state;
       }
-    case GIVE_POINTS:
-      let { newPoints } = payload;
-      return { ...state, points: newPoints };
     default:
       return state;
   }

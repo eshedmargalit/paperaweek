@@ -7,7 +7,7 @@ import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 
-function HomeView({ user, numberOfDrafts, showForm }) {
+function HomeView({ points, user, numberOfDrafts, showForm }) {
   let draftMenuItem = null;
   if (numberOfDrafts > 0) {
     draftMenuItem = (
@@ -20,7 +20,7 @@ function HomeView({ user, numberOfDrafts, showForm }) {
     );
   }
 
-  const pointsMenuItem = <Menu.Item className="menu__item">{user.points} Points</Menu.Item>;
+  const pointsMenuItem = <Menu.Item className="menu__item">{points.points} Points</Menu.Item>;
 
   const formRedirect = <Redirect to="/form" push />;
   const home_render = (

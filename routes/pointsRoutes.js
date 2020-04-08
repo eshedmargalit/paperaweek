@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const User = mongoose.model("users");
 
 module.exports = app => {
-  app.get("/api/papers", async (req, res) => {
-    let user = await User.findById(req.headers.userid);
-    res.send(JSON.stringify(user.points));
-  });
-
   app.put("/api/points/:points", async (req, res) => {
     const points = req.params.points;
 

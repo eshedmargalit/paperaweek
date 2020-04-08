@@ -3,11 +3,6 @@ const User = mongoose.model("users");
 const Paper = mongoose.model("papers");
 
 module.exports = app => {
-  app.get("/api/papers", async (req, res) => {
-    let user = await User.findById(req.headers.userid);
-    res.send(JSON.stringify(user.reviews));
-  });
-
   app.post("/api/papers", async (req, res) => {
     const review = req.body.review;
     let newPaper = new Paper(review.paper);
