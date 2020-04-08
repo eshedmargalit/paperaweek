@@ -9,14 +9,17 @@ class HomeRedux extends Component {
   }
 
   render() {
-    let { user, activeReview, drafts } = this.props;
-    return <HomeContainer user={user} showForm={activeReview.showForm} numberOfDrafts={drafts.length} />;
+    let { user, activeReview, drafts, points } = this.props;
+    return (
+      <HomeContainer points={points} user={user} showForm={activeReview.showForm} numberOfDrafts={drafts.length} />
+    );
   }
 }
 
-const mapStateToProps = ({ user, activeReview, drafts }) => {
+const mapStateToProps = ({ user, points, activeReview, drafts }) => {
   return {
     user,
+    points,
     activeReview,
     drafts,
   };

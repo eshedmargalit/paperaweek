@@ -1,4 +1,7 @@
 import axios from 'axios';
+
+import { dailyLoginReason } from './pointReasons.js';
+
 export const FETCH_USER = 'FETCH_USER';
 export const EXIT_FORM = 'EXIT_FORM';
 export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
@@ -8,22 +11,35 @@ export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 export const GIVE_POINTS = 'GIVE_POINTS';
+export const HIDE_POINTS_MODAL = 'HIDE_POINTS_MODAL';
 
 export const fetchUser = () => async dispatch => {
-  const user = await axios.get('/api/current_user');
+  let user = await axios.get('/api/current_user');
   dispatch({ type: FETCH_USER, payload: user.data });
 
-  const pointsToPut = user.data.points + 1;
-  const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
-  dispatch({ type: GIVE_POINTS, payload: { newPoints: pointsResp.data.points } });
+  // get last login
+  const today = new Date();
+  const lastLogin = new Date(user.data.lastLogin);
+  const lastLoginWasToday = lastLogin.toDateString() === today.toDateString();
+
+  if (!lastLoginWasToday) {
+    const pointsToPut = user.data.points + 1;
+    const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
+
+    dispatch({
+      type: GIVE_POINTS,
+      payload: { newPoints: pointsResp.data.points, increment: 1, reason: dailyLoginReason },
+    });
+  }
+
+  // on successful login, update last login date
+  if (user.data) {
+    user = await axios.get('/api/lastLogin');
+  }
 };
 
-export const dailyLoginPoints = () => async dispatch => {
-  const user = await axios.get('/api/current_user');
-  const pointsToPut = user.data.points + 1;
-  const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
-
-  dispatch({ type: GIVE_POINTS, payload: { newPoints: pointsResp.data.points } });
+export const hidePointsModal = () => async dispatch => {
+  dispatch({ type: HIDE_POINTS_MODAL });
 };
 
 export function startReview(paperId, reviewContent) {
