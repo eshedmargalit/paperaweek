@@ -50,8 +50,10 @@ export const assignReviewPoints = () => async dispatch => {
 
   let pointsToGive = 0;
   switch (days_since_last_review) {
-    case 6:
     case 7:
+      pointsToGive = 7;
+      break;
+    case 6:
     case 8:
       pointsToGive = 6;
       break;
