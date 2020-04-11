@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
       let { increment, newPoints, reason } = payload;
       return { points: newPoints, increment: increment, reason: reason, displayModal: true };
     case HIDE_POINTS_MODAL:
-      return { displayModal: false };
+      return { ...state, displayModal: false };
     case FETCH_USER:
       if (payload) {
         // maybe just return payload?
