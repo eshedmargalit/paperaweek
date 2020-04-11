@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-import { dailyLoginReason } from './pointReasons.js';
+import { dailyLoginReason, reviewPointsReason } from './pointReasons.js';
+import { sortBy } from 'lodash';
+import moment from 'moment';
 
 export const FETCH_USER = 'FETCH_USER';
 export const EXIT_FORM = 'EXIT_FORM';
@@ -36,6 +38,42 @@ export const fetchUser = () => async dispatch => {
   if (user.data) {
     user = await axios.get('/api/lastLogin');
   }
+};
+
+export const assignReviewPoints = () => async dispatch => {
+  const user = await axios.get('/api/current_user');
+
+  // get most recent review date
+  const sorted_reviews = sortBy(user.data.reviews, 'createdAt');
+  const last_review_date = sorted_reviews[sorted_reviews.length - 1].createdAt;
+  const days_since_last_review = moment().diff(moment(last_review_date), 'days');
+
+  let pointsToGive = 0;
+  switch (days_since_last_review) {
+    case 6:
+    case 7:
+    case 8:
+      pointsToGive = 6;
+      break;
+    case 5:
+    case 9:
+      pointsToGive = 4;
+      break;
+    case 4:
+    case 10:
+      pointsToGive = 2;
+      break;
+    default:
+      pointsToGive = 1;
+  }
+
+  const pointsToPut = user.data.points + pointsToGive;
+  const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
+
+  dispatch({
+    type: GIVE_POINTS,
+    payload: { newPoints: pointsResp.data.points, increment: pointsToGive, reason: reviewPointsReason },
+  });
 };
 
 export const hidePointsModal = () => async dispatch => {

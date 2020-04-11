@@ -3,6 +3,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
 import {
+  assignReviewPoints,
   startReview,
   endReview,
   updateReadingList,
@@ -74,6 +75,9 @@ class ReviewWizardRedux extends Component {
       const newReviewList = res.data;
       this.props.dispatch(updateReviews(newReviewList));
       this.deleteActiveDraft();
+      if (!reviewId) {
+        this.props.dispatch(assignReviewPoints());
+      }
       this.deleteReadingListEntry();
       this.props.dispatch(endReview());
     });
