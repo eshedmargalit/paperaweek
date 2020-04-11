@@ -12,11 +12,17 @@ class Login extends Component {
 
   render() {
     let { increment, reason, points, displayModal } = this.props.points;
+    const incrementString = increment === 1 ? 'point' : 'points';
+    const currentPointsString = points === 1 ? 'point' : 'points';
     return (
       <Modal title="Congratulations! 🎉" visible={displayModal} onOk={this.closeModal} onCancel={this.closeModal}>
-        <h3>You just earned {increment} points!</h3>
-        <p>That brings you up to {points} points, nice! </p>
-        <p>{reason}</p>
+        <h3>
+          You just earned {increment} {incrementString}!
+        </h3>
+        <p>
+          That brings you up to {points} {currentPointsString}, nice!{' '}
+        </p>
+        <div dangerouslySetInnerHTML={{ __html: reason }}></div>
       </Modal>
     );
   }
