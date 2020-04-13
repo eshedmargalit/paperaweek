@@ -11,43 +11,6 @@ $blue-dark: rgba(73, 132, 238, 1);
   justify-content: space-between;
 }
 
-.menu {
-  .ant-menu-item > a {
-    color: black;
-  }
-}
-
 .signout {
   color: red;
-}
-
-.ant-menu.menu {
-  background: $blue-light;
-  background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
-
-  .ant-menu-item:hover {
-    border-bottom: 2px solid transparent;
-  }
-
-  .menu__item {
-    float: right;
-    margin-top: 6px;
-  }
-
-  .menu__badge {
-    box-shadow: 5px;
-  }
-
-  li > h6 {
-    color: #ccc;
-    .displayName {
-      color: #fff;
-    }
-  }
-
-  .menu__badge .ant-badge-count {
-    background-color: #fff;
-    color: #222;
-    opacity: 0.5;
-  }
 }
