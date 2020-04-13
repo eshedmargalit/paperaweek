@@ -18,7 +18,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
   }
 
   const pointsMenuItem = <>{points.points} Points</>;
-  return (
+  const menu = (
     <ul className="menu">
       <span className="flex">
         <li className="menu__item">
@@ -42,6 +42,8 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       </span>
     </ul>
   );
+
+  return user.displayName === '' ? null : menu;
 }
 
 export default MenuBarView;
