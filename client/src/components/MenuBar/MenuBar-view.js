@@ -17,7 +17,14 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     );
   }
 
-  const pointsMenuItem = <>{points.points} Points</>;
+  const pointsStr = points.points === 1 ? 'point' : 'points';
+  const pointsMenuItem = (
+    <>
+      {points.points}
+      {` `}
+      {pointsStr}
+    </>
+  );
   const menu = (
     <ul className="menu">
       <span className="flex">
