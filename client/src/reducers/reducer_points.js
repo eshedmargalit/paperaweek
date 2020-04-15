@@ -18,6 +18,7 @@ const reducer = (state = initialState, action) => {
       if (payload) {
         // maybe just return payload?
         let { points } = payload;
+        points = points || 0;
         return { ...state, points };
       } else {
         return state;
