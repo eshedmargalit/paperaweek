@@ -29,11 +29,13 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     <ul className="menu">
       <span className="flex">
         <li className="menu__item">
-          <h5>
-            <Icon type="user" />
-            {` `}
-            <span className="displayName">{user.displayName}</span>
-          </h5>
+          <Link to="/dashboard">
+            <h5>
+              <Icon type="user" />
+              {` `}
+              <span className="displayName">{user.displayName}</span>
+            </h5>
+          </Link>
         </li>
 
         <li className="menu__item points">{pointsMenuItem}</li>
