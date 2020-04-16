@@ -25,7 +25,8 @@ export const fetchUser = () => async dispatch => {
   const lastLoginWasToday = lastLogin.toDateString() === today.toDateString();
 
   if (!lastLoginWasToday) {
-    const pointsToPut = user.data.points + 1;
+    const prevPoints = user.data.points || 0;
+    const pointsToPut = prevPoints + 1;
     const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
 
     dispatch({
