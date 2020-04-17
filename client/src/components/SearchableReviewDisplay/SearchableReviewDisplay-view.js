@@ -114,10 +114,16 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
-function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, reviews, modalProps, pageHeaderProps }) {
-  if (modalProps) {
-    var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
-  }
+function SearchableReviewDisplayView({
+  handleSearch,
+  reviewClicked,
+  query,
+  reviews,
+  modalProps,
+  hideFooter,
+  pageHeaderProps,
+}) {
+  const { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
 
   const { pageHeaderTitle, onPageBack } = pageHeaderProps;
 
@@ -171,20 +177,18 @@ function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, revie
   );
 
   let reviewModal = null;
-  if (modalProps) {
-    let itemName = modalProps.itemName || 'Review';
-    const modalFooter = [
-      <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
-        Edit this {itemName}
-      </Button>,
-      <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
-        Delete this {itemName}
-      </Button>,
-    ];
-    reviewModal = (
-      <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={modalFooter} />
-    );
-  }
+  let itemName = modalProps.itemName || 'Review';
+  const modalFooter = [
+    <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
+      Edit this {itemName}
+    </Button>,
+    <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
+      Delete this {itemName}
+    </Button>,
+  ];
+
+  const footer = hideFooter ? null : modalFooter;
+  reviewModal = <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />;
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 

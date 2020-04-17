@@ -1,4 +1,6 @@
 import React from 'react';
+import moment from 'moment';
+import { Statistic } from 'antd';
 
 export function render_comma_sep_list(items, key) {
   return items.map((item, i) => {
@@ -87,4 +89,38 @@ export function getTagColor(tag) {
   const saturation = '80%';
   const lightness = '30%';
   return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
+}
+
+export function getReviewStats(reviews) {
+  if (reviews.reviewList.length === 0) {
+    return null;
+  }
+
+  const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
+  const sortedDates = reviewDates.sort((a, b) => a.diff(b));
+
+  let diffs = [];
+  for (var i = 0; i < sortedDates.length - 1; i++) {
+    var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
+    diffs.push(diff);
+  }
+
+  const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0;
+  const ppw = Number.parseFloat(sortedDates.length / totalWeeks).toFixed(2);
+
+  const ppwColor = ppw >= 1 ? '#237804' : '#a8071a';
+
+  return (
+    <>
+      <div style={{ marginLeft: '10px' }}>
+        <div style={{ width: '50%' }}>
+          <Statistic title="Reviews" value={reviews.reviewList.length} suffix="written" />
+        </div>
+        <hr />
+        <div style={{ width: '50%' }}>
+          <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
+        </div>
+      </div>
+    </>
+  );
 }
