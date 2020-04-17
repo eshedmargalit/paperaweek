@@ -6,7 +6,7 @@ import moment from 'moment';
 
 function FrequencyChartView(reviews) {
   const lineChart = reviews => {
-    const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
+    const reviewDates = reviews.map(review => moment(review.createdAt));
     const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
     let data = [];

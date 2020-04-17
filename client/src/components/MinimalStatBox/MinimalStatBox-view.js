@@ -8,7 +8,7 @@ function MinimalStatBoxView({ userDisplayName, reviews }) {
       <p>
         {' '}
         Stats will begin to appear when {userDisplayName} has at least 3 reviews written.{' '}
-        <strong>{3 - reviews.reviewList.length}</strong> to go!{' '}
+        <strong>{3 - reviews.length}</strong> to go!{' '}
       </p>
     </Row>
   );
@@ -17,7 +17,7 @@ function MinimalStatBoxView({ userDisplayName, reviews }) {
 
   const statBox = (
     <Card title={`${userDisplayName}'s Stats`} style={{ marginTop: 5 }}>
-      {reviews.reviewList.length > 2 ? minimalStats : emptyStats}
+      {reviews.length > 2 ? minimalStats : emptyStats}
     </Card>
   );
 

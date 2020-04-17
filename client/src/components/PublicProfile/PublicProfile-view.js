@@ -1,24 +1,26 @@
 import React from 'react';
 
-import { Row } from 'antd';
+import { Row, Spin } from 'antd';
+import NotFound from '../NotFound/NotFound';
 
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
 
-function PublicProfileView({ userDisplayName, reviews }) {
+function PublicProfileView({ loading, userDisplayName, reviews }) {
   const pageHeaderProps = {
     pageHeaderTitle: `${userDisplayName}'s Reviews`,
     onPageBack: null,
   };
 
-  return (
+  const spinner = <Spin />;
+  const profileView = reviews ? (
     <div className="width80">
       <Row>
         <MinimalStatBox userDisplayName={userDisplayName} reviews={reviews} />
       </Row>
       <Row>
         <SearchableReviewDisplay
-          reviews={reviews.reviewList}
+          reviews={reviews}
           deleteReview={null}
           handleModalEdit={null}
           pageHeaderProps={pageHeaderProps}
@@ -26,7 +28,11 @@ function PublicProfileView({ userDisplayName, reviews }) {
         />
       </Row>
     </div>
+  ) : (
+    <NotFound />
   );
+
+  return loading ? spinner : profileView;
 }
 
 export default PublicProfileView;

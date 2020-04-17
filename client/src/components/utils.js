@@ -92,11 +92,11 @@ export function getTagColor(tag) {
 }
 
 export function getReviewStats(reviews) {
-  if (reviews.reviewList.length === 0) {
+  if (reviews.length === 0) {
     return null;
   }
 
-  const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
+  const reviewDates = reviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   let diffs = [];
@@ -114,7 +114,7 @@ export function getReviewStats(reviews) {
     <>
       <div style={{ marginLeft: '10px' }}>
         <div style={{ width: '50%' }}>
-          <Statistic title="Reviews" value={reviews.reviewList.length} suffix="written" />
+          <Statistic title="Reviews" value={reviews.length} suffix="written" />
         </div>
         <hr />
         <div style={{ width: '50%' }}>

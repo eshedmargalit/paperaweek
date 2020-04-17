@@ -11,8 +11,8 @@ function StatBoxView({ reviews, startBlankReview }) {
       <Row>
         <p>
           {' '}
-          Stats will begin to appear when you have at least 3 reviews written.{' '}
-          <strong>{3 - reviews.reviewList.length}</strong> to go!{' '}
+          Stats will begin to appear when you have at least 3 reviews written. <strong>{3 - reviews.length}</strong> to
+          go!{' '}
         </p>
       </Row>
       <Row>
@@ -33,7 +33,7 @@ function StatBoxView({ reviews, startBlankReview }) {
     </Card>
   );
 
-  return reviews.reviewList.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
+  return reviews.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
 }
 
 export default StatBoxView;
