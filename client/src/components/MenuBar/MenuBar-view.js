@@ -25,6 +25,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       {pointsStr}
     </>
   );
+
   const menu = (
     <ul className="menu">
       <span className="flex">
@@ -52,7 +53,30 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     </ul>
   );
 
-  return user.displayName === '' ? null : menu;
+  const notSignedInMenu = (
+    <ul className="menu">
+      <span className="flex">
+        <li className="menu__item">
+          <Link to="/dashboard">
+            <h5>
+              <span className="displayName">Paper-a-Week</span>
+            </h5>
+          </Link>
+        </li>
+      </span>
+
+      <span className="flex">
+        <li className="menu__item">
+          <Button href="/auth/google" className="signout right">
+            {' '}
+            Sign up with <Icon type="google" />{' '}
+          </Button>
+        </li>
+      </span>
+    </ul>
+  );
+
+  return user.displayName === '' ? notSignedInMenu : menu;
 }
 
 export default MenuBarView;

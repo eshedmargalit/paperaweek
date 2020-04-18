@@ -23,16 +23,16 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Route path="/" render={props => <PointsModal {...props} />} />
-          <Route path="/" render={props => <MenuBar {...props} />} />
+          <Route path="/" component={PointsModal} />
+          <Route path="/" component={MenuBar} />
           <Switch>
             <Route path="/profiles/:userId" component={PublicProfile} />
             <Route exact path="/" render={props => <Login {...props} justSignedOut={false} />} />
             <Route exact path="/signout" render={props => <Login {...props} justSignedOut={true} />} />
-            <Route exact path="/dashboard" render={props => <Home {...props} />} />
-            <Route exact path="/form" render={props => <ReviewWizard {...props} />} />
-            <Route exact path="/drafts" render={props => <DraftPage {...props} />} />
-            <Route path="*" component={NotFound} />
+            <Route exact path="/dashboard" component={Home} />
+            <Route exact path="/form" component={ReviewWizard} />
+            <Route exact path="/drafts" component={DraftPage} />
+            <Route component={NotFound} />
           </Switch>
         </div>
       </BrowserRouter>
