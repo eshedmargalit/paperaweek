@@ -9,11 +9,11 @@ function filterUserData(user) {
 }
 
 module.exports = app => {
-  app.get("/api/profiles/:userId", async (req, res) => {
-    const mongoId = req.params.userId;
+  app.get("/api/profiles/:googleId", async (req, res) => {
+    const googleId = req.params.googleId;
 
     try {
-      let user = await User.findOne({ _id: mongoId });
+      let user = await User.findOne({ googleId: googleId });
 
       if (!user) {
         res.status(404).send("No item found");
