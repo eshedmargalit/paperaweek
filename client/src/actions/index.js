@@ -49,6 +49,11 @@ export const assignReviewPoints = () => async dispatch => {
   const last_review_date = sorted_reviews[sorted_reviews.length - 1].createdAt;
   const days_since_last_review = moment().diff(moment(last_review_date), 'days');
 
+  console.log('sorted reviews', sorted_reviews);
+  console.log('Last review date', last_review_date);
+  console.log('Today', moment());
+  console.log('Days since last review', days_since_last_review);
+
   let pointsToGive = 0;
   switch (days_since_last_review) {
     case 7:
