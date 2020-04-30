@@ -141,6 +141,7 @@ class ReviewForm extends Component {
               ref={input => {
                 this.focusedInput = input;
               }}
+              autoSize={{ minRows: 2, maxRows: 5 }}
               style={{ width: '90%' }}
             />
           )}
