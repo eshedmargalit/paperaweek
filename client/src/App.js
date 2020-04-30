@@ -9,6 +9,7 @@ import ReviewWizard from './components/ReviewWizard';
 import DraftPage from './components/DraftPage';
 import MenuBar from './components/MenuBar';
 import PublicProfile from './components/PublicProfile';
+import Preferences from './components/Preferences';
 import NotFound from './components/NotFound/NotFound';
 import * as actions from './actions';
 
@@ -32,6 +33,7 @@ class App extends Component {
             <Route exact path="/dashboard" component={Home} />
             <Route exact path="/form" component={ReviewWizard} />
             <Route exact path="/drafts" component={DraftPage} />
+            <Route exact path="/preferences" component={Preferences} />
             <Route component={NotFound} />
           </Switch>
         </div>

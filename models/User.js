@@ -11,7 +11,8 @@ var UserSchema = new Schema(
     reviews: [ReviewSchema],
     drafts: [ReviewSchema],
     points: Number,
-    lastLogin: Date
+    lastLogin: Date,
+    publicProfile: { type: Boolean, default: false }
   },
   {
     timestamps: { createdAt: true, updatedAt: true }

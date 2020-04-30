@@ -45,6 +45,11 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       <span className="flex">
         <li className="menu__item">{draftMenuItem}</li>
         <li className="menu__item">
+          <Button href="/preferences" className="right">
+            Preferences
+          </Button>
+        </li>
+        <li className="menu__item">
           <Button href="/api/logout" className="signout right">
             Sign Out
           </Button>

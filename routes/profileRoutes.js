@@ -17,6 +17,8 @@ module.exports = app => {
 
       if (!user) {
         res.status(404).send("No item found");
+      } else if (!user.publicProfile) {
+        res.status(404).send("Profile is private");
       } else {
         const filteredData = filterUserData(user);
         res.send(JSON.stringify(filteredData));
