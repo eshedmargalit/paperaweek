@@ -3,6 +3,7 @@
   font-size: 18px;
   color: #999;
   transition: all 0.3s;
+  margin-left: 3px;
 
   &:hover {
     color: red;
@@ -15,6 +16,11 @@
 
 .ant-form-item {
   margin-bottom: 2px !important;
+
+  &-children {
+    display: flex;
+    align-items: center;
+  }
 }
 
 label {
