@@ -145,13 +145,13 @@ class ReviewForm extends Component {
               style={{ width: '90%' }}
             />
           )}
-          {field_value.length > 1 ? (
+          {field_value.length > 1 && (
             <Icon
               className="dynamic-delete-button"
               type="close"
               onClick={() => this.removeItem(fieldName, field_value_idx)}
             />
-          ) : null}
+          )}
         </Form.Item>
       ));
 
