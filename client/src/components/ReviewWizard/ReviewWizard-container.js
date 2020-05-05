@@ -26,10 +26,8 @@ class ReviewWizardContainer extends Component {
       ({ paper, review } = reviewContent);
     }
 
-    // only autosave at most every 2 seconds
-    // Note: this should probably be closer to every 20 seconds or something, value is low here for
-    // testing purposes
-    this.debouncedAutosave = _.debounce(this.autosave, 2 * 1000);
+    // only autosave at most every 8 seconds
+    this.debouncedAutosave = _.debounce(this.autosave, 8 * 1000);
     this.initialPaper = paper || blankPaper;
     this.initialReview = review || blankReview;
 
