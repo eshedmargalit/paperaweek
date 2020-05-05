@@ -178,7 +178,7 @@ class ReviewForm extends Component {
       <Form layout="vertical" onSubmit={this.validateFields}>
         {renderedFields}
         <Form.Item {...formItemLayoutWithoutLabel}>
-          <Button type="primary" htmlType="submit" style={{ width: '30%' }}>
+          <Button type="primary" htmlType="submit" style={{ width: '200px' }}>
             Next: Preview and Submit
           </Button>
         </Form.Item>
