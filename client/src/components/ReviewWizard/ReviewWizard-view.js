@@ -10,7 +10,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
   useEffect(() => {
     const interval = setInterval(() => {
       setMoment(() => moment());
-    }, 1000);
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -22,14 +22,18 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
       autosaveIcon = null;
       break;
     case 'saved':
-      const timeSinceSave = currentMoment.diff(lastSave, 'minutes');
+      const secSinceSave = currentMoment.diff(lastSave, 'seconds');
+      const minSinceSave = currentMoment.diff(lastSave, 'minutes');
+
       let timePassedText = '';
-      if (timeSinceSave < 1) {
+      if (secSinceSave <= 0) {
         timePassedText = 'just now';
-      } else if (timeSinceSave === 1) {
+      } else if (minSinceSave < 1) {
+        timePassedText = `${secSinceSave} seconds ago`;
+      } else if (minSinceSave === 1) {
         timePassedText = '1 minute ago';
       } else {
-        timePassedText = `${timeSinceSave} minutes ago`;
+        timePassedText = `${minSinceSave} minutes ago`;
       }
 
       autosaveIcon = (
