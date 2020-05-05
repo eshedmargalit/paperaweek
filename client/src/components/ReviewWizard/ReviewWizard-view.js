@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { PageHeader, Steps, Icon } from 'antd';
 import './ReviewWizard.scss';
+import moment from 'moment';
 const { Step } = Steps;
 
-function ReviewWizardView({ autosaveStatus, showWizard, currentStep, stepContent, onPageBack }) {
+function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, stepContent, onPageBack }) {
+  const [currentMoment, setMoment] = useState(lastSave);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMoment(() => moment());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   let homeRedirect = <Redirect to="/dashboard" push />;
 
   let autosaveIcon;
@@ -13,10 +22,20 @@ function ReviewWizardView({ autosaveStatus, showWizard, currentStep, stepContent
       autosaveIcon = null;
       break;
     case 'saved':
+      const timeSinceSave = currentMoment.diff(lastSave, 'minutes');
+      let timePassedText = '';
+      if (timeSinceSave < 1) {
+        timePassedText = 'just now';
+      } else if (timeSinceSave === 1) {
+        timePassedText = '1 minute ago';
+      } else {
+        timePassedText = `${timeSinceSave} minutes ago`;
+      }
+
       autosaveIcon = (
         <div key="autosave" className="save-icon">
           <Icon type="save" theme="filled" />
-          {` `}Saved to Drafts
+          {` `}Saved to Drafts {timePassedText}
         </div>
       );
       break;

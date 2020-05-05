@@ -37,6 +37,7 @@ class ReviewWizardContainer extends Component {
       step: 0,
       showModal: false,
       autosaveStatus: 'unsaved',
+      lastSave: null,
       paper: blankPaper,
       review: blankReview,
       draftId: draftId,
@@ -142,6 +143,7 @@ class ReviewWizardContainer extends Component {
     return (
       <ReviewWizardView
         autosaveStatus={this.state.autosaveStatus}
+        lastSave={this.state.lastSave}
         showWizard={this.props.activeReview.showForm}
         onPageBack={this.props.onPageBack}
         currentStep={this.state.step}
