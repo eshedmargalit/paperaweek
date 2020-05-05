@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Button, Input, Form } from 'antd';
+import { Tooltip, Icon, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
 import './ReviewWizard.scss';
 import { reviewFields, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
@@ -98,6 +98,7 @@ class ReviewForm extends Component {
   }
 
   render() {
+    const addNewTooltipText = 'tab, then space';
     const existingReview = this.props.review;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
@@ -159,15 +160,17 @@ class ReviewForm extends Component {
         <div key={'field name' + fieldName}>
           {inputs}
           <Form.Item {...formItemLayoutWithoutLabel}>
-            <Button
-              type="dashed"
-              onClick={() => {
-                this.addItem(fieldName);
-              }}
-              style={{ width: '150px' }}
-            >
-              <Icon type="plus" /> Add Point
-            </Button>
+            <Tooltip placement="bottom" title={addNewTooltipText}>
+              <Button
+                type="dashed"
+                onClick={() => {
+                  this.addItem(fieldName);
+                }}
+                style={{ width: '150px' }}
+              >
+                <Icon type="plus" /> Add Point
+              </Button>
+            </Tooltip>
           </Form.Item>
           <br />
         </div>
