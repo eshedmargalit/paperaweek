@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, DatePicker, Button, Input, Form } from 'antd';
+import { Tooltip, Icon, DatePicker, Button, Input, Form } from 'antd';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { uniq as _uniq } from 'lodash';
@@ -140,6 +140,7 @@ class MetadataForm extends Component {
   }
 
   render() {
+    const addNewTooltipText = 'tab, then space';
     const existingMeta = this.props.paper;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
@@ -204,15 +205,17 @@ class MetadataForm extends Component {
           <div key={'field name' + fieldName}>
             {renderedField}
             <Form.Item {...formItemLayoutWithoutLabel}>
-              <Button
-                type="dashed"
-                onClick={() => {
-                  this.addItem(fieldName);
-                }}
-                style={{ width: '150px' }}
-              >
-                <Icon type="plus" /> Add New
-              </Button>
+              <Tooltip placement="bottom" title={addNewTooltipText}>
+                <Button
+                  type="dashed"
+                  onClick={() => {
+                    this.addItem(fieldName);
+                  }}
+                  style={{ width: '150px' }}
+                >
+                  <Icon type="plus" /> Add New
+                </Button>
+              </Tooltip>
             </Form.Item>
             <br />
           </div>
