@@ -76,10 +76,10 @@ class ReviewWizardRedux extends Component {
       const newReviewList = res.data;
       this.props.dispatch(updateReviews(newReviewList));
       this.deleteActiveDraft();
-      if (!reviewId) {
-        this.props.dispatch(assignReviewPoints());
-      }
       this.deleteReadingListEntry();
+      if (!reviewId) {
+        this.props.dispatch(assignReviewPoints(newReviewList));
+      }
       this.props.dispatch(endReview());
     });
   };

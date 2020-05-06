@@ -41,12 +41,12 @@ export const fetchUser = () => async dispatch => {
   }
 };
 
-export const assignReviewPoints = () => async dispatch => {
+export const assignReviewPoints = newReviewList => async dispatch => {
   const user = await axios.get('/api/current_user');
 
   // get most recent review date
-  const sorted_reviews = sortBy(user.data.reviews, 'createdAt');
-  const last_review_date = sorted_reviews[sorted_reviews.length - 1].createdAt;
+  const sorted_reviews = sortBy(newReviewList, 'createdAt');
+  const last_review_date = sorted_reviews[sorted_reviews.length - 2].createdAt;
   const days_since_last_review = moment().diff(moment(last_review_date), 'days');
 
   console.log('sorted reviews', sorted_reviews);
