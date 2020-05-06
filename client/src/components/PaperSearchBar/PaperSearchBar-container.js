@@ -3,7 +3,6 @@ import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
 
 import _ from 'lodash';
-import { capital_case } from '../utils';
 
 class PaperSearchBarContainer extends Component {
   constructor(props) {
@@ -46,87 +45,10 @@ class PaperSearchBarContainer extends Component {
       return;
     }
 
-    const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
-    // Attributes:
-    // key     | meaning
-    // -----------------
-    // DN      | 'Display Name' (Title)
-    // D       | Date
-    // DOI     | Digital Object Identifier
-    // AA.DAfN | Author Affiliation
-    // AA.DAuN | Author Name
-    // S       | Sources (includes URLs)
-    // Y       | Year (should be part of D but whatever)
-    // Id      | Unique identifier for entity
-    // VFN    | Journal Name
-    // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
     this.setState({ loading: true });
-    let interpret_response = await this.interpret(query, attrs);
-    let interpretations = interpret_response.interpretations;
-    if (!interpretations || !interpretations.length) {
-      this.setState({ searchResults: [], loading: false });
-    } else {
-      var top_interpretation = interpret_response.interpretations[0].rules[0].output.value;
-      let evaluate_response = await this.evaluate(top_interpretation, attrs);
-      let searchResults = this.processEntities(evaluate_response.entities);
-      this.setState({ searchResults, loading: false });
-    }
+    let searchResults = await this.interpret(query);
+    this.setState({ searchResults, loading: false });
   }
-
-  processEntities = entities => {
-    let searchResults = entities.map(entity => {
-      // sort authors by position (first author first, etc)
-      let authors = _.sortBy(entity.AA, [
-        function(o) {
-          return o.S;
-        },
-      ]);
-
-      // filter down to unique authors and remove empty entries
-      let author_names = _.uniq(
-        authors.map(author => {
-          return capital_case(author.DAuN.split('.').join(''));
-        })
-      ).filter(name => name !== '');
-
-      // filter down to unique institutions and remove empty entries
-      let institutions = _.uniq(
-        authors.map(author => {
-          return capital_case(author.DAfN)
-            .split('.')
-            .join('')
-            .trim();
-        })
-      ).filter(name => name !== '');
-
-      if (author_names === undefined || author_names.length === 0) {
-        author_names = [''];
-      }
-
-      if (institutions === undefined || institutions.length === 0) {
-        institutions = [''];
-      }
-
-      let entity_url = '';
-      if (entity.S && entity.S.length !== 0) {
-        entity_url = entity.S[0].U;
-      }
-
-      let journal_name = entity.VFN ? entity.VFN : '';
-
-      const paper = {
-        title: entity.DN,
-        authors: author_names,
-        institutions: institutions,
-        date: new Date(entity.D),
-        doi: entity.DOI,
-        journal: journal_name,
-        url: entity_url,
-      };
-      return { paper: paper, id: entity.Id };
-    });
-    return searchResults;
-  };
 
   handleSearch = searchTerm => {
     this.academicSearchThrottled.cancel();
