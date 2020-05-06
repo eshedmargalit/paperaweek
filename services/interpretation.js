@@ -56,30 +56,20 @@ module.exports = {
   }
 };
 
-const capitalCase = input_str => {
-  if (!input_str) {
+const capitalCase = input => {
+  if (!input) {
     return "";
   }
-  input_str = input_str.toLowerCase();
-  const words = input_str.trim().split(" ");
 
-  var new_str = "";
-  for (let i = 0; i < words.length; i++) {
-    var word = words[i];
-    if (
-      word === "and" ||
-      word === "or" ||
-      word === "in" ||
-      word === "of" ||
-      word === "the" ||
-      word === "an" ||
-      word === "at"
-    ) {
-      new_str += " " + word;
-    } else {
-      new_str += " " + word[0].toUpperCase() + word.substr(1).toLowerCase();
-    }
-  }
+  const words = input
+    .toLowerCase()
+    .trim()
+    .split(" ");
 
-  return new_str;
+  return words.reduce((accum, word) => {
+    // If it's any of the following words, don't uppercase it
+    return ["and", "or", "in", "of", "the", "an", "at"].includes(word)
+      ? accum + " " + word
+      : accum + " " + word[0].toUpperCase() + word.substr(1).toLowerCase();
+  }, "");
 };
