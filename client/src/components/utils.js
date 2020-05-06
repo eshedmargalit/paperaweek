@@ -1,33 +1,5 @@
 import React from 'react';
 
-export function capital_case(input_str) {
-  if (!input_str) {
-    return '';
-  }
-  input_str = input_str.toLowerCase();
-  const words = input_str.trim().split(' ');
-
-  var new_str = '';
-  for (let i = 0; i < words.length; i++) {
-    var word = words[i];
-    if (
-      word === 'and' ||
-      word === 'or' ||
-      word === 'in' ||
-      word === 'of' ||
-      word === 'the' ||
-      word === 'an' ||
-      word === 'at'
-    ) {
-      new_str += ' ' + word;
-    } else {
-      new_str += ' ' + word[0].toUpperCase() + word.substr(1).toLowerCase();
-    }
-  }
-
-  return new_str;
-}
-
 export function render_comma_sep_list(items, key) {
   return items.map((item, i) => {
     let to_render;
