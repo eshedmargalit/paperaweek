@@ -67,7 +67,7 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
 function ReadingListView(props) {
   const noList = (
     <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
-      <Empty description={<span>Add papers to your reading list from the search bar by clicking on them!</span>} />
+      <Empty description={<span>Add papers to your reading list from the search bar!</span>} />
     </div>
   );
 

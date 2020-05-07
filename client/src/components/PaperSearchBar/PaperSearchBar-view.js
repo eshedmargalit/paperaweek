@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Icon, Button, Input, PageHeader, Spin } from 'antd';
+import { Alert, Icon, Button, Input, PageHeader, Popover, Spin } from 'antd';
 
 import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
@@ -11,38 +11,44 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
     let { title, journal, date, authors } = paper;
     let year = new Date(date).getFullYear();
     let author_names_list = render_comma_sep_list(removeMiddleAuthors(authors, 4), 'author_names');
-    return (
-      <div
-        className="searchResult"
-        key={id}
-        onClick={() => {
-          handleClickResult(result);
-        }}
-      >
-        <div className="paperSearch__result">
-          <div>
-            <strong>{title}</strong>
-            <br />
-            {author_names_list}
-          </div>
-        </div>
-        <em>
-          {journal}
-          {` `}
-          {year}
-        </em>
-        <div>
-          <Button
-            size="small"
-            onClick={e => {
-              e.stopPropagation();
-              handleClickResultButton(result);
-            }}
-          >
-            Start Review Now <Icon type="form" />
-          </Button>
-        </div>
+
+    const popOverContent = (
+      <div>
+        <Button
+          onClick={() => {
+            handleClickResult(result);
+          }}
+        >
+          Add to Reading List <Icon type="plus" />
+        </Button>
+        <Button
+          onClick={() => {
+            handleClickResultButton(result);
+          }}
+        >
+          Start Review Now <Icon type="form" />
+        </Button>
       </div>
+    );
+
+    return (
+      <Popover content={popOverContent} trigger="click" key={id} placement="right">
+        <div className="searchResult">
+          <div className="paperSearch__result">
+            <div>
+              <strong>{title}</strong>
+              <br />
+              {author_names_list}
+            </div>
+          </div>
+          <em>
+            {journal}
+            {` `}
+            {year}
+          </em>
+          <div></div>
+        </div>
+      </Popover>
     );
   });
   return renderedSearchResults;
