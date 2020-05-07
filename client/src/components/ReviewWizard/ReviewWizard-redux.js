@@ -11,6 +11,7 @@ import {
   updateDraftId,
   updateReviews,
 } from '../../actions/index';
+import moment from 'moment';
 
 class ReviewWizardRedux extends Component {
   constructor(props) {
@@ -95,14 +96,16 @@ class ReviewWizardRedux extends Component {
     const res = await axios({ method, url, data });
 
     let autosaveStatus = 'saveFailed';
+    let lastSave = null;
     if (res.status === 200) {
       const returnedDraft = res.data;
+      lastSave = moment();
       autosaveStatus = 'saved';
       draftId = returnedDraft._id;
       this.props.dispatch(updateDraftId(draftId));
     }
 
-    return { autosaveStatus, draftId };
+    return { autosaveStatus, draftId, lastSave };
   };
 
   restartReview = reviewContent => {
@@ -136,7 +139,4 @@ const mapStateToProps = ({ activeReview, activeDraft, readingList, reviews, draf
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ReviewWizardRedux);
+export default connect(mapStateToProps, null)(ReviewWizardRedux);
