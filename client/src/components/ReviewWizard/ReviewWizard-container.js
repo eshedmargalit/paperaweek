@@ -26,10 +26,8 @@ class ReviewWizardContainer extends Component {
       ({ paper, review } = reviewContent);
     }
 
-    // only autosave at most every 2 seconds
-    // Note: this should probably be closer to every 20 seconds or something, value is low here for
-    // testing purposes
-    this.debouncedAutosave = _.debounce(this.autosave, 2 * 1000);
+    // only autosave at most every 5 seconds
+    this.debouncedAutosave = _.debounce(this.autosave, 5 * 1000);
     this.initialPaper = paper || blankPaper;
     this.initialReview = review || blankReview;
 
@@ -37,6 +35,7 @@ class ReviewWizardContainer extends Component {
       step: 0,
       showModal: false,
       autosaveStatus: 'unsaved',
+      lastSave: null,
       paper: blankPaper,
       review: blankReview,
       draftId: draftId,
@@ -142,6 +141,7 @@ class ReviewWizardContainer extends Component {
     return (
       <ReviewWizardView
         autosaveStatus={this.state.autosaveStatus}
+        lastSave={this.state.lastSave}
         showWizard={this.props.activeReview.showForm}
         onPageBack={this.props.onPageBack}
         currentStep={this.state.step}
