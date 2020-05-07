@@ -32,6 +32,8 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
         timePassedText = `${secSinceSave} seconds ago`;
       } else if (minSinceSave === 1) {
         timePassedText = '1 minute ago';
+      } else if (minSinceSave > 60) {
+        timePassedText = 'more than an hour ago';
       } else {
         timePassedText = `${minSinceSave} minutes ago`;
       }
