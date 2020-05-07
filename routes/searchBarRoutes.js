@@ -19,8 +19,16 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 
 module.exports = app => {
   app.get("/api/searchBar/interpret/:query", async (req, res) => {
-    const interpret_query = `${endpoint}/interpret?query=${req.params.query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
-    const response = await axios(interpret_query);
+    const response = await axios(`${endpoint}/interpret`, {
+      params: {
+        query: req.params.query,
+        count: 1,
+        "subscription-key": process.env.REACT_APP_MSCOG_KEY1,
+        entityCount: 15,
+        attributes: attrs
+      }
+    });
+
     const interpretations = response.data.interpretations;
 
     // No results, return with an empty array
@@ -29,13 +37,10 @@ module.exports = app => {
       return;
     }
 
-    // Only look at first interpretation and evaluate it
-    const topInterpretation = interpretations[0].rules[0].output.value;
-
-    // evaulate
-    const evalQuery = `${endpoint}/evaluate?expr=${topInterpretation}&count=5&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}&attributes=${attrs}`;
-    const evalRespose = await axios(evalQuery);
-    const processed = processEntities(evalRespose.data.entities);
+    // process
+    const processed = processEntities(
+      interpretations[0].rules[0].output.entities
+    );
     res.send(JSON.stringify(processed));
   });
 };
