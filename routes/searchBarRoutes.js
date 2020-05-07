@@ -19,7 +19,6 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 
 module.exports = app => {
   app.get("/api/searchBar/interpret/:query", async (req, res) => {
-    //const interpret_query = `${endpoint}/interpret`?query=${req.params.query}&count=1&subscription-key=${process.env.REACT_APP_MSCOG_KEY1}`;
     const response = await axios(`${endpoint}/interpret`, {
       params: {
         query: req.params.query,
