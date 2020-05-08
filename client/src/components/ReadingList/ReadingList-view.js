@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Empty, List, PageHeader } from 'antd';
-import { DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
@@ -84,7 +84,7 @@ function ReadingListView(props) {
   return (
     <div>
       <br />
-      <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
+      <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
       {props.items.length > 0 ? sortableList : noList}
     </div>
   );

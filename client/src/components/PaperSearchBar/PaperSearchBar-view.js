@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Button, Input, PageHeader, Popover, Spin } from 'antd';
-import { PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
+import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
 
 import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
@@ -68,7 +68,11 @@ function PaperSearchBarView({
   const search_area = (
     <div>
       <div>
-        <PageHeader title="Write a Review" subTitle="Search online for papers" avatar={{ icon: 'file-search' }} />
+        <PageHeader
+          title="Write a Review"
+          subTitle="Search online for papers"
+          avatar={{ icon: <FileSearchOutlined /> }}
+        />
       </div>
       <div className="paperSearch__input">
         <Input
