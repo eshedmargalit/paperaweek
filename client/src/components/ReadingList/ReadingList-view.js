@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Empty, Icon, List, PageHeader } from 'antd';
+import { Button, Empty, List, PageHeader } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
@@ -10,7 +11,7 @@ const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 130;
 
 const DragHandle = sortableHandle(() => (
-  <Icon style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} type="menu" />
+  <MenuOutlined style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} />
 ));
 
 const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (

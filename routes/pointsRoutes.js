@@ -25,4 +25,29 @@ module.exports = app => {
       res.status(500).send(err);
     }
   });
+
+  app.put("/givePoints/dailyLogin", async (req, res) => {
+    const points = req.params.points;
+    let user = await User.findOne({ googleId: req.user.googleId });
+
+    try {
+      let user = await User.findOneAndUpdate(
+        { googleId: req.user.googleId },
+        {
+          $set: {
+            points: points
+          }
+        },
+        { new: true }
+      );
+
+      if (!user) {
+        res.status(404).send("No item found");
+      } else {
+        res.send(JSON.stringify(user));
+      }
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
 };

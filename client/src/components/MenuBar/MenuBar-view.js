@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Icon, Button } from 'antd';
+import { Badge, Button } from 'antd';
+import { GoogleOutlined, UserOutlined } from '@ant-design/icons';
 
 import './MenuBar.scss';
 
@@ -32,7 +33,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
         <li className="menu__item">
           <Link to="/dashboard">
             <h5>
-              <Icon type="user" />
+              <UserOutlined />
               {` `}
               <span className="displayName">{user.displayName}</span>
             </h5>
@@ -74,7 +75,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
         <li className="menu__item">
           <Button href="/auth/google" className="signout right">
             {' '}
-            Sign up with <Icon type="google" />{' '}
+            Sign up with <GoogleOutlined />{' '}
           </Button>
         </li>
       </span>

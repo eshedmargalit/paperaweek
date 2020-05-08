@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, Icon, Button, Input, PageHeader, Popover, Spin } from 'antd';
+import { Alert, Button, Input, PageHeader, Popover, Spin } from 'antd';
+import { PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
 
 import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
@@ -19,14 +20,14 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
             handleClickResult(result);
           }}
         >
-          Add to Reading List <Icon type="plus" />
+          Add to Reading List <PlusOutlined />
         </Button>
         <Button
           onClick={() => {
             handleClickResultButton(result);
           }}
         >
-          Start Review Now <Icon type="form" />
+          Start Review Now <FormOutlined />
         </Button>
       </div>
     );
@@ -79,7 +80,7 @@ function PaperSearchBarView({
           allowClear
         />
         <Button onClick={startBlankReview}>
-          Create Manual Entry <Icon type="plus-circle" />
+          Create Manual Entry <PlusCircleOutlined />
         </Button>
       </div>
     </div>

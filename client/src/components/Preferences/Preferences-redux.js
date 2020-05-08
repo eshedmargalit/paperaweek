@@ -7,12 +7,14 @@ class PreferencesRedux extends Component {
     let { user, auth } = this.props;
     const settings = [
       {
-        name: 'Display Name',
+        fieldName: 'displayName',
+        label: 'Display Name',
         type: 'text',
         currentValue: user.displayName,
       },
       {
-        name: '',
+        fieldName: 'publicProfile',
+        label: 'Make Profile Public?',
         type: 'bool',
         currentValue: user.publicProfile,
       },
@@ -25,7 +27,4 @@ const mapStateToProps = ({ user, auth }) => {
   return { user, auth };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(PreferencesRedux);
+export default connect(mapStateToProps, null)(PreferencesRedux);
