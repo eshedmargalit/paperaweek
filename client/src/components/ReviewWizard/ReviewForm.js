@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Tooltip, Button, Input, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Tooltip, Button, Input } from 'antd';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import './ReviewWizard.scss';

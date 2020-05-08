@@ -5,6 +5,8 @@ import MetadataForm from './MetadataForm';
 import ReviewForm from './ReviewForm';
 import { blankPaper, blankReview } from './utils.js';
 
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+
 import { Button } from 'antd';
 import _ from 'lodash';
 
@@ -110,13 +112,13 @@ class ReviewWizardContainer extends Component {
       <Button
         key="submit"
         type="primary"
-        icon="check"
+        icon={<CheckOutlined />}
         onClick={this.handleSubmission}
         loading={this.props.submitLoading}
       >
         Looks good, submit!
       </Button>,
-      <Button key="cancel" icon="close" onClick={this.onModalCancel} style={{ borderColor: 'red' }}>
+      <Button key="cancel" icon={<CloseOutlined />} onClick={this.onModalCancel} style={{ borderColor: 'red' }}>
         Cancel
       </Button>,
     ];

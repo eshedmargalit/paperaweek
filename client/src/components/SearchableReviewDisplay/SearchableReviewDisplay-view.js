@@ -1,4 +1,5 @@
 import React from 'react';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { shortenAuthors, shortenString, getTagColor } from '../utils.js';
@@ -179,10 +180,15 @@ function SearchableReviewDisplayView({
   let reviewModal = null;
   let itemName = modalProps.itemName || 'Review';
   const modalFooter = [
-    <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
+    <Button key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
       Edit this {itemName}
     </Button>,
-    <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
+    <Button
+      key="delete"
+      type="dashed"
+      icon={<DeleteOutlined />}
+      onClick={() => handleModalDelete(deleteConfirmHandler)}
+    >
       Delete this {itemName}
     </Button>,
   ];

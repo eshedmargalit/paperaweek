@@ -1,5 +1,7 @@
 import React from 'react';
-import { Tooltip, Icon, Button, Input, Form, Switch } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Tooltip, Button, Input, Switch } from 'antd';
 import { formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
 
 const PreferencesForm = ({ fields }) => {
