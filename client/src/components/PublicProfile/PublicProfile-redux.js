@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import PublicProfileContainer from './PublicProfile-container';
 
 class PublicProfileRedux extends Component {
@@ -10,29 +11,14 @@ class PublicProfileRedux extends Component {
       userDisplayName: '',
       reviews: null,
       loading: false,
+      isOwnPage: false,
     };
 
     this.refreshData = this.refreshData.bind(this);
   }
 
-  componentDidMount() {
+  componentWillReceiveProps() {
     this.refreshData();
-  }
-
-  async refreshData() {
-    const { userId } = this.props.match.params;
-    this.setState({ loading: true });
-    const profileData = await this.getProfileData(userId);
-    this.setState({ loading: false });
-
-    if (profileData) {
-      this.setState({
-        userDisplayName: profileData.userDisplayName,
-        reviews: profileData.reviews,
-      });
-    } else {
-      this.setState({ reviews: null });
-    }
   }
 
   getProfileData = async userId => {
@@ -45,16 +31,49 @@ class PublicProfileRedux extends Component {
     return resp ? resp.data : null;
   };
 
+  async refreshData() {
+    const { userId } = this.props.match.params;
+    const { googleId } = this.props.user;
+
+    this.setState({ loading: true });
+    const profileData = await this.getProfileData(userId);
+    this.setState({ loading: false });
+
+    const isOwnPage = userId === googleId;
+    console.log(userId, googleId, isOwnPage);
+
+    let userDisplayName,
+      reviews = null;
+
+    if (profileData) {
+      userDisplayName = profileData.userDisplayName;
+      reviews = profileData.reviews;
+    }
+
+    this.setState({
+      userDisplayName,
+      reviews,
+      isOwnPage,
+    });
+  }
+
   render() {
     return (
       <PublicProfileContainer
         reviews={this.state.reviews}
         userDisplayName={this.state.userDisplayName}
         loading={this.state.loading}
+        isOwnPage={this.state.isOwnPage}
         onChange={this.refreshData}
       />
     );
   }
 }
 
-export default PublicProfileRedux;
+const mapStateToProps = ({ user }) => {
+  return {
+    user,
+  };
+};
+
+export default connect(mapStateToProps, null)(PublicProfileRedux);
