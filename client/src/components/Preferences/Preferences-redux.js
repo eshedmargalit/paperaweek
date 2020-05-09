@@ -1,28 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import PreferencesContainer from './Preferences-container';
 import axios from 'axios';
 
-function PreferencesRedux({ auth, user }) {
-  const [updating, setUpdating] = useState(false);
-
-  const onFinish = async values => {
-    setUpdating(true);
-    let returnedUser = await axios.put('api/user', values);
-    setUpdating(false);
+function PreferencesRedux({ auth, user, onChange }) {
+  const saveResults = async values => {
+    let returnedUser = await axios.put('/api/user', values);
+    onChange();
   };
 
-  let { displayName, googleId, publicProfile } = user;
-  const initialValues = { displayName, publicProfile };
+  let { googleId, publicProfile } = user;
+  const initialValues = { publicProfile };
 
   return (
-    <PreferencesContainer
-      auth={auth}
-      profileId={googleId}
-      initialValues={initialValues}
-      onFinish={onFinish}
-      updating={updating}
-    />
+    <PreferencesContainer auth={auth} profileId={googleId} initialValues={initialValues} saveResults={saveResults} />
   );
 }
 

@@ -11,9 +11,15 @@ class PublicProfileRedux extends Component {
       reviews: null,
       loading: false,
     };
+
+    this.refreshData = this.refreshData.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.refreshData();
+  }
+
+  async refreshData() {
     const { userId } = this.props.match.params;
     this.setState({ loading: true });
     const profileData = await this.getProfileData(userId);
@@ -24,6 +30,8 @@ class PublicProfileRedux extends Component {
         userDisplayName: profileData.userDisplayName,
         reviews: profileData.reviews,
       });
+    } else {
+      this.setState({ reviews: null });
     }
   }
 
@@ -43,6 +51,7 @@ class PublicProfileRedux extends Component {
         reviews={this.state.reviews}
         userDisplayName={this.state.userDisplayName}
         loading={this.state.loading}
+        onChange={this.refreshData}
       />
     );
   }

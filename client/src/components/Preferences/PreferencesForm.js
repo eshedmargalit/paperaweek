@@ -1,55 +1,48 @@
 import React, { useState } from 'react';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Input, Switch, Spin, Form } from 'antd';
-import { formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
+import { Switch, Form } from 'antd';
+import { formItemLayout } from './utils.js';
 import './PreferencesForm.scss';
 
-const PreferencesForm = ({ initialValues, profileId, onFinish, updating }) => {
+const PreferencesForm = ({ initialValues, profileId, saveResults }) => {
   const [form] = Form.useForm();
   const initialProfileUrlColor = initialValues.publicProfile ? '#222' : '#bbb';
-  const initialProfileText = initialValues.publicProfile ? 'will be publicly visible' : 'will not be publicly visible';
+  const initialProfileText = initialValues.publicProfile ? 'is publicly visible' : 'is not publicly visible';
 
   const [profileUrlColor, setProfileColor] = useState(initialProfileUrlColor);
   const [profileText, setProfileText] = useState(initialProfileText);
 
-  const onPublicToggle = isPublic => {
-    const newColor = isPublic ? '#222' : '#bbb';
-    const newText = isPublic ? 'will be publicly visible' : 'will not be publicly visible';
+  const onValuesChange = values => {
+    const newColor = values.publicProfile ? '#222' : '#bbb';
+    const newText = values.publicProfile ? 'is publicly visible' : 'is not publicly visible';
     setProfileColor(newColor);
     setProfileText(newText);
+
+    saveResults(values);
   };
 
   const profileUrl = `${window.location.origin}/profiles/${profileId}`;
-  const buttonContent = updating ? (
-    <div>
-      Saving <Spin />
-    </div>
-  ) : (
-    'Save Changes'
-  );
 
   return (
-    <div className="width80">
-      <Form {...formItemLayout} layout="vertical" form={form} onFinish={onFinish} initialValues={initialValues}>
-        <Form.Item name="displayName" label="Display Name">
-          <Input />
-        </Form.Item>
-        <Form.Item name="publicProfile" label="Make Profile Public?" valuePropName="checked">
-          <Switch onChange={onPublicToggle} />
-        </Form.Item>
-        <div className="profileUrl" style={{ color: profileUrlColor }}>
+    <Form
+      {...formItemLayout}
+      onValuesChange={onValuesChange}
+      layout="vertical"
+      form={form}
+      initialValues={initialValues}
+    >
+      <Form.Item name="publicProfile" label="Make Profile Public?" valuePropName="checked">
+        <Switch />
+      </Form.Item>
+      <div className="profileUrl" style={{ color: profileUrlColor }}>
+        <a href={profileUrl} target="_blank">
           {profileUrl}
-          {` `}
-          {profileText}
-        </div>
-        <hr />
-        <Form.Item {...formItemLayoutWithoutLabel} name="displayName">
-          <Button type="secondary" htmlType="submit">
-            {buttonContent}
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+        </a>
+        {` `}
+        {profileText}
+      </div>
+      <hr />
+    </Form>
   );
 };
 

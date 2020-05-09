@@ -5,14 +5,22 @@ import NotFound from '../NotFound/NotFound';
 
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
+import Preferences from '../Preferences';
 
-function PublicProfileView({ loading, userDisplayName, reviews }) {
+function PublicProfileView({ loading, userDisplayName, reviews, onChange }) {
   const pageHeaderProps = {
     pageHeaderTitle: `${userDisplayName}'s Reviews`,
     onPageBack: null,
   };
 
   const spinner = <Spin />;
+  const preferences = (
+    <div className="width80">
+      <Row>
+        <Preferences onChange={onChange} />
+      </Row>
+    </div>
+  );
   const profileView = reviews ? (
     <div className="width80">
       <Row>
@@ -32,7 +40,14 @@ function PublicProfileView({ loading, userDisplayName, reviews }) {
     <NotFound />
   );
 
-  return loading ? spinner : profileView;
+  const toRender = loading ? spinner : profileView;
+  // TODO only visualize preferences if it's your profile...
+  return (
+    <div>
+      {preferences}
+      {toRender}
+    </div>
+  );
 }
 
 export default PublicProfileView;

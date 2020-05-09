@@ -27,6 +27,8 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     </>
   );
 
+  const profileUrlExt = `/profiles/${user.googleId}`;
+
   const menu = (
     <ul className="menu">
       <span className="flex">
@@ -46,8 +48,8 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       <span className="flex">
         <li className="menu__item">{draftMenuItem}</li>
         <li className="menu__item">
-          <Button href="/preferences" className="right">
-            Preferences
+          <Button href={profileUrlExt} className="right">
+            My Profile
           </Button>
         </li>
         <li className="menu__item">
