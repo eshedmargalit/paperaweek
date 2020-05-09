@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function PreferencesRedux({ auth, user, onChange }) {
   const saveResults = async values => {
-    let returnedUser = await axios.put('/api/user', values);
+    await axios.put('/api/user', values);
     onChange();
   };
 

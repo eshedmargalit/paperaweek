@@ -35,7 +35,7 @@ const PreferencesForm = ({ initialValues, profileId, saveResults }) => {
         <Switch />
       </Form.Item>
       <div className="profileUrl" style={{ color: profileUrlColor }}>
-        <a href={profileUrl} target="_blank">
+        <a href={profileUrl} target="_blank" rel="noopener noreferrer">
           {profileUrl}
         </a>
         {` `}
