@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Icon, Button } from 'antd';
+import { Badge, Button } from 'antd';
+import { GoogleOutlined, UserOutlined } from '@ant-design/icons';
 
 import './MenuBar.scss';
 
@@ -25,15 +26,20 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       {pointsStr}
     </>
   );
+
+  const profileUrlExt = `/profiles/${user.googleId}`;
+
   const menu = (
     <ul className="menu">
       <span className="flex">
         <li className="menu__item">
-          <h5>
-            <Icon type="user" />
-            {` `}
-            <span className="displayName">{user.displayName}</span>
-          </h5>
+          <Link to="/dashboard">
+            <h5>
+              <UserOutlined />
+              {` `}
+              <span className="displayName">{user.displayName}</span>
+            </h5>
+          </Link>
         </li>
 
         <li className="menu__item points">{pointsMenuItem}</li>
@@ -41,6 +47,11 @@ function MenuBarView({ points, user, numberOfDrafts }) {
 
       <span className="flex">
         <li className="menu__item">{draftMenuItem}</li>
+        <li className="menu__item">
+          <Button href={profileUrlExt} className="right">
+            My Profile
+          </Button>
+        </li>
         <li className="menu__item">
           <Button href="/api/logout" className="signout right">
             Sign Out
@@ -50,7 +61,30 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     </ul>
   );
 
-  return user.displayName === '' ? null : menu;
+  const notSignedInMenu = (
+    <ul className="menu">
+      <span className="flex">
+        <li className="menu__item">
+          <Link to="/dashboard">
+            <h5>
+              <span className="displayName">Paper-a-Week</span>
+            </h5>
+          </Link>
+        </li>
+      </span>
+
+      <span className="flex">
+        <li className="menu__item">
+          <Button href="/auth/google" className="signout right">
+            {' '}
+            Sign up with <GoogleOutlined />{' '}
+          </Button>
+        </li>
+      </span>
+    </ul>
+  );
+
+  return user.displayName === '' ? notSignedInMenu : menu;
 }
 
 export default MenuBarView;

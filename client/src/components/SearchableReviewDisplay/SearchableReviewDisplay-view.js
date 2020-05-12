@@ -1,4 +1,5 @@
 import React from 'react';
+import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { shortenAuthors, shortenString, getTagColor } from '../utils.js';
@@ -28,22 +29,22 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
   const columns = [
     {
       title: 'Title',
-      dataIndex: 'paper.title',
+      dataIndex: ['paper', 'title'],
       render: title => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
     },
     {
       title: 'One Sentence',
-      dataIndex: 'paper.one_sentence',
+      dataIndex: ['paper', 'one_sentence'],
       render: one_sentence => <span>{one_sentence}</span>,
     },
     {
       title: 'Authors',
-      dataIndex: 'paper.authors',
+      dataIndex: ['paper', 'authors'],
       render: authorList => <span>{shortenAuthors(authorList)}</span>,
     },
     {
       title: 'Year Published',
-      dataIndex: 'paper.date',
+      dataIndex: ['paper', 'date'],
       render: date => <span>{moment(date, 'YYYY-MM').format('YYYY')}</span>,
       sorter: (a, b) => {
         return moment(a.paper.date).diff(moment(b.paper.date));
@@ -51,7 +52,7 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
     },
     {
       title: 'Journal',
-      dataIndex: 'paper.journal',
+      dataIndex: ['paper', 'journal'],
       render: journal => <span>{shortenString(journal, displaySettings.journalStringLengthLimit)}</span>,
     },
     {
@@ -65,7 +66,7 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
     },
     {
       title: 'Keywords',
-      dataIndex: 'paper.keywords',
+      dataIndex: ['paper', 'keywords'],
       render: keywords => renderTags(keywords, handleSearch),
     },
   ];
@@ -114,10 +115,16 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
-function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, reviews, modalProps, pageHeaderProps }) {
-  if (modalProps) {
-    var { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
-  }
+function SearchableReviewDisplayView({
+  handleSearch,
+  reviewClicked,
+  query,
+  reviews,
+  modalProps,
+  hideFooter,
+  pageHeaderProps,
+}) {
+  const { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
 
   const { pageHeaderTitle, onPageBack } = pageHeaderProps;
 
@@ -125,7 +132,7 @@ function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, revie
   if (onPageBack) {
     pageHeader = <PageHeader title={pageHeaderTitle} onBack={onPageBack} />;
   } else {
-    pageHeader = <PageHeader title={pageHeaderTitle} avatar={{ icon: 'read' }} />;
+    pageHeader = <PageHeader title={pageHeaderTitle} avatar={{ icon: <ReadOutlined /> }} />;
   }
 
   const searchRow = (
@@ -171,20 +178,23 @@ function SearchableReviewDisplayView({ handleSearch, reviewClicked, query, revie
   );
 
   let reviewModal = null;
-  if (modalProps) {
-    let itemName = modalProps.itemName || 'Review';
-    const modalFooter = [
-      <Button key="edit" type="dashed" icon="edit" onClick={handleModalEdit}>
-        Edit this {itemName}
-      </Button>,
-      <Button key="delete" type="dashed" icon="delete" onClick={() => handleModalDelete(deleteConfirmHandler)}>
-        Delete this {itemName}
-      </Button>,
-    ];
-    reviewModal = (
-      <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={modalFooter} />
-    );
-  }
+  let itemName = modalProps.itemName || 'Review';
+  const modalFooter = [
+    <Button key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
+      Edit this {itemName}
+    </Button>,
+    <Button
+      key="delete"
+      type="dashed"
+      icon={<DeleteOutlined />}
+      onClick={() => handleModalDelete(deleteConfirmHandler)}
+    >
+      Delete this {itemName}
+    </Button>,
+  ];
+
+  const footer = hideFooter ? null : modalFooter;
+  reviewModal = <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />;
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 

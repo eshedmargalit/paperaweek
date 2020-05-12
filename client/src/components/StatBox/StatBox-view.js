@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Button, Card, Icon, Row } from 'antd';
+import { Button, Card, Row } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import FrequencyChart from '../FrequencyChart';
 
 import './StatBox.scss';
@@ -11,8 +12,8 @@ function StatBoxView({ reviews, startBlankReview }) {
       <Row>
         <p>
           {' '}
-          Stats will begin to appear when you have at least 3 reviews written.{' '}
-          <strong>{3 - reviews.reviewList.length}</strong> to go!{' '}
+          Stats will begin to appear when you have at least 3 reviews written. <strong>{3 - reviews.length}</strong> to
+          go!{' '}
         </p>
       </Row>
       <Row>
@@ -20,7 +21,7 @@ function StatBoxView({ reviews, startBlankReview }) {
         <p>
           <strong>Option 1</strong>: Click
           <Button onClick={startBlankReview}>
-            Create Manual Entry <Icon type="plus-circle" />
+            Create Manual Entry <PlusCircleOutlined />
           </Button>{' '}
           to start a review from scratch.
         </p>
@@ -33,7 +34,7 @@ function StatBoxView({ reviews, startBlankReview }) {
     </Card>
   );
 
-  return reviews.reviewList.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
+  return reviews.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
 }
 
 export default StatBoxView;

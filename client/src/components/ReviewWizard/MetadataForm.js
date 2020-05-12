@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Tooltip, Icon, DatePicker, Button, Input, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Tooltip, DatePicker, Button, Input } from 'antd';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { uniq as _uniq } from 'lodash';
@@ -193,7 +196,7 @@ class MetadataForm extends Component {
               />
             )}
             {fieldValue.length > 1 ? (
-              <Icon
+              <CloseOutlined
                 className="dynamic-delete-button"
                 type="close"
                 onClick={() => this.removeItem(fieldName, listIdx)}
@@ -213,7 +216,7 @@ class MetadataForm extends Component {
                   }}
                   style={{ width: '150px' }}
                 >
-                  <Icon type="plus" /> Add New
+                  <PlusOutlined /> Add New
                 </Button>
               </Tooltip>
             </Form.Item>

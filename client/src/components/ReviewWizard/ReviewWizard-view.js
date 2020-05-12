@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { PageHeader, Steps, Icon } from 'antd';
+import { Steps, PageHeader } from 'antd';
+import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment from 'moment';
 const { Step } = Steps;
@@ -40,7 +41,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
 
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <Icon type="save" theme="filled" />
+          <SaveFilled />
           {` `}Saved to Drafts {timePassedText}
         </div>
       );
@@ -48,7 +49,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
     case 'saving':
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <Icon type="save" theme="twoTone" spin />
+          <SaveTwoTone spin />
           {` `}Saving...
         </div>
       );
@@ -56,7 +57,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
     case 'saveFailed':
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <Icon type="save" theme="twoTone" twoToneColor="#f5222d" />
+          <SaveTwoTone twoToneColor="#f5222d" />
           {` `} Failed to save
         </div>
       );

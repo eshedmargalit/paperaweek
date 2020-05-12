@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Empty, Icon, List, PageHeader } from 'antd';
+import { Button, Empty, List, PageHeader } from 'antd';
+import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
@@ -10,7 +11,7 @@ const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 130;
 
 const DragHandle = sortableHandle(() => (
-  <Icon style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} type="menu" />
+  <MenuOutlined style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} />
 ));
 
 const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (
@@ -34,10 +35,10 @@ const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandl
         </div>
         <div>
           <div className="reading-list__form-button">
-            <Button onClick={() => editClickHandler(value)} icon="form" />
+            <Button onClick={() => editClickHandler(value)} icon={<FormOutlined />} />
           </div>
           <div>
-            <Button onClick={() => deleteClickHandler(value)} icon="delete" />
+            <Button onClick={() => deleteClickHandler(value)} icon={<DeleteOutlined />} />
           </div>
         </div>
       </div>
@@ -83,7 +84,7 @@ function ReadingListView(props) {
   return (
     <div>
       <br />
-      <PageHeader title="Reading List" avatar={{ icon: 'ordered-list' }} />
+      <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
       {props.items.length > 0 ? sortableList : noList}
     </div>
   );
