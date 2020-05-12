@@ -109,18 +109,7 @@ export function getReviewStats(reviews) {
   const ppw = Number.parseFloat(sortedDates.length / totalWeeks).toFixed(2);
 
   const ppwColor = ppw >= 1 ? '#237804' : '#a8071a';
+  const numReviews = reviews.length;
 
-  return (
-    <>
-      <div style={{ marginLeft: '10px' }}>
-        <div style={{ width: '50%' }}>
-          <Statistic title="Reviews" value={reviews.length} suffix="written" />
-        </div>
-        <hr />
-        <div style={{ width: '50%' }}>
-          <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
-        </div>
-      </div>
-    </>
-  );
+  return { numReviews, ppw, ppwColor };
 }
