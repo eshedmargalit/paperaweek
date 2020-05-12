@@ -1,46 +1,12 @@
 import React from 'react';
 import { Text, Label, ReferenceLine, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin, Statistic } from 'antd';
+import { Row, Col, Card, Spin } from 'antd';
+import { getReviewStats } from '../utils';
 import moment from 'moment';
-
-function getReviewStats(reviews) {
-  if (reviews.reviewList.length === 0) {
-    return null;
-  }
-
-  const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
-  const sortedDates = reviewDates.sort((a, b) => a.diff(b));
-
-  let diffs = [];
-  for (var i = 0; i < sortedDates.length - 1; i++) {
-    var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
-    diffs.push(diff);
-  }
-
-  const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0;
-  const ppw = Number.parseFloat(sortedDates.length / totalWeeks).toFixed(2);
-
-  const ppwColor = ppw >= 1 ? '#237804' : '#a8071a';
-
-  return (
-    <>
-      <br />
-      <div style={{ marginLeft: '10px' }}>
-        <div style={{ width: '50%' }}>
-          <Statistic title="Reviews" value={reviews.reviewList.length} suffix="written" />
-        </div>
-        <hr />
-        <div style={{ width: '50%' }}>
-          <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
-        </div>
-      </div>
-    </>
-  );
-}
 
 function FrequencyChartView(reviews) {
   const lineChart = reviews => {
-    const reviewDates = reviews.reviewList.map(review => moment(review.createdAt));
+    const reviewDates = reviews.map(review => moment(review.createdAt));
     const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
     let data = [];

@@ -4,7 +4,7 @@ import StatBoxContainer from './StatBox-container';
 
 class StatBoxRedux extends Component {
   render() {
-    return <StatBoxContainer {...this.props} />;
+    return <StatBoxContainer reviews={this.props.reviews.reviewList} />;
   }
 }
 

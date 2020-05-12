@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Card, Col, Icon, notification, Row } from 'antd';
+import { Button, Card, Col, notification, Row } from 'antd';
+import { CalendarOutlined, DashboardOutlined, GoogleOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import './Login.scss';
@@ -9,7 +10,7 @@ class Login extends Component {
   openNotification = () => {
     notification.open({
       message: 'Logout successful, see you soon!',
-      icon: <Icon type="smile" />,
+      icon: <SmileOutlined />,
       onClick: () => {
         console.log('Notification Clicked!');
       },
@@ -47,7 +48,7 @@ class Login extends Component {
           <h5>Read a paper a week. That's it.</h5>
           <Button href="/auth/google" size={'large'}>
             {' '}
-            Sign in with <Icon type="google" />{' '}
+            Sign in with <GoogleOutlined />{' '}
           </Button>
         </LazyHero>
         <div className="login__bottom-tray">
@@ -55,7 +56,7 @@ class Login extends Component {
             <Col span={8}>
               <Card style={{ height: '100%' }}>
                 <Card.Meta
-                  avatar={<Icon type="calendar" />}
+                  avatar={<CalendarOutlined />}
                   title="Because reading papers is hard"
                   description="Make it easy with Paper-a-week. Use our search feature and wizard to write one detailed review per week. Future you will thank you!"
                 />
@@ -64,7 +65,7 @@ class Login extends Component {
             <Col span={8}>
               <Card>
                 <Card.Meta
-                  avatar={<Icon type="team" />}
+                  avatar={<TeamOutlined />}
                   title="Because you're smart"
                   description="Make your profile public to allow others to learn from your summaries and insights!"
                 />
@@ -73,7 +74,7 @@ class Login extends Component {
             <Col span={8}>
               <Card>
                 <Card.Meta
-                  avatar={<Icon type="dashboard" />}
+                  avatar={<DashboardOutlined />}
                   title="Because we could all use some motivation"
                   description="Earn points by writing reviews on time and commenting on others!"
                 />
@@ -90,7 +91,4 @@ const mapStateToProps = ({ auth }) => {
   return { auth };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(Login);
+export default connect(mapStateToProps, null)(Login);

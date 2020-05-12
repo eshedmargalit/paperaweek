@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { Tooltip, Icon, Button, Input, Form } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Tooltip, Button, Input } from 'antd';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import './ReviewWizard.scss';
 import { reviewFields, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
@@ -147,9 +150,8 @@ class ReviewForm extends Component {
             />
           )}
           {field_value.length > 1 && (
-            <Icon
+            <CloseOutlined
               className="dynamic-delete-button"
-              type="close"
               onClick={() => this.removeItem(fieldName, field_value_idx)}
             />
           )}
@@ -168,7 +170,7 @@ class ReviewForm extends Component {
                 }}
                 style={{ width: '150px' }}
               >
-                <Icon type="plus" /> Add Point
+                <PlusOutlined /> Add Point
               </Button>
             </Tooltip>
           </Form.Item>

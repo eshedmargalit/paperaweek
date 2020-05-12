@@ -6,8 +6,9 @@ import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 
-function HomeView({ showForm }) {
+function HomeView({ auth, showForm }) {
   const formRedirect = <Redirect to="/form" push />;
+  const homeRedirect = <Redirect to="/" push />;
   const home_render = (
     <div>
       <div className="searchbar width80">
@@ -24,7 +25,7 @@ function HomeView({ showForm }) {
     </div>
   );
 
-  return <div>{showForm ? formRedirect : home_render}</div>;
+  return auth ? (showForm ? formRedirect : home_render) : homeRedirect;
 }
 
 export default HomeView;

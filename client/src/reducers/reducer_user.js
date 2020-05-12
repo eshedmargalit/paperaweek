@@ -5,6 +5,7 @@ const initialState = {
   readingList: [],
   drafts: [],
   lastLogin: null,
+  publicProfile: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -12,9 +13,7 @@ const reducer = (state = initialState, action) => {
   switch (type) {
     case FETCH_USER:
       if (payload) {
-        // maybe just return payload?
-        let { displayName, reviews, readingList, drafts, lastLogin } = payload;
-        return { displayName, reviews, readingList, drafts, lastLogin };
+        return payload;
       } else {
         return state;
       }
