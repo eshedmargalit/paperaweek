@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Label, ReferenceLine, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin } from 'antd';
+import { Row, Col, Card, Spin, Statistic } from 'antd';
 import { getReviewStats } from '../utils';
 import moment from 'moment';
 
@@ -47,6 +47,19 @@ function FrequencyChartView(reviews) {
       );
     }
 
+    const { numReviews, ppw, ppwColor } = getReviewStats(reviews);
+    const statRender = (
+      <div style={{ marginLeft: '10px' }}>
+        <div style={{ width: '50%' }}>
+          <Statistic title="Reviews" value={numReviews} suffix="written" />
+        </div>
+        <hr />
+        <div style={{ width: '50%' }}>
+          <Statistic title="Papers per Week" value={ppw} valueStyle={{ color: ppwColor }} suffix="/ week" />
+        </div>
+      </div>
+    );
+
     return (
       <Card title="Your Stats" style={{ marginTop: 5 }}>
         <Row>
@@ -56,7 +69,7 @@ function FrequencyChartView(reviews) {
           </Col>
           <Col lg={8} sm={24}>
             {' '}
-            {getReviewStats(reviews)}
+            {statRender}
           </Col>
         </Row>
       </Card>
