@@ -6,7 +6,6 @@ module.exports = app => {
     const filter = { googleId: req.user.googleId };
     const update = req.body;
 
-    console.log(filter, update);
     try {
       let user = await User.findOneAndUpdate(
         filter,
