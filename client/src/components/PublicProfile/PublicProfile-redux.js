@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
 import PublicProfileContainer from './PublicProfile-container';
 
 class PublicProfileRedux extends Component {
@@ -17,7 +16,7 @@ class PublicProfileRedux extends Component {
     this.refreshData = this.refreshData.bind(this);
   }
 
-  componentWillReceiveProps() {
+  componentDidMount() {
     this.refreshData();
   }
 
@@ -33,28 +32,12 @@ class PublicProfileRedux extends Component {
 
   async refreshData() {
     const { userId } = this.props.match.params;
-    const { googleId } = this.props.user;
 
     this.setState({ loading: true });
     const profileData = await this.getProfileData(userId);
-    this.setState({ loading: false });
-
-    const isOwnPage = userId === googleId;
-    console.log(userId, googleId, isOwnPage);
-
-    let userDisplayName,
-      reviews = null;
-
     if (profileData) {
-      userDisplayName = profileData.userDisplayName;
-      reviews = profileData.reviews;
+      this.setState({ loading: false, ...profileData });
     }
-
-    this.setState({
-      userDisplayName,
-      reviews,
-      isOwnPage,
-    });
   }
 
   render() {
@@ -70,10 +53,4 @@ class PublicProfileRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => {
-  return {
-    user,
-  };
-};
-
-export default connect(mapStateToProps, null)(PublicProfileRedux);
+export default PublicProfileRedux;
