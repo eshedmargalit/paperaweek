@@ -17,6 +17,9 @@ export const HIDE_POINTS_MODAL = 'HIDE_POINTS_MODAL';
 
 export const fetchUser = () => async dispatch => {
   let user = await axios.get('/api/current_user');
+  if (!user.data) {
+    return;
+  }
   dispatch({ type: FETCH_USER, payload: user.data });
 
   // get last login
