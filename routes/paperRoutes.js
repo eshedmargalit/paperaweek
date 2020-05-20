@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const Paper = mongoose.model("papers");
+const requireLogin = require("../middlewares/requireLogin");
 
 module.exports = app => {
-  app.post("/api/papers", async (req, res) => {
+  app.post("/api/papers", requireLogin, async (req, res) => {
     const review = req.body.review;
     let newPaper = new Paper(review.paper);
     let newReview = {
@@ -17,7 +18,7 @@ module.exports = app => {
     res.send(JSON.stringify(user.reviews));
   });
 
-  app.put("/api/papers", async (req, res) => {
+  app.put("/api/papers", requireLogin, async (req, res) => {
     const review = req.body.review;
     try {
       let newPaper = new Paper(review.paper);
@@ -44,7 +45,7 @@ module.exports = app => {
     }
   });
 
-  app.delete("/api/papers/:id", async (req, res) => {
+  app.delete("/api/papers/:id", requireLogin, async (req, res) => {
     try {
       User.findOneAndUpdate(
         { googleId: req.user.googleId },

@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
+const requireLogin = require("../middlewares/requireLogin");
 
 module.exports = app => {
-  app.put("/api/user", async (req, res) => {
+  app.put("/api/user", requireLogin, async (req, res) => {
     const filter = { googleId: req.user.googleId };
     const update = req.body;
 

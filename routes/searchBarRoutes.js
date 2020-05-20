@@ -1,6 +1,7 @@
 const axios = require("axios");
 const processEntities = require("../services/interpretation").processEntities;
 const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
+const requireLogin = require("../middlewares/requireLogin");
 
 const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 // Attributes:
@@ -18,7 +19,7 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
 
 module.exports = app => {
-  app.get("/api/searchBar/interpret/:query", async (req, res) => {
+  app.get("/api/searchBar/interpret/:query", requireLogin, async (req, res) => {
     const response = await axios(`${endpoint}/interpret`, {
       params: {
         query: req.params.query,
