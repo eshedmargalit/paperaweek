@@ -36,7 +36,7 @@ class Login extends Component {
     }
 
     return (
-      <div>
+      <div style={{ position: 'absolute', top: '42px' }}>
         <LazyHero
           className="login__lazy-hero"
           minHeight="80vh"

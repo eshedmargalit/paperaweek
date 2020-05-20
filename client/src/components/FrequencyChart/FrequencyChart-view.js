@@ -40,7 +40,7 @@ function FrequencyChartView(reviews) {
                 }
               />
               <ReferenceLine y={7} strokeDasharray="3 3" strokeWidth={3} stroke="#237804" />
-              <Line strokeWidth={5} dataKey="gap" stroke="#888888" />
+              <Line strokeWidth={3} dataKey="gap" stroke="#888888" />
             </LineChart>
           </ResponsiveContainer>
         </div>

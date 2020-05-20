@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
 const Paper = mongoose.model("papers");
+const requireLogin = require("../middlewares/requireLogin");
 
 module.exports = app => {
-  app.get("/api/drafts", async (req, res) => {
+  app.get("/api/drafts", requireLogin, async (req, res) => {
     let user = await User.findById(req.user.googleId);
     res.send(JSON.stringify(user.drafts));
   });
 
-  app.post("/api/drafts", async (req, res) => {
+  app.post("/api/drafts", requireLogin, async (req, res) => {
     const draft = req.body.draft;
     let newPaper = new Paper(draft.paper);
     let newReview = {
@@ -22,7 +23,7 @@ module.exports = app => {
     res.send(JSON.stringify(newReview));
   });
 
-  app.put("/api/drafts", async (req, res) => {
+  app.put("/api/drafts", requireLogin, async (req, res) => {
     const draft = req.body.draft;
     try {
       let newPaper = new Paper(draft.paper);
@@ -49,7 +50,7 @@ module.exports = app => {
     }
   });
 
-  app.delete("/api/drafts/:id", async (req, res) => {
+  app.delete("/api/drafts/:id", requireLogin, async (req, res) => {
     try {
       User.findOneAndUpdate(
         { googleId: req.user.googleId },

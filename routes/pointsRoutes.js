@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
+const requireLogin = require("../middlewares/requireLogin");
 
 module.exports = app => {
-  app.put("/api/points/:points", async (req, res) => {
+  app.put("/api/points/:points", requireLogin, async (req, res) => {
     const points = req.params.points;
 
     try {
@@ -26,9 +27,8 @@ module.exports = app => {
     }
   });
 
-  app.put("/givePoints/dailyLogin", async (req, res) => {
+  app.put("/givePoints/dailyLogin", requireLogin, async (req, res) => {
     const points = req.params.points;
-    let user = await User.findOne({ googleId: req.user.googleId });
 
     try {
       let user = await User.findOneAndUpdate(

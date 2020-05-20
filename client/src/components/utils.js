@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { Statistic } from 'antd';
 
 export function render_comma_sep_list(items, key) {
   return items.map((item, i) => {
