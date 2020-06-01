@@ -51,3 +51,16 @@ To start the server and client together, just run `yarn run dev` from the top-le
 ### Run Tests
 
 To run the tests for the application, run `yarn test` from the top-level directory. No credentials or environment variables are required for running tests.
+
+### Docker
+
+Build the container from the top-level directory:
+`docker build -t paw:1.0.0 .`
+
+Run the container, exposing port 5000:000 in "production" mode
+`docker run -p 5000:5000 --env NODE_ENV=production --name paw_container paw:1.0.0`
+
+Navigate to `localhost:5000` to see the app in production!
+
+To drop into a shell in the running container:
+`docker exec -it paw_container sh`
