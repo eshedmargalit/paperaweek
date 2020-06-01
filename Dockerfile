@@ -1,9 +1,8 @@
 # Phase 1: Client Build
 FROM node:14-alpine as builder
 WORKDIR /usr/src/app
-COPY ./client/package.json ./client/yarn.lock ./
-RUN yarn
 COPY ./client ./
+RUN yarn
 RUN yarn build
 
 # Phase 2: Server Build
