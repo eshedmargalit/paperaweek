@@ -73,7 +73,7 @@ To run the tests for the application, run `yarn test` from the `server/`. No cre
 Build the container from the top-level directory:
 `docker build -t paw:1.0.0 .`
 
-Run the container, exposing port 5000:000 in "production" mode. Add environment variables by passing in an "env-file". Read more about this [here](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file). Duplicate my `server/.env`, remove double quotes from the values, and added it to the root directory.
+Run the container, exposing port 5000:5000 in "production" mode. Add environment variables by passing in an "env-file". Read more about this [here](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file). Duplicate my `server/.env`, remove double quotes from the values, and added it to the root directory.
 `docker run -p 5000:5000 --env NODE_ENV=production --env-file .env.list --name paw_container paw:1.0.0`
 
 Navigate to `localhost:5000` to see the app in production!
