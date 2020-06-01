@@ -64,3 +64,12 @@ Navigate to `localhost:5000` to see the app in production!
 
 To drop into a shell in the running container:
 `docker exec -it paw_container sh`
+
+Build and deploy to Cloud Run:
+
+```sh
+GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
+docker build . --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app && docker push gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app`
+```
+
+Then go to Cloud Run, select latest image, and re-deploy.
