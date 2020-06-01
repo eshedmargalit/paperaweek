@@ -1,27 +1,37 @@
 # Paper-a-Week
 
+## Tools
+
+### Backend Stack
+
+- [Search Engine][microsoft cognitive services](https://azure.microsoft.com/en-us/services/cognitive-services/)
+- [Object Document Mapping (ODM)][mongoose](https://mongoosejs.com/)
+- [Server] Node.js + [Express.js](https://expressjs.com/)
+- [Testing][mocha](https://mochajs.org/)
+- [Deployment] Google Cloud Run + Docker
+
+### Frontend Stack
+
+- [Components and Style][ant design](https://ant.design/)
+- [JS Library] React + Redux
+
 ## Development
 
-You'll need two API keys:
+### Environment Variables
 
-1. For the MongoDB instance
-1. For Microsoft Cognitive Services, which provides the academic search [MS Cog Services](https://azure.microsoft.com/en-us/services/cognitive-services/)
-
-Create `.env` in the root directory and add:
+Create a new file, `server/.env`. It should look like this:
 
 ```text
-DB_CONNECTION_STRING="<your connection string goes here>"
-```
-
-Create `client/.env.local` and add:
-
-```text
-REACT_APP_MSCOG_KEY1=<MSCOG API key goes here>
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+COOKIE_KEY=
+MONGO_URI=
+REACT_APP_MSCOG_KEY1=
 ```
 
 ### Code Style
 
-[![styled with perttier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![styled with prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 The `client/` directory is styled using prettier. The settings are defined in [our prettier config file](./client/.prettierrc.json). Staged changes are automatically formatted based on a pre-commit hook using `husky` and `pretty-quick`.
 
@@ -29,8 +39,14 @@ You can format the files yourself by running `yarn pretty-quick` from the `clien
 
 ### Dependencies :package:
 
-From the top-level directory, run `yarn install`.
-`cd` into the `client` directory and run `yarn install` to scoop up those dependencies, too.
+Run `yarn install` once from `server/` and once from `client/`:
+
+```sh
+cd server
+yarn install
+cd ../client
+yarn install
+```
 
 You'll need the following installed (maybe globally) if you want hot-reloading and easy startup. They're included in the project, but if you're getting any errors, install them globally.
 
@@ -46,24 +62,21 @@ You'll need the following installed (maybe globally) if you want hot-reloading a
   npm install -g concurrently
   ```
 
-To start the server and client together, just run `yarn run dev` from the top-level directory.
+To start the server and client together, just run `yarn run dev` from the `server/` directory
 
 ### Run Tests
 
-To run the tests for the application, run `yarn test` from the top-level directory. No credentials or environment variables are required for running tests.
+To run the tests for the application, run `yarn test` from the `server/`. No credentials or environment variables are required for running tests.
 
 ### Docker
 
 Build the container from the top-level directory:
 `docker build -t paw:1.0.0 .`
 
-Run the container, exposing port 5000:000 in "production" mode
-`docker run -p 5000:5000 --env NODE_ENV=production --name paw_container paw:1.0.0`
+Run the container, exposing port 5000:000 in "production" mode. Add environment variables by passing in an "env-file". Read more about this [here](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file). Duplicate my `server/.env`, remove double quotes from the values, and added it to the root directory.
+`docker run -p 5000:5000 --env NODE_ENV=production --env-file .env.list --name paw_container paw:1.0.0`
 
 Navigate to `localhost:5000` to see the app in production!
-
-To drop into a shell in the running container:
-`docker exec -it paw_container sh`
 
 Build and deploy to Cloud Run:
 
