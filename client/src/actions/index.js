@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { dailyLoginReason, reviewPointsReason } from './pointReasons.js';
+import PointsModal from '../components/PointsModal/PointsModal';
 import { sortBy } from 'lodash';
 import moment from 'moment';
 
@@ -13,7 +14,6 @@ export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const START_REVIEW = 'START_REVIEW';
 export const END_REVIEW = 'END_REVIEW';
 export const GIVE_POINTS = 'GIVE_POINTS';
-export const HIDE_POINTS_MODAL = 'HIDE_POINTS_MODAL';
 
 export const fetchUser = () => async dispatch => {
   let user = await axios.get('/api/current_user');
@@ -32,9 +32,10 @@ export const fetchUser = () => async dispatch => {
     const pointsToPut = prevPoints + 1;
     const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
 
+    PointsModal(5, 1, dailyLoginReason);
     dispatch({
       type: GIVE_POINTS,
-      payload: { newPoints: pointsResp.data.points, increment: 1, reason: dailyLoginReason },
+      payload: { newPoints: pointsResp.data.points },
     });
   }
 
@@ -48,17 +49,18 @@ export const assignReviewPoints = newReviewList => async dispatch => {
   const user = await axios.get('/api/current_user');
 
   // get most recent review date
-  const sorted_reviews = sortBy(newReviewList, 'createdAt');
-  const last_review_date = sorted_reviews[sorted_reviews.length - 2].createdAt;
-  const days_since_last_review = moment().diff(moment(last_review_date), 'days');
+  const sortedReviews = sortBy(newReviewList, 'createdAt');
+  let daysSinceLastReview = 7;
+  let lastReviewDate = null;
+  if (sortedReviews.length > 1) {
+    lastReviewDate = sortedReviews[sortedReviews.length - 2].createdAt;
+    daysSinceLastReview = moment().diff(moment(lastReviewDate), 'days');
+  }
 
-  console.log('sorted reviews', sorted_reviews);
-  console.log('Last review date', last_review_date);
-  console.log('Today', moment());
-  console.log('Days since last review', days_since_last_review);
+  console.log('Most recent review JSON string', JSON.stringify(sortedReviews[sortedReviews.length - 1]));
 
   let pointsToGive = 0;
-  switch (days_since_last_review) {
+  switch (daysSinceLastReview) {
     case 7:
       pointsToGive = 7;
       break;
@@ -80,15 +82,11 @@ export const assignReviewPoints = newReviewList => async dispatch => {
 
   const pointsToPut = user.data.points + pointsToGive;
   const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
-
+  PointsModal(5, pointsToGive, reviewPointsReason);
   dispatch({
     type: GIVE_POINTS,
-    payload: { newPoints: pointsResp.data.points, increment: pointsToGive, reason: reviewPointsReason },
+    payload: { newPoints: pointsResp.data.points },
   });
-};
-
-export const hidePointsModal = () => async dispatch => {
-  dispatch({ type: HIDE_POINTS_MODAL });
 };
 
 export function startReview(paperId, reviewContent) {
