@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
 import Login from './components/Login/Login';
-import PointsModal from './components/PointsModal/PointsModal';
 import ReviewWizard from './components/ReviewWizard';
 import DraftPage from './components/DraftPage';
 import MenuBar from './components/MenuBar';
@@ -24,7 +23,6 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Route path="/" component={PointsModal} />
           <Route path="/" component={MenuBar} />
           <Switch>
             <Route path="/profiles/:userId" component={PublicProfile} />
@@ -42,7 +40,4 @@ class App extends Component {
   }
 }
 
-export default connect(
-  null,
-  actions
-)(App);
+export default connect(null, actions)(App);

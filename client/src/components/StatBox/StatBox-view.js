@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Card, Row } from 'antd';
+import { Button, Card, Row, Col } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import FrequencyChart from '../FrequencyChart';
 
@@ -17,19 +17,21 @@ function StatBoxView({ reviews, startBlankReview }) {
         </p>
       </Row>
       <Row>
-        <h6> Getting Started </h6>
-        <p>
-          <strong>Option 1</strong>: Click
-          <Button onClick={startBlankReview}>
-            Create Manual Entry <PlusCircleOutlined />
-          </Button>{' '}
-          to start a review from scratch.
-        </p>
+        <Col>
+          <h6> Getting Started </h6>
+          <p>
+            <strong>Option 1</strong>: Click
+            <Button onClick={startBlankReview}>
+              Create Manual Entry <PlusCircleOutlined />
+            </Button>{' '}
+            to start a review from scratch.
+          </p>
 
-        <p>
-          <strong>Option 2</strong>: Search for topics or authors with the search bar above. Click a result to add it to
-          your reading list for later, or "Start Review Now" to begin a review right away.
-        </p>
+          <p>
+            <strong>Option 2</strong>: Search for topics or authors with the search bar above. Click a result to add it
+            to your reading list for later, or "Start Review Now" to begin a review right away.
+          </p>
+        </Col>
       </Row>
     </Card>
   );
