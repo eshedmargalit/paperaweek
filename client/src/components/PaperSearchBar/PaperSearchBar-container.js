@@ -29,13 +29,12 @@ class PaperSearchBarContainer extends Component {
 
   async doiSearch(query) {
     let doiResp = null;
-    const parts = query.split('/');
-    if (parts.length < 2) {
+    if (query.split('/').length < 2) {
       return [];
     }
 
     try {
-      doiResp = await axios.get(`/api/doi/${parts[0]}/${parts[1]}`);
+      doiResp = await axios.get(`/api/doi/${query}`);
     } catch (err) {
       console.log(err);
     }
@@ -60,7 +59,7 @@ class PaperSearchBarContainer extends Component {
 
     this.setState({ loading: true });
     let searchResults = [];
-    // if doi, search for that
+    // if query looks like a DOI, call that API instead of interpretation
     if (query.startsWith('10.')) {
       searchResults = await this.doiSearch(query);
     } else {

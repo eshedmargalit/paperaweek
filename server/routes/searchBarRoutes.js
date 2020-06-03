@@ -20,6 +20,7 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
 //
 function parseDOIJSON(data) {
+  // grab data from DOI response
   const title = data.match(/(?<=title={)(.*?)(?=})/g)[0];
   const journal = data.match(/(?<=journal={)(.*?)(?=})/g)[0];
   const doi = data.match(/(?<=DOI={)(.*?)(?=})/g)[0];
@@ -27,12 +28,13 @@ function parseDOIJSON(data) {
   const year = data.match(/(?<=year={)(.*?)(?=})/g)[0];
   const month = data.match(/(?<=month={)(.*?)(?=})/g)[0];
   const url = data.match(/(?<=url={)(.*?)(?=})/g)[0];
+
+  // manipulate data into "paper" format
   const authors = authorString.split(" and ");
   const authorsReordered = authors.map(author => {
     const parts = author.split(", ");
     return `${parts[1]} ${parts[0]}`;
   });
-
   const date = moment(`${month}-${year}`, "MMM YYYY").format();
 
   const paper = {
@@ -42,7 +44,7 @@ function parseDOIJSON(data) {
     url,
     doi,
     authors: authorsReordered,
-    institutions: null
+    institutions: null // needs to be null instead of [] for front-end to render correctly
   };
   return { paper, id: title };
 }
@@ -74,12 +76,15 @@ module.exports = app => {
     res.send(JSON.stringify(processed));
   });
 
-  app.get("/api/doi/:urlBase/:urlExt", requireLogin, async (req, res) => {
-    const { urlBase, urlExt } = req.params;
+  app.get("/api/doi/:query*", requireLogin, async (req, res) => {
+    // :query* matches everything up to the first slash as the slug (query) and puts
+    // everything else in a field with key '0'. So we reconstruct the full url
+    // from those two pieces.
+    const fullQuery = `${req.params.query}${req.params["0"]}`;
     const headers = { Accept: "text/bibliography; style=bibtex" };
     let resp = null;
     try {
-      resp = await axios(`https://doi.org/${urlBase}/${urlExt}`, {
+      resp = await axios(`https://doi.org/${fullQuery}`, {
         headers
       });
       res.send(parseDOIJSON(resp.data));
