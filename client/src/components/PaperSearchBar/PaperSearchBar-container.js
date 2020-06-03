@@ -28,6 +28,11 @@ class PaperSearchBarContainer extends Component {
   }
 
   async doiSearch(query) {
+    if (query.includes('doi.org')) {
+      // catches both doi.org and dx.doi.org
+      query = new URL(query).pathname;
+    }
+
     let doiResp = null;
     if (query.split('/').length < 2) {
       return [];
@@ -60,7 +65,7 @@ class PaperSearchBarContainer extends Component {
     this.setState({ loading: true });
     let searchResults = [];
     // if query looks like a DOI, call that API instead of interpretation
-    if (query.startsWith('10.')) {
+    if (query.startsWith('10.') || query.includes('doi.org')) {
       searchResults = await this.doiSearch(query);
     } else {
       searchResults = await this.interpret(query);
