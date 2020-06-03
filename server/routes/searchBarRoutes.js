@@ -1,4 +1,5 @@
 const axios = require("axios");
+const moment = require("moment");
 const processEntities = require("../services/interpretation").processEntities;
 const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 const requireLogin = require("../middlewares/requireLogin");
@@ -32,7 +33,18 @@ function parseDOIJSON(data) {
     return `${parts[1]} ${parts[0]}`;
   });
 
-  return { title, journal, doi, year, month, url, authors: authorsReordered };
+  const date = moment(`${month}-${year}`, "MMM YYYY").format();
+
+  const paper = {
+    title,
+    journal,
+    date,
+    url,
+    doi,
+    authors: authorsReordered,
+    institutions: []
+  };
+  return { paper, id: title };
 }
 
 module.exports = app => {
