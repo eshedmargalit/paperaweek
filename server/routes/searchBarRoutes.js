@@ -42,7 +42,7 @@ function parseDOIJSON(data) {
     url,
     doi,
     authors: authorsReordered,
-    institutions: []
+    institutions: null
   };
   return { paper, id: title };
 }
