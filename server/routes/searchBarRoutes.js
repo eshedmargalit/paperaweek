@@ -65,9 +65,15 @@ module.exports = app => {
   app.get("/api/doi/:urlBase/:urlExt", requireLogin, async (req, res) => {
     const { urlBase, urlExt } = req.params;
     const headers = { Accept: "text/bibliography; style=bibtex" };
-    const resp = await axios(`https://doi.org/${urlBase}/${urlExt}`, {
-      headers
-    });
-    res.send(parseDOIJSON(resp.data));
+    let resp = null;
+    try {
+      resp = await axios(`https://doi.org/${urlBase}/${urlExt}`, {
+        headers
+      });
+      res.send(parseDOIJSON(resp.data));
+    } catch (err) {
+      console.log(err);
+      res.status(404).send("DOI Not Found");
+    }
   });
 };

@@ -17,9 +17,14 @@ export const GIVE_POINTS = 'GIVE_POINTS';
 
 export const fetchUser = () => async dispatch => {
   let user = await axios.get('/api/current_user');
-  // let doi_resp = await axios.get('/api/doi/10.1523/JNEUROSCI.2106-19.2020');
-  let doi_resp = await axios.get('/api/doi/10.1038/s41583-020-0277-3');
-  console.log(doi_resp.data);
+  let doiResp = null;
+  try {
+    doiResp = await axios.get('/api/doi/10.1038/s41583-020-0277-3');
+    console.log(doiResp.data);
+  } catch (err) {
+    console.log(err);
+  }
+
   if (!user.data) {
     return;
   }
