@@ -20,33 +20,37 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
 //
 function parseDOIJSON(data) {
-  // grab data from DOI response
-  const title = data.match(/(?<=title={)(.*?)(?=})/g)[0];
-  const journal = data.match(/(?<=journal={)(.*?)(?=})/g)[0];
-  const doi = data.match(/(?<=DOI={)(.*?)(?=})/g)[0];
-  const authorString = data.match(/(?<=author={)(.*?)(?=})/g)[0];
-  const year = data.match(/(?<=year={)(.*?)(?=})/g)[0];
-  const month = data.match(/(?<=month={)(.*?)(?=})/g)[0];
-  const url = data.match(/(?<=url={)(.*?)(?=})/g)[0];
+  // parse DOI string
+  const parsedData = {};
+  const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
+  for (let i = 0; i < targets.length; i++) {
+    let target = targets[i];
+    let re = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
+    let matchingData = data.match(re)[0];
+    parsedData[target] = matchingData;
+  }
 
   // manipulate data into "paper" format
-  const authors = authorString.split(" and ");
+  const authors = parsedData.author.split(" and ");
   const authorsReordered = authors.map(author => {
     const parts = author.split(", ");
     return `${parts[1]} ${parts[0]}`;
   });
-  const date = moment(`${month}-${year}`, "MMM YYYY").format();
+  const date = moment(
+    `${parsedData.month}-${parsedData.year}`,
+    "MMM YYYY"
+  ).format();
 
   const paper = {
-    title,
-    journal,
-    date,
-    url,
-    doi,
+    title: parsedData.title,
+    journal: parsedData.journal,
+    url: parsedData.url,
+    doi: parsedData.DOI,
     authors: authorsReordered,
+    date,
     institutions: null // needs to be null instead of [] for front-end to render correctly
   };
-  return { paper, id: title };
+  return { paper, id: parsedData.title };
 }
 
 module.exports = app => {

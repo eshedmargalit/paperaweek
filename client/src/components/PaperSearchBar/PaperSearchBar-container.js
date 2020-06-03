@@ -30,7 +30,7 @@ class PaperSearchBarContainer extends Component {
   async doiSearch(query) {
     if (query.includes('doi.org')) {
       // catches both doi.org and dx.doi.org
-      query = new URL(query).pathname;
+      query = new URL(query).pathname.substr(1);
     }
 
     let doiResp = null;
