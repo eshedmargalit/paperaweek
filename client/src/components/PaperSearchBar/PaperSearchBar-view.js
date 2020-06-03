@@ -79,7 +79,7 @@ function PaperSearchBarView({
           type="text"
           width="50%"
           onChange={e => handleSearch(`${e.target.value}`)}
-          placeholder="e.g., Retinal waves nature 2012"
+          placeholder="search by DOI, title, author,  or journal"
           value={query}
           allowClear
         />
