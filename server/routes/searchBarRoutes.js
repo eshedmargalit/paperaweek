@@ -84,7 +84,6 @@ module.exports = app => {
       });
       res.send(parseDOIJSON(resp.data));
     } catch (err) {
-      console.log(err);
       res.status(404).send("DOI Not Found");
     }
   });

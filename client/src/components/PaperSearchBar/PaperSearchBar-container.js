@@ -9,7 +9,7 @@ class PaperSearchBarContainer extends Component {
     super(props);
 
     // debounce search to avoid repeated calls to API
-    this.academicSearchThrottled = _.debounce(this.academicSearch, 350);
+    this.academicSearchThrottled = _.debounce(this.academicSearch, 500);
     this.handleSearch.bind(this);
 
     this.state = {
@@ -30,6 +30,10 @@ class PaperSearchBarContainer extends Component {
   async doiSearch(query) {
     let doiResp = null;
     const parts = query.split('/');
+    if (parts.length < 2) {
+      return [];
+    }
+
     try {
       doiResp = await axios.get(`/api/doi/${parts[0]}/${parts[1]}`);
     } catch (err) {
