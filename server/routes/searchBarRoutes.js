@@ -51,11 +51,10 @@ module.exports = app => {
     // everything else in a field with key '0'. So we reconstruct the full url
     // from those two pieces.
     const fullQuery = `${req.params.query}${req.params["0"]}`;
-    const headers = { Accept: "text/bibliography; style=bibtex" };
     let resp = null;
     try {
       resp = await axios(`https://doi.org/${fullQuery}`, {
-        headers
+        headers: { Accept: "text/bibliography; style=bibtex" }
       });
       const parsed = parseDOIJSON(resp.data);
       res.send(JSON.stringify(parsed));
