@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
+import { isDOI } from '../utils';
 
 import _ from 'lodash';
 
@@ -36,11 +37,11 @@ class PaperSearchBarContainer extends Component {
       query = new URL(query).pathname.substr(1);
     }
 
-    let doiResp = null;
     if (query.split('/').length < 2) {
       return [];
     }
 
+    let doiResp = null;
     try {
       doiResp = await axios.get(`/api/doi/${query}`);
     } catch (err) {
@@ -66,13 +67,10 @@ class PaperSearchBarContainer extends Component {
     }
 
     this.setState({ loading: true });
-    let searchResults = [];
+
     // if query looks like a DOI, call that API instead of interpretation
-    if (query.startsWith('10.') || query.includes('doi.org')) {
-      searchResults = await this.doiSearch(query);
-    } else {
-      searchResults = await this.interpret(query);
-    }
+    const apiCall = isDOI(query) ? this.doiSearch : this.interpret;
+    const searchResults = await apiCall(query);
     this.setState({ searchResults, loading: false });
   }
 

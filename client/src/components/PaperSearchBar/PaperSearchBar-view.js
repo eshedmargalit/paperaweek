@@ -79,7 +79,7 @@ function PaperSearchBarView({
           type="text"
           width="50%"
           onChange={e => handleSearch(`${e.target.value}`)}
-          placeholder="search by DOI, title, author,  or journal"
+          placeholder="search by DOI, title, author, or journal"
           value={query}
           allowClear
         />

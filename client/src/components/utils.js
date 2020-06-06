@@ -112,3 +112,7 @@ export function getReviewStats(reviews) {
 
   return { numReviews, ppw, ppwColor };
 }
+
+export function isDOI(query) {
+  return query.startsWith('10.') || query.includes('doi.org');
+}
