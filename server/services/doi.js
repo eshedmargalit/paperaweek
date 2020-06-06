@@ -1,4 +1,21 @@
 const moment = require("moment");
+
+// define the fields to pull from DOI string, and construct a regex to get the
+// meat inside each
+//
+// Regex in English:
+//     (?<=startingPattern) matches startingPattern before the main expression, but
+//         doesn't include it in the final result
+//     (?=closingPattern) matches closingPattern after the main expression, but
+//         doesn't include it in the final result
+//     (.*?) matches the first pattern (lazy) that can have any number (*) of any
+//         character (.)
+const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
+const regExs = {};
+targets.forEach(target => {
+  regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
+});
+
 const parsedDOIToPaper = parsedData => {
   // manipulate data into "paper" format
   const authors = parsedData.author.split(" and ");
@@ -26,16 +43,8 @@ const parsedDOIToPaper = parsedData => {
 const parseDOIJSON = data => {
   // parse DOI string
   const parsedData = {};
-  const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
   targets.forEach(target => {
-    // (?<=startingPattern) matches startingPattern before the main expression, but
-    //     doesn't include it in the final result
-    // (?=closingPattern) matches closingPattern after the main expression, but
-    //     doesn't include it in the final result
-    // (.*?) matches the first pattern (lazy) that can have any number (*) of any
-    //     character (.)
-    let re = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
-    let matchingData = data.match(re)[0];
+    let matchingData = data.match(regExs[target])[0];
     parsedData[target] = matchingData;
   });
   return parsedDOIToPaper(parsedData);
