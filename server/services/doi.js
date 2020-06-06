@@ -42,6 +42,10 @@ const parsedDoiToPaper = parsedData => {
 
 const parseDoiString = doiString => {
   // parse DOI string
+  if (!doiString || !doiString.trim()) {
+    return null;
+  }
+
   const parsedData = {};
   targets.forEach(target => {
     let matchingData = doiString.match(regExs[target])[0];
