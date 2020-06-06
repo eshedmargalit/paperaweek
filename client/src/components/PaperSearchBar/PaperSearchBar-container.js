@@ -20,7 +20,10 @@ class PaperSearchBarContainer extends Component {
   }
 
   async interpret(query) {
+    // first regex to replace any dashes or underscores with a space
     query = query.replace(/[-_]/g, ' ').toLowerCase();
+
+    // second regex to delete single quotes, double quotes, and slashes
     query = query.replace(/['"\/\\]/g, '');
 
     const response = await axios(`api/searchBar/interpret/${query}`);
