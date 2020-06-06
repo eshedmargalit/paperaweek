@@ -3,9 +3,7 @@ const parseDOIJSON = data => {
   // parse DOI string
   const parsedData = {};
   const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
-  for (let i = 0; i < targets.length; i++) {
-    let target = targets[i];
-
+  targets.forEach(target => {
     // (?<=startingPattern) matches startingPattern before the main expression, but
     //     doesn't include it in the final result
     // (?=closingPattern) matches closingPattern after the main expression, but
@@ -15,7 +13,7 @@ const parseDOIJSON = data => {
     let re = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
     let matchingData = data.match(re)[0];
     parsedData[target] = matchingData;
-  }
+  });
 
   // manipulate data into "paper" format
   const authors = parsedData.author.split(" and ");
