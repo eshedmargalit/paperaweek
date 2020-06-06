@@ -22,6 +22,14 @@ export const fetchUser = () => async dispatch => {
     return;
   }
   dispatch({ type: FETCH_USER, payload: user.data });
+};
+
+export const dailyLoginCheck = () => async dispatch => {
+  let user = await axios.get('/api/current_user');
+
+  if (!user.data) {
+    return;
+  }
 
   // get last login
   const today = new Date();
