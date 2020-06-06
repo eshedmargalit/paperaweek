@@ -1,6 +1,6 @@
 const axios = require("axios");
-const moment = require("moment");
 const processEntities = require("../services/interpretation").processEntities;
+const parseDOIJSON = require("../services/doi").parseDOIJSON;
 const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 const requireLogin = require("../middlewares/requireLogin");
 
@@ -18,40 +18,6 @@ const attrs = "DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN";
 // Id      | Unique identifier for entity
 // VFN    | Journal Name
 // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
-//
-function parseDOIJSON(data) {
-  // parse DOI string
-  const parsedData = {};
-  const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
-  for (let i = 0; i < targets.length; i++) {
-    let target = targets[i];
-    let re = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
-    let matchingData = data.match(re)[0];
-    parsedData[target] = matchingData;
-  }
-
-  // manipulate data into "paper" format
-  const authors = parsedData.author.split(" and ");
-  const authorsReordered = authors.map(author => {
-    const parts = author.split(", ");
-    return `${parts[1]} ${parts[0]}`;
-  });
-  const date = moment(
-    `${parsedData.month}-${parsedData.year}`,
-    "MMM YYYY"
-  ).format();
-
-  const paper = {
-    title: parsedData.title,
-    journal: parsedData.journal,
-    url: parsedData.url,
-    doi: parsedData.DOI,
-    authors: authorsReordered,
-    date,
-    institutions: null // needs to be null instead of [] for front-end to render correctly
-  };
-  return { paper, id: parsedData.title };
-}
 
 module.exports = app => {
   app.get("/api/searchBar/interpret/:query", requireLogin, async (req, res) => {
@@ -91,7 +57,8 @@ module.exports = app => {
       resp = await axios(`https://doi.org/${fullQuery}`, {
         headers
       });
-      res.send(parseDOIJSON(resp.data));
+      const parsed = parseDOIJSON(resp.data);
+      res.send(JSON.stringify(parsed));
     } catch (err) {
       res.status(404).send("DOI Not Found");
     }
