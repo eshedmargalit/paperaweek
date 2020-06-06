@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
+import { isDOI } from '../utils';
 
 import _ from 'lodash';
 
@@ -9,7 +10,7 @@ class PaperSearchBarContainer extends Component {
     super(props);
 
     // debounce search to avoid repeated calls to API
-    this.academicSearchThrottled = _.debounce(this.academicSearch, 350);
+    this.academicSearchThrottled = _.debounce(this.academicSearch, 500);
     this.handleSearch.bind(this);
 
     this.state = {
@@ -20,25 +21,45 @@ class PaperSearchBarContainer extends Component {
   }
 
   async interpret(query) {
+    // first regex to replace any dashes or underscores with a space
+    query = query.replace(/[-_]/g, ' ').toLowerCase();
+
+    // second regex to delete single quotes, double quotes, and slashes
+    query = query.replace(/['"\/\\]/g, '');
+
     const response = await axios(`api/searchBar/interpret/${query}`);
     return response.data;
   }
 
+  async doiSearch(query) {
+    if (query.includes('doi.org')) {
+      // catches both doi.org and dx.doi.org
+      query = new URL(query).pathname.substr(1);
+    }
+
+    if (query.split('/').length < 2) {
+      return [];
+    }
+
+    let doiResp = null;
+    try {
+      doiResp = await axios.get(`/api/doi/${query}`);
+    } catch (err) {
+      console.log(err);
+    }
+    if (doiResp) {
+      return [doiResp.data];
+    } else {
+      return [];
+    }
+  }
+
   async evaluate(interpretation, attrs) {
     const response = await axios(`api/searchBar/evaluate/${interpretation}/${attrs}`);
-    // let data = await response.json();
-    // return data;
     return response.data;
   }
 
   async academicSearch(query) {
-    // sanitize query
-    // replacing with spaces
-    query = query.replace(/[-_]/g, ' ').toLowerCase();
-
-    // deleting
-    query = query.replace(/['"\/\\]/g, '');
-
     // bail out if no query
     if (query.length === 0) {
       this.setState({ searchResults: [], loading: false });
@@ -46,7 +67,10 @@ class PaperSearchBarContainer extends Component {
     }
 
     this.setState({ loading: true });
-    let searchResults = await this.interpret(query);
+
+    // if query looks like a DOI, call that API instead of interpretation
+    const apiCall = isDOI(query) ? this.doiSearch : this.interpret;
+    const searchResults = await apiCall(query);
     this.setState({ searchResults, loading: false });
   }
 
