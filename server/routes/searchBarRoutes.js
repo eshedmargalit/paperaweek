@@ -1,6 +1,6 @@
 const axios = require("axios");
 const processEntities = require("../services/interpretation").processEntities;
-const parseDOIJSON = require("../services/doi").parseDOIJSON;
+const doiToPaper = require("../services/doi").doiToPaper;
 const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 const requireLogin = require("../middlewares/requireLogin");
 
@@ -56,8 +56,8 @@ module.exports = app => {
       resp = await axios(`https://doi.org/${fullQuery}`, {
         headers: { Accept: "text/bibliography; style=bibtex" }
       });
-      const parsed = parseDOIJSON(resp.data);
-      res.send(JSON.stringify(parsed));
+      const parsedPaper = doiToPaper(resp.data);
+      res.send(JSON.stringify(parsedPaper));
     } catch (err) {
       res.status(404).send("DOI Not Found");
     }

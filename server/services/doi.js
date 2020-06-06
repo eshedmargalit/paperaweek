@@ -16,8 +16,8 @@ targets.forEach(target => {
   regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
 });
 
-const parsedDOIToPaper = parsedData => {
-  // manipulate data into "paper" format
+const parsedDoiToPaper = parsedData => {
+  // manipulate parsedData object into "paper" format
   const authors = parsedData.author.split(" and ");
   const authorsReordered = authors.map(author => {
     const parts = author.split(", ");
@@ -40,14 +40,19 @@ const parsedDOIToPaper = parsedData => {
   return { paper, id: parsedData.title };
 };
 
-const parseDOIJSON = data => {
+const parseDoiString = doiString => {
   // parse DOI string
   const parsedData = {};
   targets.forEach(target => {
-    let matchingData = data.match(regExs[target])[0];
+    let matchingData = doiString.match(regExs[target])[0];
     parsedData[target] = matchingData;
   });
-  return parsedDOIToPaper(parsedData);
+  return parsedData;
 };
 
-module.exports = { parseDOIJSON };
+const doiToPaper = doiString => {
+  const parsedData = parseDoiString(doiString);
+  return parsedDoiToPaper(parsedData);
+};
+
+module.exports = { parseDoiString, parsedDoiToPaper, doiToPaper };

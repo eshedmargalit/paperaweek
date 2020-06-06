@@ -57,6 +57,17 @@ const testUser = new User({
   reviews: []
 });
 
+const testDOIString =
+  "@article{Margalit_2020, title={Ultra-high-resolution fMRI of Human Ventral " +
+  "Temporal Cortex Reveals Differential Representation of Categories and Domains}, " +
+  "volume={40}, ISSN={1529-2401}, url={http://dx.doi.org/10.1523/JNEUROSCI.2106-19." +
+  "2020}, DOI={10.1523/jneurosci.2106-19.2020}, number={15}, journal={The Journal of " +
+  "Neuroscience}, publisher={Society for Neuroscience}, author={Margalit, Eshed and " +
+  "Jamison, Keith W. and Weiner, Kevin S. and Vizioli, Luca and Zhang, Ru-Yuan and " +
+  "Kay, Kendrick N. and Grill-Spector, Kalanit}, year={2020}, month={Feb}, " +
+  "pages={3008–3024}}";
+
 exports.testReview = testReview;
 exports.testUser = testUser;
 exports.testUserId = testUserId;
+exports.testDOIString = testDOIString;
