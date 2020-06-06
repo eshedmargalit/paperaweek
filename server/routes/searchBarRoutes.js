@@ -1,5 +1,6 @@
 const axios = require("axios");
 const processEntities = require("../services/interpretation").processEntities;
+const doiToPaper = require("../services/doi").doiToPaper;
 const endpoint = "https://api.labs.cognitive.microsoft.com/academic/v1.0";
 const requireLogin = require("../middlewares/requireLogin");
 
@@ -43,5 +44,22 @@ module.exports = app => {
       interpretations[0].rules[0].output.entities
     );
     res.send(JSON.stringify(processed));
+  });
+
+  app.get("/api/doi/:query*", requireLogin, async (req, res) => {
+    // :query* matches everything up to the first slash as the slug (query) and puts
+    // everything else in a field with key '0'. So we reconstruct the full url
+    // from those two pieces.
+    const fullQuery = `${req.params.query}${req.params["0"]}`;
+    let resp = null;
+    try {
+      resp = await axios(`https://doi.org/${fullQuery}`, {
+        headers: { Accept: "text/bibliography; style=bibtex" }
+      });
+      const parsedPaper = doiToPaper(resp.data);
+      res.send(JSON.stringify(parsedPaper));
+    } catch (err) {
+      res.status(404).send("DOI Not Found");
+    }
   });
 };
