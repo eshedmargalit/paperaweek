@@ -39,7 +39,7 @@ function FrequencyChartView(reviews) {
                   </Text>
                 }
               />
-              <Line dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
+              <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
             </LineChart>
           </ResponsiveContainer>
         </div>
