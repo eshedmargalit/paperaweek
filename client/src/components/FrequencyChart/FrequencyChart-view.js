@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Label, ReferenceLine, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
+import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
 import { Row, Col, Card, Spin, Statistic } from 'antd';
 import { getReviewStats } from '../utils';
 import moment from 'moment';
@@ -39,8 +39,7 @@ function FrequencyChartView(reviews) {
                   </Text>
                 }
               />
-              <ReferenceLine y={7} strokeDasharray="3 3" strokeWidth={3} stroke="#237804" />
-              <Line dot={false} strokeWidth={3} dataKey="gap" stroke="#888888" />
+              <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
             </LineChart>
           </ResponsiveContainer>
         </div>
