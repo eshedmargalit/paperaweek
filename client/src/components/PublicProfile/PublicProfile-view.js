@@ -7,7 +7,7 @@ import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
 import Preferences from '../Preferences';
 
-function PublicProfileView({ loading, userDisplayName, reviews, isOwnPage, onChange }) {
+function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, isOwnPage, onChange }) {
   const pageHeaderProps = {
     pageHeaderTitle: `${userDisplayName}'s Reviews`,
     onPageBack: null,
@@ -21,6 +21,12 @@ function PublicProfileView({ loading, userDisplayName, reviews, isOwnPage, onCha
     </div>
   );
 
+  // map reviewId to review
+  let reviewToOpen = null;
+  if (reviews) {
+    reviewToOpen = reviews.find(review => review._id === reviewIdToOpen);
+  }
+
   const profileView = reviews ? (
     <>
       <Row>
@@ -29,6 +35,7 @@ function PublicProfileView({ loading, userDisplayName, reviews, isOwnPage, onCha
       <Row>
         <SearchableReviewDisplay
           reviews={reviews}
+          reviewToOpen={reviewToOpen}
           deleteReview={null}
           handleModalEdit={null}
           pageHeaderProps={pageHeaderProps}
@@ -41,7 +48,6 @@ function PublicProfileView({ loading, userDisplayName, reviews, isOwnPage, onCha
   );
 
   const toRender = loading ? <Spin /> : profileView;
-  // TODO only visualize preferences if it's your profile...
   return (
     <div>
       {preferences}

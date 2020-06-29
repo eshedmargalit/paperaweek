@@ -8,6 +8,7 @@ class PublicProfileRedux extends Component {
 
     this.state = {
       userDisplayName: '',
+      reviewIdToOpen: null,
       reviews: null,
       loading: false,
       isOwnPage: false,
@@ -31,12 +32,12 @@ class PublicProfileRedux extends Component {
   };
 
   async refreshData() {
-    const { userId } = this.props.match.params;
+    const { userId, reviewIdToOpen } = this.props.match.params;
 
     this.setState({ loading: true });
     const profileData = await this.getProfileData(userId);
     if (profileData) {
-      this.setState({ loading: false, ...profileData });
+      this.setState({ loading: false, reviewIdToOpen, ...profileData });
     }
   }
 
@@ -44,6 +45,7 @@ class PublicProfileRedux extends Component {
     return (
       <PublicProfileContainer
         reviews={this.state.reviews}
+        reviewIdToOpen={this.state.reviewIdToOpen}
         userDisplayName={this.state.userDisplayName}
         loading={this.state.loading}
         isOwnPage={this.state.isOwnPage}

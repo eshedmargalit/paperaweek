@@ -124,7 +124,14 @@ function SearchableReviewDisplayView({
   hideFooter,
   pageHeaderProps,
 }) {
-  const { deleteConfirmHandler, handleModalEdit, handleModalClose, showModal, modalReview } = modalProps;
+  const {
+    deleteConfirmHandler,
+    handleModalEdit,
+    handleModalCopy,
+    handleModalClose,
+    showModal,
+    modalReview,
+  } = modalProps;
 
   const { pageHeaderTitle, onPageBack } = pageHeaderProps;
 
@@ -179,7 +186,12 @@ function SearchableReviewDisplayView({
 
   let reviewModal = null;
   let itemName = modalProps.itemName || 'Review';
-  const modalFooter = [
+  const copyButton = (
+    <Button key="copy" type="dashed" icon={<EditOutlined />} onClick={handleModalCopy}>
+      Copy Link to this {itemName}
+    </Button>
+  );
+  let modalFooter = [
     <Button key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
       Edit this {itemName}
     </Button>,
@@ -192,6 +204,10 @@ function SearchableReviewDisplayView({
       Delete this {itemName}
     </Button>,
   ];
+
+  if (itemName === 'Review') {
+    modalFooter.splice(0, 0, copyButton);
+  }
 
   const footer = hideFooter ? null : modalFooter;
   reviewModal = <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />;
