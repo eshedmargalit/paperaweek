@@ -71,7 +71,7 @@ class SearchableReviewDisplayContainer extends Component {
       deleteConfirmHandler: this.deleteConfirmHandler,
       handleModalClose: this.handleModalClose,
       handleModalEdit: this.modalEditHandler,
-      handleModalCopy: this.modalCopyHandler,
+      handleModalCopy: this.props.handleModalCopy ? this.modalCopyHandler : null,
       showModal: this.state.showModal,
       modalReview: this.state.selectedReview,
       itemName: this.props.itemName || 'Review',

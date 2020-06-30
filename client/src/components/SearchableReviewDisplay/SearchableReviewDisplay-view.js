@@ -186,11 +186,6 @@ function SearchableReviewDisplayView({
 
   let reviewModal = null;
   let itemName = modalProps.itemName || 'Review';
-  const copyButton = (
-    <Button key="copy" type="dashed" icon={<EditOutlined />} onClick={handleModalCopy}>
-      Copy Link to this {itemName}
-    </Button>
-  );
   let modalFooter = [
     <Button key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
       Edit this {itemName}
@@ -205,7 +200,12 @@ function SearchableReviewDisplayView({
     </Button>,
   ];
 
-  if (itemName === 'Review') {
+  if (handleModalCopy) {
+    const copyButton = (
+      <Button key="copy" type="dashed" icon={<EditOutlined />} onClick={handleModalCopy}>
+        Copy Link to this {itemName}
+      </Button>
+    );
     modalFooter.splice(0, 0, copyButton);
   }
 
