@@ -26,7 +26,7 @@ class App extends Component {
         <div className="App">
           <Route path="/" component={MenuBar} />
           <Switch>
-            <Route path="/profiles/:userId" component={PublicProfile} />
+            <Route path="/profiles/:userId/:reviewIdToOpen?" component={PublicProfile} />
             <Route exact path="/" render={props => <Login {...props} justSignedOut={false} />} />
             <Route exact path="/signout" render={props => <Login {...props} justSignedOut={true} />} />
             <Route exact path="/dashboard" component={Home} />

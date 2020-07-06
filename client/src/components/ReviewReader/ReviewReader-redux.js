@@ -3,6 +3,13 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { startReview, updateReviews } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
+import { notification } from 'antd';
+
+const openNotificationWithIcon = type => {
+  notification[type]({
+    message: 'Link Copied!',
+  });
+};
 
 class ReviewReaderRedux extends Component {
   deleteReview = reviewToDelete => {
@@ -19,6 +26,12 @@ class ReviewReaderRedux extends Component {
     this.props.dispatch(startReview(null, reviewContent));
   };
 
+  handleModalCopy = review => {
+    const link = `${window.location.origin}/profiles/${this.props.user.googleId}/${review._id}`;
+    navigator.clipboard.writeText(link);
+    openNotificationWithIcon('success');
+  };
+
   render() {
     let { reviews } = this.props;
     const pageHeaderProps = {
@@ -30,19 +43,18 @@ class ReviewReaderRedux extends Component {
         reviews={reviews.reviewList}
         deleteReview={this.deleteReview}
         handleModalEdit={this.handleModalEdit}
+        handleModalCopy={this.handleModalCopy}
         pageHeaderProps={pageHeaderProps}
       />
     );
   }
 }
 
-const mapStateToProps = ({ reviews }) => {
+const mapStateToProps = ({ user, reviews }) => {
   return {
+    user,
     reviews,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ReviewReaderRedux);
+export default connect(mapStateToProps, null)(ReviewReaderRedux);

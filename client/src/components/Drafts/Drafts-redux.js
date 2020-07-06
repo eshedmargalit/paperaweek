@@ -59,6 +59,7 @@ class DraftsRedux extends Component {
         reviews={drafts}
         deleteReview={this.deleteDraft}
         handleModalEdit={this.handleModalEdit}
+        handleModalCopy={null}
         pageHeaderProps={pageHeaderProps}
         itemName="Draft"
       />
@@ -73,7 +74,4 @@ const mapStateToProps = ({ drafts, activeReview }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(DraftsRedux);
+export default connect(mapStateToProps, null)(DraftsRedux);
