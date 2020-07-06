@@ -8,6 +8,7 @@ const { Step } = Steps;
 
 function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, stepContent, onPageBack }) {
   const [currentMoment, setMoment] = useState(lastSave);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setMoment(() => moment());
@@ -23,8 +24,12 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
       autosaveIcon = null;
       break;
     case 'saved':
-      const secSinceSave = currentMoment.diff(lastSave, 'seconds');
-      const minSinceSave = currentMoment.diff(lastSave, 'minutes');
+      let secSinceSave = 0;
+      let minSinceSave = 0;
+      if (currentMoment) {
+        secSinceSave = currentMoment.diff(lastSave, 'seconds');
+        minSinceSave = currentMoment.diff(lastSave, 'minutes');
+      }
 
       let timePassedText = '';
       if (secSinceSave <= 0) {

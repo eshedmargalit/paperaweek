@@ -6,10 +6,11 @@ class SearchableReviewDisplayContainer extends Component {
   constructor(props) {
     super(props);
 
+    const { reviewToOpen } = this.props;
     this.state = {
       query: '',
-      selectedReview: null,
-      showModal: false,
+      selectedReview: reviewToOpen || null,
+      showModal: reviewToOpen,
     };
   }
 
@@ -42,6 +43,10 @@ class SearchableReviewDisplayContainer extends Component {
     this.props.handleModalEdit(this.state.selectedReview);
   };
 
+  modalCopyHandler = () => {
+    this.props.handleModalCopy(this.state.selectedReview);
+  };
+
   fuzzyFilterReviews = reviews => {
     if (this.state.query === '') {
       return reviews;
@@ -66,6 +71,7 @@ class SearchableReviewDisplayContainer extends Component {
       deleteConfirmHandler: this.deleteConfirmHandler,
       handleModalClose: this.handleModalClose,
       handleModalEdit: this.modalEditHandler,
+      handleModalCopy: this.props.handleModalCopy ? this.modalCopyHandler : null,
       showModal: this.state.showModal,
       modalReview: this.state.selectedReview,
       itemName: this.props.itemName || 'Review',
