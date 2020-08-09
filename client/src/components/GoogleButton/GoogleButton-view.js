@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function GoogleButtonView({ colorMode, height }) {
+function GoogleButtonView({ colorMode }) {
   const [buttonMode, setButtonMode] = useState('normal');
 
   const buttons = {
