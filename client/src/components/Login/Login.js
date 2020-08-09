@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Card, Col, notification, Row } from 'antd';
-import { CalendarOutlined, DashboardOutlined, GoogleOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
+import { Card, Col, notification, Row } from 'antd';
+import { CalendarOutlined, DashboardOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
+import GoogleButton from '../GoogleButton';
 import './Login.scss';
 
 class Login extends Component {
@@ -46,10 +47,7 @@ class Login extends Component {
         >
           <h1>Paper a Week</h1>
           <h5>Read a paper a week. That's it.</h5>
-          <Button href="/auth/google" size={'large'}>
-            {' '}
-            Sign in with <GoogleOutlined />{' '}
-          </Button>
+          <GoogleButton colorMode="dark" />
         </LazyHero>
         <div className="login__bottom-tray">
           <Row gutter={16} type="flex">
@@ -58,7 +56,7 @@ class Login extends Component {
                 <Card.Meta
                   avatar={<CalendarOutlined />}
                   title="Because reading papers is hard"
-                  description="Make it easy with Paper-a-week. Use our search feature and wizard to write one detailed review per week. Future you will thank you!"
+                  description="Make it easy with Paper-a-week. Find papers online, automatically import metadata, and fill out the review form to write one detailed review per week. Future you will thank you."
                 />
               </Card>
             </Col>
@@ -67,7 +65,7 @@ class Login extends Component {
                 <Card.Meta
                   avatar={<TeamOutlined />}
                   title="Because you're smart"
-                  description="Make your profile public to allow others to learn from your summaries and insights!"
+                  description="Make your profile public to allow others to learn from your summaries and insights. Share interesting papers or find inspiration in other profiles!"
                 />
               </Card>
             </Col>
@@ -76,7 +74,7 @@ class Login extends Component {
                 <Card.Meta
                   avatar={<DashboardOutlined />}
                   title="Because we could all use some motivation"
-                  description="Earn points by writing reviews on time and commenting on others!"
+                  description="Earn points by writing reviews on time and logging in every day."
                 />
               </Card>
             </Col>

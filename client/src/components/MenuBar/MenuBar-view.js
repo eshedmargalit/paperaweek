@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button } from 'antd';
 import { GoogleOutlined, UserOutlined } from '@ant-design/icons';
+import GoogleButton from '../GoogleButton';
 
 import './MenuBar.scss';
 
@@ -75,10 +76,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
 
       <span className="flex">
         <li className="menu__item">
-          <Button href="/auth/google" className="signout right">
-            {' '}
-            Sign up with <GoogleOutlined />{' '}
-          </Button>
+          <GoogleButton colorMode="light" />
         </li>
       </span>
     </ul>
