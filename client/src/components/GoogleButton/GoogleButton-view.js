@@ -20,7 +20,7 @@ function GoogleButtonView({ colorMode }) {
       href="/auth/google"
       size={'large'}
     >
-      <img src={src} height={'100%'} />
+      <img src={src} height={'100%'} alt="Sign in with Google Button" />
     </a>
   );
 
