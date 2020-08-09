@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button } from 'antd';
-import { GoogleOutlined, UserOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import GoogleButton from '../GoogleButton';
 
 import './MenuBar.scss';
