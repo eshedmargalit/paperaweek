@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, Button } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Badge, Button, Popover } from 'antd';
+import { UserOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import GoogleButton from '../GoogleButton';
 
 import './MenuBar.scss';
@@ -29,6 +29,26 @@ function MenuBarView({ points, user, numberOfDrafts }) {
   );
 
   const profileUrlExt = `/profiles/${user.googleId}`;
+
+  // define the link to the about tooltip
+  const infoContent = (
+    <div style={{ width: '300px' }}>
+      Paper-a-Week began as an experiment in accountability, hosted on{` `}
+      <a href="https://www.eshedmargalit.com/#/PaperReviews">my personal website</a>. The goal is simple: build a
+      literature-reading habit by writing a structured review of one paper per week. Reviews can be searched, sorted,
+      and shared with others. Thank you for using Paper-A-Week, I hope it helps you! <hr /> If you have suggestions or
+      run into problems, please send me an email at <code>eshed [dot] margalit [at] gmail [dot] com</code> <br />
+      <br /> Happy reviewing!
+      <br /> -Eshed
+    </div>
+  );
+  const infoPopover = (
+    <Popover content={infoContent} title={'About Paper-A-Week'} placement={'bottomRight'}>
+      <h4 style={{ color: 'white' }}>
+        <InfoCircleOutlined />
+      </h4>
+    </Popover>
+  );
 
   const menu = (
     <ul className="menu">
@@ -58,6 +78,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
             Sign Out
           </Button>
         </li>
+        <li className="menu__item">{infoPopover}</li>
       </span>
     </ul>
   );
@@ -78,6 +99,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
         <li className="menu__item">
           <GoogleButton colorMode="light" />
         </li>
+        <li className="menu__item">{infoPopover}</li>
       </span>
     </ul>
   );
