@@ -15,6 +15,11 @@ const createApp = (port = 5000) => {
     })
   );
 
+  // change something about the cookie session to automatically re-issue
+  app.use(function(req, res, next) {
+    req.session.nowInMinutes = Math.floor(Date.now() / 60e3);
+    next();
+  });
   app.use(passport.initialize());
   app.use(passport.session());
 
