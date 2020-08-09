@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
+import { Row, Col } from 'antd';
 
 import './Home.scss';
 
@@ -10,18 +11,20 @@ function HomeView({ auth, showForm }) {
   const formRedirect = <Redirect to="/form" push />;
   const homeRedirect = <Redirect to="/" push />;
   const home_render = (
-    <div>
-      <div className="searchbar width80">
-        <div style={{ width: '60%' }}>
+    <div className="width80">
+      <Row>
+        <Col lg={{ span: '16' }} sm={{ span: '24' }}>
           <PaperSearchBar />
-        </div>
-        <div style={{ width: '35%' }}>
+        </Col>
+        <Col lg={{ span: '7', offset: '1' }} sm={{ span: '24' }}>
           <ReadingList />
-        </div>
-      </div>
-      <div className="width80">
-        <ReviewReader />
-      </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ReviewReader />
+        </Col>
+      </Row>
     </div>
   );
 

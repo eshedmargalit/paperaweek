@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, Input, PageHeader, Popover, Spin } from 'antd';
+import { Alert, Button, Input, PageHeader, Popover, Row, Col, Spin } from 'antd';
 import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
 
 import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
@@ -74,18 +74,23 @@ function PaperSearchBarView({
           avatar={{ icon: <FileSearchOutlined /> }}
         />
       </div>
-      <div className="paperSearch__input">
-        <Input
-          type="text"
-          width="50%"
-          onChange={e => handleSearch(`${e.target.value}`)}
-          placeholder="search by DOI, title, author, or journal"
-          value={query}
-          allowClear
-        />
-        <Button onClick={startBlankReview}>
-          Create Manual Entry <PlusCircleOutlined />
-        </Button>
+      <div>
+        <Row gutter={[16, 16]}>
+          <Col lg={16} sm={24} xs={24}>
+            <Input
+              type="text"
+              onChange={e => handleSearch(`${e.target.value}`)}
+              placeholder="search by DOI, title, author, or journal"
+              value={query}
+              allowClear
+            />
+          </Col>
+          <Col lg={8} sm={24} xs={24}>
+            <Button style={{ width: '100%' }} onClick={startBlankReview}>
+              Create Manual Entry <PlusCircleOutlined />
+            </Button>
+          </Col>
+        </Row>
       </div>
     </div>
   );
