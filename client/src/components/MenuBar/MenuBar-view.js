@@ -1,38 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button, Popover } from 'antd';
-import { UserOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import GoogleButton from '../GoogleButton';
+import { UserOutlined, InfoCircleOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { useMedia } from 'react-media';
 
 import './MenuBar.scss';
 
-function MenuBarView({ points, user, numberOfDrafts }) {
-  let draftMenuItem = null;
-  if (numberOfDrafts > 0) {
-    draftMenuItem = (
-      <>
-        <Link to="/drafts">
-          Drafts{` `}
-          <Badge count={numberOfDrafts} className="menu__badge" />
-        </Link>
-      </>
-    );
-  }
+const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover, isSmallScreen) => {
+  const [collapsed, setCollapsed] = useState(true);
+  const signedIn = displayName !== '';
+  const profileButton = (
+    <li className="menu__item">
+      <Button type="default" href={`/profiles/${googleId}`} className="right">
+        My Profile
+      </Button>
+    </li>
+  );
 
-  const pointsStr = points.points === 1 ? 'point' : 'points';
+  const signoutButton = (
+    <li className="menu__item">
+      <Button type="default" href="/api/logout" className="signout right">
+        Sign Out
+      </Button>
+    </li>
+  );
+
+  const userNameDisplay = (
+    <span>
+      <UserOutlined />
+      {` `}
+      <span className="displayName">{displayName}</span>
+    </span>
+  );
+
+  const brandHeader = (
+    <li className="menu__item">
+      <Link to="/dashboard">
+        <h5>{signedIn ? userNameDisplay : 'Paper-A-Week'}</h5>
+      </Link>
+    </li>
+  );
+
+  const expandedMenu = (
+    <ul className="menu">
+      <span className="flex">
+        {brandHeader}
+        {signedIn ? <li className="menu__item">{pointsMenuItem}</li> : null}
+      </span>
+
+      <span className="flex">
+        {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
+        {signedIn ? profileButton : null}
+        {signedIn ? signoutButton : null}
+        <li className="menu__item">{infoPopover}</li>
+      </span>
+    </ul>
+  );
+
+  const hiddenContent = collapsed ? null : (
+    <>
+      {signedIn ? <li className="menu__item">{pointsMenuItem}</li> : null}
+      {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
+      {signedIn ? profileButton : null}
+      {signedIn ? signoutButton : null}
+      <li className="menu__item">{infoPopover}</li>
+    </>
+  );
+
+  const collapsedMenu = (
+    <ul className="menu collapsed">
+      <span className="flex">
+        {brandHeader}
+        <Button
+          type="text"
+          icon={collapsed ? <MenuOutlined /> : <CloseOutlined />}
+          ghost
+          onClick={() => {
+            setCollapsed(!collapsed);
+          }}
+        />
+      </span>
+      {hiddenContent}
+    </ul>
+  );
+
+  return isSmallScreen ? collapsedMenu : expandedMenu;
+};
+
+function MenuBarView({ points, user, numberOfDrafts }) {
+  const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
+
+  const draftMenuItem = numberOfDrafts === 0 || (
+    <>
+      <Link to="/drafts">
+        Drafts{` `}
+        <Badge count={numberOfDrafts} className="menu__badge" />
+      </Link>
+    </>
+  );
+
   const pointsMenuItem = (
     <>
       {points.points}
       {` `}
-      {pointsStr}
+      {points.points === 1 ? 'point' : 'points'}
     </>
   );
 
-  const profileUrlExt = `/profiles/${user.googleId}`;
-
-  // define the link to the about tooltip
   const infoContent = (
-    <div style={{ width: '300px' }}>
+    <div className="infoContent">
       Paper-a-Week began as an experiment in accountability, hosted on{` `}
       <a href="https://www.eshedmargalit.com/#/PaperReviews">my personal website</a>. The goal is simple: build a
       literature-reading habit by writing a structured review of one paper per week. Reviews can be searched, sorted,
@@ -42,6 +118,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
       <br /> -Eshed
     </div>
   );
+
   const infoPopover = (
     <Popover content={infoContent} title={'About Paper-A-Week'} placement={'bottomRight'}>
       <h4 style={{ color: 'white' }}>
@@ -50,61 +127,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     </Popover>
   );
 
-  const menu = (
-    <ul className="menu">
-      <span className="flex">
-        <li className="menu__item">
-          <Link to="/dashboard">
-            <h5>
-              <UserOutlined />
-              {` `}
-              <span className="displayName">{user.displayName}</span>
-            </h5>
-          </Link>
-        </li>
-
-        <li className="menu__item points">{pointsMenuItem}</li>
-      </span>
-
-      <span className="flex">
-        <li className="menu__item">{draftMenuItem}</li>
-        <li className="menu__item">
-          <Button href={profileUrlExt} className="right">
-            My Profile
-          </Button>
-        </li>
-        <li className="menu__item">
-          <Button href="/api/logout" className="signout right">
-            Sign Out
-          </Button>
-        </li>
-        <li className="menu__item">{infoPopover}</li>
-      </span>
-    </ul>
-  );
-
-  const notSignedInMenu = (
-    <ul className="menu">
-      <span className="flex">
-        <li className="menu__item">
-          <Link to="/dashboard">
-            <h5>
-              <span className="displayName">Paper-a-Week</span>
-            </h5>
-          </Link>
-        </li>
-      </span>
-
-      <span className="flex">
-        <li className="menu__item">
-          <GoogleButton colorMode="light" />
-        </li>
-        <li className="menu__item">{infoPopover}</li>
-      </span>
-    </ul>
-  );
-
-  return user.displayName === '' ? notSignedInMenu : menu;
+  return Menu(user.displayName, user.googleId, pointsMenuItem, draftMenuItem, infoPopover, isSmallScreen);
 }
 
 export default MenuBarView;
