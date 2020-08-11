@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, Button, Popover } from 'antd';
-import { UserOutlined, InfoCircleOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  InfoCircleOutlined,
+  LogoutOutlined,
+  MenuOutlined,
+  CloseOutlined,
+  UnorderedListOutlined,
+} from '@ant-design/icons';
 import { useMedia } from 'react-media';
 
 import './MenuBar.scss';
@@ -11,17 +18,19 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
   const signedIn = displayName !== '';
   const profileButton = (
     <li className="menu__item">
-      <Button type="default" href={`/profiles/${googleId}`} className="right">
-        My Profile
-      </Button>
+      <a type="text" href={`/profiles/${googleId}`} className="right">
+        <UnorderedListOutlined />
+        {` `}My Profile
+      </a>
     </li>
   );
 
   const signoutButton = (
     <li className="menu__item">
-      <Button type="default" href="/api/logout" className="signout right">
-        Sign Out
-      </Button>
+      <a type="text" href="/api/logout" className="signout right">
+        <LogoutOutlined />
+        {` `}Sign Out
+      </a>
     </li>
   );
 
@@ -57,15 +66,32 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
     </ul>
   );
 
-  const hiddenContent = collapsed ? null : (
-    <>
-      {signedIn ? <li className="menu__item">{pointsMenuItem}</li> : null}
-      {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
-      {signedIn ? profileButton : null}
-      {signedIn ? signoutButton : null}
-      <li className="menu__item">{infoPopover}</li>
-    </>
-  );
+  const hiddenItems = [
+    {
+      name: 'points',
+      content: <li className="menu__item">{pointsMenuItem}</li>,
+    },
+    {
+      name: 'drafts',
+      content: <li className="menu__item">{draftMenuItem}</li>,
+    },
+    {
+      name: 'profileButton',
+      content: profileButton,
+    },
+    {
+      name: 'signoutButton',
+      content: signoutButton,
+    },
+    {
+      name: 'info',
+      content: <li className="menu__item">{infoPopover}</li>,
+    },
+  ];
+
+  const hiddenContent = hiddenItems.map(item => <div key={item.name}>{collapsed ? null : item.content}</div>);
+
+  const menuHiddenClass = collapsed ? 'menuHidden' : 'menuExpanded';
 
   const collapsedMenu = (
     <ul className="menu collapsed">
@@ -80,7 +106,7 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
           }}
         />
       </span>
-      {hiddenContent}
+      <div className={menuHiddenClass}>{hiddenContent}</div>
     </ul>
   );
 
@@ -121,9 +147,10 @@ function MenuBarView({ points, user, numberOfDrafts }) {
 
   const infoPopover = (
     <Popover content={infoContent} title={'About Paper-A-Week'} placement={'bottomRight'}>
-      <h4 style={{ color: 'white' }}>
+      <div>
         <InfoCircleOutlined />
-      </h4>
+        {` `}About
+      </div>
     </Popover>
   );
 

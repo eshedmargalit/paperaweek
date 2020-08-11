@@ -16,6 +16,25 @@ $blue-dark: rgba(73, 132, 238, 1);
   height: 100% !important;
 }
 
+.menuHidden {
+  overflow: hidden;
+  height: 0px;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.25s ease-out;
+}
+
+.menuExpanded {
+  display: flex;
+  flex-direction: column;
+  height: 130px;
+  transition: height 0.25s ease-in;
+}
+
+.infoContent {
+  width: 300px;
+}
+
 .menu {
   display: flex;
   color: white;
@@ -28,7 +47,7 @@ $blue-dark: rgba(73, 132, 238, 1);
   padding: 4px 12px 4px 12px;
 
   li {
-    margin-left: 5px;
+    margin-left: 12px;
     line-height: 2;
   }
 
@@ -36,6 +55,7 @@ $blue-dark: rgba(73, 132, 238, 1);
     font-weight: 700;
     font-size: 1rem;
     color: white;
+    float: left;
   }
 
   a:hover {
@@ -47,7 +67,6 @@ $blue-dark: rgba(73, 132, 238, 1);
       color: #fff;
     }
     color: #888;
-    float: left;
     &:hover {
       color: #fff;
     }
@@ -70,7 +89,6 @@ $blue-dark: rgba(73, 132, 238, 1);
     color: #ccc;
     .displayName {
       color: #fff;
-      margin-right: 20px;
     }
   }
 
@@ -78,6 +96,7 @@ $blue-dark: rgba(73, 132, 238, 1);
     color: #fff;
     font-weight: 700;
     font-size: 1rem;
+    margin-left: 8px;
   }
 
   .menu__badge {
@@ -89,4 +108,20 @@ $blue-dark: rgba(73, 132, 238, 1);
     color: #222;
     opacity: 0.5;
   }
+}
+
+// Animation
+.item-enter {
+  opacity: 0;
+}
+.item-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.item-exit {
+  opacity: 1;
+}
+.item-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
 }
