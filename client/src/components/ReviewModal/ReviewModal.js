@@ -116,6 +116,10 @@ class ReviewModal extends Component {
             {` `}
             {doi_tag}
           </div>
+          <br />
+          <strong>TLDR</strong>
+          <br />
+          {paper.one_sentence}
           <hr />
           {reviewBody}
         </Modal>
