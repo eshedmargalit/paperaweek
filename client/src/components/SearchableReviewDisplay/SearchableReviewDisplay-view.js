@@ -24,6 +24,7 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
   const displaySettings = {
     titleStringLengthLimit: 150,
     journalStringLengthLimit: 30,
+    oneSentenceStringLengthLimit: 80,
   };
 
   const columns = [
@@ -35,7 +36,7 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
     {
       title: 'One Sentence',
       dataIndex: ['paper', 'one_sentence'],
-      render: one_sentence => <span>{one_sentence}</span>,
+      render: one_sentence => <span>{shortenString(one_sentence, displaySettings.oneSentenceStringLengthLimit)}</span>,
     },
     {
       title: 'Authors',
