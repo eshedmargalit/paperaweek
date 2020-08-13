@@ -62,11 +62,11 @@ function FrequencyChartView(reviews) {
     return (
       <Card title="Your Stats" style={{ marginTop: 5 }}>
         <Row>
-          <Col lg={16} sm={24}>
+          <Col lg={16} sm={24} xs={24}>
             {' '}
             {chart}
           </Col>
-          <Col lg={8} sm={24}>
+          <Col lg={8} sm={24} xs={24}>
             {' '}
             {statRender}
           </Col>
