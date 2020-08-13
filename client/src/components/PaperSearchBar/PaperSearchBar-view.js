@@ -99,7 +99,7 @@ function PaperSearchBarView({
     <Alert
       className="no-results-alert"
       message="No Results Found"
-      description="Try searching for a different keyword or with simpler terms"
+      description="Try searching for a different keyword or with simpler terms. If you're searching by DOI, try formatting the query like '10.7554/elife.53798'."
       type="info"
       showIcon
     />
