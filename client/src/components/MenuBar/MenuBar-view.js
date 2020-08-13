@@ -36,9 +36,11 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
 
   const userNameDisplay = (
     <span>
-      <UserOutlined />
+      <span className="userIcon">
+        <UserOutlined />
+      </span>
       {` `}
-      <span className="displayName">{displayName}</span>
+      {displayName}
     </span>
   );
 
@@ -69,29 +71,45 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
   const hiddenItems = [
     {
       name: 'points',
+      requireSignIn: true,
       content: <li className="menu__item">{pointsMenuItem}</li>,
     },
     {
       name: 'drafts',
+      requireSignIn: true,
       content: <li className="menu__item">{draftMenuItem}</li>,
     },
     {
       name: 'profileButton',
+      requireSignIn: true,
       content: profileButton,
     },
     {
       name: 'signoutButton',
+      requireSignIn: true,
       content: signoutButton,
     },
     {
       name: 'info',
+      requireSignIn: false,
       content: <li className="menu__item">{infoPopover}</li>,
     },
   ];
 
-  const hiddenContent = hiddenItems.map(item => <div key={item.name}>{collapsed ? null : item.content}</div>);
+  const hiddenContent = hiddenItems.map(item => {
+    if (collapsed) {
+      return null;
+    }
+
+    if (item.requireSignIn) {
+      return signedIn ? <div key={item.name}>{item.content}</div> : null;
+    } else {
+      return <div key={item.name}>{item.content}</div>;
+    }
+  });
 
   const menuHiddenClass = collapsed ? 'menuHidden' : 'menuExpanded';
+  const menuHeight = collapsed ? '0px' : signedIn ? '130px' : '30px';
 
   const collapsedMenu = (
     <ul className="menu collapsed">
@@ -106,7 +124,9 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
           }}
         />
       </span>
-      <div className={menuHiddenClass}>{hiddenContent}</div>
+      <div className={menuHiddenClass} style={{ height: menuHeight }}>
+        {hiddenContent}
+      </div>
     </ul>
   );
 
