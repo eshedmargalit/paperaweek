@@ -20,8 +20,8 @@ function StatBoxView({ reviews, startBlankReview }) {
         <Col>
           <h6> Getting Started </h6>
           <p>
-            <strong>Option 1</strong>: Click
-            <Button onClick={startBlankReview}>
+            <strong>Option 1</strong>: Click{` `}
+            <Button onClick={startBlankReview} size="small">
               Create Manual Entry <PlusCircleOutlined />
             </Button>{' '}
             to start a review from scratch.
