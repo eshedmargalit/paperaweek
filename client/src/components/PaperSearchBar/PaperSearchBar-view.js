@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Button, Input, PageHeader, Popover, Row, Col, Spin } from 'antd';
 import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
 
-import { render_comma_sep_list, removeMiddleAuthors } from '../utils';
+import { renderCommaSepList, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
 import './PaperSearchBar.scss';
 
@@ -11,7 +11,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
     let { paper, id } = result;
     let { title, journal, date, authors } = paper;
     let year = new Date(date).getFullYear();
-    let author_names_list = render_comma_sep_list(removeMiddleAuthors(authors, 4), 'author_names');
+    let author_names_list = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
     const popOverContent = (
       <div>
@@ -65,7 +65,7 @@ function PaperSearchBarView({
   query,
 }) {
   const renderedSearchResults = renderSearchResults(searchResults, handleClickResult, handleClickResultButton);
-  const search_area = (
+  const searchArea = (
     <div>
       <div>
         <PageHeader
@@ -119,7 +119,7 @@ function PaperSearchBarView({
   return (
     <div>
       <br />
-      {search_area}
+      {searchArea}
       {loading ? <Spin className="searchResult loading-spinner" /> : searchRender}
     </div>
   );

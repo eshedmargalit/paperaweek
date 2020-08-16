@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Tag } from 'antd';
 import moment from 'moment';
-import { render_comma_sep_list } from '../utils.js';
+import { renderCommaSepList } from '../utils.js';
 
 class ReviewModal extends Component {
   getTagColor = tag => {
@@ -110,8 +110,8 @@ class ReviewModal extends Component {
           width="80%"
         >
           <div>
-            {render_comma_sep_list(paper.authors)}
-            {render_comma_sep_list(paper.institutions)}
+            {renderCommaSepList(paper.authors)}
+            {renderCommaSepList(paper.institutions)}
             Published in {paper.journal} in {date_str}
             {` `}
             {doi_tag}
