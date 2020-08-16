@@ -13,7 +13,8 @@ function MinimalStatBoxView({ userDisplayName, reviews }) {
     </Row>
   );
 
-  const { numReviews, ppw, ppwColor } = getReviewStats(reviews);
+  // destructure if not null, or set all to undefined
+  const { numReviews, ppw, ppwColor } = getReviewStats(reviews) || {};
   const minimalStats = (
     <div style={{ display: 'flex', width: '400px' }}>
       <div style={{ width: '50%' }}>
