@@ -21,7 +21,7 @@ function HomeView({ auth, showForm }) {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col span={24}>
           <ReviewReader />
         </Col>
       </Row>
