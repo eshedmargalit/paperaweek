@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-export function render_comma_sep_list(items, key) {
+export function renderCommaSepList(items, key) {
   return items.map((item, i) => {
     let to_render;
     if (i === items.length - 1) {
