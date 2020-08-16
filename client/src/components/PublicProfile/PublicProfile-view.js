@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Row, Spin } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import NotFound from '../NotFound/NotFound';
 
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
@@ -16,7 +16,9 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
   const preferences = isOwnPage && (
     <div className="width80">
       <Row>
-        <Preferences onChange={onChange} />
+        <Col span={24}>
+          <Preferences onChange={onChange} />
+        </Col>
       </Row>
     </div>
   );
@@ -30,17 +32,21 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
   const profileView = reviews ? (
     <>
       <Row>
-        <MinimalStatBox userDisplayName={userDisplayName} reviews={reviews} />
+        <Col span={24}>
+          <MinimalStatBox userDisplayName={userDisplayName} reviews={reviews} />
+        </Col>
       </Row>
       <Row>
-        <SearchableReviewDisplay
-          reviews={reviews}
-          reviewToOpen={reviewToOpen}
-          deleteReview={null}
-          handleModalEdit={null}
-          pageHeaderProps={pageHeaderProps}
-          hideFooter={true}
-        />
+        <Col span={24}>
+          <SearchableReviewDisplay
+            reviews={reviews}
+            reviewToOpen={reviewToOpen}
+            deleteReview={null}
+            handleModalEdit={null}
+            pageHeaderProps={pageHeaderProps}
+            hideFooter={true}
+          />
+        </Col>
       </Row>
     </>
   ) : (
@@ -50,8 +56,14 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
   const toRender = loading ? <Spin /> : profileView;
   return (
     <div>
-      {preferences}
-      <div className="width80">{toRender}</div>
+      <Row>
+        <Col span={24}>{preferences}</Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <div className="width80">{toRender}</div>
+        </Col>
+      </Row>
     </div>
   );
 }
