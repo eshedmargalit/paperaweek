@@ -10,7 +10,7 @@ class PaperSearchBarContainer extends Component {
     super(props);
 
     // debounce search to avoid repeated calls to API
-    this.academicSearchThrottled = _.debounce(this.academicSearch, 500);
+    this.academicSearchThrottled = _.debounce(this.academicSearch, 800);
     this.handleSearch.bind(this);
 
     this.state = {
