@@ -10,7 +10,11 @@ const capitalCase = input => {
     .trim()
     .split(" ");
 
-  return words.reduce((accum, word) => {
+  const filtered = words.filter(word => {
+    return word !== "";
+  });
+
+  return filtered.reduce((accum, word) => {
     // If it's any of the following words, don't uppercase it
     return ["and", "or", "in", "of", "the", "an", "at"].includes(word)
       ? accum + " " + word
