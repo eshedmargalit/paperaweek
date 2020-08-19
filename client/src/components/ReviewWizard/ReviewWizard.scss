@@ -29,10 +29,6 @@
   &-children {
     display: flex;
     align-items: center;
-
-    & textarea:before {
-      content: '- ';
-    }
   }
 }
 
