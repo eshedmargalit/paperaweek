@@ -10,6 +10,15 @@
   }
 }
 
+.dynamic-add-button {
+  width: 150px;
+  margin-left: 25px;
+}
+
+.bullet {
+  margin-right: 20px;
+}
+
 .save-icon {
   margin: 5px 0px;
 }
@@ -20,6 +29,10 @@
   &-children {
     display: flex;
     align-items: center;
+
+    & textarea:before {
+      content: '- ';
+    }
   }
 }
 
