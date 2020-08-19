@@ -1,6 +1,8 @@
 export const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 4 },
+  labelCol: {
+    xl: { span: 3 },
+    lg: { span: 24 },
+  },
 };
 
 export const formItemLayoutWithoutLabel = {

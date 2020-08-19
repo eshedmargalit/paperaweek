@@ -14,7 +14,7 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
   };
 
   const preferences = isOwnPage && (
-    <div className="width80">
+    <div>
       <Row>
         <Col span={24}>
           <Preferences onChange={onChange} />
@@ -55,15 +55,9 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
 
   const toRender = loading ? <Spin /> : profileView;
   return (
-    <div>
-      <Row>
-        <Col span={24}>{preferences}</Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <div className="width80">{toRender}</div>
-        </Col>
-      </Row>
+    <div className="width80">
+      {preferences}
+      {toRender}
     </div>
   );
 }
