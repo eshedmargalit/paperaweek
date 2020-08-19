@@ -9,12 +9,10 @@ function PreferencesRedux({ auth, user, onChange }) {
     onChange();
   };
 
-  let { googleId, publicProfile } = user;
+  let { publicProfile } = user;
   const initialValues = { publicProfile };
 
-  return (
-    <PreferencesContainer auth={auth} profileId={googleId} initialValues={initialValues} saveResults={saveResults} />
-  );
+  return <PreferencesContainer auth={auth} initialValues={initialValues} saveResults={saveResults} />;
 }
 
 const mapStateToProps = ({ user, auth }) => {
