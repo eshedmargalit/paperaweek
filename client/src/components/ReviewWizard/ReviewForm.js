@@ -141,13 +141,15 @@ class ReviewForm extends Component {
           {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
             rules: [{ required: required, message: `${label} point cannot be blank` }],
           })(
-            <TextArea
-              ref={input => {
-                this.focusedInput = input;
-              }}
-              autoSize={{ minRows: 2, maxRows: 5 }}
-              style={{ width: '90%' }}
-            />
+            <div style={{ display: 'flex', width: '90%' }}>
+              <div className="bullet">&bull;</div>
+              <TextArea
+                ref={input => {
+                  this.focusedInput = input;
+                }}
+                autoSize={{ minRows: 2, maxRows: 5 }}
+              />
+            </div>
           )}
           {field_value.length > 1 && (
             <CloseOutlined
@@ -168,9 +170,9 @@ class ReviewForm extends Component {
                 onClick={() => {
                   this.addItem(fieldName);
                 }}
-                style={{ width: '150px' }}
+                className="dynamic-add-button"
               >
-                <PlusOutlined /> Add Point
+                <PlusOutlined /> Add Bullet Point
               </Button>
             </Tooltip>
           </Form.Item>
