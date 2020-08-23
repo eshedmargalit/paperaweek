@@ -138,19 +138,19 @@ class ReviewForm extends Component {
           required={required}
           key={fieldName + field_value_idx}
         >
-          {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
-            rules: [{ required: required, message: `${label} point cannot be blank` }],
-          })(
-            <div style={{ display: 'flex', width: '90%' }}>
-              <div className="bullet">&bull;</div>
+          <div style={{ display: 'flex', width: '90%' }}>
+            <div className="bullet">&bull;</div>
+            {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
+              rules: [{ required: required, message: `${label} point cannot be blank` }],
+            })(
               <TextArea
                 ref={input => {
                   this.focusedInput = input;
                 }}
                 autoSize={{ minRows: 2, maxRows: 5 }}
               />
-            </div>
-          )}
+            )}
+          </div>
           {field_value.length > 1 && (
             <CloseOutlined
               className="dynamic-delete-button"
