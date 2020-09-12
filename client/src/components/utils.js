@@ -1,6 +1,9 @@
 import React from 'react';
 import moment from 'moment';
 
+import 'katex/dist/katex.min.css';
+import { InlineMath } from 'react-katex';
+
 export function renderCommaSepList(items, key) {
   return items.map((item, i) => {
     let to_render;
@@ -115,4 +118,21 @@ export function getReviewStats(reviews) {
 
 export function isDOI(query) {
   return query.startsWith('10.') || query.includes('doi.org');
+}
+
+function isEven(x) {
+  return x % 2 === 0;
+}
+
+export function wrapMath(s, delimiter = '$') {
+  const parts = s.split(delimiter);
+
+  // now odds are not math, evens are math (always?)
+  return (
+    <div>
+      {parts.map((part, partIdx) => {
+        return isEven(partIdx) ? part : <InlineMath>{part}</InlineMath>;
+      })}
+    </div>
+  );
 }
