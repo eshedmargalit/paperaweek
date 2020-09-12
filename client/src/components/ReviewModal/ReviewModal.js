@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Tag } from 'antd';
 import moment from 'moment';
-import { renderCommaSepList } from '../utils.js';
+import { renderCommaSepList, wrapMath } from '../utils.js';
 
 class ReviewModal extends Component {
   getTagColor = tag => {
@@ -84,7 +84,9 @@ class ReviewModal extends Component {
               if (point !== '') {
                 empty = false;
               }
-              return <li key={point}>{point}</li>;
+              const wrappedPoint = wrapMath(point);
+              console.log(wrappedPoint);
+              return <li key={point}>{wrapMath(point)}</li>;
             })}
           </ul>
         </div>
