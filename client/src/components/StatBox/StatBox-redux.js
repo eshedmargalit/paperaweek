@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import StatBoxContainer from './StatBox-container';
-import { startReview } from '../../actions';
+import { setReview } from '../../actions';
 
 class StatBoxRedux extends Component {
   startBlankReview = () => {
-    this.props.dispatch(startReview(null, null));
+    this.props.dispatch(setReview(null, null));
   };
 
   render() {

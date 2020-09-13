@@ -7,10 +7,9 @@ import { Row, Col } from 'antd';
 
 import './Home.scss';
 
-function HomeView({ auth, showForm }) {
-  const formRedirect = <Redirect to="/form" push />;
-  const homeRedirect = <Redirect to="/" push />;
-  const home_render = (
+function HomeView({ auth }) {
+  const loginRedirect = <Redirect to="/" push />;
+  const homeRender = (
     <div className="width80">
       <Row>
         <Col lg={{ span: '16' }} sm={{ span: '24' }}>
@@ -28,7 +27,7 @@ function HomeView({ auth, showForm }) {
     </div>
   );
 
-  return auth ? (showForm ? formRedirect : home_render) : homeRedirect;
+  return auth ? homeRender : loginRedirect;
 }
 
 export default HomeView;

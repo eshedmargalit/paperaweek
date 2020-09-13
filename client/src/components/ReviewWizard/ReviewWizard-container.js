@@ -9,6 +9,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 import { Button } from 'antd';
 import _ from 'lodash';
+import { Redirect } from 'react-router-dom';
 
 class ReviewWizardContainer extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class ReviewWizardContainer extends Component {
       paper: blankPaper,
       review: blankReview,
       draftId: draftId,
+      redirectHome: false,
     };
   }
 
@@ -140,12 +142,13 @@ class ReviewWizardContainer extends Component {
     );
     const stepContent = [step0, step1, modal];
 
-    return (
+    return this.state.redirectHome ? (
+      <Redirect to="/dashboard" push />
+    ) : (
       <ReviewWizardView
         autosaveStatus={this.state.autosaveStatus}
         lastSave={this.state.lastSave}
-        showWizard={this.props.activeReview.showForm}
-        onPageBack={this.props.onPageBack}
+        onPageBack={() => this.setState({ redirectHome: true })}
         currentStep={this.state.step}
         stepContent={stepContent[this.state.step]}
       />

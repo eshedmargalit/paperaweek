@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Alert, Button, Input, PageHeader, Popover, Row, Col, Spin } from 'antd';
 import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
 
@@ -11,7 +12,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
     let { paper, id } = result;
     let { title, journal, date, authors } = paper;
     let year = new Date(date).getFullYear();
-    let author_names_list = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
+    let authorNamesList = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
     const popOverContent = (
       <div>
@@ -39,7 +40,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
             <div>
               <strong>{title}</strong>
               <br />
-              {author_names_list}
+              {authorNamesList}
             </div>
           </div>
           <em>
@@ -87,7 +88,10 @@ function PaperSearchBarView({
           </Col>
           <Col lg={8} sm={24} xs={24}>
             <Button style={{ width: '100%' }} onClick={startBlankReview}>
-              Create Manual Entry <PlusCircleOutlined />
+              <Link to="/form">
+                {' '}
+                Create Manual Entry <PlusCircleOutlined />
+              </Link>
             </Button>
           </Col>
         </Row>

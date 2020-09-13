@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
 import {
   assignReviewPoints,
-  startReview,
-  endReview,
   updateReadingList,
   updateDrafts,
   updateDraftId,
   updateReviews,
+  setReview,
 } from '../../actions/index';
 import moment from 'moment';
 
@@ -21,10 +20,6 @@ class ReviewWizardRedux extends Component {
       submitLoading: false,
     };
   }
-
-  onPageBack = async () => {
-    this.props.dispatch(endReview());
-  };
 
   deleteActiveDraft = async () => {
     let { activeDraft, drafts } = this.props;
@@ -80,7 +75,6 @@ class ReviewWizardRedux extends Component {
       if (!reviewId) {
         this.props.dispatch(assignReviewPoints(newReviewList));
       }
-      this.props.dispatch(endReview());
     });
   };
 
@@ -109,14 +103,13 @@ class ReviewWizardRedux extends Component {
   };
 
   restartReview = reviewContent => {
-    this.props.dispatch(startReview(null, null, reviewContent));
+    this.props.dispatch(setReview(null, null, reviewContent));
   };
 
   render() {
     let { activeReview, activeDraft, readingList } = this.props;
     return (
       <ReviewWizardContainer
-        onPageBack={this.onPageBack}
         restartReview={this.restartReview}
         submitReview={this.submitReview}
         saveDraft={this.saveDraft}

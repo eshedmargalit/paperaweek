@@ -6,13 +6,11 @@ import { sortBy } from 'lodash';
 import moment from 'moment';
 
 export const FETCH_USER = 'FETCH_USER';
-export const EXIT_FORM = 'EXIT_FORM';
 export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
 export const UPDATE_DRAFT_ID = 'UPDATE_DRAFT_ID';
 export const UPDATE_READING_LIST = 'UPDATE_READING_LIST';
 export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
-export const START_REVIEW = 'START_REVIEW';
-export const END_REVIEW = 'END_REVIEW';
+export const SET_REVIEW = 'SET_REVIEW';
 export const GIVE_POINTS = 'GIVE_POINTS';
 
 export const fetchUser = () => async dispatch => {
@@ -98,9 +96,9 @@ export const assignReviewPoints = newReviewList => async dispatch => {
   });
 };
 
-export function startReview(paperId, reviewContent) {
+export function setReview(paperId, reviewContent) {
   return {
-    type: START_REVIEW,
+    type: SET_REVIEW,
     payload: { paperId, reviewContent },
   };
 }
@@ -109,13 +107,6 @@ export function updateDraftId(draftId) {
   return {
     type: UPDATE_DRAFT_ID,
     payload: { draftId },
-  };
-}
-
-export function endReview() {
-  return {
-    type: END_REVIEW,
-    payload: null,
   };
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { startReview, updateReviews } from '../../actions';
+import { setReview, updateReviews } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { notification } from 'antd';
 
@@ -23,7 +23,7 @@ class ReviewReaderRedux extends Component {
   };
 
   handleModalEdit = reviewContent => {
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(setReview(null, reviewContent));
   };
 
   handleModalCopy = review => {

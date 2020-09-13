@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
 import { Steps, PageHeader } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment from 'moment';
 const { Step } = Steps;
 
-function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, stepContent, onPageBack }) {
+function ReviewWizardView({ autosaveStatus, lastSave, currentStep, stepContent, onPageBack }) {
   const [currentMoment, setMoment] = useState(lastSave);
 
   useEffect(() => {
@@ -15,8 +14,6 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
     }, 10000);
     return () => clearInterval(interval);
   }, []);
-
-  let homeRedirect = <Redirect to="/dashboard" push />;
 
   let autosaveIcon;
   switch (autosaveStatus) {
@@ -87,7 +84,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, showWizard, currentStep, s
       <div>{stepContent}</div>
     </div>
   );
-  return <div>{showWizard ? wizardRender : homeRedirect}</div>;
+  return wizardRender;
 }
 
 export default ReviewWizardView;
