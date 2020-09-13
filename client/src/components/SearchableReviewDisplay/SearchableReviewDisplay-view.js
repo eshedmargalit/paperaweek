@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
@@ -188,12 +189,15 @@ function SearchableReviewDisplayView({
   let reviewModal = null;
   let itemName = modalProps.itemName || 'Review';
   let modalFooter = [
-    <Button key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
-      Edit this {itemName}
-    </Button>,
+    <Link to="/form">
+      <Button className="footer-btn" key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
+        Edit this {itemName}
+      </Button>
+    </Link>,
     <Button
       key="delete"
       type="dashed"
+      className="footer-btn"
       icon={<DeleteOutlined />}
       onClick={() => handleModalDelete(deleteConfirmHandler)}
     >
@@ -203,7 +207,7 @@ function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" icon={<EditOutlined />} onClick={handleModalCopy}>
+      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={handleModalCopy}>
         Copy Link to this {itemName}
       </Button>
     );

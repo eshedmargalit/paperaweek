@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateDraftId, updateDrafts, startReview } from '../../actions';
+import { updateDraftId, updateDrafts, setReview } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 class DraftsRedux extends Component {
@@ -31,7 +31,7 @@ class DraftsRedux extends Component {
       review: draft.review,
     };
     this.props.dispatch(updateDraftId(draftId));
-    this.props.dispatch(startReview(null, draftContent));
+    this.props.dispatch(setReview(null, draftContent));
   };
 
   redirectHome = () => {

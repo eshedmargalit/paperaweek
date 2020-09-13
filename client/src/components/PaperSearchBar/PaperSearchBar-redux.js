@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { startReview, updateReadingList } from '../../actions';
+import { setReview, updateReadingList } from '../../actions';
 import PaperSearchBarContainer from './PaperSearchBar-container';
 
 class PaperSearchBarRedux extends Component {
-  startBlankReview = () => {
-    this.props.dispatch(startReview(null, null));
+  setBlankReview = () => {
+    this.props.dispatch(setReview(null, null));
   };
 
   updateReadingList = async newReadingList => {
@@ -27,13 +27,13 @@ class PaperSearchBarRedux extends Component {
       paper: paper,
       review: null,
     };
-    this.props.dispatch(startReview(null, reviewContent));
+    this.props.dispatch(setReview(null, reviewContent));
   };
 
   render() {
     return (
       <PaperSearchBarContainer
-        startBlankReview={this.startBlankReview.bind(this)}
+        setBlankReview={this.setBlankReview.bind(this)}
         handleClickResult={this.handleClickResult.bind(this)}
         handleClickResultButton={this.handleClickResultButton.bind(this)}
       />
@@ -47,7 +47,4 @@ const mapStateToProps = ({ readingList }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(PaperSearchBarRedux);
+export default connect(mapStateToProps, null)(PaperSearchBarRedux);

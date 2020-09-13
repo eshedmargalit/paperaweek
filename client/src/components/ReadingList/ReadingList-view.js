@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Empty, List, PageHeader } from 'antd';
 import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
@@ -35,7 +36,9 @@ const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandl
         </div>
         <div>
           <div className="reading-list__form-button">
-            <Button onClick={() => editClickHandler(value)} icon={<FormOutlined />} />
+            <Link to="/form">
+              <Button onClick={() => editClickHandler(value)} icon={<FormOutlined />} />
+            </Link>
           </div>
           <div>
             <Button onClick={() => deleteClickHandler(value)} icon={<DeleteOutlined />} />
