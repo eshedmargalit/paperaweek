@@ -84,8 +84,6 @@ class ReviewModal extends Component {
               if (point !== '') {
                 empty = false;
               }
-              const wrappedPoint = wrapMath(point);
-              console.log(wrappedPoint);
               return <li key={point}>{wrapMath(point)}</li>;
             })}
           </ul>
