@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Card, Col, notification, Row } from 'antd';
-import { CalendarOutlined, DashboardOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
+import { CalendarOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import GoogleButton from '../GoogleButton';
