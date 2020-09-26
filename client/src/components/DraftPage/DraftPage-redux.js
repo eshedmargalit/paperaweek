@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Drafts from '../Drafts';
 
 class DraftPageRedux extends Component {
@@ -22,7 +22,4 @@ const mapStateToProps = ({ auth }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(DraftPageRedux);
+export default connect(mapStateToProps, null)(DraftPageRedux);
