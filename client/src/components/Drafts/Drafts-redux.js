@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateDraftId, updateDrafts, setReview } from '../../actions';
+import { Redirect } from 'react-router-dom';
+import { setReview, updateDraftId, updateDrafts } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 class DraftsRedux extends Component {
@@ -43,12 +43,7 @@ class DraftsRedux extends Component {
       pageHeaderTitle: 'Read Your Drafts',
       onPageBack: this.redirectHome,
     };
-    const { activeReview, drafts } = this.props;
-    let { showForm } = activeReview;
-
-    if (showForm) {
-      return <Redirect to="/form" push />;
-    }
+    const { drafts } = this.props;
 
     if (this.state.redirectHome) {
       return <Redirect to="/dashboard" push />;
@@ -67,9 +62,8 @@ class DraftsRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ drafts, activeReview }) => {
+const mapStateToProps = ({ drafts }) => {
   return {
-    activeReview,
     drafts,
   };
 };
