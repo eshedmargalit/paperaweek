@@ -10,7 +10,6 @@ var UserSchema = new Schema(
     readingList: [PaperSchema],
     reviews: [ReviewSchema],
     drafts: [ReviewSchema],
-    points: Number,
     lastLogin: Date,
     publicProfile: { type: Boolean, default: false }
   },

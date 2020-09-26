@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import {
-  assignReviewPoints,
-  updateReadingList,
-  updateDrafts,
-  updateDraftId,
-  updateReviews,
-  setReview,
-} from '../../actions/index';
+import { updateReadingList, updateDrafts, updateDraftId, updateReviews, setReview } from '../../actions/index';
 import moment from 'moment';
 
 class ReviewWizardRedux extends Component {
@@ -72,9 +65,6 @@ class ReviewWizardRedux extends Component {
       this.props.dispatch(updateReviews(newReviewList));
       this.deleteActiveDraft();
       this.deleteReadingListEntry();
-      if (!reviewId) {
-        this.props.dispatch(assignReviewPoints(newReviewList));
-      }
     });
   };
 

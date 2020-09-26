@@ -24,7 +24,6 @@ const createApp = (port = 5000) => {
   require("./routes/readingListRoutes")(app);
   require("./routes/userRoutes")(app);
   require("./routes/draftRoutes")(app);
-  require("./routes/pointsRoutes")(app);
   require("./routes/searchBarRoutes")(app);
   require("./routes/loginRoutes")(app);
   require("./routes/profileRoutes")(app);

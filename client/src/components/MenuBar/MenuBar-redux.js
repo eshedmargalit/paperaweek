@@ -9,15 +9,14 @@ class MenuBarRedux extends Component {
   }
 
   render() {
-    let { user, drafts, points } = this.props;
-    return <MenuBarContainer points={points} user={user} numberOfDrafts={drafts.length} />;
+    let { user, drafts } = this.props;
+    return <MenuBarContainer user={user} numberOfDrafts={drafts.length} />;
   }
 }
 
-const mapStateToProps = ({ user, points, activeReview, drafts }) => {
+const mapStateToProps = ({ user, activeReview, drafts }) => {
   return {
     user,
-    points,
     activeReview,
     drafts,
   };

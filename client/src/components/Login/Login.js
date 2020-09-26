@@ -51,7 +51,7 @@ class Login extends Component {
         </LazyHero>
         <div className="login__bottom-tray">
           <Row gutter={16} type="flex">
-            <Col span={8}>
+            <Col span={12}>
               <Card style={{ height: '100%' }}>
                 <Card.Meta
                   avatar={<CalendarOutlined />}
@@ -60,21 +60,12 @@ class Login extends Component {
                 />
               </Card>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Card>
                 <Card.Meta
                   avatar={<TeamOutlined />}
                   title="Because you're smart"
                   description="Make your profile public to allow others to learn from your summaries and insights. Share interesting papers or find inspiration in other profiles!"
-                />
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card>
-                <Card.Meta
-                  avatar={<DashboardOutlined />}
-                  title="Because we could all use some motivation"
-                  description="Earn points by writing reviews on time and logging in every day."
                 />
               </Card>
             </Col>
