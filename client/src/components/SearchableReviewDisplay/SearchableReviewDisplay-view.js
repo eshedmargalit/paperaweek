@@ -117,7 +117,7 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
-function SearchableReviewDisplayView({
+export default function SearchableReviewDisplayView({
   handleSearch,
   reviewClicked,
   query,
@@ -227,5 +227,3 @@ function SearchableReviewDisplayView({
     </>
   );
 }
-
-export default SearchableReviewDisplayView;

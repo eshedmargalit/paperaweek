@@ -41,8 +41,6 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
           <SearchableReviewDisplay
             reviews={reviews}
             reviewToOpen={reviewToOpen}
-            deleteReview={null}
-            handleModalEdit={null}
             pageHeaderProps={pageHeaderProps}
             hideFooter={true}
           />

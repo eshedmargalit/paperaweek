@@ -41,7 +41,7 @@ class ReviewReaderRedux extends Component {
     return (
       <SearchableReviewDisplay
         reviews={reviews.reviewList}
-        deleteReview={this.deleteReview}
+        deleteItemFunc={this.deleteReview}
         handleModalEdit={this.handleModalEdit}
         handleModalCopy={this.handleModalCopy}
         pageHeaderProps={pageHeaderProps}

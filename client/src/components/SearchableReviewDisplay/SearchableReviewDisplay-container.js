@@ -1,96 +1,85 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import Fuse from 'fuse.js';
 
-class SearchableReviewDisplayContainer extends Component {
-  constructor(props) {
-    super(props);
-
-    const { reviewToOpen } = this.props;
-    this.state = {
-      query: '',
-      selectedReview: reviewToOpen || null,
-      showModal: reviewToOpen,
-    };
+const fuzzyFilterReviews = (query, reviews) => {
+  if (query === '') {
+    return reviews;
   }
-
-  handleSearch = query => {
-    this.setState({ query });
+  var options = {
+    shouldSort: false,
+    threshold: 0.2,
+    location: 0,
+    distance: 5000,
+    maxPatternLength: 32,
+    minMatchCharLength: 4,
+    keys: ['paper.title', 'paper.authors', 'paper.keywords', 'paper.date'],
   };
 
-  reviewClicked = review => {
-    this.setState({
-      selectedReview: review,
-      showModal: true,
-    });
+  var fuse = new Fuse(reviews, options);
+  const results = fuse.search(query);
+  return results;
+};
+
+export default function SearchableReviewDisplayContainer({
+  reviews,
+  reviewToOpen,
+  itemName,
+  pageHeaderProps,
+  hideFooter,
+  deleteItemFunc,
+  handleModalEdit,
+  handleModalCopy,
+}) {
+  const [query, setQuery] = useState('');
+  const [selectedReview, setSelectedReview] = useState(reviewToOpen);
+  const [showModal, setShowModal] = useState(reviewToOpen);
+
+  const reviewClicked = review => {
+    setSelectedReview(review);
+    setShowModal(true);
   };
 
-  handleModalClose = () => {
-    this.setState({
-      selectedReview: null,
-      showModal: false,
-    });
+  const handleModalClose = () => {
+    setSelectedReview(null);
+    setShowModal(false);
   };
 
-  deleteConfirmHandler = () => {
-    this.props.deleteReview(this.state.selectedReview);
-    this.setState({
-      showModal: false,
-    });
+  const deleteConfirmHandler = () => {
+    deleteItemFunc(selectedReview);
+    setShowModal(false);
   };
 
-  modalEditHandler = () => {
-    this.props.handleModalEdit(this.state.selectedReview);
+  const modalEditHandler = () => {
+    handleModalEdit(selectedReview);
   };
 
-  modalCopyHandler = () => {
-    this.props.handleModalCopy(this.state.selectedReview);
+  const modalCopyHandler = () => {
+    handleModalCopy(selectedReview);
   };
 
-  fuzzyFilterReviews = reviews => {
-    if (this.state.query === '') {
-      return reviews;
-    }
-    var options = {
-      shouldSort: false,
-      threshold: 0.2,
-      location: 0,
-      distance: 5000,
-      maxPatternLength: 32,
-      minMatchCharLength: 4,
-      keys: ['paper.title', 'paper.authors', 'paper.keywords', 'paper.date'],
-    };
-
-    var fuse = new Fuse(reviews, options);
-    const results = fuse.search(this.state.query);
-    return results;
+  // render
+  const modalProps = {
+    deleteConfirmHandler: deleteConfirmHandler,
+    handleModalClose: handleModalClose,
+    handleModalEdit: modalEditHandler,
+    handleModalCopy: handleModalCopy ? modalCopyHandler : null,
+    showModal: showModal,
+    modalReview: selectedReview,
+    itemName: itemName || 'Review',
   };
 
-  render() {
-    const modalProps = {
-      deleteConfirmHandler: this.deleteConfirmHandler,
-      handleModalClose: this.handleModalClose,
-      handleModalEdit: this.modalEditHandler,
-      handleModalCopy: this.props.handleModalCopy ? this.modalCopyHandler : null,
-      showModal: this.state.showModal,
-      modalReview: this.state.selectedReview,
-      itemName: this.props.itemName || 'Review',
-    };
-    let { pageHeaderProps, hideFooter } = this.props;
+  let filteredReviews = fuzzyFilterReviews(query, reviews);
 
-    let filteredReviews = this.fuzzyFilterReviews(this.props.reviews);
-    return (
-      <SearchableReviewDisplayView
-        handleSearch={this.handleSearch}
-        reviewClicked={this.reviewClicked}
-        query={this.state.query}
-        reviews={filteredReviews}
-        modalProps={modalProps}
-        pageHeaderProps={pageHeaderProps}
-        hideFooter={hideFooter}
-      />
-    );
-  }
+  return (
+    <SearchableReviewDisplayView
+      handleSearch={setQuery}
+      reviewClicked={reviewClicked}
+      query={query}
+      reviews={filteredReviews}
+      modalProps={modalProps}
+      pageHeaderProps={pageHeaderProps}
+      hideFooter={hideFooter}
+    />
+  );
 }
-
-export default SearchableReviewDisplayContainer;
