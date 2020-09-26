@@ -44,7 +44,8 @@ export default function DraftsRedux() {
   return (
     <SearchableReviewDisplay
       reviews={drafts}
-      deleteReview={deleteDraft}
+      reviewToOpen={null}
+      deleteItemFunc={deleteDraft}
       handleModalEdit={handleModalEdit}
       handleModalCopy={null}
       pageHeaderProps={pageHeaderProps}
