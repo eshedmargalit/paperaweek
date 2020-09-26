@@ -13,7 +13,7 @@ import { useMedia } from 'react-media';
 
 import './MenuBar.scss';
 
-const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover, isSmallScreen) => {
+const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) => {
   const [collapsed, setCollapsed] = useState(true);
   const signedIn = displayName !== '';
   const profileButton = (
@@ -54,10 +54,7 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
 
   const expandedMenu = (
     <ul className="menu">
-      <span className="flex">
-        {brandHeader}
-        {signedIn ? <li className="menu__item">{pointsMenuItem}</li> : null}
-      </span>
+      <span className="flex">{brandHeader}</span>
 
       <span className="flex">
         {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
@@ -69,11 +66,6 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
   );
 
   const hiddenItems = [
-    {
-      name: 'points',
-      requireSignIn: true,
-      content: <li className="menu__item">{pointsMenuItem}</li>,
-    },
     {
       name: 'drafts',
       requireSignIn: true,
@@ -133,7 +125,7 @@ const Menu = (displayName, googleId, pointsMenuItem, draftMenuItem, infoPopover,
   return isSmallScreen ? collapsedMenu : expandedMenu;
 };
 
-function MenuBarView({ points, user, numberOfDrafts }) {
+function MenuBarView({ user, numberOfDrafts }) {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
   const draftMenuItem = numberOfDrafts === 0 || (
@@ -142,14 +134,6 @@ function MenuBarView({ points, user, numberOfDrafts }) {
         Drafts{` `}
         <Badge count={numberOfDrafts} className="menu__badge" />
       </Link>
-    </>
-  );
-
-  const pointsMenuItem = (
-    <>
-      {points.points}
-      {` `}
-      {points.points === 1 ? 'point' : 'points'}
     </>
   );
 
@@ -174,7 +158,7 @@ function MenuBarView({ points, user, numberOfDrafts }) {
     </Popover>
   );
 
-  return Menu(user.displayName, user.googleId, pointsMenuItem, draftMenuItem, infoPopover, isSmallScreen);
+  return Menu(user.displayName, user.googleId, draftMenuItem, infoPopover, isSmallScreen);
 }
 
 export default MenuBarView;

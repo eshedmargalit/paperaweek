@@ -1,17 +1,11 @@
 import axios from 'axios';
 
-import { dailyLoginReason, reviewPointsReason } from './pointReasons.js';
-import PointsModal from '../components/PointsModal/PointsModal';
-import { sortBy } from 'lodash';
-import moment from 'moment';
-
 export const FETCH_USER = 'FETCH_USER';
 export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
 export const UPDATE_DRAFT_ID = 'UPDATE_DRAFT_ID';
 export const UPDATE_READING_LIST = 'UPDATE_READING_LIST';
 export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
 export const SET_REVIEW = 'SET_REVIEW';
-export const GIVE_POINTS = 'GIVE_POINTS';
 
 export const fetchUser = () => async dispatch => {
   let user = await axios.get('/api/current_user');
@@ -20,80 +14,6 @@ export const fetchUser = () => async dispatch => {
     return;
   }
   dispatch({ type: FETCH_USER, payload: user.data });
-};
-
-export const dailyLoginCheck = () => async dispatch => {
-  let user = await axios.get('/api/current_user');
-
-  if (!user.data) {
-    return;
-  }
-
-  // get last login
-  const today = new Date();
-  const lastLogin = new Date(user.data.lastLogin);
-  const lastLoginWasToday = lastLogin.toDateString() === today.toDateString();
-
-  if (!lastLoginWasToday) {
-    const prevPoints = user.data.points || 0;
-    const pointsToPut = prevPoints + 1;
-    const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
-
-    PointsModal(5, 1, dailyLoginReason);
-    dispatch({
-      type: GIVE_POINTS,
-      payload: { newPoints: pointsResp.data.points },
-    });
-  }
-
-  // on successful login, update last login date
-  if (user.data) {
-    user = await axios.get('/api/lastLogin');
-  }
-};
-
-export const assignReviewPoints = newReviewList => async dispatch => {
-  const user = await axios.get('/api/current_user');
-
-  // get most recent review date
-  const sortedReviews = sortBy(newReviewList, 'createdAt');
-  let daysSinceLastReview = 7;
-  let lastReviewDate = null;
-  if (sortedReviews.length > 1) {
-    lastReviewDate = sortedReviews[sortedReviews.length - 2].createdAt;
-    daysSinceLastReview = moment().diff(moment(lastReviewDate), 'days');
-  }
-
-  console.log('Most recent review JSON string', JSON.stringify(sortedReviews[sortedReviews.length - 1]));
-
-  let pointsToGive = 0;
-  switch (daysSinceLastReview) {
-    case 7:
-      pointsToGive = 7;
-      break;
-    case 6:
-    case 8:
-      pointsToGive = 6;
-      break;
-    case 5:
-    case 9:
-      pointsToGive = 4;
-      break;
-    case 4:
-    case 10:
-      pointsToGive = 2;
-      break;
-    default:
-      pointsToGive = 1;
-  }
-
-  const pointsToPut = user.data.points + pointsToGive;
-  const pointsResp = await axios.put(`/api/points/${pointsToPut}`);
-  PointsModal(5, pointsToGive, reviewPointsReason);
-  dispatch({
-    type: GIVE_POINTS,
-    payload: { newPoints: pointsResp.data.points },
-  });
 };
 
 export function setReview(paperId, reviewContent) {
