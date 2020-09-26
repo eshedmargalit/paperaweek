@@ -1,71 +1,54 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { setReview, updateDraftId, updateDrafts } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
-class DraftsRedux extends Component {
-  constructor(props) {
-    super(props);
+export default function DraftsRedux() {
+  const dispatch = useDispatch();
+  const drafts = useSelector(state => state.drafts);
+  const [redirectHome, setRedirectHome] = useState(false);
 
-    this.state = {
-      redirectHome: false,
-    };
+  // go home if back arrow is pressed
+  if (redirectHome) {
+    return <Redirect to="/dashboard" push />;
   }
 
-  deleteDraft = draftToDelete => {
-    let { drafts } = this.props;
-    let newDrafts = drafts.filter(draft => {
+  // function to delete the specified draft
+  const deleteDraft = draftToDelete => {
+    const newDrafts = drafts.filter(draft => {
       return draft !== draftToDelete;
     });
-    this.props.dispatch(updateDrafts(newDrafts));
+    dispatch(updateDrafts(newDrafts));
 
     axios.delete(`/api/drafts/${draftToDelete._id}`);
   };
 
-  handleModalEdit = draft => {
+  // function to edit the specified draft
+  const handleModalEdit = draft => {
     const draftId = draft._id;
     const draftContent = {
       paper: draft.paper,
       review: draft.review,
     };
-    this.props.dispatch(updateDraftId(draftId));
-    this.props.dispatch(setReview(null, draftContent));
+    dispatch(updateDraftId(draftId));
+    dispatch(setReview(null, draftContent));
   };
 
-  redirectHome = () => {
-    this.setState({ redirectHome: true });
+  const pageHeaderProps = {
+    pageHeaderTitle: 'Read Your Drafts',
+    onPageBack: () => setRedirectHome(true),
   };
 
-  render() {
-    const pageHeaderProps = {
-      pageHeaderTitle: 'Read Your Drafts',
-      onPageBack: this.redirectHome,
-    };
-    const { drafts } = this.props;
-
-    if (this.state.redirectHome) {
-      return <Redirect to="/dashboard" push />;
-    }
-
-    return (
-      <SearchableReviewDisplay
-        reviews={drafts}
-        deleteReview={this.deleteDraft}
-        handleModalEdit={this.handleModalEdit}
-        handleModalCopy={null}
-        pageHeaderProps={pageHeaderProps}
-        itemName="Draft"
-      />
-    );
-  }
+  return (
+    <SearchableReviewDisplay
+      reviews={drafts}
+      deleteReview={deleteDraft}
+      handleModalEdit={handleModalEdit}
+      handleModalCopy={null}
+      pageHeaderProps={pageHeaderProps}
+      itemName="Draft"
+    />
+  );
 }
-
-const mapStateToProps = ({ drafts }) => {
-  return {
-    drafts,
-  };
-};
-
-export default connect(mapStateToProps, null)(DraftsRedux);
