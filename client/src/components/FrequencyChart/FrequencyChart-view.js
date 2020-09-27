@@ -4,7 +4,7 @@ import { Row, Col, Card, Spin, Statistic } from 'antd';
 import { getReviewStats } from '../utils';
 import moment from 'moment';
 
-function FrequencyChartView(reviews) {
+export default function FrequencyChartView(reviews) {
   const lineChart = reviews => {
     const reviewDates = reviews.map(review => moment(review.createdAt));
     const sortedDates = reviewDates.sort((a, b) => a.diff(b));
@@ -77,5 +77,3 @@ function FrequencyChartView(reviews) {
 
   return lineChart(reviews);
 }
-
-export default FrequencyChartView;
