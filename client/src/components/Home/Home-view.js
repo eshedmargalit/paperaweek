@@ -7,7 +7,7 @@ import { Row, Col } from 'antd';
 
 import './Home.scss';
 
-function HomeView({ auth }) {
+export default function HomeView({ auth }) {
   const loginRedirect = <Redirect to="/" push />;
   const homeRender = (
     <div className="width80">
@@ -29,5 +29,3 @@ function HomeView({ auth }) {
 
   return auth ? homeRender : loginRedirect;
 }
-
-export default HomeView;
