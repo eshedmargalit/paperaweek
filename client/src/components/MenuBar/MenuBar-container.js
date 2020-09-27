@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MenuBarView from './MenuBar-view';
 
-class MenuBarContainer extends Component {
-  render() {
-    return <MenuBarView {...this.props} />;
-  }
+export default function MenuBarContainer(props) {
+  return <MenuBarView {...props} />;
 }
-
-export default MenuBarContainer;
