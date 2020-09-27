@@ -1,55 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setReview, updateReadingList, updateDraftId } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
 
 import arrayMove from 'array-move';
 
-class ReadingListRedux extends Component {
-  updateReadingList = async newReadingList => {
-    this.props.dispatch(updateReadingList(newReadingList));
+export default function ReadingListRedux() {
+  const dispatch = useDispatch();
+  const readingList = useSelector(state => state.readingList);
+
+  const updateReadingListFunc = async newReadingList => {
+    dispatch(updateReadingList(newReadingList));
 
     const res = await axios.put('api/readingList', newReadingList);
-    this.props.dispatch(updateReadingList(res.data));
+    dispatch(updateReadingList(res.data));
   };
 
-  handleEditClick(value) {
-    this.props.dispatch(updateDraftId(null));
-    this.props.dispatch(setReview(value._id, null));
-  }
-
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    let newReadingList = arrayMove(this.props.readingList, oldIndex, newIndex);
-    this.updateReadingList(newReadingList);
+  const handleEditClick = value => {
+    dispatch(updateDraftId(null));
+    dispatch(setReview(value._id, null));
   };
 
-  removeFromReadingList = paper => {
-    let newReadingList = this.props.readingList.filter(currPaper => {
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    const newReadingList = arrayMove(readingList, oldIndex, newIndex);
+    updateReadingListFunc(newReadingList);
+  };
+
+  const removeFromReadingList = paper => {
+    let newReadingList = readingList.filter(currPaper => {
       return currPaper !== paper;
     });
-    this.updateReadingList(newReadingList);
+    updateReadingListFunc(newReadingList);
   };
 
-  render() {
-    let { readingList, user } = this.props;
-    return (
-      <ReadingListContainer
-        readingList={readingList}
-        user={user}
-        handleEditClick={this.handleEditClick.bind(this)}
-        handleDeleteClick={this.removeFromReadingList.bind(this)}
-        onSortEnd={this.onSortEnd.bind(this)}
-      />
-    );
-  }
+  return (
+    <ReadingListContainer
+      items={readingList}
+      handleEditClick={handleEditClick}
+      handleDeleteClick={removeFromReadingList}
+      onSortEnd={onSortEnd}
+    />
+  );
 }
-
-const mapStateToProps = ({ readingList, user }) => {
-  return {
-    readingList,
-    user,
-  };
-};
-
-export default connect(mapStateToProps, null)(ReadingListRedux);
