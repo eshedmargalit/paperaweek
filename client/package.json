@@ -13,7 +13,7 @@
     "cognitive-services": "^1.2.3",
     "fuse.js": "^3.4.5",
     "http-proxy-middleware": "^0.19.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.0",
     "node-sass": "^4.14.1",
     "prettier": "^1.15.1",
     "prettierrc": "^0.0.0-5",
