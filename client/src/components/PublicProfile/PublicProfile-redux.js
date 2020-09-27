@@ -1,58 +1,54 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import PublicProfileContainer from './PublicProfile-container';
 
-class PublicProfileRedux extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userDisplayName: '',
-      reviewIdToOpen: null,
-      reviews: null,
-      loading: false,
-      isOwnPage: false,
-    };
-
-    this.refreshData = this.refreshData.bind(this);
+const getProfileData = async userId => {
+  let resp = null;
+  try {
+    resp = await axios.get(`/api/profiles/${userId}`);
+  } catch (err) {
+    console.log(err.response.status);
   }
+  return resp ? resp.data : null;
+};
 
-  componentDidMount() {
-    this.refreshData();
-  }
+export default function PublicProfileRedux({ match }) {
+  const [userDisplayName, setUserDisplayName] = useState('');
+  const [reviewIdToOpen, setReviewIdToOpen] = useState(null);
+  const [reviews, setReviews] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isOwnPage, setIsOwnPage] = useState(false);
 
-  getProfileData = async userId => {
-    let resp = null;
-    try {
-      resp = await axios.get(`/api/profiles/${userId}`);
-    } catch (err) {
-      console.log(err.response.status);
+  const refreshData = async () => {
+    const { userId, reviewIdToOpen } = match.params;
+
+    setLoading(true);
+    const profileData = await getProfileData(userId);
+    setLoading(false);
+
+    if (profileData) {
+      setReviewIdToOpen(reviewIdToOpen);
+      setIsOwnPage(profileData.isOwnPage);
+      setReviews(profileData.reviews);
+      setUserDisplayName(profileData.userDisplayName);
     }
-    return resp ? resp.data : null;
   };
 
-  async refreshData() {
-    const { userId, reviewIdToOpen } = this.props.match.params;
+  const wrappedRefreshData = useCallback(refreshData, []);
 
-    this.setState({ loading: true });
-    const profileData = await this.getProfileData(userId);
-    if (profileData) {
-      this.setState({ loading: false, reviewIdToOpen, ...profileData });
-    }
-  }
+  // on mount, get data from the server
+  useEffect(() => {
+    wrappedRefreshData();
+  }, [wrappedRefreshData]);
 
-  render() {
-    return (
-      <PublicProfileContainer
-        reviews={this.state.reviews}
-        reviewIdToOpen={this.state.reviewIdToOpen}
-        userDisplayName={this.state.userDisplayName}
-        loading={this.state.loading}
-        isOwnPage={this.state.isOwnPage}
-        onChange={this.refreshData}
-      />
-    );
-  }
+  return (
+    <PublicProfileContainer
+      reviews={reviews}
+      reviewIdToOpen={reviewIdToOpen}
+      userDisplayName={userDisplayName}
+      loading={loading}
+      isOwnPage={isOwnPage}
+      onChange={wrappedRefreshData}
+    />
+  );
 }
-
-export default PublicProfileRedux;
