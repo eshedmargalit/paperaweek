@@ -1,116 +1,95 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
 import { isDOI } from '../utils';
 
 import _ from 'lodash';
 
-class PaperSearchBarContainer extends Component {
-  constructor(props) {
-    super(props);
+const interpret = async query => {
+  // first regex to replace any dashes or underscores with a space
+  query = query.replace(/[-_]/g, ' ').toLowerCase();
 
-    // debounce search to avoid repeated calls to API
-    this.academicSearchThrottled = _.debounce(this.academicSearch, 800);
-    this.handleSearch.bind(this);
+  // second regex to delete single quotes, double quotes, and slashes
+  query = query.replace(/['"\/\\]/g, '');
 
-    this.state = {
-      query: '',
-      loading: false,
-      searchResults: [],
-    };
+  const response = await axios(`api/searchBar/interpret/${query}`);
+  return response.data;
+};
+
+const doiSearch = async query => {
+  if (query.includes('doi.org')) {
+    // catches both doi.org and dx.doi.org
+    query = new URL(query).pathname.substr(1);
   }
 
-  async interpret(query) {
-    // first regex to replace any dashes or underscores with a space
-    query = query.replace(/[-_]/g, ' ').toLowerCase();
-
-    // second regex to delete single quotes, double quotes, and slashes
-    query = query.replace(/['"\/\\]/g, '');
-
-    const response = await axios(`api/searchBar/interpret/${query}`);
-    return response.data;
+  if (query.split('/').length < 2) {
+    return [];
   }
 
-  async doiSearch(query) {
-    if (query.includes('doi.org')) {
-      // catches both doi.org and dx.doi.org
-      query = new URL(query).pathname.substr(1);
-    }
-
-    if (query.split('/').length < 2) {
-      return [];
-    }
-
-    let doiResp = null;
-    try {
-      doiResp = await axios.get(`/api/doi/${query}`);
-    } catch (err) {
-      console.log(err);
-    }
-    if (doiResp) {
-      return [doiResp.data];
-    } else {
-      return [];
-    }
+  let doiResp = null;
+  try {
+    doiResp = await axios.get(`/api/doi/${query}`);
+    return [doiResp.data];
+  } catch (err) {
+    console.log(err);
+    return [];
   }
+};
 
-  async evaluate(interpretation, attrs) {
-    const response = await axios(`api/searchBar/evaluate/${interpretation}/${attrs}`);
-    return response.data;
-  }
+export default function PaperSearchBarContainer({ setBlankReview, handleClickResult, handleClickResultButton }) {
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
-  async academicSearch(query) {
+  const academicSearch = async () => {
     // bail out if no query
     if (query.length === 0) {
-      this.setState({ searchResults: [], loading: false });
+      setSearchResults([]);
+      setLoading(false);
       return;
     }
 
-    this.setState({ loading: true });
+    setLoading(true);
 
     // if query looks like a DOI, call that API instead of interpretation
-    const apiCall = isDOI(query) ? this.doiSearch : this.interpret;
+    const apiCall = isDOI(query) ? doiSearch : interpret;
     const searchResults = await apiCall(query);
-    this.setState({ searchResults, loading: false });
-  }
+    setSearchResults(searchResults);
+    setLoading(false);
+  };
+  const academicSearchThrottled = _.debounce(academicSearch, 800);
 
-  handleSearch = searchTerm => {
-    this.academicSearchThrottled.cancel();
+  const handleSearch = searchTerm => {
+    academicSearchThrottled.cancel();
+    setQuery(searchTerm);
 
+    // bail out if search is empty
     if (searchTerm === '') {
-      this.setState({
-        loading: false,
-        searchResults: [],
-        query: searchTerm,
-      });
+      setLoading(false);
+      setSearchResults([]);
       return;
     }
 
     // update searchbar value and only then run the search
-    this.setState(
-      {
-        loading: true,
-        query: searchTerm,
-      },
-      () => {
-        this.academicSearchThrottled(searchTerm);
-      }
-    );
+    setLoading(true);
   };
 
-  render() {
-    return (
-      <PaperSearchBarView
-        handleSearch={this.handleSearch}
-        handleClickResult={this.props.handleClickResult}
-        handleClickResultButton={this.props.handleClickResultButton}
-        searchResults={this.state.searchResults}
-        startBlankReview={this.props.startBlankReview}
-        loading={this.state.loading}
-        query={this.state.query}
-      />
-    );
-  }
-}
+  // search when query changes
+  useEffect(() => {
+    if (query !== '') {
+      academicSearchThrottled(query);
+    }
+  }, [query]);
 
-export default PaperSearchBarContainer;
+  return (
+    <PaperSearchBarView
+      handleSearch={handleSearch}
+      handleClickResult={handleClickResult}
+      handleClickResultButton={handleClickResultButton}
+      searchResults={searchResults}
+      setBlankReview={setBlankReview}
+      loading={loading}
+      query={query}
+    />
+  );
+}

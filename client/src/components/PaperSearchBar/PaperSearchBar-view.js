@@ -23,13 +23,15 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
         >
           Add to Reading List <PlusOutlined />
         </Button>
-        <Button
-          onClick={() => {
-            handleClickResultButton(result);
-          }}
-        >
-          Start Review Now <FormOutlined />
-        </Button>
+        <Link to="/form">
+          <Button
+            onClick={() => {
+              handleClickResultButton(result);
+            }}
+          >
+            Start Review Now <FormOutlined />
+          </Button>
+        </Link>
       </div>
     );
 
@@ -56,7 +58,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
   return renderedSearchResults;
 };
 
-function PaperSearchBarView({
+export default function PaperSearchBarView({
   handleSearch,
   handleClickResult,
   handleClickResultButton,
@@ -128,5 +130,3 @@ function PaperSearchBarView({
     </div>
   );
 }
-
-export default PaperSearchBarView;
