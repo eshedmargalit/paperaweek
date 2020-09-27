@@ -11,7 +11,7 @@ const openNotificationWithIcon = type => {
   });
 };
 
-export default function ReviewReaderRedux({}) {
+export default function ReviewReaderRedux() {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const reviews = useSelector(state => state.reviews);
