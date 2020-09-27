@@ -68,7 +68,7 @@ const SortableInfiniteList = sortableContainer(({ items, editClickHandler, delet
   );
 });
 
-function ReadingListView(props) {
+export default function ReadingListView({ onSortEnd, items, handleEditClick, handleDeleteClick }) {
   const noList = (
     <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
       <Empty description={<span>Add papers to your reading list from the search bar!</span>} />
@@ -77,10 +77,10 @@ function ReadingListView(props) {
 
   const sortableList = (
     <SortableInfiniteList
-      onSortEnd={props.onSortEnd}
-      items={props.items}
-      editClickHandler={props.handleEditClick}
-      deleteClickHandler={props.handleDeleteClick}
+      onSortEnd={onSortEnd}
+      items={items}
+      editClickHandler={handleEditClick}
+      deleteClickHandler={handleDeleteClick}
       useDragHandle
     />
   );
@@ -88,9 +88,7 @@ function ReadingListView(props) {
     <div>
       <br />
       <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
-      {props.items.length > 0 ? sortableList : noList}
+      {items.length > 0 ? sortableList : noList}
     </div>
   );
 }
-
-export default ReadingListView;
