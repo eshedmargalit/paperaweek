@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setReview, updateReviews } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { notification } from 'antd';
@@ -11,50 +11,41 @@ const openNotificationWithIcon = type => {
   });
 };
 
-class ReviewReaderRedux extends Component {
-  deleteReview = reviewToDelete => {
-    let { reviews } = this.props;
-    let { reviewList } = reviews;
+export default function ReviewReaderRedux({}) {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  const reviews = useSelector(state => state.reviews);
+  const { reviewList } = reviews;
+
+  const deleteReview = reviewToDelete => {
     let newReviews = reviewList.filter(rev => {
       return rev !== reviewToDelete;
     });
-    this.props.dispatch(updateReviews(newReviews));
+    dispatch(updateReviews(newReviews));
     axios.delete(`/api/papers/${reviewToDelete._id}`);
   };
 
-  handleModalEdit = reviewContent => {
-    this.props.dispatch(setReview(null, reviewContent));
+  const handleModalEdit = reviewContent => {
+    dispatch(setReview(null, reviewContent));
   };
 
-  handleModalCopy = review => {
-    const link = `${window.location.origin}/profiles/${this.props.user.googleId}/${review._id}`;
+  const handleModalCopy = review => {
+    const link = `${window.location.origin}/profiles/${user.googleId}/${review._id}`;
     navigator.clipboard.writeText(link);
     openNotificationWithIcon('success');
   };
 
-  render() {
-    let { reviews } = this.props;
-    const pageHeaderProps = {
-      pageHeaderTitle: 'Read Your Reviews',
-      onPageBack: null,
-    };
-    return (
-      <SearchableReviewDisplay
-        reviews={reviews.reviewList}
-        deleteItemFunc={this.deleteReview}
-        handleModalEdit={this.handleModalEdit}
-        handleModalCopy={this.handleModalCopy}
-        pageHeaderProps={pageHeaderProps}
-      />
-    );
-  }
-}
-
-const mapStateToProps = ({ user, reviews }) => {
-  return {
-    user,
-    reviews,
+  const pageHeaderProps = {
+    pageHeaderTitle: 'Read Your Reviews',
+    onPageBack: null,
   };
-};
-
-export default connect(mapStateToProps, null)(ReviewReaderRedux);
+  return (
+    <SearchableReviewDisplay
+      reviews={reviewList}
+      deleteItemFunc={deleteReview}
+      handleModalEdit={handleModalEdit}
+      handleModalCopy={handleModalCopy}
+      pageHeaderProps={pageHeaderProps}
+    />
+  );
+}

@@ -131,7 +131,8 @@ export function wrapMath(s, delimiter = '$') {
   return (
     <div>
       {parts.map((part, partIdx) => {
-        return isEven(partIdx) ? part : <InlineMath>{part}</InlineMath>;
+        const guts = isEven(partIdx) ? part : <InlineMath>{part}</InlineMath>;
+        return <span key={part}>{guts}</span>;
       })}
     </div>
   );
