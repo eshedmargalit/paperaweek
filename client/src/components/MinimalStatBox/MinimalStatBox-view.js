@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Row, Statistic } from 'antd';
 import { getReviewStats } from '../utils';
 
-function MinimalStatBoxView({ userDisplayName, reviews }) {
+export default function MinimalStatBoxView({ userDisplayName, reviews }) {
   const emptyStats = (
     <Row>
       <p>
@@ -34,5 +34,3 @@ function MinimalStatBoxView({ userDisplayName, reviews }) {
 
   return statBox;
 }
-
-export default MinimalStatBoxView;
