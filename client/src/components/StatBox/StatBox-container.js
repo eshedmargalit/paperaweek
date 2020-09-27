@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import StatBoxView from './StatBox-view';
 
-class StatBoxContainer extends Component {
-  render() {
-    return <StatBoxView {...this.props} />;
-  }
+export default function StatBoxContainer(props) {
+  return <StatBoxView {...props} />;
 }
-
-export default StatBoxContainer;
