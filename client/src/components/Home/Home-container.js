@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import HomeView from './Home-view';
 
-class HomeContainer extends Component {
-  render() {
-    return <HomeView {...this.props} />;
-  }
+export default function HomeContainer(props) {
+  return <HomeView {...props} />;
 }
-
-export default HomeContainer;
