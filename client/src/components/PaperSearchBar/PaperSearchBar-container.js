@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import PaperSearchBarView from './PaperSearchBar-view';
 import { isDOI } from '../utils';
@@ -41,9 +41,9 @@ export default function PaperSearchBarContainer({ setBlankReview, handleClickRes
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
-  const academicSearch = async () => {
+  const academicSearch = async searchQuery => {
     // bail out if no query
-    if (query.length === 0) {
+    if (searchQuery.length === 0) {
       setSearchResults([]);
       setLoading(false);
       return;
@@ -51,13 +51,16 @@ export default function PaperSearchBarContainer({ setBlankReview, handleClickRes
 
     setLoading(true);
 
-    // if query looks like a DOI, call that API instead of interpretation
-    const apiCall = isDOI(query) ? doiSearch : interpret;
-    const searchResults = await apiCall(query);
+    // if searchQuery looks like a DOI, call that API instead of interpretation
+    const apiCall = isDOI(searchQuery) ? doiSearch : interpret;
+    const searchResults = await apiCall(searchQuery);
     setSearchResults(searchResults);
     setLoading(false);
   };
-  const academicSearchThrottled = _.debounce(academicSearch, 800);
+
+  // need to use useCallback here so that debounce always returns the same object;
+  // otherwise we get infinite re-renders with useEffect
+  const academicSearchThrottled = useCallback(_.debounce(academicSearch, 800), []);
 
   const handleSearch = searchTerm => {
     academicSearchThrottled.cancel();
@@ -79,7 +82,7 @@ export default function PaperSearchBarContainer({ setBlankReview, handleClickRes
     if (query !== '') {
       academicSearchThrottled(query);
     }
-  }, [query]);
+  }, [query, academicSearchThrottled]);
 
   return (
     <PaperSearchBarView
