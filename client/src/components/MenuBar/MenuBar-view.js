@@ -125,7 +125,7 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
   return isSmallScreen ? collapsedMenu : expandedMenu;
 };
 
-function MenuBarView({ user, numberOfDrafts }) {
+export default function MenuBarView({ user, numberOfDrafts }) {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
   const draftMenuItem = numberOfDrafts === 0 || (
@@ -160,5 +160,3 @@ function MenuBarView({ user, numberOfDrafts }) {
 
   return Menu(user.displayName, user.googleId, draftMenuItem, infoPopover, isSmallScreen);
 }
-
-export default MenuBarView;

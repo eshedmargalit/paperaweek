@@ -1,25 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from '../../actions';
 import MenuBarContainer from './MenuBar-container';
 
-class MenuBarRedux extends Component {
-  componentDidMount() {
-    this.props.dispatch(fetchUser());
-  }
+export default function MenuBarRedux() {
+  const dispatch = useDispatch();
 
-  render() {
-    let { user, drafts } = this.props;
-    return <MenuBarContainer user={user} numberOfDrafts={drafts.length} />;
-  }
+  useEffect(() => {
+    dispatch(fetchUser());
+  });
+
+  const user = useSelector(state => state.user);
+  const drafts = useSelector(state => state.drafts);
+  return <MenuBarContainer user={user} numberOfDrafts={drafts.length} />;
 }
-
-const mapStateToProps = ({ user, activeReview, drafts }) => {
-  return {
-    user,
-    activeReview,
-    drafts,
-  };
-};
-
-export default connect(mapStateToProps, null)(MenuBarRedux);
