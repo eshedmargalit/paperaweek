@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PreferencesView from './Preferences-view';
 
-class PreferencesContainer extends Component {
-  render() {
-    return <PreferencesView {...this.props} />;
-  }
+export default function PreferencesContainer(props) {
+  return <PreferencesView {...props} />;
 }
-
-export default PreferencesContainer;

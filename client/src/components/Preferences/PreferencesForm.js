@@ -4,7 +4,7 @@ import { Switch, Form } from 'antd';
 import { formItemLayout } from './utils.js';
 import './PreferencesForm.scss';
 
-const PreferencesForm = ({ initialValues, saveResults }) => {
+export default function PreferencesForm({ initialValues, saveResults }) {
   const [form] = Form.useForm();
   const initialProfileText = initialValues.publicProfile ? 'is publicly visible' : 'is not publicly visible';
 
@@ -33,6 +33,4 @@ const PreferencesForm = ({ initialValues, saveResults }) => {
       {profileText}!
     </Form>
   );
-};
-
-export default PreferencesForm;
+}
