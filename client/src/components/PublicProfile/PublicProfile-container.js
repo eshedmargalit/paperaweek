@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PublicProfileView from './PublicProfile-view';
 
-class PublicProfileContainer extends Component {
-  render() {
-    return <PublicProfileView {...this.props} />;
-  }
+export default function PublicProfileContainer(props) {
+  return <PublicProfileView {...props} />;
 }
-
-export default PublicProfileContainer;

@@ -7,7 +7,7 @@ import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
 import Preferences from '../Preferences';
 
-function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, isOwnPage, onChange }) {
+export default function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, isOwnPage, onChange }) {
   const pageHeaderProps = {
     pageHeaderTitle: `${userDisplayName}'s Reviews`,
     onPageBack: null,
@@ -59,5 +59,3 @@ function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, 
     </div>
   );
 }
-
-export default PublicProfileView;
