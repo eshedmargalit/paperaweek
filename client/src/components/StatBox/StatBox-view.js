@@ -6,7 +6,7 @@ import FrequencyChart from '../FrequencyChart';
 
 import './StatBox.scss';
 
-function StatBoxView({ reviews, startBlankReview }) {
+export default function StatBoxView({ reviews, startBlankReview }) {
   const emptyStats = (
     <Card title="Your Stats" style={{ marginTop: 5 }}>
       <Row>
@@ -38,5 +38,3 @@ function StatBoxView({ reviews, startBlankReview }) {
 
   return reviews.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
 }
-
-export default StatBoxView;

@@ -1,24 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import StatBoxContainer from './StatBox-container';
 import { setReview } from '../../actions';
 
-class StatBoxRedux extends Component {
-  startBlankReview = () => {
-    this.props.dispatch(setReview(null, null));
+export default function StatBoxRedux() {
+  const dispatch = useDispatch();
+  const reviewList = useSelector(state => state.reviews.reviewList);
+
+  const startBlankReview = () => {
+    dispatch(setReview(null, null));
   };
 
-  render() {
-    return (
-      <StatBoxContainer reviews={this.props.reviews.reviewList} startBlankReview={this.startBlankReview.bind(this)} />
-    );
-  }
+  return <StatBoxContainer reviews={reviewList} startBlankReview={startBlankReview} />;
 }
-
-const mapStateToProps = ({ reviews }) => {
-  return {
-    reviews,
-  };
-};
-
-export default connect(mapStateToProps, null)(StatBoxRedux);
