@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 export const metaFields = [
   {
     fieldName: 'title',
@@ -146,4 +146,60 @@ export const blankReview = {
   results_points: [''],
   conclusions_points: [''],
   other_points: [''],
+};
+
+export const draftTimeIndicator = (autosaveStatus, currentMoment, lastSave) => {
+  let autosaveIcon;
+  switch (autosaveStatus) {
+    case 'unsaved':
+      autosaveIcon = null;
+      break;
+    case 'saved':
+      let secSinceSave = 0;
+      let minSinceSave = 0;
+      if (currentMoment) {
+        secSinceSave = currentMoment.diff(lastSave, 'seconds');
+        minSinceSave = currentMoment.diff(lastSave, 'minutes');
+      }
+
+      let timePassedText = '';
+      if (secSinceSave <= 0) {
+        timePassedText = 'just now';
+      } else if (minSinceSave < 1) {
+        timePassedText = `${secSinceSave} seconds ago`;
+      } else if (minSinceSave === 1) {
+        timePassedText = '1 minute ago';
+      } else if (minSinceSave > 60) {
+        timePassedText = 'more than an hour ago';
+      } else {
+        timePassedText = `${minSinceSave} minutes ago`;
+      }
+
+      autosaveIcon = (
+        <div key="autosave" className="save-icon">
+          <SaveFilled />
+          {` `}Saved to Drafts {timePassedText}
+        </div>
+      );
+      break;
+    case 'saving':
+      autosaveIcon = (
+        <div key="autosave" className="save-icon">
+          <SaveTwoTone spin />
+          {` `}Saving...
+        </div>
+      );
+      break;
+    case 'saveFailed':
+      autosaveIcon = (
+        <div key="autosave" className="save-icon">
+          <SaveTwoTone twoToneColor="#f5222d" />
+          {` `} Failed to save
+        </div>
+      );
+      break;
+    default:
+    // do nothing
+  }
+  return autosaveIcon;
 };
