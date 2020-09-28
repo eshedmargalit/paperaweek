@@ -51,3 +51,11 @@
 .ant-avatar {
   background-color: #4984ee;
 }
+
+.width-80 {
+  width: 80%;
+}
+
+.flex {
+  display: flex;
+}

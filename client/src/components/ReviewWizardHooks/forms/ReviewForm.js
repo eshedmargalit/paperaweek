@@ -1,0 +1,197 @@
+import React, { Component } from 'react';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Tooltip, Button, Input } from 'antd';
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import './ReviewWizard.scss';
+import { reviewFields, formItemLayout, formItemLayoutWithoutLabel } from './utils.js';
+
+const { TextArea } = Input;
+
+// set counters for which field number is next for dynamic fields
+var dynamicFieldCounters = {
+  summary_points: 1,
+  background_points: 1,
+  approach_points: 1,
+  results_points: 1,
+  conclusions_points: 1,
+  other_points: 1,
+};
+
+class ReviewForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      needsFocus: false,
+    };
+  }
+
+  componentDidMount() {
+    // on form load, set the index for dynamic fields that might come from props at the right spot
+    for (var fieldName of Object.keys(dynamicFieldCounters)) {
+      let existingReview = this.props.review[fieldName];
+
+      if (existingReview) {
+        dynamicFieldCounters[fieldName] = existingReview.length;
+      }
+    }
+  }
+
+  componentDidUpdate() {
+    const reviewFromState = this.getValues();
+    this.props.onChange(reviewFromState);
+    if (this.state.needsFocus) {
+      this.setState({ needsFocus: false }, () => {
+        this.focusedInput.focus();
+      });
+    }
+  }
+
+  getValues() {
+    let review = {};
+    reviewFields.forEach(({ fieldName }) => {
+      let reviewValue = this.props.form.getFieldValue(fieldName);
+      let listValues = reviewValue.map(itemIdx => {
+        return this.props.form.getFieldValue(`${fieldName}_list_values`)[itemIdx];
+      });
+      review[fieldName] = listValues;
+    });
+    return review;
+  }
+
+  validateFields = e => {
+    e.preventDefault();
+
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        let review = {};
+        reviewFields.forEach(({ fieldName }) => {
+          let mergedValues = values[fieldName].map(idx => {
+            return values[`${fieldName}_list_values`][idx];
+          });
+
+          review[fieldName] = mergedValues;
+        });
+
+        this.props.onSubmit(review);
+      }
+    });
+  };
+
+  removeItem(fieldName, k) {
+    const { form } = this.props;
+    const items = form.getFieldValue(fieldName);
+    if (items.length === 1) {
+      return;
+    }
+    form.setFieldsValue({
+      [`${fieldName}`]: items.filter(item => item !== k),
+    });
+  }
+
+  addItem(fieldName) {
+    const { form } = this.props;
+    const items = form.getFieldValue(fieldName);
+    const nextItems = items.concat(dynamicFieldCounters[fieldName]++);
+    form.setFieldsValue({
+      [`${fieldName}`]: nextItems,
+    });
+    this.setState({ needsFocus: true });
+  }
+
+  render() {
+    const addNewTooltipText = 'tab, then space';
+    const existingReview = this.props.review;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+
+    // create a list of step 2 fields
+    const renderedFields = reviewFields.map(reviewField => {
+      let { fieldName, label, required } = reviewField;
+
+      let existingList = null;
+      if (existingReview) {
+        existingList = existingReview[fieldName];
+      }
+
+      if (existingList) {
+        let fieldKeys = [];
+        for (let i = 0; i < existingList.length; i++) {
+          fieldKeys.push(i);
+          getFieldDecorator(`${fieldName}_list_values[${i}]`, {
+            initialValue: existingList[i],
+          });
+        }
+        getFieldDecorator(fieldName, { initialValue: fieldKeys });
+      } else {
+        getFieldDecorator(`${fieldName}_list_values[${0}]`, {
+          initialValue: '',
+        });
+        getFieldDecorator(fieldName, { initialValue: [0] });
+      }
+
+      const field_value = getFieldValue(fieldName);
+      const inputs = field_value.map((field_value_idx, index) => (
+        <Form.Item
+          {...(index === 0 ? formItemLayout : formItemLayoutWithoutLabel)}
+          label={index === 0 ? label : ''}
+          required={required}
+          key={fieldName + field_value_idx}
+        >
+          <div style={{ display: 'flex', width: '90%' }}>
+            <div className="bullet">&bull;</div>
+            {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
+              rules: [{ required: required, message: `${label} point cannot be blank` }],
+            })(
+              <TextArea
+                ref={input => {
+                  this.focusedInput = input;
+                }}
+                autoSize={{ minRows: 2, maxRows: 5 }}
+              />
+            )}
+          </div>
+          {field_value.length > 1 && (
+            <CloseOutlined
+              className="dynamic-delete-button"
+              onClick={() => this.removeItem(fieldName, field_value_idx)}
+            />
+          )}
+        </Form.Item>
+      ));
+
+      return (
+        <div key={'field name' + fieldName}>
+          {inputs}
+          <Form.Item {...formItemLayoutWithoutLabel}>
+            <Tooltip placement="bottom" title={addNewTooltipText}>
+              <Button
+                type="dashed"
+                onClick={() => {
+                  this.addItem(fieldName);
+                }}
+                className="dynamic-add-button"
+              >
+                <PlusOutlined /> Add Bullet Point
+              </Button>
+            </Tooltip>
+          </Form.Item>
+          <br />
+        </div>
+      );
+    });
+
+    return (
+      <Form layout="vertical" onSubmit={this.validateFields}>
+        {renderedFields}
+        <Form.Item {...formItemLayoutWithoutLabel}>
+          <Button type="primary" htmlType="submit" style={{ width: '200px' }}>
+            Next: Preview and Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    );
+  }
+}
+
+export default connect()(Form.create({})(ReviewForm));
