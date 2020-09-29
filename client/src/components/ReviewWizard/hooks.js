@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateDrafts } from '../../actions/index';
+import { useSelector } from 'react-redux';
 import { useIsMounted } from '../../hooks.js';
 import axios from 'axios';
 import moment from 'moment';
@@ -27,7 +26,6 @@ const draftSaver = (paper, review, draftId) => {
 };
 
 export const useSaveDraft = () => {
-  const dispatch = useDispatch();
   const isMounted = useIsMounted();
 
   const activeDraftId = useSelector(state => state.activeDraft.draftId);
@@ -59,14 +57,8 @@ export const useSaveDraft = () => {
 
   // deleteActiveDraft function
   const deleteActiveDraft = async () => {
-    if (isMounted()) {
-      if (draftIdRef.current) {
-        const res = await axios.delete(`api/drafts/${draftIdRef.current}`);
-
-        if (res.data) {
-          dispatch(updateDrafts(res.data.drafts));
-        }
-      }
+    if (isMounted() && draftIdRef.current) {
+      await axios.delete(`api/drafts/${draftIdRef.current}`);
     }
   };
 
