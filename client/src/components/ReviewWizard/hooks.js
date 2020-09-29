@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateDrafts } from '../../actions/index';
+import { useIsMounted } from '../../hooks.js';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -27,8 +28,10 @@ const draftSaver = (paper, review, draftId) => {
 
 export const useSaveDraft = () => {
   const dispatch = useDispatch();
+  const isMounted = useIsMounted();
 
-  const [draftId, setDraftId] = useState(null);
+  const activeDraftId = useSelector(state => state.activeDraft.draftId);
+  const [draftId, setDraftId] = useState(activeDraftId);
   const [lastSave, setLastSave] = useState(null);
   const [autosaveStatus, setAutosaveStatus] = useState(statuses.UNSAVED);
 
@@ -40,26 +43,29 @@ export const useSaveDraft = () => {
 
   // saveDraft function
   const saveDraft = async (paper, review) => {
-    setAutosaveStatus(statuses.SAVING);
-    const res = await draftSaver(paper, review, draftIdRef.current);
-    if (res.status === 200) {
-      setAutosaveStatus(statuses.SAVED);
-      setLastSave(moment());
-      setDraftId(res.data._id);
-    } else {
-      setAutosaveStatus(statuses.SAVE_FAILED);
-      setLastSave(null);
+    if (isMounted()) {
+      setAutosaveStatus(statuses.SAVING);
+      const res = await draftSaver(paper, review, draftIdRef.current);
+      if (res.status === 200) {
+        setAutosaveStatus(statuses.SAVED);
+        setLastSave(moment());
+        setDraftId(res.data._id);
+      } else {
+        setAutosaveStatus(statuses.SAVE_FAILED);
+        setLastSave(null);
+      }
     }
   };
 
   // deleteActiveDraft function
   const deleteActiveDraft = async () => {
-    if (draftIdRef.current) {
-      console.log(draftIdRef.current);
-      const res = await axios.delete(`api/drafts/${draftIdRef.current}`);
+    if (isMounted()) {
+      if (draftIdRef.current) {
+        const res = await axios.delete(`api/drafts/${draftIdRef.current}`);
 
-      if (res.data) {
-        dispatch(updateDrafts(res.data.drafts));
+        if (res.data) {
+          dispatch(updateDrafts(res.data.drafts));
+        }
       }
     }
   };
