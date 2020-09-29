@@ -10,7 +10,7 @@ const statuses = {
 };
 
 // do not export
-const draftSaver = async (paper, review, draftId) => {
+const draftSaver = (paper, review, draftId) => {
   const draftToSave = { paper, review };
 
   const method = draftId ? 'put' : 'post';
