@@ -58,7 +58,6 @@ class MetadataForm extends Component {
         });
         paperValue = listValues;
       }
-      console.log(fieldName, paperValue);
 
       // special fields: deal with keywords or date
       if (fieldName === 'keywords') {

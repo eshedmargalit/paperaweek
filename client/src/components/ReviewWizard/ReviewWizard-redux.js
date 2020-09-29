@@ -2,25 +2,21 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { updateReadingList, updateDrafts, updateDraftId, updateReviews, setReview } from '../../actions/index';
-import moment from 'moment';
+import { updateReadingList, updateDrafts, updateReviews, setReview } from '../../actions/index';
 import { blankPaper, blankReview } from './utils.js';
 import _ from 'lodash';
+import { useSaveDraft } from './hooks.js';
 
 export default function ReviewWizardRedux() {
   const dispatch = useDispatch();
 
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [lastSave, setLastSave] = useState(null);
-  const [autosaveStatus, setAutosaveStatus] = useState('unsaved');
 
   const activeReview = useSelector(state => state.activeReview);
-  const activeDraft = useSelector(state => state.activeDraft);
   const readingList = useSelector(state => state.readingList);
   const drafts = useSelector(state => state.drafts);
 
-  const { draftId } = activeDraft;
-  console.log(`Rendered! Draft ID is ${draftId}`);
+  const { saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 
   // if the review is restarted, set the review in state to have no id, but keep
   // the contents
@@ -31,6 +27,8 @@ export default function ReviewWizardRedux() {
   // if there is an active draft in the redux state, invoking this method will delete
   // it from state + DB
   const deleteActiveDraft = async () => {
+    // TODO: CHANGE THIS TO NOT NULL
+    const draftId = null;
     if (draftId && drafts) {
       const newDrafts = drafts.filter(currDraft => {
         return currDraft._id !== draftId;
@@ -58,38 +56,6 @@ export default function ReviewWizardRedux() {
     // update reading list in DB and re-update global state
     let res = await axios.put('api/readingList', newReadingList);
     dispatch(updateReadingList(res.data));
-  };
-
-  const saveDraft = async draft => {
-    console.log('Saving draft! Here is the draft content:');
-    console.log(draft);
-
-    const method = draftId ? 'put' : 'post';
-    const url = '/api/drafts';
-    console.log(`The draft id is ${draftId}, so I want to ${method} to ${url}`);
-
-    const data = {
-      draft: draft,
-      id: draftId,
-    };
-
-    console.log('Here are the datat I want to post');
-    console.log(data);
-
-    const res = await axios({ method, url, data });
-
-    console.log('Heres the response I got from the server');
-    console.log(res);
-
-    if (res.status === 200) {
-      const returnedDraft = res.data;
-      setAutosaveStatus('saved');
-      setLastSave(moment());
-      dispatch(updateDraftId(returnedDraft._id));
-    } else {
-      setAutosaveStatus('saveFailed');
-      setLastSave(null);
-    }
   };
 
   const submitReview = async reviewObject => {
