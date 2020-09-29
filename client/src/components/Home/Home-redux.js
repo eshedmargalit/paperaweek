@@ -7,7 +7,7 @@ export default function HomeRedux() {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
 
-  // by passing [] as the second argument of useEffect, we replicate the behavior
+  // by passing [dispatch] as the second argument of useEffect, we replicate the behavior
   // of componentDidMount + componentDidUnmount, but not componentDidUpdate
   useEffect(() => {
     dispatch(fetchUser());

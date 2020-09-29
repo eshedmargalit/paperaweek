@@ -137,6 +137,8 @@ export const blankPaper = {
   doi: '',
   journal: '',
   url: '',
+  keywords: [],
+  one_sentence: '',
 };
 
 export const blankReview = {
