@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateDrafts } from '../../actions/index';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -24,15 +26,22 @@ const draftSaver = (paper, review, draftId) => {
 };
 
 export const useSaveDraft = () => {
+  const dispatch = useDispatch();
+
   const [draftId, setDraftId] = useState(null);
   const [lastSave, setLastSave] = useState(null);
   const [autosaveStatus, setAutosaveStatus] = useState(statuses.UNSAVED);
 
-  console.log(`Draft ID in useSaveDraft() is ${draftId}`);
+  const draftIdRef = useRef();
+
+  useEffect(() => {
+    draftIdRef.current = draftId;
+  }, [draftId]);
+
+  // saveDraft function
   const saveDraft = async (paper, review) => {
-    console.log(`Draft ID in saveDraft() is ${draftId}`);
     setAutosaveStatus(statuses.SAVING);
-    const res = await draftSaver(paper, review, draftId);
+    const res = await draftSaver(paper, review, draftIdRef.current);
     if (res.status === 200) {
       setAutosaveStatus(statuses.SAVED);
       setLastSave(moment());
@@ -43,5 +52,17 @@ export const useSaveDraft = () => {
     }
   };
 
-  return { autosaveStatus, lastSave, saveDraft };
+  // deleteActiveDraft function
+  const deleteActiveDraft = async () => {
+    if (draftIdRef.current) {
+      console.log(draftIdRef.current);
+      const res = await axios.delete(`api/drafts/${draftIdRef.current}`);
+
+      if (res.data) {
+        dispatch(updateDrafts(res.data.drafts));
+      }
+    }
+  };
+
+  return { autosaveStatus, lastSave, saveDraft, deleteActiveDraft };
 };

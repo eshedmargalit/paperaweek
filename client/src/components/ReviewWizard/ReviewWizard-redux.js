@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { updateReadingList, updateDrafts, updateReviews, setReview } from '../../actions/index';
+import { updateReadingList, updateReviews, setReview } from '../../actions/index';
 import { blankPaper, blankReview } from './utils.js';
 import _ from 'lodash';
 import { useSaveDraft } from './hooks.js';
@@ -14,30 +14,13 @@ export default function ReviewWizardRedux() {
 
   const activeReview = useSelector(state => state.activeReview);
   const readingList = useSelector(state => state.readingList);
-  const drafts = useSelector(state => state.drafts);
 
-  const { saveDraft, autosaveStatus, lastSave } = useSaveDraft();
+  const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 
   // if the review is restarted, set the review in state to have no id, but keep
   // the contents
   const restartReview = reviewContent => {
     dispatch(setReview(null, reviewContent));
-  };
-
-  // if there is an active draft in the redux state, invoking this method will delete
-  // it from state + DB
-  const deleteActiveDraft = async () => {
-    // TODO: CHANGE THIS TO NOT NULL
-    const draftId = null;
-    if (draftId && drafts) {
-      const newDrafts = drafts.filter(currDraft => {
-        return currDraft._id !== draftId;
-      });
-
-      dispatch(updateDrafts(newDrafts));
-      let res = await axios.delete(`api/drafts/${draftId}`);
-      dispatch(updateDrafts(res.data));
-    }
   };
 
   const deleteReadingListEntry = async () => {
@@ -60,31 +43,33 @@ export default function ReviewWizardRedux() {
 
   const submitReview = async reviewObject => {
     // start the submission spinner
-    setSubmitLoading(true);
+    deleteActiveDraft();
+    // setSubmitLoading(true);
 
-    let reviewId;
-    if (activeReview.reviewContent) {
-      reviewId = activeReview.reviewContent._id;
-    }
+    // let reviewId;
+    // if (activeReview.reviewContent) {
+    //   reviewId = activeReview.reviewContent._id;
+    // }
 
-    const method = reviewId ? 'put' : 'post';
-    const url = '/api/papers';
-    const data = {
-      review: reviewObject,
-      id: reviewId,
-    };
+    // const method = reviewId ? 'put' : 'post';
+    // const url = '/api/papers';
+    // const data = {
+    //   review: reviewObject,
+    //   id: reviewId,
+    // };
 
-    // send the request to the server
-    let res = await axios({ method, url, data });
+    // // send the request to the server
+    // let res = await axios({ method, url, data });
 
-    if (res.status === 200) {
-      dispatch(updateReviews(res.data));
-      deleteActiveDraft();
-      deleteReadingListEntry();
-    }
+    // if (res.status === 200) {
+    //   console.log('Deleting active draft');
+    //   dispatch(updateReviews(res.data));
+    //   deleteActiveDraft();
+    //   deleteReadingListEntry();
+    // }
 
-    // turn off the submission spinner
-    setSubmitLoading(false);
+    // // turn off the submission spinner
+    // setSubmitLoading(false);
   };
 
   // figure out if we already have a paper or a review
