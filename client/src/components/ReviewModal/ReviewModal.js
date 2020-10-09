@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal, Tag } from 'antd';
+import React, { useState } from 'react';
+import { Button, Modal, Tag } from 'antd';
 import moment from 'moment';
 import { renderCommaSepList, wrapMath } from '../utils.js';
 
@@ -34,6 +34,8 @@ const renderTags = tags => {
 };
 
 export default function ReviewModal(props) {
+  const [renderMath, setRenderMath] = useState(props.renderMath);
+  const toggleMath = () => setRenderMath(!renderMath);
   const reviewObj = props.review;
   if (!reviewObj) return null;
 
@@ -86,7 +88,7 @@ export default function ReviewModal(props) {
             if (point !== '') {
               empty = false;
             }
-            return <li key={point}>{wrapMath(point)}</li>;
+            return <li key={point}>{renderMath ? wrapMath(point) : point}</li>;
           })}
         </ul>
       </div>
@@ -100,6 +102,13 @@ export default function ReviewModal(props) {
       <div>{paper.title}</div>
       <div>{renderTags(paper.keywords)}</div>
     </div>
+  );
+
+  const toggleButton = (
+    <Button onClick={toggleMath}>
+      {renderMath ? 'Disable ' : 'Enable '}
+      {wrapMath(' $\\rm\\LaTeX$ ')}
+    </Button>
   );
 
   return (
@@ -117,6 +126,7 @@ export default function ReviewModal(props) {
         <br />
         {paper.one_sentence}
         <hr />
+        {toggleButton}
         {reviewBody}
       </Modal>
     </div>
