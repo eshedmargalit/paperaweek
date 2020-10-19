@@ -24,6 +24,7 @@
     "react-infinite": "^0.13.0",
     "react-katex": "^2.0.2",
     "react-lazy-hero": "^2.0.0",
+    "react-markdown": "^5.0.0",
     "react-media": "^2.0.0-rc.1",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.0.1",
@@ -34,6 +35,7 @@
     "recharts": "^2.0.0-beta.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
+    "remark-math": "^4.0.0",
     "styled-components": "^5.1.1"
   },
   "scripts": {

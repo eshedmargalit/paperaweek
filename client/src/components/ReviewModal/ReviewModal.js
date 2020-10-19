@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Switch, Modal, Tag } from 'antd';
+import { Space, Switch, Modal, Tag } from 'antd';
 import moment from 'moment';
-import { renderCommaSepList, wrapMath } from '../utils.js';
+import { renderCommaSepList, wrapMarkdownWithMath } from '../utils.js';
 import axios from 'axios';
 
 const getTagColor = tag => {
@@ -89,7 +89,7 @@ export default function ReviewModal(props) {
             if (point !== '') {
               empty = false;
             }
-            return <li key={point}>{renderMath ? wrapMath(point) : point}</li>;
+            return <li key={point}>{renderMath ? wrapMarkdownWithMath(point) : point}</li>;
           })}
         </ul>
       </div>
@@ -116,10 +116,12 @@ export default function ReviewModal(props) {
   };
 
   const toggleSwitch = (
-    <div>
-      <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} /> Render
-      {wrapMath(' $\\rm\\LaTeX$ ')}
-    </div>
+    <Space align="start">
+      <div>
+        <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} /> Render
+      </div>
+      <div>{wrapMarkdownWithMath('$\\rm\\LaTeX$ + Markdown')}</div>
+    </Space>
   );
 
   return (
