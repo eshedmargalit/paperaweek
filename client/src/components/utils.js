@@ -124,10 +124,6 @@ export function isDOI(query) {
   return query.startsWith('10.') || query.includes('doi.org');
 }
 
-function isEven(x) {
-  return x % 2 === 0;
-}
-
 export function wrapMarkdownWithMath(s) {
   const renderers = {
     inlineMath: ({ value }) => <InlineMath math={value} />,
