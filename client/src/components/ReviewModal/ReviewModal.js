@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Modal, Tag } from 'antd';
+import { Switch, Modal, Tag } from 'antd';
 import moment from 'moment';
 import { renderCommaSepList, wrapMath } from '../utils.js';
+import axios from 'axios';
 
 const getTagColor = tag => {
   var hash = 0;
@@ -35,7 +36,7 @@ const renderTags = tags => {
 
 export default function ReviewModal(props) {
   const [renderMath, setRenderMath] = useState(props.renderMath);
-  const toggleMath = () => setRenderMath(!renderMath);
+  const [switchLoading, setSwitchLoading] = useState(false);
   const reviewObj = props.review;
   if (!reviewObj) return null;
 
@@ -104,11 +105,21 @@ export default function ReviewModal(props) {
     </div>
   );
 
-  const toggleButton = (
-    <Button onClick={toggleMath}>
-      {renderMath ? 'Disable ' : 'Enable '}
+  const handleLatexToggle = async isChecked => {
+    setRenderMath(isChecked);
+
+    // set preference in user profile
+    const values = { renderMath: isChecked };
+    setSwitchLoading(true);
+    await axios.put('/api/user', values);
+    setSwitchLoading(false);
+  };
+
+  const toggleSwitch = (
+    <div>
+      <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} /> Render
       {wrapMath(' $\\rm\\LaTeX$ ')}
-    </Button>
+    </div>
   );
 
   return (
@@ -126,7 +137,7 @@ export default function ReviewModal(props) {
         <br />
         {paper.one_sentence}
         <hr />
-        {toggleButton}
+        <div style={{ float: 'right' }}>{toggleSwitch}</div>
         {reviewBody}
       </Modal>
     </div>

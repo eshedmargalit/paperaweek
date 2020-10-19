@@ -133,6 +133,7 @@ export default function SearchableReviewDisplayView({
     handleModalClose,
     showModal,
     modalReview,
+    renderMath,
   } = modalProps;
 
   const { pageHeaderTitle, onPageBack } = pageHeaderProps;
@@ -189,8 +190,8 @@ export default function SearchableReviewDisplayView({
   let reviewModal = null;
   let itemName = modalProps.itemName || 'Review';
   let modalFooter = [
-    <Link to="/form">
-      <Button className="footer-btn" key="edit" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
+    <Link to="/form" key="edit">
+      <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
         Edit this {itemName}
       </Button>
     </Link>,
@@ -215,7 +216,15 @@ export default function SearchableReviewDisplayView({
   }
 
   const footer = hideFooter ? null : modalFooter;
-  reviewModal = <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />;
+  reviewModal = (
+    <ReviewModal
+      review={modalReview}
+      visible={showModal}
+      renderMath={renderMath}
+      onClose={handleModalClose}
+      footer={footer}
+    />
+  );
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 

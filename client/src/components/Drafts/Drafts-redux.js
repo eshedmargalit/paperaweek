@@ -1,14 +1,19 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { setReview, updateDraftId, updateDrafts } from '../../actions';
+import { setReview, updateDraftId, updateDrafts, fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 export default function DraftsRedux() {
   const dispatch = useDispatch();
   const drafts = useSelector(state => state.drafts);
+  const renderMath = useSelector(state => state.user.renderMath);
   const [redirectHome, setRedirectHome] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
 
   // go home if back arrow is pressed
   if (redirectHome) {
@@ -45,6 +50,7 @@ export default function DraftsRedux() {
     <SearchableReviewDisplay
       reviews={drafts}
       reviewToOpen={null}
+      renderMath={renderMath}
       deleteItemFunc={deleteDraft}
       handleModalEdit={handleModalEdit}
       handleModalCopy={null}

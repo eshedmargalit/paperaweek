@@ -129,11 +129,11 @@ export function wrapMath(s, delimiter = '$') {
 
   // now odds are not math, evens are math (always?)
   return (
-    <div>
+    <>
       {parts.map((part, partIdx) => {
         const guts = isEven(partIdx) ? part : <InlineMath>{part}</InlineMath>;
-        return <span key={part}>{guts}</span>;
+        return <span key={`${s}_${part}_${partIdx}`}>{guts}</span>;
       })}
-    </div>
+    </>
   );
 }
