@@ -35,3 +35,11 @@
 label {
   font-weight: bold;
 }
+.bullet-text-area {
+  display: flex;
+  width: 90%;
+
+  .ant-input-textarea {
+    width: 100%;
+  }
+}

@@ -138,7 +138,7 @@ class ReviewForm extends Component {
           required={required}
           key={fieldName + field_value_idx}
         >
-          <div style={{ display: 'flex', width: '90%' }}>
+          <div className="bullet-text-area">
             <div className="bullet">&bull;</div>
             {getFieldDecorator(`${fieldName}_list_values[${field_value_idx}]`, {
               rules: [{ required: required, message: `${label} point cannot be blank` }],
