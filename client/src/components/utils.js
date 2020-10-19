@@ -1,8 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 
+import { InlineMath, BlockMath } from 'react-katex';
+import math from 'remark-math';
+
+import ReactMarkdown from 'react-markdown';
+
 import 'katex/dist/katex.min.css';
-import { InlineMath } from 'react-katex';
 
 export function renderCommaSepList(items, key) {
   return items.map((item, i) => {
@@ -124,16 +128,11 @@ function isEven(x) {
   return x % 2 === 0;
 }
 
-export function wrapMath(s, delimiter = '$') {
-  const parts = s.split(delimiter);
+export function wrapMarkdownWithMath(s) {
+  const renderers = {
+    inlineMath: ({ value }) => <InlineMath math={value} />,
+    math: ({ value }) => <BlockMath math={value} />,
+  };
 
-  // now odds are not math, evens are math (always?)
-  return (
-    <>
-      {parts.map((part, partIdx) => {
-        const guts = isEven(partIdx) ? part : <InlineMath>{part}</InlineMath>;
-        return <span key={`${s}_${part}_${partIdx}`}>{guts}</span>;
-      })}
-    </>
-  );
+  return <ReactMarkdown plugins={[math]} renderers={renderers} children={s} />;
 }
