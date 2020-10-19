@@ -6,6 +6,7 @@ const initialState = {
   drafts: [],
   lastLogin: null,
   publicProfile: false,
+  renderMath: false,
 };
 
 const reducer = (state = initialState, action) => {

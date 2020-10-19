@@ -42,6 +42,7 @@ export default function ReviewReaderRedux() {
   return (
     <SearchableReviewDisplay
       reviews={reviewList}
+      renderMath={user.renderMath}
       deleteItemFunc={deleteReview}
       handleModalEdit={handleModalEdit}
       handleModalCopy={handleModalCopy}
