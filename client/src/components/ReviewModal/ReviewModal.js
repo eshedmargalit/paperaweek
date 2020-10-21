@@ -111,7 +111,11 @@ export default function ReviewModal(props) {
     // set preference in user profile
     const values = { renderMath: isChecked };
     setSwitchLoading(true);
-    await axios.put('/api/user', values);
+    try {
+      await axios.put('/api/user', values);
+    } catch (err) {
+      console.log(err.response.status);
+    }
     setSwitchLoading(false);
   };
 
