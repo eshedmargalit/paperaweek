@@ -34,7 +34,11 @@ const processEntities = entities => {
     // filter down to unique authors and remove empty entries
     let author_names = _.uniq(
       authors.map(author => {
-        return capitalCase(author.DAuN.split(".").join(""));
+        return capitalCase(
+          author.DAuN.split(".")
+            .join("")
+            .trim()
+        );
       })
     ).filter(name => name !== "");
 

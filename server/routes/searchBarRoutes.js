@@ -25,6 +25,7 @@ module.exports = app => {
       params: {
         query: req.params.query,
         count: 1,
+        complete: 1,
         "subscription-key": process.env.REACT_APP_MSCOG_KEY1,
         entityCount: 15,
         timeout: 200,
