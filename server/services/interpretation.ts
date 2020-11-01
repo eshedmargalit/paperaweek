@@ -33,9 +33,15 @@ export const processEntities = (entities: Entity[]) => {
     ]);
 
     // filter down to unique authors and remove empty entries
-    let author_names = _.uniq(authors.map(author => capitalCase(author.DAuN.split('.').join('')))).filter(
-      name => name !== ''
-    );
+    let author_names = _.uniq(
+      authors.map(author => {
+        return capitalCase(
+          author.DAuN.split(".")
+            .join("")
+            .trim()
+        );
+      })
+    ).filter(name => name !== "");
 
     // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
