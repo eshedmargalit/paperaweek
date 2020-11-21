@@ -1,5 +1,13 @@
-.dynamic-delete-button {
+input {
+  border: 1px solid #ccc;
+  width: 90%;
+  padding-left: 6px;
+}
+
+.ant-btn.dynamic-delete-button {
   cursor: pointer;
+  border: none;
+  box-shadow: none;
   font-size: 18px;
   color: #999;
   transition: all 0.3s;
@@ -32,6 +40,10 @@
   }
 }
 
+.form-group {
+  margin-top: 15px;
+}
+
 label {
   font-weight: bold;
 }
@@ -42,4 +54,17 @@ label {
   .ant-input-textarea {
     width: 100%;
   }
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.react-datepicker__input-container {
+  width: inherit;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
 }
