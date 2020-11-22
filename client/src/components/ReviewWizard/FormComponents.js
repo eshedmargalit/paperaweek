@@ -80,7 +80,8 @@ export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, p
       {values[name] &&
         values[name].length > 0 &&
         values[name].map((listItem, index) => (
-          <div key={index}>
+          <div key={index} className="bullet-text-area">
+            <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} />
             <Button
               type="close"
@@ -91,7 +92,7 @@ export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, p
             </Button>
           </div>
         ))}
-      <Button style={{ width: '150px' }} onClick={() => push('')}>
+      <Button className="dynamic-add-button" onClick={() => push('')}>
         <PlusOutlined /> Add
       </Button>
     </div>
