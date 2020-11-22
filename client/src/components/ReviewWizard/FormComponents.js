@@ -7,6 +7,7 @@ import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 const DatePickerField = ({ ...props }) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
+
   return (
     <DatePicker
       {...field}

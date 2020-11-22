@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Steps, PageHeader } from 'antd';
+import { PageHeader } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment from 'moment';
-const { Step } = Steps;
 
-function ReviewWizardView({ autosaveStatus, lastSave, currentStep, stepContent, onPageBack }) {
+function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }) {
   const [currentMoment, setMoment] = useState(lastSave);
 
   useEffect(() => {
@@ -73,15 +72,8 @@ function ReviewWizardView({ autosaveStatus, lastSave, currentStep, stepContent, 
       <div style={{ display: 'flex' }}>
         <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />
       </div>
-      <div>
-        <Steps current={currentStep}>
-          <Step title="Enter Paper Metadata" />
-          <Step title="Write Review" />
-          <Step title="Preview and Submit" subTitle="🎉" />
-        </Steps>
-      </div>
-      <br />
-      <div>{stepContent}</div>
+      {form}
+      {modal}
     </div>
   );
   return wizardRender;
