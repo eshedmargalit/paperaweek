@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Tooltip, DatePicker, Button, Input } from 'antd';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { uniq as _uniq } from 'lodash';

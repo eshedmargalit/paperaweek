@@ -83,8 +83,10 @@ export default function ReviewWizardRedux() {
   }
 
   // set initial paper and review
-  const initialPaper = paper || blankPaper;
-  const initialReview = review || blankReview;
+  // spread operator makes second argument overwrite first in case of key conflict
+  // this approach guarantees the initial object contains all necessary keys
+  const initialPaper = { ...blankPaper, ...paper };
+  const initialReview = { ...blankReview, ...review };
 
   return (
     <ReviewWizardContainer

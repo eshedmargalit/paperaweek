@@ -7,13 +7,11 @@ import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default function PAWForm({ initialPaper, initialReview, onChange }) {
+export default function PAWForm({ initialPaper, initialReview, onChange, onSubmit }) {
   const initialValues = {
     ...initialPaper,
     ...initialReview,
   };
-
-  console.log(initialValues);
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Required'),
@@ -29,7 +27,7 @@ export default function PAWForm({ initialPaper, initialReview, onChange }) {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        alert(JSON.stringify(values));
+        onSubmit(values);
       }}
       validate={values => {
         onChange(values);
