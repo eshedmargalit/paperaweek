@@ -54,10 +54,6 @@ export default function ReviewModal(props) {
 
   const fields = [
     {
-      heading: 'General Summary',
-      review_key: 'summary_points',
-    },
-    {
       heading: 'Background',
       review_key: 'background_points',
     },
