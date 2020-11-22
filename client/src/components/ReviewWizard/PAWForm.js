@@ -2,8 +2,8 @@ import React from 'react';
 import { Row, Col, Button } from 'antd';
 import { Form, Field, FieldArray, ErrorMessage, Formik, useField, useFormikContext } from 'formik';
 import * as Yup from 'yup';
-import { DynamicList, MonthPicker, TextField } from './FormComponents';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
+import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -14,13 +14,25 @@ export default function PAWForm({ exampleProp }) {
     journal: '',
     doi: '',
     url: '',
+    one_sentence: '',
+    keywords: '',
     authors: [''],
     institutions: [''],
+    background_points: [''],
+    methods_points: [''],
+    results_points: [''],
+    conclusions_points: [''],
+    other_points: [''],
   };
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Required'),
   });
+
+  const reviewItemColSpan = {
+    lg: 12,
+    sm: 24,
+  };
 
   return (
     <Formik
@@ -35,37 +47,51 @@ export default function PAWForm({ exampleProp }) {
           <div className="width80">
             <h2> Paper Information </h2>
             <Row className="form-group">
-              <Col span="12">
+              <Col {...reviewItemColSpan}>
                 <TextField label="Title" name="title" type="text" />
               </Col>
-              <Col span="12">
+              <Col {...reviewItemColSpan}>
                 <MonthPicker label="Publication Date" name="date" />
               </Col>
-            </Row>
-            <Row className="form-group">
-              <Col span="12">
+              <Col {...reviewItemColSpan}>
                 <label htmlFor={'authors'}>Authors</label>
                 <FieldArray name="authors" component={DynamicList} />
               </Col>
-              <Col span="12">
+              <Col {...reviewItemColSpan}>
                 <label htmlFor={'institutions'}>Institutions</label>
                 <FieldArray name="institutions" component={DynamicList} />
               </Col>
-            </Row>
-            <Row>
-              <Col span="8">
+              <Col lg={8} sm={12}>
                 <TextField label="Journal" name="journal" type="text" />
               </Col>
-              <Col span="8">
+              <Col lg={8} sm={12}>
                 <TextField label="URL" name="url" type="text" />
               </Col>
-              <Col span="8">
+              <Col lg={8} sm={12}>
                 <TextField label="DOI" name="doi" type="text" />
               </Col>
             </Row>
             <hr />
             <h2> Your Review </h2>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Row className="form-group">
+              {reviewFields.map(({ fieldName, label }) => (
+                <Col {...reviewItemColSpan}>
+                  <label htmlFor={fieldName}>{label}</label>
+                  <FieldArray name={fieldName} component={DynamicTextAreaList} />
+                </Col>
+              ))}
+            </Row>
+            <Row>
+              <Col {...reviewItemColSpan}>
+                <TextField label="One Sentence Summary" name="one_sentence" type="text" />
+              </Col>
+              <Col {...reviewItemColSpan}>
+                <TextField label="Keywords" name="keywords" type="text" placeholder="human, fmri, statistics" />
+              </Col>
+            </Row>
+            <Button type="primary" onClick={handleSubmit}>
+              Continue to Preview
+            </Button>
           </div>
         </Form>
       )}
