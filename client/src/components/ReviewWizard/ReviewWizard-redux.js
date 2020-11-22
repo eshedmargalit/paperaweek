@@ -5,6 +5,7 @@ import ReviewWizardContainer from './ReviewWizard-container';
 import { updateReadingList, updateReviews, setReview } from '../../actions/index';
 import { blankPaper, blankReview } from './utils.js';
 import _ from 'lodash';
+import moment from 'moment';
 import { useSaveDraft } from './hooks.js';
 
 export default function ReviewWizardRedux() {

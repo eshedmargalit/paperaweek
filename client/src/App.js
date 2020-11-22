@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login/Login';
 import ReviewWizard from './components/ReviewWizard';
-import PAWForm from './components/ReviewWizard/PAWForm';
 import DraftPage from './components/DraftPage';
 import MenuBar from './components/MenuBar';
 import PublicProfile from './components/PublicProfile';
@@ -33,7 +32,7 @@ export default function App() {
           <Route exact path="/" render={props => <Login {...props} justSignedOut={false} />} />
           <Route exact path="/signout" render={props => <Login {...props} justSignedOut={true} />} />
           <Route exact path="/dashboard" component={Home} />
-          <Route exact path="/form" component={PAWForm} />
+          <Route exact path="/form" component={ReviewWizard} />
           <Route exact path="/drafts" component={DraftPage} />
           <Route exact path="/preferences" component={Preferences} />
           <Route component={NotFound} />

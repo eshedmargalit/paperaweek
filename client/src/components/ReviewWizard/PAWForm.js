@@ -1,29 +1,19 @@
 import React from 'react';
 import { Row, Col, Button } from 'antd';
-import { Form, Field, FieldArray, ErrorMessage, Formik, useField, useFormikContext } from 'formik';
+import { Form, FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default function PAWForm({ exampleProp }) {
+export default function PAWForm({ initialPaper, initialReview, onChange }) {
   const initialValues = {
-    title: '',
-    date: '',
-    journal: '',
-    doi: '',
-    url: '',
-    one_sentence: '',
-    keywords: '',
-    authors: [''],
-    institutions: [''],
-    background_points: [''],
-    methods_points: [''],
-    results_points: [''],
-    conclusions_points: [''],
-    other_points: [''],
+    ...initialPaper,
+    ...initialReview,
   };
+
+  console.log(initialValues);
 
   const validationSchema = Yup.object({
     title: Yup.string().required('Required'),
@@ -41,10 +31,13 @@ export default function PAWForm({ exampleProp }) {
       onSubmit={(values, { setSubmitting }) => {
         alert(JSON.stringify(values));
       }}
+      validate={values => {
+        onChange(values);
+      }}
     >
       {({ values, handleSubmit }) => (
         <Form>
-          <div className="width80">
+          <div>
             <h2> Paper Information </h2>
             <Row className="form-group">
               <Col {...reviewItemColSpan}>
@@ -75,7 +68,7 @@ export default function PAWForm({ exampleProp }) {
             <h2> Your Review </h2>
             <Row className="form-group">
               {reviewFields.map(({ fieldName, label }) => (
-                <Col {...reviewItemColSpan}>
+                <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
                   <FieldArray name={fieldName} component={DynamicTextAreaList} />
                 </Col>

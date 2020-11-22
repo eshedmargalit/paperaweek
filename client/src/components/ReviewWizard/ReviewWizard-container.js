@@ -4,8 +4,9 @@ import { Button } from 'antd';
 import _ from 'lodash';
 import { Redirect } from 'react-router-dom';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import MetadataForm from './MetadataForm';
-import ReviewForm from './ReviewForm';
+// import MetadataForm from './MetadataForm';
+// import ReviewForm from './ReviewForm';
+import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
 
 const _MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
@@ -25,18 +26,10 @@ export default function ReviewWizardContainer({
   const [review, setReview] = useState(initialReview);
 
   // set wizard state
-  const [step, setStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [redirectHome, setRedirectHome] = useState(false);
 
-  const submitMetadata = newPaper => {
-    setPaper(newPaper);
-    setStep(1);
-  };
-
   const previewModal = newReview => {
-    setReview(newReview);
-    setStep(2);
     setShowModal(true);
   };
 
@@ -48,14 +41,13 @@ export default function ReviewWizardContainer({
     []
   );
 
-  const paperOnChangeHandler = newPaper => {
-    setPaper(newPaper);
-    autosave(newPaper, review);
-  };
-
-  const reviewOnChangeHandler = newReview => {
-    setReview(newReview);
-    autosave(paper, newReview);
+  const onChangeHandler = newValues => {
+    console.log(newValues);
+    const newPaper = null;
+    const newReview = null;
+    // setPaper(newPaper);
+    // setReview(newReview);
+    // autosave(newPaper, newReview);
   };
 
   /*
@@ -65,25 +57,33 @@ export default function ReviewWizardContainer({
    * needs to read the new value of review
    */
 
-  const metadataStep = (
-    <MetadataForm
-      paper={initialPaper}
-      onSubmit={useCallback(submitMetadata, [])}
-      onChange={useCallback(paperOnChangeHandler, [review])}
+  const form = (
+    <PAWForm
+      initialPaper={initialPaper}
+      initialReview={initialReview}
+      onSubmit={useCallback(previewModal)}
+      onChange={useCallback(onChangeHandler, [paper, review])}
     />
   );
-  const reviewStep = (
-    <ReviewForm
-      review={initialReview}
-      onSubmit={useCallback(previewModal, [])}
-      onChange={useCallback(reviewOnChangeHandler, [paper])}
-    />
-  );
+
+  // const metadataStep = (
+  //   <MetadataForm
+  //     paper={initialPaper}
+  //     onSubmit={useCallback(submitMetadata, [])}
+  //     onChange={useCallback(paperOnChangeHandler, [review])}
+  //   />
+  // );
+  // const reviewStep = (
+  //   <ReviewForm
+  //     review={initialReview}
+  //     onSubmit={useCallback(previewModal, [])}
+  //     onChange={useCallback(reviewOnChangeHandler, [paper])}
+  //   />
+  // );
 
   // what should happen if the review modal is exited?
   const onModalCancel = () => {
     restartReview({ paper, review });
-    setStep(0);
     setShowModal(false);
   };
 
@@ -106,17 +106,16 @@ export default function ReviewWizardContainer({
       <ReviewModal review={{ paper, review }} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
     </div>
   );
-  const stepContent = [metadataStep, reviewStep, modal];
 
   return redirectHome ? (
     <Redirect to="/dashboard" push />
   ) : (
     <ReviewWizardView
+      form={form}
+      modal={modal}
       autosaveStatus={autosaveStatus}
       lastSave={lastSave}
       onPageBack={() => setRedirectHome(true)}
-      currentStep={step}
-      stepContent={stepContent[step]}
     />
   );
 }
