@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import _ from 'lodash';
+import { uniq as _uniq } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import ReviewModal from '../ReviewModal/ReviewModal';
 // import MetadataForm from './MetadataForm';
@@ -10,6 +11,40 @@ import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
 
 const _MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
+
+const parseKeywords = keywords => {
+  if (Array.isArray(keywords)) {
+    keywords = keywords.join(',');
+  }
+  return _uniq(
+    keywords.split(',').map(item => {
+      return item.trim().toLowerCase();
+    })
+  );
+};
+
+function repackageValues(values) {
+  return {
+    paper: {
+      title: values.title,
+      authors: values.authors,
+      institutions: values.institutions,
+      date: values.date,
+      journal: values.journal,
+      doi: values.doi,
+      url: values.url,
+      keywords: parseKeywords(values.keywords),
+      one_sentence: values.one_sentence,
+    },
+    review: {
+      background_points: values.background_points,
+      approach_points: values.approach_points,
+      results_points: values.results_points,
+      conclusions_points: values.conclusions_points,
+      other_points: values.other_points,
+    },
+  };
+}
 
 export default function ReviewWizardContainer({
   initialPaper,
@@ -29,7 +64,10 @@ export default function ReviewWizardContainer({
   const [showModal, setShowModal] = useState(false);
   const [redirectHome, setRedirectHome] = useState(false);
 
-  const previewModal = newReview => {
+  const previewModal = newValues => {
+    const { paper, review } = repackageValues(newValues);
+    setPaper(paper);
+    setReview(review);
     setShowModal(true);
   };
 
@@ -42,12 +80,10 @@ export default function ReviewWizardContainer({
   );
 
   const onChangeHandler = newValues => {
-    console.log(newValues);
-    const newPaper = null;
-    const newReview = null;
-    // setPaper(newPaper);
-    // setReview(newReview);
-    // autosave(newPaper, newReview);
+    const { paper, review } = repackageValues(newValues);
+    setPaper(paper);
+    setReview(review);
+    autosave(paper, review);
   };
 
   /*

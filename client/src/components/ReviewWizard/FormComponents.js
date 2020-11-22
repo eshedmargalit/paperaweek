@@ -83,11 +83,7 @@ export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, p
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} />
-            <Button
-              type="close"
-              className="dynamic-delete-button"
-              onClick={() => pop(index)} // remove a listItem from the list
-            >
+            <Button type="close" className="dynamic-delete-button" onClick={() => pop(index)}>
               <CloseOutlined />
             </Button>
           </div>
