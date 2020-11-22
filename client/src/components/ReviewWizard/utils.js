@@ -57,20 +57,14 @@ export const metaFields = [
 
 export const reviewFields = [
   {
-    fieldName: 'summary_points',
-    label: 'Paper Summary',
-    required: false,
-    isList: true,
-  },
-  {
     fieldName: 'background_points',
     label: 'Background Info',
     required: false,
     isList: true,
   },
   {
-    fieldName: 'approach_points',
-    label: 'Approach',
+    fieldName: 'methods_points',
+    label: 'Methods',
     required: false,
     isList: true,
   },
@@ -88,7 +82,7 @@ export const reviewFields = [
   },
   {
     fieldName: 'other_points',
-    label: 'Other (optional)',
+    label: 'Other',
     required: false,
     isList: true,
   },

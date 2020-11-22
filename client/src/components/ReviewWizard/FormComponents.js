@@ -71,3 +71,28 @@ export const DynamicList = ({ name, move, swap, push, insert, unshift, pop, form
     </div>
   );
 };
+
+export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, pop, form }) => {
+  const { values } = form;
+  return (
+    <div>
+      {values[name] &&
+        values[name].length > 0 &&
+        values[name].map((listItem, index) => (
+          <div key={index}>
+            <Field as="textarea" name={`${name}.${index}`} />
+            <Button
+              type="close"
+              className="dynamic-delete-button"
+              onClick={() => pop(index)} // remove a listItem from the list
+            >
+              <CloseOutlined />
+            </Button>
+          </div>
+        ))}
+      <Button style={{ width: '150px' }} onClick={() => push('')}>
+        <PlusOutlined /> Add
+      </Button>
+    </div>
+  );
+};

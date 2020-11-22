@@ -4,6 +4,12 @@ input {
   padding-left: 6px;
 }
 
+textarea {
+  border: 1px solid #ccc;
+  width: 90%;
+  padding-left: 6px;
+}
+
 .ant-btn.dynamic-delete-button {
   cursor: pointer;
   border: none;
@@ -40,12 +46,9 @@ input {
   }
 }
 
-.form-group {
-  margin-top: 15px;
-}
-
 label {
   font-weight: bold;
+  margin-top: 15px;
 }
 .bullet-text-area {
   display: flex;
