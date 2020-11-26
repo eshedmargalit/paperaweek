@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Row, Col, Button } from 'antd';
 import { Form, FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
+import _ from 'lodash';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function PAWForm({ initialPaper, initialReview, onChange, onSubmit }) {
+  const debouncedOnChange = _.debounce(onChange, 2000);
   const initialValues = {
     ...initialPaper,
     ...initialReview,
@@ -22,6 +24,10 @@ export default function PAWForm({ initialPaper, initialReview, onChange, onSubmi
     sm: 24,
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Formik
       initialValues={initialValues}
@@ -30,7 +36,7 @@ export default function PAWForm({ initialPaper, initialReview, onChange, onSubmi
         onSubmit(values);
       }}
       validate={values => {
-        onChange(values);
+        debouncedOnChange(values);
       }}
     >
       {({ values, handleSubmit }) => (
@@ -80,6 +86,7 @@ export default function PAWForm({ initialPaper, initialReview, onChange, onSubmi
                 <TextField label="Keywords" name="keywords" type="text" placeholder="human, fmri, statistics" />
               </Col>
             </Row>
+            <br />
             <Button type="primary" onClick={handleSubmit}>
               Continue to Preview
             </Button>
