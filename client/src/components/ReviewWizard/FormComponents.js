@@ -56,9 +56,10 @@ export const DynamicList = ({ name, move, swap, push, insert, unshift, pop, form
         values[name].length > 0 &&
         values[name].map((listItem, index) => (
           <div key={index}>
-            <Field name={`${name}.${index}`} />
+            <Field name={`${name}.${index}`} autoFocus={true} />
             <Button
               type="close"
+              tabIndex="-1"
               className="dynamic-delete-button"
               onClick={() => pop(index)} // remove a listItem from the list
             >
@@ -82,8 +83,8 @@ export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, p
         values[name].map((listItem, index) => (
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
-            <Field as="textarea" name={`${name}.${index}`} />
-            <Button type="close" className="dynamic-delete-button" onClick={() => pop(index)}>
+            <Field as="textarea" name={`${name}.${index}`} autoFocus={true} />
+            <Button type="close" tabIndex="-1" className="dynamic-delete-button" onClick={() => pop(index)}>
               <CloseOutlined />
             </Button>
           </div>
