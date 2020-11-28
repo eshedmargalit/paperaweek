@@ -2,6 +2,15 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IPaper extends Document {
   title: string;
+  authors: string[];
+  institutions: string[];
+  date: string;
+  journal: string;
+  doi: string;
+  url: string;
+  keywords: string[];
+  one_sentence: string;
+  review_date: string;
 }
 
 var PaperSchema = new Schema(

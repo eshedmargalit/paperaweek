@@ -1,16 +1,17 @@
 import { Document, Schema, model } from 'mongoose';
 
-import Paper from './Paper';
-import Review from './Review';
+import Paper, { IPaper } from './Paper';
+import Review, { IReview } from './Review';
 
 export interface IUser extends Document {
   googleId: string;
-  reviews: any[];
-  readingList: any[];
-  drafts: any[];
-  lastLogin: any;
-  publicProfile: any;
   displayName: string;
+  readingList: IPaper[];
+  reviews: IReview[];
+  drafts: IReview[];
+  lastLogin: number;
+  publicProfile: boolean;
+  renderMath: boolean;
 }
 
 var UserSchema = new Schema(

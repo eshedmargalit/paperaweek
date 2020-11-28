@@ -1,4 +1,5 @@
 import UserModel, { IUser } from '../models/User';
+import ReviewModel from '../models/Review';
 import PaperModel from '../models/Paper';
 import { Types } from 'mongoose';
 import requireLogin from '../middlewares/requireLogin';
@@ -14,14 +15,18 @@ module.exports = (app: Application) => {
 
   app.post('/api/drafts', requireLogin, async (req, res) => {
     const draft = req.body.draft;
-    let newPaper = new PaperModel(draft.paper);
-    let newReview = {
+
+    const newPaper = new PaperModel(draft.paper);
+    const newReview = new ReviewModel({
       paper: newPaper,
       review: draft.review,
       _id: new Types.ObjectId(),
-    };
-    let user = await UserModel.findOne({ googleId: (req.user as IUser).googleId });
+    });
+
+    const user = await UserModel.findOne({ googleId: (req.user as IUser).googleId });
+
     if (!user) throw 'TODO';
+
     user.drafts.push(newReview);
     user.save();
     res.send(JSON.stringify(newReview));

@@ -1,8 +1,16 @@
 import { Schema, model, Document } from 'mongoose';
-import Paper from './Paper';
+import Paper, { IPaper } from './Paper';
 
 export interface IReview extends Document {
-  paper: any;
+  paper: IPaper;
+  review: {
+    summary_points: string[];
+    background_points: string[];
+    approach_points: string[];
+    results_points: string[];
+    conclusions_points: string[];
+    other_points: string[];
+  };
 }
 
 var ReviewSchema = new Schema(
