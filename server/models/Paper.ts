@@ -1,5 +1,8 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+import { Schema, model, Document } from 'mongoose';
+
+export interface IPaper extends Document {
+  title: string;
+}
 
 var PaperSchema = new Schema(
   {
@@ -12,13 +15,11 @@ var PaperSchema = new Schema(
     url: String,
     keywords: [{ type: String }],
     one_sentence: String,
-    review_date: String
+    review_date: String,
   },
   {
-    timestamps: { createdAt: true, updatedAt: true }
+    timestamps: { createdAt: true, updatedAt: true },
   }
 );
 
-mongoose.model("papers", PaperSchema);
-
-module.exports = PaperSchema;
+export default model<IPaper>('papers', PaperSchema);

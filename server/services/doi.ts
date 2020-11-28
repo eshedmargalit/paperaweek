@@ -1,4 +1,4 @@
-const moment = require("moment");
+import moment from 'moment';
 
 // define the fields to pull from DOI string, and construct a regex to get the
 // meat inside each
@@ -10,23 +10,23 @@ const moment = require("moment");
 //         doesn't include it in the final result
 //     (.*?) matches the first pattern (lazy) that can have any number (*) of any
 //         character (.)
-const targets = ["title", "journal", "DOI", "author", "year", "month", "url"];
-const regExs = {};
+const targets = ['title', 'journal', 'DOI', 'author', 'year', 'month', 'url'] as const;
+const regExs = {} as Record<typeof targets[number], RegExp>;
+
 targets.forEach(target => {
-  regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, "g");
+  regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, 'g');
 });
 
-const parsedDoiToPaper = parsedData => {
+// @ts-ignore
+export const parsedDoiToPaper = parsedData => {
   // manipulate parsedData object into "paper" format
-  const authors = parsedData.author.split(" and ");
+  const authors = parsedData.author.split(' and ');
+  // @ts-ignore
   const authorsReordered = authors.map(author => {
-    const parts = author.split(", ");
+    const parts = author.split(', ');
     return `${parts[1]} ${parts[0]}`;
   });
-  const date = moment(
-    `${parsedData.month}-${parsedData.year}`,
-    "MMM YYYY"
-  ).format();
+  const date = moment(`${parsedData.month}-${parsedData.year}`, 'MMM YYYY').format();
 
   const paper = {
     title: parsedData.title,
@@ -35,12 +35,12 @@ const parsedDoiToPaper = parsedData => {
     doi: parsedData.DOI,
     authors: authorsReordered,
     date,
-    institutions: null // needs to be null instead of [] for front-end to render correctly
+    institutions: null, // needs to be null instead of [] for front-end to render correctly
   };
   return { paper, id: parsedData.title };
 };
 
-const parseDoiString = doiString => {
+export const parseDoiString = (doiString: string) => {
   // parse DOI string
   if (!doiString || !doiString.trim()) {
     return null;
@@ -48,15 +48,15 @@ const parseDoiString = doiString => {
 
   const parsedData = {};
   targets.forEach(target => {
+    // @ts-ignore
     let matchingData = doiString.match(regExs[target])[0];
+    // @ts-ignore
     parsedData[target] = matchingData;
   });
   return parsedData;
 };
 
-const doiToPaper = doiString => {
+export const doiToPaper = (doiString: string) => {
   const parsedData = parseDoiString(doiString);
   return parsedDoiToPaper(parsedData);
 };
-
-module.exports = { parseDoiString, parsedDoiToPaper, doiToPaper };

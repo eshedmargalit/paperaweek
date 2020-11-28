@@ -6,7 +6,7 @@ import { googleClientID, googleClientSecret } from '../config/keys';
 const User = mongoose.model('users');
 
 // TODO AM: Define user elsewhere
-passport.serializeUser<{ id: string }, string>((user, done) => {
+passport.serializeUser<{ id: string; googleId: string }, string>((user, done) => {
   done(null, user.id);
 });
 

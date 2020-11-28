@@ -7,7 +7,7 @@ require('./models/User');
 require('./models/Review');
 
 const mongoose = require('mongoose');
-const { createApp } = require('./utils');
+import createApp from './utils';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
