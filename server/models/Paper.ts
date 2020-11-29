@@ -1,9 +1,9 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface IPaper extends Document {
+export interface IPaper {
   title: string;
   authors: string[];
-  institutions: string[];
+  institutions: string[] | null;
   date: string;
   journal: string;
   doi: string;
@@ -12,6 +12,8 @@ export interface IPaper extends Document {
   one_sentence: string;
   review_date: string;
 }
+
+export interface PaperDocument extends IPaper, Document {}
 
 var PaperSchema = new Schema(
   {
@@ -31,4 +33,4 @@ var PaperSchema = new Schema(
   }
 );
 
-export default model<IPaper>('papers', PaperSchema);
+export default model<PaperDocument>('papers', PaperSchema);

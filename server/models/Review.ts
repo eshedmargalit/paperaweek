@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 import Paper, { IPaper } from './Paper';
 
-export interface IReview extends Document {
+export interface IReview {
   paper: IPaper;
   review: {
     summary_points: string[];
@@ -12,6 +12,8 @@ export interface IReview extends Document {
     other_points: string[];
   };
 }
+
+export interface ReviewDocument extends IReview, Document {}
 
 var ReviewSchema = new Schema(
   {
@@ -31,4 +33,4 @@ var ReviewSchema = new Schema(
   }
 );
 
-export default model<IReview>('reviews', ReviewSchema);
+export default model<ReviewDocument>('reviews', ReviewSchema);

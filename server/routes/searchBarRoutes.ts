@@ -53,11 +53,11 @@ module.exports = (app: Application) => {
     // everything else in a field with key '0'. So we reconstruct the full url
     // from those two pieces.
     const fullQuery = `${req.params.query}${req.params['0']}`;
-    let resp = null;
     try {
-      resp = await axios(`https://doi.org/${fullQuery}`, {
+      const resp = await axios.get<string>(`https://doi.org/${fullQuery}`, {
         headers: { Accept: 'text/bibliography; style=bibtex' },
       });
+
       const parsedPaper = doiToPaper(resp.data);
       res.send(JSON.stringify(parsedPaper));
     } catch (err) {

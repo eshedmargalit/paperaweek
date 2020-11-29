@@ -1,18 +1,20 @@
 import { Document, Schema, model } from 'mongoose';
 
-import Paper, { IPaper } from './Paper';
-import Review, { IReview } from './Review';
+import Paper, { PaperDocument } from './Paper';
+import Review, { ReviewDocument } from './Review';
 
-export interface IUser extends Document {
+export interface IUser {
   googleId: string;
   displayName: string;
-  readingList: IPaper[];
-  reviews: IReview[];
-  drafts: IReview[];
+  readingList: PaperDocument[];
+  reviews: ReviewDocument[];
+  drafts: ReviewDocument[];
   lastLogin: number;
   publicProfile: boolean;
   renderMath: boolean;
 }
+
+export interface UserDocument extends Document, IUser {}
 
 var UserSchema = new Schema(
   {
@@ -30,4 +32,4 @@ var UserSchema = new Schema(
   }
 );
 
-export default model<IUser>('users', UserSchema);
+export default model<UserDocument>('users', UserSchema);

@@ -2,11 +2,11 @@ import passport from 'passport';
 import GoogleStrategy from 'passport-google-oauth20';
 import mongoose from 'mongoose';
 import { googleClientID, googleClientSecret } from '../config/keys';
-import { IUser } from '../models/User';
+import { UserDocument } from '../models/User';
 
 const User = mongoose.model('users');
 
-passport.serializeUser<IUser, string>((user, done) => {
+passport.serializeUser<UserDocument, string>((user, done) => {
   done(null, user.id);
 });
 

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { IPaper } from '../models/Paper';
 
 // define the fields to pull from DOI string, and construct a regex to get the
 // meat inside each
@@ -11,24 +12,31 @@ import moment from 'moment';
 //     (.*?) matches the first pattern (lazy) that can have any number (*) of any
 //         character (.)
 const targets = ['title', 'journal', 'DOI', 'author', 'year', 'month', 'url'] as const;
-const regExs = {} as Record<typeof targets[number], RegExp>;
+type Target = typeof targets[number];
+type ParsedData = Record<Target, string>;
+type ParsedPaper = {
+  paper: Partial<IPaper>;
+  id: string;
+};
+
+const regExs = {} as Record<Target, RegExp>;
 
 targets.forEach(target => {
   regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, 'g');
 });
 
-// @ts-ignore
-export const parsedDoiToPaper = parsedData => {
+export const parsedDoiToPaper = (parsedData: ParsedData) => {
   // manipulate parsedData object into "paper" format
   const authors = parsedData.author.split(' and ');
-  // @ts-ignore
+
   const authorsReordered = authors.map(author => {
     const parts = author.split(', ');
     return `${parts[1]} ${parts[0]}`;
   });
+
   const date = moment(`${parsedData.month}-${parsedData.year}`, 'MMM YYYY').format();
 
-  const paper = {
+  const paper: Partial<IPaper> = {
     title: parsedData.title,
     journal: parsedData.journal,
     url: parsedData.url,
@@ -40,23 +48,31 @@ export const parsedDoiToPaper = parsedData => {
   return { paper, id: parsedData.title };
 };
 
-export const parseDoiString = (doiString: string) => {
+export const parseDoiString = (doiString: string): ParsedData | null => {
   // parse DOI string
   if (!doiString || !doiString.trim()) {
     return null;
   }
 
-  const parsedData = {};
+  const parsedData = {} as ParsedData;
+
   targets.forEach(target => {
-    // @ts-ignore
-    let matchingData = doiString.match(regExs[target])[0];
-    // @ts-ignore
-    parsedData[target] = matchingData;
+    const matchingData = doiString.match(regExs[target]);
+    if (!matchingData) return;
+    parsedData[target] = matchingData[0];
   });
+
   return parsedData;
 };
 
-export const doiToPaper = (doiString: string) => {
-  const parsedData = parseDoiString(doiString);
+export const doiToPaper = (doiString: string): ParsedPaper => {
+  const parsedData: ParsedData | null = parseDoiString(doiString);
+  if (parsedData === null) {
+    // TODO EM: what do?
+    return {
+      paper: {},
+      id: '',
+    };
+  }
   return parsedDoiToPaper(parsedData);
 };
