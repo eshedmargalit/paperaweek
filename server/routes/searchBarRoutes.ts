@@ -3,6 +3,7 @@ import { processEntities } from '../services/interpretation';
 import { doiToPaper } from '../services/doi';
 import { Application } from 'express';
 import requireLogin from '../middlewares/requireLogin';
+import { InterpretationResponse } from '../types/interpretation';
 
 const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
@@ -23,7 +24,7 @@ const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 
 module.exports = (app: Application) => {
   app.get('/api/searchBar/interpret/:query', requireLogin, async (req, res) => {
-    const response = await axios.get(`${endpoint}/interpret`, {
+    const response = await axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
       params: {
         query: req.params.query,
         count: 1,

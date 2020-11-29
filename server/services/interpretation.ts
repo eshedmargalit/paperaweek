@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Entity } from '../types/interpretation';
 
 export const capitalCase = (input: string) => {
   if (!input.trim()) {
@@ -22,32 +23,30 @@ export const capitalCase = (input: string) => {
   }, '');
 };
 
-// @ts-ignore
-export const processEntities = entities => {
-  // @ts-ignore
+export const processEntities = (entities: Entity[]) => {
   return entities.map(entity => {
     // sort authors by position (first author first, etc)
-    let authors = _.sortBy(entity.AA, [
+    const authors = _.sortBy(entity.AA, [
       function(o) {
+        // @ts-ignore
+        // TODO EM: Eshed, are you sure S exists on entity.AA?
         return o.S;
       },
     ]);
 
     // filter down to unique authors and remove empty entries
-    let author_names = _.uniq(
-      authors.map(author => {
-        return capitalCase(author.DAuN.split('.').join(''));
-      })
-    ).filter(name => name !== '');
+    let author_names = _.uniq(authors.map(author => capitalCase(author.DAuN.split('.').join('')))).filter(
+      name => name !== ''
+    );
 
     // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
-      authors.map(author => {
-        return capitalCase(author.DAfN)
+      authors.map(author =>
+        capitalCase(author.DAfN)
           .split('.')
           .join('')
-          .trim();
-      })
+          .trim()
+      )
     ).filter(name => name !== '');
 
     if (author_names === undefined || author_names.length === 0) {
@@ -63,7 +62,7 @@ export const processEntities = entities => {
       entity_url = entity.S[0].U;
     }
 
-    let journal_name = entity.VFN ? entity.VFN : '';
+    let journal_name = entity.VFN || '';
 
     const paper = {
       title: entity.DN,
