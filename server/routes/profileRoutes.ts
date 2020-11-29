@@ -1,18 +1,22 @@
 import { Application } from 'express';
+import { IReview } from '../models/Review';
 import UserModel, { IUser } from '../models/User';
 
-function filterUserData(user: IUser) {
+interface FilteredData {
+  userDisplayName?: string;
+  reviews?: IReview[];
+  isOwnPage?: boolean;
+}
+
+function filterUserData(user: IUser): FilteredData {
   if (user.publicProfile) {
     return {
       userDisplayName: user.displayName,
       reviews: user.reviews,
     };
-  } else {
-    return {
-      userDisplayName: null,
-      reviews: null,
-    };
   }
+
+  return {};
 }
 
 module.exports = (app: Application) => {
@@ -27,8 +31,7 @@ module.exports = (app: Application) => {
       if (!user) {
         res.status(404).send('No item found');
       } else {
-        // TODO AM
-        let filteredData: any = filterUserData(user);
+        let filteredData = filterUserData(user);
         filteredData.isOwnPage = isOwnPage;
         res.send(JSON.stringify(filteredData));
       }

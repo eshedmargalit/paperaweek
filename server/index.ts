@@ -1,4 +1,5 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { mongoURI } from './config/keys';
 
@@ -6,8 +7,10 @@ require('./models/Paper');
 require('./models/User');
 require('./models/Review');
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 import createApp from './utils';
+
+if (!mongoURI) throw Error('gotta have a Mongo URI, man!');
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
