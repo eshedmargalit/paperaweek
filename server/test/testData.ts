@@ -1,10 +1,7 @@
-import { model, Types } from 'mongoose';
+import UserModel from '../models/User';
+import mongoose from 'mongoose';
 
-import '../models/Paper';
-import '../models/User';
-import '../models/Review';
-
-const testReview = {
+export const testReview = {
   review: {
     summary_points: ['s'],
     background_points: ['d'],
@@ -44,17 +41,17 @@ const testReview = {
   updatedAt: '2019-11-22T06:24:03.085Z',
 };
 
-const testUserId = '6ef7637953cac5899118898f';
+export const testUserId = '6ef7637953cac5899118898f';
 
-const testUser = new User({
-  _id: new Types.ObjectId(testUserId),
+export const testUser = new UserModel({
+  _id: new mongoose.Types.ObjectId(testUserId),
   unique_id: 'user',
   display_name: 'Arad Margalit',
   reading_list: [],
   reviews: [],
 });
 
-const testDOIString =
+export const testDOIString =
   '@article{Margalit_2020, title={Ultra-high-resolution fMRI of Human Ventral ' +
   'Temporal Cortex Reveals Differential Representation of Categories and Domains}, ' +
   'volume={40}, ISSN={1529-2401}, url={http://dx.doi.org/10.1523/JNEUROSCI.2106-19.' +
@@ -63,12 +60,3 @@ const testDOIString =
   'Jamison, Keith W. and Weiner, Kevin S. and Vizioli, Luca and Zhang, Ru-Yuan and ' +
   'Kay, Kendrick N. and Grill-Spector, Kalanit}, year={2020}, month={Feb}, ' +
   'pages={3008–3024}}';
-
-const _testReview = testReview;
-export { _testReview as testReview };
-const _testUser = testUser;
-export { _testUser as testUser };
-const _testUserId = testUserId;
-export { _testUserId as testUserId };
-const _testDOIString = testDOIString;
-export { _testDOIString as testDOIString };
