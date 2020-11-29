@@ -3,12 +3,12 @@ dotenv.config();
 
 import { mongoURI } from './config/keys';
 
-require('./models/Paper');
-require('./models/User');
-require('./models/Review');
-
 import mongoose from 'mongoose';
 import createApp from './utils';
+
+import './models/User';
+import './models/Paper';
+import './models/Review';
 
 if (!mongoURI) throw Error('gotta have a Mongo URI, man!');
 
