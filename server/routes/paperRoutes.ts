@@ -1,6 +1,6 @@
 import { Application } from 'express';
 import requireLogin from '../middlewares/requireLogin';
-import UserModel, { IUser } from '../models/User';
+import UserModel from '../models/User';
 import PaperModel from '../models/Paper';
 import ReviewModel from '../models/Review';
 import { Types } from 'mongoose';
@@ -14,13 +14,10 @@ module.exports = (app: Application) => {
       review: review.review,
       _id: new Types.ObjectId(),
     });
-    const user = await UserModel.findOne({ googleId: (req.user as IUser).googleId });
-    if (!user) {
-      throw Error('...');
-    }
-    user.reviews.push(newReview);
-    user.save();
-    res.send(JSON.stringify(user.reviews));
+
+    req.user.reviews.push(newReview);
+    req.user.save();
+    res.send(JSON.stringify(req.user.reviews));
   });
 
   app.put('/api/papers', requireLogin, async (req, res) => {
@@ -29,7 +26,7 @@ module.exports = (app: Application) => {
       let newPaper = new PaperModel(review.paper);
       let user = await UserModel.findOneAndUpdate(
         {
-          googleId: (req.user as IUser).googleId,
+          googleId: req.user.googleId,
           'reviews._id': Types.ObjectId(req.body.id),
         },
         {
@@ -53,7 +50,7 @@ module.exports = (app: Application) => {
   app.delete('/api/papers/:id', requireLogin, async (req, res) => {
     try {
       UserModel.findOneAndUpdate(
-        { googleId: (req.user as IUser).googleId },
+        { googleId: req.user.googleId },
         {
           $pull: {
             reviews: { _id: new Types.ObjectId(req.params.id) },

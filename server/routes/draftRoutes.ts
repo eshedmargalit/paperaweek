@@ -1,4 +1,4 @@
-import UserModel, { IUser } from '../models/User';
+import UserModel from '../models/User';
 import ReviewModel from '../models/Review';
 import PaperModel from '../models/Paper';
 import { Types } from 'mongoose';
@@ -7,10 +7,7 @@ import { Application } from 'express';
 
 module.exports = (app: Application) => {
   app.get('/api/drafts', requireLogin, async (req, res) => {
-    let user = await UserModel.findById((req.user as IUser).googleId);
-    if (!user) throw 'TODO';
-
-    res.send(JSON.stringify(user.drafts));
+    res.send(JSON.stringify(req.user.drafts));
   });
 
   app.post('/api/drafts', requireLogin, async (req, res) => {
@@ -23,12 +20,8 @@ module.exports = (app: Application) => {
       _id: new Types.ObjectId(),
     });
 
-    const user = await UserModel.findOne({ googleId: (req.user as IUser).googleId });
-
-    if (!user) throw 'TODO';
-
-    user.drafts.push(newReview);
-    user.save();
+    req.user.drafts.push(newReview);
+    req.user.save();
     res.send(JSON.stringify(newReview));
   });
 
@@ -38,7 +31,7 @@ module.exports = (app: Application) => {
       let newPaper = new PaperModel(draft.paper);
       let user = await UserModel.findOneAndUpdate(
         {
-          googleId: (req.user as IUser).googleId,
+          googleId: req.user.googleId,
           'drafts._id': Types.ObjectId(req.body.id),
         },
         {
@@ -62,7 +55,7 @@ module.exports = (app: Application) => {
   app.delete('/api/drafts/:id', requireLogin, async (req, res) => {
     try {
       UserModel.findOneAndUpdate(
-        { googleId: (req.user as IUser).googleId },
+        { googleId: req.user.googleId },
         {
           $pull: {
             drafts: { _id: new Types.ObjectId(req.params.id) },
