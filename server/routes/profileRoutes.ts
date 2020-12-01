@@ -22,7 +22,7 @@ function filterUserData(user: IUser): FilteredData {
 module.exports = (app: Application) => {
   app.get('/api/profiles/:googleId', async (req, res) => {
     const googleId = req.params.googleId;
-    const currentUserGoogleId = req.user ? (req.user as IUser).googleId : null;
+    const currentUserGoogleId = req.user ? req.user.googleId : null;
     const isOwnPage = googleId === currentUserGoogleId;
 
     try {
