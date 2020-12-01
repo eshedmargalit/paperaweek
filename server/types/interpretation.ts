@@ -25,6 +25,7 @@ export interface Entity {
   AA: Array<{
     DAuN: string; // Original author name
     DAfN: string; // Original affiliation name
+    S: number; // Author's numeric position in author list
   }>; // Author affiliation
 }
 

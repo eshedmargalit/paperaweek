@@ -28,8 +28,6 @@ export const processEntities = (entities: Entity[]) => {
     // sort authors by position (first author first, etc)
     const authors = _.sortBy(entity.AA, [
       function(o) {
-        // @ts-ignore
-        // TODO EM: Eshed, are you sure S exists on entity.AA?
         return o.S;
       },
     ]);
