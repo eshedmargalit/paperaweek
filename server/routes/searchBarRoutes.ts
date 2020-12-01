@@ -58,6 +58,10 @@ module.exports = (app: Application) => {
         headers: { Accept: 'text/bibliography; style=bibtex' },
       });
 
+      if (!resp.data) {
+        return res.status(404).send('DOI Not Found');
+      }
+
       const parsedPaper = doiToPaper(resp.data);
       res.send(JSON.stringify(parsedPaper));
     } catch (err) {

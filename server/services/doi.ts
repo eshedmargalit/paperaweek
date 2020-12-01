@@ -29,12 +29,13 @@ export const parsedDoiToPaper = (parsedData: ParsedData) => {
   // manipulate parsedData object into "paper" format
   const authors = parsedData.author.split(' and ');
 
+  // authors have last names first, so we reverse the order
   const authorsReordered = authors.map(author => {
     const parts = author.split(', ');
     return `${parts[1]} ${parts[0]}`;
   });
 
-  const date = moment(`${parsedData.month}-${parsedData.year}`, 'MMM YYYY').format();
+  const date = moment(`${parsedData.month || 'Jan'}-${parsedData.year}`, 'MMM YYYY').format();
 
   const paper: Partial<IPaper> = {
     title: parsedData.title,
@@ -48,31 +49,14 @@ export const parsedDoiToPaper = (parsedData: ParsedData) => {
   return { paper, id: parsedData.title };
 };
 
-export const parseDoiString = (doiString: string): ParsedData | null => {
-  // parse DOI string
-  if (!doiString || !doiString.trim()) {
-    return null;
-  }
-
+export const doiToPaper = (doiString: string): ParsedPaper => {
   const parsedData = {} as ParsedData;
 
   targets.forEach(target => {
-    const matchingData = doiString.match(regExs[target]);
+    const matchingData = doiString.trim().match(regExs[target]);
     if (!matchingData) return;
     parsedData[target] = matchingData[0];
   });
 
-  return parsedData;
-};
-
-export const doiToPaper = (doiString: string): ParsedPaper => {
-  const parsedData: ParsedData | null = parseDoiString(doiString);
-  if (parsedData === null) {
-    // TODO EM: what do?
-    return {
-      paper: {},
-      id: '',
-    };
-  }
   return parsedDoiToPaper(parsedData);
 };
