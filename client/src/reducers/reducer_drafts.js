@@ -1,4 +1,4 @@
-import { FETCH_USER, UPDATE_DRAFTS } from '../actions/index';
+import { FETCH_USER, UPDATE_DRAFTS } from '../actions';
 const initialState = [];
 
 const reducer = (state = initialState, action) => {

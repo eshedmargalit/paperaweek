@@ -1,15 +1,15 @@
-import { FETCH_USER } from '../actions/index';
-const initialState = {
+import { FetchUserAction, FETCH_USER, User } from '../actions/user/types';
+
+const initialState: User = {
   displayName: '',
   reviews: [],
   readingList: [],
   drafts: [],
-  lastLogin: null,
   publicProfile: false,
   renderMath: false,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = (state = initialState, action: FetchUserAction) => {
   let { type, payload } = action;
   switch (type) {
     case FETCH_USER:
