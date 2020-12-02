@@ -1,10 +1,25 @@
-export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
-export const UPDATE_DRAFT_ID = 'UPDATE_DRAFT_ID';
-export const UPDATE_READING_LIST = 'UPDATE_READING_LIST';
-export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
-export const SET_REVIEW = 'SET_REVIEW';
+import axios from 'axios';
+import { Dispatch } from 'redux';
 
-export * from './user';
+import {
+  FETCH_USER,
+  UPDATE_DRAFTS,
+  UPDATE_DRAFT_ID,
+  UPDATE_READING_LIST,
+  UPDATE_REVIEWS,
+  SET_REVIEW,
+} from './actionTypes';
+
+import { User, FetchUserAction } from './types';
+
+export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>) => {
+  let user = await axios.get<User>('/api/current_user');
+
+  if (!user.data) {
+    return;
+  }
+  dispatch({ type: FETCH_USER, payload: user.data });
+};
 
 // @ts-ignore
 export function setReview(paperId, reviewContent) {
@@ -23,18 +38,18 @@ export function updateDraftId(draftId) {
 }
 
 // @ts-ignore
-export function updateReadingList(newReadingList) {
-  return {
-    type: UPDATE_READING_LIST,
-    payload: newReadingList,
-  };
-}
-
-// @ts-ignore
 export function updateDrafts(newDrafts) {
   return {
     type: UPDATE_DRAFTS,
     payload: newDrafts,
+  };
+}
+
+// @ts-ignore
+export function updateReadingList(newReadingList) {
+  return {
+    type: UPDATE_READING_LIST,
+    payload: newReadingList,
   };
 }
 
