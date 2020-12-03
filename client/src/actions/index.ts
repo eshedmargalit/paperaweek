@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
+import { Maybe, MongoID, Review } from '../types';
+
 import {
   FETCH_USER,
   UPDATE_DRAFTS,
@@ -10,7 +12,8 @@ import {
   SET_REVIEW,
 } from './actionTypes';
 
-import { User, FetchUserAction } from './types';
+import { FetchUserAction, SetReviewAction } from './types';
+import { User } from '../types';
 
 export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>) => {
   let user = await axios.get<User>('/api/current_user');
@@ -21,29 +24,20 @@ export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>) => {
   dispatch({ type: FETCH_USER, payload: user.data });
 };
 
-// @ts-ignore
-export function setReview(paperId, reviewContent) {
-  return {
-    type: SET_REVIEW,
-    payload: { paperId, reviewContent },
-  };
-}
+export const setReview = (review: Review): SetReviewAction => ({
+  type: SET_REVIEW,
+  payload: review,
+});
 
-// @ts-ignore
-export function updateDraftId(draftId) {
-  return {
-    type: UPDATE_DRAFT_ID,
-    payload: { draftId },
-  };
-}
+export const updateDraftId = (draftId: Maybe<MongoID>) => ({
+  type: UPDATE_DRAFT_ID,
+  payload: draftId,
+});
 
-// @ts-ignore
-export function updateDrafts(newDrafts) {
-  return {
-    type: UPDATE_DRAFTS,
-    payload: newDrafts,
-  };
-}
+export const updateDrafts = (newDrafts: Review[]) => ({
+  type: UPDATE_DRAFTS,
+  payload: newDrafts,
+});
 
 // @ts-ignore
 export function updateReadingList(newReadingList) {

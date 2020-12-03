@@ -1,4 +1,6 @@
-import { FetchUserAction, FETCH_USER, User } from '../actions/user/types';
+import { FETCH_USER } from '../actions/actionTypes';
+import { FetchUserAction } from '../actions/types';
+import { User } from '../types';
 
 const initialState: User = {
   displayName: '',
