@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 
-import { Maybe, MongoID, Review } from '../types';
-
 import {
   FETCH_USER,
   UPDATE_DRAFTS,
@@ -13,7 +11,7 @@ import {
 } from './actionTypes';
 
 import { FetchUserAction, SetReviewAction } from './types';
-import { User } from '../types';
+import { Maybe, MongoID, Paper, Review, User } from '../types';
 
 export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>) => {
   let user = await axios.get<User>('/api/current_user');
@@ -39,18 +37,16 @@ export const updateDrafts = (newDrafts: Review[]) => ({
   payload: newDrafts,
 });
 
-// @ts-ignore
-export function updateReadingList(newReadingList) {
+export const updateReadingList = (newReadingList: Paper[]) => {
   return {
     type: UPDATE_READING_LIST,
     payload: newReadingList,
   };
-}
+};
 
-// @ts-ignore
-export function updateReviews(newReviews) {
+export const updateReviews = (newReviews: Review[]) => {
   return {
     type: UPDATE_REVIEWS,
     payload: newReviews,
   };
-}
+};

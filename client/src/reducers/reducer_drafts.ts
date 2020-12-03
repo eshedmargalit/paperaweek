@@ -6,14 +6,10 @@ const initialState: Review[] = [];
 
 const reducer = (state = initialState, action: UpdateDraftsAction | FetchUserAction) => {
   switch (action.type) {
-    case FETCH_USER:
-      if (action.payload) {
-        return action.payload.drafts;
-      } else {
-        return state;
-      }
     case UPDATE_DRAFTS:
       return action.payload;
+    case FETCH_USER:
+      return action.payload ? action.payload.drafts : state;
     default:
       return state;
   }
