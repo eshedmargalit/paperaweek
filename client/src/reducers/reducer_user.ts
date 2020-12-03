@@ -1,15 +1,9 @@
 import { FETCH_USER } from '../actions/actionTypes';
 import { FetchUserAction } from '../actions/types';
+import { blankUser } from '../templates';
 import { User } from '../types';
 
-const initialState: User = {
-  displayName: '',
-  reviews: [],
-  readingList: [],
-  drafts: [],
-  publicProfile: false,
-  renderMath: false,
-};
+const initialState: User = blankUser;
 
 const reducer = (state = initialState, action: FetchUserAction) => {
   const { type, payload } = action;

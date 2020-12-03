@@ -7,7 +7,7 @@ import ReducerUser from './reducer_user';
 import ActiveReviewReducer from './active_review_reducer';
 import ActiveDraftReducer from './active_draft_reducer';
 
-export default combineReducers({
+const rootReducer = combineReducers({
   auth: ReducerAuth,
   user: ReducerUser,
   reviews: ReducerReviews,
@@ -16,3 +16,6 @@ export default combineReducers({
   activeReview: ActiveReviewReducer,
   activeDraft: ActiveDraftReducer,
 });
+
+export default rootReducer;
+export type RootState = ReturnType<typeof rootReducer>;

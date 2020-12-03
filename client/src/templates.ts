@@ -1,4 +1,13 @@
-import { Paper, Notes } from './types';
+import { Paper, Notes, Review } from './types';
+
+export const blankUser = {
+  displayName: '',
+  reviews: [],
+  readingList: [],
+  drafts: [],
+  publicProfile: false,
+  renderMath: false,
+};
 
 export const blankPaper: Paper = {
   title: '',
@@ -20,4 +29,9 @@ export const blankNotes: Notes = {
   results_points: [],
   conclusions_points: [],
   other_points: [],
+};
+
+export const blankReview: Review = {
+  paper: blankPaper,
+  notes: blankNotes,
 };

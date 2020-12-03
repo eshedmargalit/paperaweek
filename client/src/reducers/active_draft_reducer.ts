@@ -1,9 +1,8 @@
 import { UPDATE_DRAFT_ID } from '../actions/actionTypes';
 import { UpdateDraftIdAction } from '../actions/types';
+import { Maybe, MongoID } from '../types';
 
-const initialState = {
-  draftId: null,
-};
+const initialState: Maybe<MongoID> = null;
 
 const reducer = (state = initialState, action: UpdateDraftIdAction) => {
   const { type, payload } = action;
