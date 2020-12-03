@@ -5,7 +5,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  let { type, payload } = action;
+  const { type, payload } = action;
   switch (type) {
     case UPDATE_REVIEWS:
       return { loading: false, reviewList: payload };

@@ -6,7 +6,7 @@ import { SetReviewAction } from '../actions/types';
 const initialState: Review = { paper: blankPaper, notes: blankNotes };
 
 const reducer = (state = initialState, action: SetReviewAction) => {
-  let { type, payload } = action;
+  const { type, payload } = action;
   switch (type) {
     case SET_REVIEW:
       return { ...payload };

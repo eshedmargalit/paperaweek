@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action: UpdateDraftIdAction) => {
-  let { type, payload } = action;
+  const { type, payload } = action;
   switch (type) {
     case UPDATE_DRAFT_ID:
       return payload;

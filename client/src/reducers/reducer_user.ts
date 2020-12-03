@@ -12,7 +12,7 @@ const initialState: User = {
 };
 
 const reducer = (state = initialState, action: FetchUserAction) => {
-  let { type, payload } = action;
+  const { type, payload } = action;
   switch (type) {
     case FETCH_USER:
       if (payload) {
