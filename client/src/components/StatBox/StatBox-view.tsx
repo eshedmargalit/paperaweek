@@ -5,8 +5,13 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import FrequencyChart from '../FrequencyChart';
 
 import './StatBox.scss';
+import { Review } from '../../types';
 
-export default function StatBoxView({ reviews, startBlankReview }) {
+interface StatBoxViewProps {
+  reviews: Review[];
+  setBlankReview: () => void;
+}
+export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProps) {
   const emptyStats = (
     <Card title="Your Stats" style={{ marginTop: 5 }}>
       <Row>
@@ -21,7 +26,7 @@ export default function StatBoxView({ reviews, startBlankReview }) {
           <h6> Getting Started </h6>
           <p>
             <strong>Option 1</strong>: Click{` `}
-            <Button onClick={startBlankReview} size="small">
+            <Button onClick={setBlankReview} size="small">
               Create Manual Entry <PlusCircleOutlined />
             </Button>{' '}
             to start a review from scratch.

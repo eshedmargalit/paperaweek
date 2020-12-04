@@ -6,19 +6,23 @@ import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } fr
 import { renderCommaSepList, removeMiddleAuthors } from '../utils';
 import StatBox from '../StatBox';
 import './PaperSearchBar.scss';
+import { Paper } from '../../types';
 
-const renderSearchResults = (searchResults, handleClickResult, handleClickResultButton) => {
-  const renderedSearchResults = searchResults.map(result => {
-    let { paper, id } = result;
-    let { title, journal, date, authors } = paper;
-    let year = new Date(date).getFullYear();
-    let authorNamesList = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
+const renderSearchResults = (
+  searchResults: Paper[],
+  handleReadingListAdd: (paper: Paper) => void,
+  handleStartReview: (paper: Paper) => void
+) => {
+  const renderedSearchResults = searchResults.map((result: Paper) => {
+    const { id, title, journal, date, authors } = result;
+    const year = new Date(date).getFullYear();
+    const authorNamesList = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
     const popOverContent = (
       <div>
         <Button
           onClick={() => {
-            handleClickResult(result);
+            handleReadingListAdd(result);
           }}
         >
           Add to Reading List <PlusOutlined />
@@ -26,7 +30,7 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
         <Link to="/form">
           <Button
             onClick={() => {
-              handleClickResultButton(result);
+              handleStartReview(result);
             }}
           >
             Start Review Now <FormOutlined />
@@ -58,16 +62,26 @@ const renderSearchResults = (searchResults, handleClickResult, handleClickResult
   return renderedSearchResults;
 };
 
+interface PaperSearchBarViewProps {
+  handleSearch: (searchTerm: string) => void;
+  handleReadingListAdd: (paper: Paper) => void;
+  handleStartReview: (paper: Paper) => void;
+  setBlankReview: () => void;
+  searchResults: Paper[];
+  loading: boolean;
+  query: string;
+}
+
 export default function PaperSearchBarView({
   handleSearch,
-  handleClickResult,
-  handleClickResultButton,
-  startBlankReview,
+  handleReadingListAdd,
+  handleStartReview,
+  setBlankReview,
   searchResults,
   loading,
   query,
-}) {
-  const renderedSearchResults = renderSearchResults(searchResults, handleClickResult, handleClickResultButton);
+}: PaperSearchBarViewProps) {
+  const renderedSearchResults = renderSearchResults(searchResults, handleReadingListAdd, handleStartReview);
   const searchArea = (
     <div>
       <div>
@@ -89,7 +103,7 @@ export default function PaperSearchBarView({
             />
           </Col>
           <Col lg={8} sm={24} xs={24}>
-            <Button style={{ width: '100%' }} onClick={startBlankReview}>
+            <Button style={{ width: '100%' }} onClick={setBlankReview}>
               <Link to="/form">
                 {' '}
                 Create Manual Entry <PlusCircleOutlined />
@@ -113,7 +127,7 @@ export default function PaperSearchBarView({
 
   let searchRender = null;
   if (query === '') {
-    searchRender = <StatBox startBlankReview={startBlankReview} />;
+    searchRender = <StatBox />;
   } else {
     if (renderedSearchResults.length) {
       searchRender = renderedSearchResults;

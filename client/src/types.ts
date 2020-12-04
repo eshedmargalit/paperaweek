@@ -5,6 +5,7 @@ export type Maybe<T> = T | null;
 export type MongoID = string;
 
 export interface Paper {
+  id?: MongoID;
   title: string;
   authors: string[];
   institutions: string[] | null;
