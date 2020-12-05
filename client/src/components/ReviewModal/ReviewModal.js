@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Space, Switch, Modal, Tag } from 'antd';
 import moment from 'moment';
-import { renderCommaSepList, wrapMarkdownWithMath } from '../utils.js';
+import { renderCommaSepList, wrapMarkdownWithMath } from '../utils';
 import axios from 'axios';
 
 const getTagColor = tag => {

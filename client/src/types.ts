@@ -6,6 +6,7 @@ export type MongoID = string;
 
 export interface Paper {
   id?: MongoID;
+  createdAt?: Date;
   title: string;
   authors: string[];
   institutions: string[] | null;
@@ -28,7 +29,8 @@ export interface Notes {
 }
 
 export interface Review {
-  id?: MongoID;
+  _id?: MongoID;
+  createdAt?: Date;
   paper: Paper;
   notes: Notes;
 }

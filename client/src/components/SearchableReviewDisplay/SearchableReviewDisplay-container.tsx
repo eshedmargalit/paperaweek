@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import Fuse from 'fuse.js';
+import { Maybe, Review } from '../../types';
 
-const fuzzyFilterReviews = (query, reviews) => {
+const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
   if (query === '') {
     return reviews;
   }
-  var options = {
+  const options = {
     shouldSort: false,
     threshold: 0.2,
     location: 0,
@@ -16,10 +17,22 @@ const fuzzyFilterReviews = (query, reviews) => {
     keys: ['paper.title', 'paper.authors', 'paper.keywords', 'paper.date'],
   };
 
-  var fuse = new Fuse(reviews, options);
+  const fuse = new Fuse(reviews, options);
   const results = fuse.search(query);
   return results;
 };
+
+interface SearchableReviewDisplayContainerProps {
+  reviews: Review[];
+  reviewToOpen: Review;
+  renderMath: boolean;
+  itemName: string;
+  pageHeaderProps: { pageHeaderTitle: string; onPageBack: () => void };
+  hideFooter: boolean;
+  deleteItemFunc: (selectedReview: Review) => void;
+  handleModalEdit: (selectedReview: Review) => void;
+  handleModalCopy: (selectedReview: Review) => void;
+}
 
 export default function SearchableReviewDisplayContainer({
   reviews,
@@ -31,12 +44,12 @@ export default function SearchableReviewDisplayContainer({
   deleteItemFunc,
   handleModalEdit,
   handleModalCopy,
-}) {
+}: SearchableReviewDisplayContainerProps) {
   const [query, setQuery] = useState('');
-  const [selectedReview, setSelectedReview] = useState(reviewToOpen);
-  const [showModal, setShowModal] = useState(reviewToOpen);
+  const [selectedReview, setSelectedReview] = useState<Maybe<Review>>(reviewToOpen);
+  const [showModal, setShowModal] = useState(reviewToOpen != null);
 
-  const reviewClicked = review => {
+  const reviewClicked = (review: Review) => {
     setSelectedReview(review);
     setShowModal(true);
   };
@@ -47,16 +60,16 @@ export default function SearchableReviewDisplayContainer({
   };
 
   const deleteConfirmHandler = () => {
-    deleteItemFunc(selectedReview);
+    if (selectedReview) {
+      deleteItemFunc(selectedReview);
+    }
     setShowModal(false);
   };
 
   const modalEditHandler = () => {
-    handleModalEdit(selectedReview);
-  };
-
-  const modalCopyHandler = () => {
-    handleModalCopy(selectedReview);
+    if (selectedReview) {
+      handleModalEdit(selectedReview);
+    }
   };
 
   // render
@@ -64,14 +77,14 @@ export default function SearchableReviewDisplayContainer({
     deleteConfirmHandler: deleteConfirmHandler,
     handleModalClose: handleModalClose,
     handleModalEdit: modalEditHandler,
-    handleModalCopy: handleModalCopy ? modalCopyHandler : null,
+    handleModalCopy: handleModalCopy,
     showModal: showModal,
     modalReview: selectedReview,
     renderMath: renderMath,
     itemName: itemName || 'Review',
   };
 
-  let filteredReviews = fuzzyFilterReviews(query, reviews);
+  const filteredReviews = fuzzyFilterReviews(query, reviews);
 
   return (
     <SearchableReviewDisplayView

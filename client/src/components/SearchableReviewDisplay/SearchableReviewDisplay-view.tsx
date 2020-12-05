@@ -3,13 +3,18 @@ import { Link } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
-import { shortenAuthors, shortenString, getTagColor } from '../utils.js';
+import { shortenAuthors, shortenString, getTagColor } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import './SearchableReviewDisplay.scss';
+import { Maybe, Review } from '../../types';
+import { ColumnsType } from 'antd/es/table';
 
 const { confirm } = Modal;
 
-const handleModalDelete = onOkHandler => {
+type SearchHandler = (q: string) => void;
+type VoidHandler = () => void;
+
+const handleModalDelete = (onOkHandler: VoidHandler) => {
   confirm({
     title: 'Are you sure delete this review?',
     content: "Once it's gone, it's gone forever!",
@@ -21,47 +26,49 @@ const handleModalDelete = onOkHandler => {
   });
 };
 
-const renderReviews = (reviews, handleSearch, reviewClicked) => {
+const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewClicked: (review: Review) => void) => {
   const displaySettings = {
     titleStringLengthLimit: 150,
     journalStringLengthLimit: 30,
     oneSentenceStringLengthLimit: 80,
   };
 
-  const columns = [
+  const columns: ColumnsType<Review> = [
     {
       title: 'Title',
       dataIndex: ['paper', 'title'],
-      render: title => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
+      render: (title: string) => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
     },
     {
       title: 'One Sentence',
       dataIndex: ['paper', 'one_sentence'],
-      render: one_sentence => <span>{shortenString(one_sentence, displaySettings.oneSentenceStringLengthLimit)}</span>,
+      render: (one_sentence: string) => (
+        <span>{shortenString(one_sentence, displaySettings.oneSentenceStringLengthLimit)}</span>
+      ),
     },
     {
       title: 'Authors',
       dataIndex: ['paper', 'authors'],
-      render: authorList => <span>{shortenAuthors(authorList)}</span>,
+      render: (authorList: string[]) => <span>{shortenAuthors(authorList)}</span>,
     },
     {
       title: 'Year Published',
       dataIndex: ['paper', 'date'],
-      render: date => <span>{moment(date, 'YYYY-MM').format('YYYY')}</span>,
-      sorter: (a, b) => {
+      render: (date: Date) => <span>{moment(date, 'YYYY-MM').format('YYYY')}</span>,
+      sorter: (a: Review, b: Review) => {
         return moment(a.paper.date).diff(moment(b.paper.date));
       },
     },
     {
       title: 'Journal',
       dataIndex: ['paper', 'journal'],
-      render: journal => <span>{shortenString(journal, displaySettings.journalStringLengthLimit)}</span>,
+      render: (journal: string) => <span>{shortenString(journal, displaySettings.journalStringLengthLimit)}</span>,
     },
     {
       title: 'Review Date',
       dataIndex: 'createdAt',
-      render: date => <span>{moment(date).format('MMMM Do, YYYY')}</span>,
-      sorter: (a, b) => {
+      render: (date: Date) => <span>{moment(date).format('MMMM Do, YYYY')}</span>,
+      sorter: (a: Review, b: Review) => {
         return moment(a.createdAt).diff(moment(b.createdAt));
       },
       defaultSortOrder: 'descend',
@@ -69,7 +76,7 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
     {
       title: 'Keywords',
       dataIndex: ['paper', 'keywords'],
-      render: keywords => renderTags(keywords, handleSearch),
+      render: (keywords: string[]) => renderTags(keywords, handleSearch),
     },
   ];
 
@@ -82,16 +89,15 @@ const renderReviews = (reviews, handleSearch, reviewClicked) => {
           },
         };
       }}
-      rowKey={review => review._id}
+      rowKey={review => review._id!}
       columns={columns}
       dataSource={reviews}
-      page_size={10}
-      pagination={reviews.length > 10}
+      pagination={reviews.length > 10 && { position: ['bottomRight'] }}
     />
   );
 };
 
-const renderTags = (tags, handleSearch) => {
+const renderTags = (tags: string[], handleSearch: SearchHandler) => {
   let tag_render = null;
 
   if (tags && tags.length > 0) {
@@ -104,6 +110,7 @@ const renderTags = (tags, handleSearch) => {
           color={getTagColor(tag)}
           onClick={e => {
             e.stopPropagation();
+            // @ts-ignore
             handleSearch(`${e.target.innerHTML}`);
           }}
           style={{ marginBottom: '8px' }}
@@ -117,6 +124,27 @@ const renderTags = (tags, handleSearch) => {
   return tag_render;
 };
 
+interface ModalProps {
+  deleteConfirmHandler: VoidHandler;
+  handleModalEdit: VoidHandler;
+  handleModalCopy: (review: Review) => void;
+  handleModalClose: VoidHandler;
+  showModal: boolean;
+  modalReview: Maybe<Review>;
+  renderMath: boolean;
+  itemName: string;
+}
+
+interface SearchableReviewDisplayViewProps {
+  handleSearch: SearchHandler;
+  reviewClicked: (review: Review) => void;
+  query: string;
+  reviews: Review[];
+  modalProps: ModalProps;
+  hideFooter: boolean;
+  pageHeaderProps: { pageHeaderTitle: string; onPageBack: () => void };
+}
+
 export default function SearchableReviewDisplayView({
   handleSearch,
   reviewClicked,
@@ -125,7 +153,7 @@ export default function SearchableReviewDisplayView({
   modalProps,
   hideFooter,
   pageHeaderProps,
-}) {
+}: SearchableReviewDisplayViewProps) {
   const {
     deleteConfirmHandler,
     handleModalEdit,
@@ -134,6 +162,7 @@ export default function SearchableReviewDisplayView({
     showModal,
     modalReview,
     renderMath,
+    itemName,
   } = modalProps;
 
   const { pageHeaderTitle, onPageBack } = pageHeaderProps;
@@ -188,7 +217,6 @@ export default function SearchableReviewDisplayView({
   );
 
   let reviewModal = null;
-  let itemName = modalProps.itemName || 'Review';
   let modalFooter = [
     <Link to="/form" key="edit">
       <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
@@ -208,7 +236,7 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={handleModalCopy}>
+      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={() => handleModalCopy}>
         Copy Link to this {itemName}
       </Button>
     );

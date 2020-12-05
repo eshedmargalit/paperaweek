@@ -1,10 +1,10 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, MongooseDocumentOptionals } from 'mongoose';
 
 export interface IPaper {
   title: string;
   authors: string[];
   institutions: string[] | null;
-  date: string;
+  date: Date;
   journal: string;
   doi: string;
   url: string;

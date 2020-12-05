@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setReview, updateReadingList } from '../../actions';
 import { RootState } from '../../reducers';
 import { blankNotes, blankReview } from '../../templates';

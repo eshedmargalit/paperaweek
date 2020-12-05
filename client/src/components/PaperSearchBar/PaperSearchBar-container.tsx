@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
-import PaperSearchBarView from './PaperSearchBar-view';
-import { isDOI } from '../utils';
+import axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Paper } from '../../types';
+import { isDOI } from '../utils';
+import PaperSearchBarView from './PaperSearchBar-view';
 
 const interpret = async (query: string): Promise<Paper[]> => {
   // first regex to replace any dashes or underscores with a space
@@ -12,7 +12,7 @@ const interpret = async (query: string): Promise<Paper[]> => {
   // second regex to delete single quotes, double quotes, and slashes
   query = query.replace(/['"/\\]/g, '');
 
-  const response = await axios(`api/searchBar/interpret/${query}`);
+  const response: AxiosResponse<Paper[]> = await axios(`api/searchBar/interpret/${query}`);
   return response.data;
 };
 
@@ -26,14 +26,8 @@ const doiSearch = async (query: string): Promise<Paper[]> => {
     return [];
   }
 
-  let doiResp = null;
-  try {
-    doiResp = await axios.get(`/api/doi/${query}`);
-    return [doiResp.data];
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
+  const response: AxiosResponse<Paper> = await axios(`/api/doi/${query}`);
+  return [response.data];
 };
 
 interface PaperSearchBarContainerProps {
@@ -72,7 +66,7 @@ export default function PaperSearchBarContainer({
   // otherwise we get infinite re-renders with useEffect
   const academicSearchThrottled = useCallback(_.debounce(academicSearch, 800), []);
 
-  const handleSearch = (searchTerm: string) => {
+  const handleSearch = (searchTerm: string): void => {
     academicSearchThrottled.cancel();
     setQuery(searchTerm);
 

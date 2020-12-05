@@ -1,12 +1,11 @@
+import { FileSearchOutlined, FormOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Alert, Button, Col, Input, PageHeader, Popover, Row, Spin } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Alert, Button, Input, PageHeader, Popover, Row, Col, Spin } from 'antd';
-import { FileSearchOutlined, PlusOutlined, PlusCircleOutlined, FormOutlined } from '@ant-design/icons';
-
-import { renderCommaSepList, removeMiddleAuthors } from '../utils';
+import { Maybe, Paper } from '../../types';
 import StatBox from '../StatBox';
+import { removeMiddleAuthors, renderCommaSepList } from '../utils';
 import './PaperSearchBar.scss';
-import { Paper } from '../../types';
 
 const renderSearchResults = (
   searchResults: Paper[],
@@ -16,7 +15,7 @@ const renderSearchResults = (
   const renderedSearchResults = searchResults.map((result: Paper) => {
     const { id, title, journal, date, authors } = result;
     const year = new Date(date).getFullYear();
-    const authorNamesList = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
+    const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
     const popOverContent = (
       <div>
@@ -46,7 +45,7 @@ const renderSearchResults = (
             <div>
               <strong>{title}</strong>
               <br />
-              {authorNamesList}
+              {renderedAuthorNames}
             </div>
           </div>
           <em>
@@ -125,7 +124,7 @@ export default function PaperSearchBarView({
     />
   );
 
-  let searchRender = null;
+  let searchRender: Maybe<JSX.Element | JSX.Element[]> = null;
   if (query === '') {
     searchRender = <StatBox />;
   } else {

@@ -35,7 +35,7 @@ export const parsedDoiToPaper = (parsedData: ParsedData) => {
     return `${parts[1]} ${parts[0]}`;
   });
 
-  const date = moment(`${parsedData.month || 'Jan'}-${parsedData.year}`, 'MMM YYYY').format();
+  const date = moment(`${parsedData.month || 'Jan'}-${parsedData.year}`, 'MMM YYYY').toDate();
 
   const paper: Partial<IPaper> = {
     title: parsedData.title,

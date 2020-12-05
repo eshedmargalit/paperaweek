@@ -36,12 +36,12 @@ export const processEntities = (entities: Entity[]) => {
     let author_names = _.uniq(
       authors.map(author => {
         return capitalCase(
-          author.DAuN.split(".")
-            .join("")
+          author.DAuN.split('.')
+            .join('')
             .trim()
         );
       })
-    ).filter(name => name !== "");
+    ).filter(name => name !== '');
 
     // filter down to unique institutions and remove empty entries
     let institutions = _.uniq(
@@ -77,6 +77,6 @@ export const processEntities = (entities: Entity[]) => {
       journal: journal_name,
       url: entity_url,
     };
-    return { paper: paper, id: entity.Id };
+    return paper;
   });
 };
