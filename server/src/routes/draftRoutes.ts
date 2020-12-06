@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Types } from 'mongoose';
 import { Application } from 'express';
 import UserModel from '../models/User';

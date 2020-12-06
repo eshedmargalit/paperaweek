@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Schema, model, Document } from 'mongoose';
 
 export interface IPaper {
