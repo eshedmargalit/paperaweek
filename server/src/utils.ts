@@ -11,7 +11,7 @@ const createApp = (): Application => {
   app.use(
     cookieSession({
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: [getEnvironmentVariable('cookieKey')],
+      keys: [getEnvironmentVariable('COOKIE_KEY')],
     })
   );
 

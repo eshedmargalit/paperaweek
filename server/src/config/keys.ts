@@ -1,12 +1,14 @@
-const pawEnvKeys = ['googleClientID', 'googleClientSecret', 'mongoURI', 'cookieKey'] as const;
+require('dotenv').config();
+
+const pawEnvKeys = ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'MONGO_URI', 'COOKIE_KEY'] as const;
 type PAWEnvKey = typeof pawEnvKeys[number];
 
 // Defaults for testing
 const testKeys: Record<PAWEnvKey, string> = {
-  googleClientID: 'testGoogleId',
-  googleClientSecret: 'testGoogleSecret',
-  mongoURI: 'testURI',
-  cookieKey: 'testCookieKey',
+  GOOGLE_CLIENT_ID: 'testGoogleId',
+  GOOGLE_CLIENT_SECRET: 'testGoogleSecret',
+  MONGO_URI: 'testURI',
+  COOKIE_KEY: 'testCookieKey',
 };
 
 export const getEnvironmentVariable = (key: PAWEnvKey): string => {

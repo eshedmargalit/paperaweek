@@ -4,8 +4,8 @@
   "description": "Paper-a-Week",
   "main": "index",
   "scripts": {
-    "start": "ts-node index.ts",
-    "server": "nodemon index.ts",
+    "start": "ts-node src/index.ts",
+    "server": "nodemon src/index.ts",
     "client": "npm run start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest",

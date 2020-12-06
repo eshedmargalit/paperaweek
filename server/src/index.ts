@@ -2,14 +2,12 @@ import mongoose from 'mongoose';
 
 import createApp from './utils';
 
+import { getEnvironmentVariable } from './config/keys';
 import './models/User';
 import './models/Paper';
 import './models/Review';
-import { getEnvironmentVariable } from './config/keys';
 
-require('dotenv').config();
-
-mongoose.connect(getEnvironmentVariable('mongoURI'), {
+mongoose.connect(getEnvironmentVariable('MONGO_URI'), {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

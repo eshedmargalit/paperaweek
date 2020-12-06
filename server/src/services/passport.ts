@@ -13,8 +13,8 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-const googleClientID = getEnvironmentVariable('googleClientID');
-const googleClientSecret = getEnvironmentVariable('googleClientSecret');
+const googleClientID = getEnvironmentVariable('GOOGLE_CLIENT_ID');
+const googleClientSecret = getEnvironmentVariable('GOOGLE_CLIENT_SECRET');
 
 passport.use(
   new GoogleStrategy.Strategy(
