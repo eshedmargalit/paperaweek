@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Paper } from '../../types';
@@ -12,7 +12,7 @@ const interpret = async (query: string): Promise<Paper[]> => {
   // second regex to delete single quotes, double quotes, and slashes
   query = query.replace(/['"/\\]/g, '');
 
-  const response: AxiosResponse<Paper[]> = await axios(`api/searchBar/interpret/${query}`);
+  const response = await axios.get<Paper[]>(`api/searchBar/interpret/${query}`);
   return response.data;
 };
 
@@ -26,7 +26,7 @@ const doiSearch = async (query: string): Promise<Paper[]> => {
     return [];
   }
 
-  const response: AxiosResponse<Paper> = await axios(`/api/doi/${query}`);
+  const response = await axios.get<Paper>(`/api/doi/${query}`);
   return [response.data];
 };
 

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setReview, updateReadingList } from '../../actions';
@@ -24,7 +24,7 @@ export default function PaperSearchBarRedux() {
   const updateReadingListFunc = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));
 
-    const res = await axios.put<Paper[], AxiosResponse<Paper[]>>('api/readingList', newReadingList);
+    const res = await axios.put<Paper[]>('api/readingList', newReadingList);
     if (res.data) {
       dispatch(updateReadingList(res.data));
     }
