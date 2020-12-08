@@ -7,12 +7,20 @@ import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './Form
 import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Notes, Paper } from '../../types';
+import { PAWProps } from './types';
 
-export default function PAWForm({ initialPaper, initialReview, onChange, onSubmit }) {
+interface PAWFormProps {
+  initialPaper: Paper;
+  initialNotes: Notes;
+  onChange: (formValues: PAWProps) => void;
+  onSubmit: (formValues: PAWProps) => void;
+}
+export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps) {
   const debouncedOnChange = _.debounce(onChange, 2000);
   const initialValues = {
     ...initialPaper,
-    ...initialReview,
+    ...initialNotes,
   };
 
   const validationSchema = Yup.object({
@@ -24,6 +32,10 @@ export default function PAWForm({ initialPaper, initialReview, onChange, onSubmi
     sm: 24,
   };
 
+  /**
+   * Setting autoFocus on fieldArrays will cause autofocus the last element added
+   * to the DOM when the page loads. useEffect scrolls back to top here.
+   */
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

@@ -5,14 +5,15 @@ import _ from 'lodash';
 import { uniq as _uniq } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import ReviewModal from '../ReviewModal/ReviewModal';
-// import MetadataForm from './MetadataForm';
-// import ReviewForm from './ReviewForm';
 import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
+import { PAWProps } from './types';
+import { Notes, Paper, Review, Maybe } from '../../types';
+import { Moment } from 'moment';
 
 const _MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
 
-const parseKeywords = keywords => {
+const parseKeywords = (keywords: string | string[]) => {
   if (Array.isArray(keywords)) {
     keywords = keywords.join(',');
   }
@@ -23,51 +24,60 @@ const parseKeywords = keywords => {
   );
 };
 
-function repackageValues(values) {
-  return {
-    paper: {
-      title: values.title,
-      authors: values.authors,
-      institutions: values.institutions,
-      date: values.date,
-      journal: values.journal,
-      doi: values.doi,
-      url: values.url,
-      keywords: parseKeywords(values.keywords),
-      one_sentence: values.one_sentence,
-    },
-    review: {
-      background_points: values.background_points,
-      approach_points: values.approach_points,
-      results_points: values.results_points,
-      conclusions_points: values.conclusions_points,
-      other_points: values.other_points,
-    },
-  };
-}
+const repackageValues = (values: PAWProps): Review => ({
+  paper: {
+    title: values.title,
+    authors: values.authors,
+    institutions: values.institutions,
+    date: values.date,
+    journal: values.journal,
+    doi: values.doi,
+    url: values.url,
+    keywords: parseKeywords(values.keywords || []),
+    one_sentence: values.one_sentence,
+  },
+  notes: {
+    background_points: values.background_points,
+    approach_points: values.approach_points,
+    results_points: values.results_points,
+    conclusions_points: values.conclusions_points,
+    summary_points: values.summary_points,
+    other_points: values.other_points,
+  },
+});
 
+interface ReviewWizardContainerProps {
+  initialPaper: Paper;
+  initialNotes: Notes;
+  restartReview: (review: Review) => void;
+  submitReview: (review: Review) => void;
+  submitLoading: boolean;
+  saveDraft: (paper: Paper, notes: Notes) => Promise<void>;
+  autosaveStatus: string;
+  lastSave: Maybe<Moment>;
+}
 export default function ReviewWizardContainer({
   initialPaper,
-  initialReview,
+  initialNotes,
   restartReview,
   submitReview,
   submitLoading,
   saveDraft,
   autosaveStatus,
   lastSave,
-}) {
-  // set state variables for paper and review
+}: ReviewWizardContainerProps) {
+  // set state variables for paper and Notes
   const [paper, setPaper] = useState(initialPaper);
-  const [review, setReview] = useState(initialReview);
+  const [notes, setNotes] = useState(initialNotes);
 
   // set wizard state
   const [showModal, setShowModal] = useState(false);
   const [redirectHome, setRedirectHome] = useState(false);
 
-  const previewModal = newValues => {
-    const { paper, review } = repackageValues(newValues);
+  const previewModal = (newValues: PAWProps) => {
+    const { paper, notes } = repackageValues(newValues);
     setPaper(paper);
-    setReview(review);
+    setNotes(notes);
     setShowModal(true);
   };
 
@@ -79,11 +89,11 @@ export default function ReviewWizardContainer({
     []
   );
 
-  const onChangeHandler = newValues => {
-    const { paper, review } = repackageValues(newValues);
+  const onChangeHandler = (newValues: PAWProps) => {
+    const { paper, notes } = repackageValues(newValues);
     setPaper(paper);
-    setReview(review);
-    autosave(paper, review);
+    setNotes(notes);
+    autosave(paper, notes);
   };
 
   /*
@@ -96,36 +106,21 @@ export default function ReviewWizardContainer({
   const form = (
     <PAWForm
       initialPaper={initialPaper}
-      initialReview={initialReview}
-      onSubmit={useCallback(previewModal)}
-      onChange={useCallback(onChangeHandler, [paper, review])}
+      initialNotes={initialNotes}
+      onSubmit={useCallback(previewModal, [])}
+      onChange={useCallback(onChangeHandler, [autosave])}
     />
   );
 
-  // const metadataStep = (
-  //   <MetadataForm
-  //     paper={initialPaper}
-  //     onSubmit={useCallback(submitMetadata, [])}
-  //     onChange={useCallback(paperOnChangeHandler, [review])}
-  //   />
-  // );
-  // const reviewStep = (
-  //   <ReviewForm
-  //     review={initialReview}
-  //     onSubmit={useCallback(previewModal, [])}
-  //     onChange={useCallback(reviewOnChangeHandler, [paper])}
-  //   />
-  // );
-
   // what should happen if the review modal is exited?
   const onModalCancel = () => {
-    restartReview({ paper, review });
+    restartReview({ paper, notes });
     setShowModal(false);
   };
 
   // what should happen if modal is submitted?
-  const handleSubmission = async () => {
-    await submitReview({ paper, review });
+  const handleSubmission = () => {
+    submitReview({ paper, notes });
     setRedirectHome(true);
   };
   const modalFooter = [
@@ -139,7 +134,7 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={{ paper, review }} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
+      <ReviewModal review={{ paper, notes }} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
     </div>
   );
 

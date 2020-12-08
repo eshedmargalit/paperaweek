@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext, FieldInputProps, FormikProps } from 'formik';
+import { Field, useField, useFormikContext, FieldInputProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { PAWFormikProps } from './types';
+import { Paper, Notes } from '../../types';
 
 interface FieldInputPropsWithLabel extends FieldInputProps<''> {
   label: string;
@@ -57,16 +58,24 @@ export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel) => {
 interface DynamicListProps {
   push: (s: string) => void;
   pop: (index: number) => void;
-  name: string;
-  form: ???
+  name: keyof Paper | keyof Notes;
+  form: PAWFormikProps;
 }
+
 export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
   const { values } = form;
+  const fieldArray = values[name];
+
+  // bail if the field array isn't actually an array. Helps TS figure out what's going on
+  if (!Array.isArray(fieldArray)) {
+    return null;
+  }
+
   return (
     <div>
-      {values[name] &&
-        values[name].length > 0 &&
-        values[name].map((listItem: string, index: number) => (
+      {fieldArray &&
+        fieldArray.length > 0 &&
+        fieldArray.map((_, index: number) => (
           <div key={index}>
             <Field name={`${name}.${index}`} autoFocus={true} />
             <Button
@@ -87,11 +96,18 @@ export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
 
 export const DynamicTextAreaList = ({ name, push, pop, form }: DynamicListProps) => {
   const { values } = form;
+  const fieldArray = values[name];
+
+  // bail if the field array isn't actually an array. Helps TS figure out what's going on
+  if (!Array.isArray(fieldArray)) {
+    return null;
+  }
+
   return (
     <div>
-      {values[name] &&
-        values[name].length > 0 &&
-        values[name].map((listItem: string, index: number) => (
+      {fieldArray &&
+        fieldArray.length > 0 &&
+        fieldArray.map((_, index: number) => (
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} autoFocus={true} />

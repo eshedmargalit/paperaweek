@@ -9,14 +9,14 @@ export interface Paper {
   createdAt?: Date;
   title: string;
   authors: string[];
-  institutions: string[] | null;
-  date: Date;
-  journal: string;
-  doi: string;
-  url: string;
-  keywords: string[];
-  one_sentence: string;
-  review_date: Date;
+  institutions?: string[] | null;
+  date?: Date;
+  journal?: string;
+  doi?: string;
+  url?: string;
+  keywords?: string[];
+  one_sentence?: string;
+  review_date?: Date;
 }
 
 export interface Notes {
