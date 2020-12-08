@@ -1,10 +1,16 @@
 import React from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext } from 'formik';
+import { Field, useField, useFormikContext, FieldInputProps, FormikProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { PAWFormikProps } from './types';
 
-const DatePickerField = ({ ...props }) => {
+interface FieldInputPropsWithLabel extends FieldInputProps<''> {
+  label: string;
+  id: string;
+}
+
+const DatePickerField = ({ ...props }: FieldInputProps<''>) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 
@@ -23,7 +29,7 @@ const DatePickerField = ({ ...props }) => {
   );
 };
 
-export const TextField = ({ label, ...props }) => {
+export const TextField = ({ label, ...props }: FieldInputPropsWithLabel) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
@@ -37,7 +43,7 @@ export const TextField = ({ label, ...props }) => {
   );
 };
 
-export const MonthPicker = ({ label, ...props }) => {
+export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel) => {
   const [field, meta] = useField(props);
   return (
     <div className="form-item">
@@ -48,18 +54,23 @@ export const MonthPicker = ({ label, ...props }) => {
   );
 };
 
-export const DynamicList = ({ name, move, swap, push, insert, unshift, pop, form }) => {
+interface DynamicListProps {
+  push: (s: string) => void;
+  pop: (index: number) => void;
+  name: string;
+  form: ???
+}
+export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
   const { values } = form;
   return (
     <div>
       {values[name] &&
         values[name].length > 0 &&
-        values[name].map((listItem, index) => (
+        values[name].map((listItem: string, index: number) => (
           <div key={index}>
             <Field name={`${name}.${index}`} autoFocus={true} />
             <Button
-              type="close"
-              tabIndex="-1"
+              tabIndex={-1}
               className="dynamic-delete-button"
               onClick={() => pop(index)} // remove a listItem from the list
             >
@@ -74,17 +85,17 @@ export const DynamicList = ({ name, move, swap, push, insert, unshift, pop, form
   );
 };
 
-export const DynamicTextAreaList = ({ name, move, swap, push, insert, unshift, pop, form }) => {
+export const DynamicTextAreaList = ({ name, push, pop, form }: DynamicListProps) => {
   const { values } = form;
   return (
     <div>
       {values[name] &&
         values[name].length > 0 &&
-        values[name].map((listItem, index) => (
+        values[name].map((listItem: string, index: number) => (
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} autoFocus={true} />
-            <Button type="close" tabIndex="-1" className="dynamic-delete-button" onClick={() => pop(index)}>
+            <Button tabIndex={-1} className="dynamic-delete-button" onClick={() => pop(index)}>
               <CloseOutlined />
             </Button>
           </div>

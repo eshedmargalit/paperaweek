@@ -1949,6 +1949,15 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.4.tgz#15925414e0ad2cd765bfef58842f7e26a7accb24"
   integrity sha512-1HcDas8SEj4z1Wc696tH56G8OlRaH/sqZOynNNB+HF0WOeXPaxTtbYzJY2oEfiUxjSKjhCKr+MvR7dCHcEelug==
 
+"@types/react-datepicker@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@types/react-datepicker/-/react-datepicker-3.1.2.tgz#72c80a16ec2c323e8f51063e08b3c24f41352ed3"
+  integrity sha512-luMH1fUF3GRJwaNFh4cogHV7FSFCJLU8Ai2dZ60Xw0n+MrExvuwOHxcbNkaIkIztPwyuT0H0K8Q4g0RN88LoFQ==
+  dependencies:
+    "@types/react" "*"
+    date-fns "^2.0.1"
+    popper.js "^1.14.1"
+
 "@types/react-dom@^17.0.0":
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.0.tgz#b3b691eb956c4b3401777ee67b900cb28415d95a"
@@ -2057,6 +2066,11 @@
   integrity sha512-z8PNtlhrj7eJNLmrAivM7rjBESG6JwC5xP3RVk12i/8HVP7Xnx/sEmERnRImyEuUaJfO942X0qMOYsoupaJbZQ==
   dependencies:
     "@types/yargs-parser" "*"
+
+"@types/yup@^0.29.10":
+  version "0.29.10"
+  resolved "https://registry.yarnpkg.com/@types/yup/-/yup-0.29.10.tgz#1bfa4c4a47a6f57fcc8510948757b9e47c0d6ca3"
+  integrity sha512-kRKRZaWkxxnOK7H5C4oWqhCw9ID1QF3cBZ2oAPoXYsjIncwgpDGigWtXGjZ91t+hsc3cvPdBci9YoJo1A96CYg==
 
 "@typescript-eslint/eslint-plugin@^4.5.0":
   version "4.9.0"
@@ -10052,7 +10066,7 @@ pnp-webpack-plugin@1.6.4:
   dependencies:
     ts-pnp "^1.1.6"
 
-popper.js@^1.14.4:
+popper.js@^1.14.1, popper.js@^1.14.4:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
   integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
