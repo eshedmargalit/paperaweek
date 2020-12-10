@@ -1,9 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Button } from 'antd';
 import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+
 import { Maybe } from '../../types';
 
 interface FieldInputPropsWithLabel {
@@ -58,7 +59,17 @@ export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel): JSX.
   );
 };
 
-export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps): Maybe<JSX.Element> => {
+// Formik's FieldArray.component prop expects a FunctionComponent with either no props or FieldArrayRenderProps
+// In practice, we don't think that the props could really ever be void: https://github.com/formium/formik/blob/master/packages/formik/src/FieldArray.tsx#L355
+// But in order to maximize type safety, we're checking here just in case.
+function isFARP(props: void | FieldArrayRenderProps): props is FieldArrayRenderProps {
+  // !! is a double-negation. The inner "!" checks if props is undefined or null, then the outer "!" flips it so it returns true if not falsey
+  return !!props;
+}
+
+export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
+  if (!isFARP(props)) return null;
+  const { form, push, pop, name } = props;
   const { values } = form;
   const fieldArray = values[name];
 
@@ -92,7 +103,9 @@ export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps): M
   );
 };
 
-export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderProps): Maybe<JSX.Element> => {
+export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
+  if (!isFARP(props)) return null;
+  const { form, push, pop, name } = props;
   const { values } = form;
   const fieldArray = values[name];
 
