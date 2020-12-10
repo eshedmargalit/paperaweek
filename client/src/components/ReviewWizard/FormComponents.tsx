@@ -1,14 +1,17 @@
 import React from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext, FieldInputProps } from 'formik';
+import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps, FieldArrayConfig } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { PAWFormikProps } from './types';
 import { Paper, Notes } from '../../types';
 
-interface FieldInputPropsWithLabel extends FieldInputProps<''> {
+interface FieldInputPropsWithLabel {
   label: string;
-  id: string;
+  name: string;
+  placeholder?: string;
+  type?: string;
+  id?: string;
 }
 
 const DatePickerField = ({ ...props }: FieldInputProps<''>) => {
@@ -55,14 +58,7 @@ export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel) => {
   );
 };
 
-interface DynamicListProps {
-  push: (s: string) => void;
-  pop: (index: number) => void;
-  name: keyof Paper | keyof Notes;
-  form: PAWFormikProps;
-}
-
-export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
+export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) => {
   const { values } = form;
   const fieldArray = values[name];
 
@@ -81,7 +77,7 @@ export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
             <Button
               tabIndex={-1}
               className="dynamic-delete-button"
-              onClick={() => pop(index)} // remove a listItem from the list
+              onClick={pop} // remove a listItem from the list
             >
               <CloseOutlined />
             </Button>
@@ -94,7 +90,7 @@ export const DynamicList = ({ name, push, pop, form }: DynamicListProps) => {
   );
 };
 
-export const DynamicTextAreaList = ({ name, push, pop, form }: DynamicListProps) => {
+export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderProps) => {
   const { values } = form;
   const fieldArray = values[name];
 
@@ -111,7 +107,7 @@ export const DynamicTextAreaList = ({ name, push, pop, form }: DynamicListProps)
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} autoFocus={true} />
-            <Button tabIndex={-1} className="dynamic-delete-button" onClick={() => pop(index)}>
+            <Button tabIndex={-1} className="dynamic-delete-button" onClick={pop}>
               <CloseOutlined />
             </Button>
           </div>

@@ -8,7 +8,7 @@ import { reviewFields } from './utils.js';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Notes, Paper } from '../../types';
-import { PAWProps } from './types';
+import { PAWProps, OnClickEventType } from './types';
 
 interface PAWFormProps {
   initialPaper: Paper;
@@ -51,7 +51,7 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
         debouncedOnChange(values);
       }}
     >
-      {({ values, handleSubmit }) => (
+      {({ values, handleSubmit }: { handleSubmit: OnClickEventType; values: PAWProps }) => (
         <Form>
           <div>
             <h2> Paper Information </h2>
@@ -86,6 +86,7 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
               {reviewFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
+                  {/* @ts-ignore */}
                   <FieldArray name={fieldName} component={DynamicTextAreaList} />
                 </Col>
               ))}
