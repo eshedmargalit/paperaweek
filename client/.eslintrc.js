@@ -3,7 +3,14 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'plugin:prettier/recommended'],
+  extends: [
+    'plugin:react/recommended',
+    'airbnb',
+    'plugin:prettier/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   settings: {
     'import/resolver': {
       node: {
@@ -23,7 +30,7 @@ module.exports = {
   rules: {
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
-    '@typescript-eslint/explicit-function-return-type': 'error',
+    'import/prefer-default-export': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -35,6 +42,10 @@ module.exports = {
       },
     ],
     'react/jsx-props-no-spreading': 'off',
-    'react/jsx-filename-extension': [2, { extensions: ['.jsx', '.tsx'] }],
+    'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
+    'react/require-default-props': 'off',
+    'react/destructuring-assignment': 'off',
+    'react/props-types': 'off',
+    'react/jsx-one-expression-per-line': 'off',
   },
 };

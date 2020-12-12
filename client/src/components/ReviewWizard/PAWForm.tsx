@@ -86,7 +86,6 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
               {reviewFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
-                  {/* @ts-ignore */}
                   <FieldArray name={fieldName} component={DynamicTextAreaList} />
                 </Col>
               ))}

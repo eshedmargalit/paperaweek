@@ -1,10 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-
-function test(arg: number) {
-  return 5;
-}
 
 const composeEnhancers =
   // @ts-ignore

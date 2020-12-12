@@ -14,7 +14,7 @@ import { fetchUser } from './actions';
 
 import './App.css';
 
-export default function App() {
+export default function App(): JSX.Element {
   const dispatch = useDispatch();
 
   // by passing [dispatch] as the second argument of useEffect, we replicate the behavior

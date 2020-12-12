@@ -1,10 +1,8 @@
 import React from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps, FieldArrayConfig } from 'formik';
+import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
-import { PAWFormikProps } from './types';
-import { Paper, Notes } from '../../types';
 
 interface FieldInputPropsWithLabel {
   label: string;
@@ -72,6 +70,7 @@ export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) =>
       {fieldArray &&
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
+          // eslint-disable-next-line react/no-array-index-key
           <div key={index}>
             <Field name={`${name}.${index}`} autoFocus />
             <Button
@@ -84,7 +83,8 @@ export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) =>
           </div>
         ))}
       <Button style={{ width: '150px' }} onClick={() => push('')}>
-        <PlusOutlined /> Add
+        <PlusOutlined />
+        Add
       </Button>
     </div>
   );
@@ -113,7 +113,8 @@ export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderP
           </div>
         ))}
       <Button className="dynamic-add-button" onClick={() => push('')}>
-        <PlusOutlined /> Add
+        <PlusOutlined />
+        Add
       </Button>
     </div>
   );

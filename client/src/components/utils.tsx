@@ -57,7 +57,7 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
 };
 
 export const shortenAuthors = (authors: string[]): string => {
-  let author_string: string = '';
+  let author_string = '';
 
   if (authors.length === 2) {
     author_string = `${authors[0].split(' ').pop()} and ${authors[1].split(' ').pop()}`;

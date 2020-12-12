@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
+import { ColumnsType } from 'antd/es/table';
 import { shortenAuthors, shortenString, getTagColor } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import './SearchableReviewDisplay.scss';
 import { Maybe, Review } from '../../types';
-import { ColumnsType } from 'antd/es/table';
 
 const { confirm } = Modal;
 
