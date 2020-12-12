@@ -1,45 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import _, { uniq as _uniq } from 'lodash';
-
+import _ from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
-import { PAWProps } from './types';
 import { Notes, Paper, Review, Maybe } from '../../types';
 
 const MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
-
-const parseKeywords = (keywords: string | string[]) => {
-  const keywordString = Array.isArray(keywords) ? keywords.join(', ') : keywords;
-
-  return _uniq(keywordString.split(',').map(item => item.trim().toLowerCase()));
-};
-
-const repackageValues = (values: PAWProps): Review => ({
-  paper: {
-    title: values.title,
-    authors: values.authors,
-    institutions: values.institutions,
-    date: values.date,
-    journal: values.journal,
-    doi: values.doi,
-    url: values.url,
-    keywords: parseKeywords(values.keywords || []),
-    one_sentence: values.one_sentence,
-  },
-  notes: {
-    background_points: values.background_points,
-    approach_points: values.approach_points,
-    results_points: values.results_points,
-    conclusions_points: values.conclusions_points,
-    summary_points: values.summary_points,
-    other_points: values.other_points,
-  },
-});
 
 interface ReviewWizardContainerProps {
   initialPaper: Paper;
@@ -62,19 +32,16 @@ export default function ReviewWizardContainer({
   lastSave,
 }: ReviewWizardContainerProps): JSX.Element {
   // set state variables for paper and Notes
-  const [paper, setPaper] = useState(initialPaper);
-  const [notes, setNotes] = useState(initialNotes);
+  const [paper, setPaper] = useState<Paper>(initialPaper);
+  const [notes, setNotes] = useState<Notes>(initialNotes);
 
   // set wizard state
   const [showModal, setShowModal] = useState(false);
   const [redirectHome, setRedirectHome] = useState(false);
 
-  const previewModal = (newValues: PAWProps) => {
-    // This shadowing is fine -- it's easy to tell what's going on
-    // eslint-disable-next-line no-shadow
-    const { paper, notes } = repackageValues(newValues);
-    setPaper(paper);
-    setNotes(notes);
+  const previewModal = (newValues: Review) => {
+    setPaper(newValues.paper);
+    setNotes(newValues.notes);
     setShowModal(true);
   };
 
@@ -86,11 +53,9 @@ export default function ReviewWizardContainer({
     []
   );
 
-  const onChangeHandler = (newValues: PAWProps) => {
-    // eslint-disable-next-line no-shadow
-    const { paper, notes } = repackageValues(newValues);
-    setPaper(paper);
-    setNotes(notes);
+  const onChangeHandler = (newValues: Review) => {
+    setPaper(newValues.paper);
+    setNotes(newValues.notes);
     autosave(paper, notes);
   };
 

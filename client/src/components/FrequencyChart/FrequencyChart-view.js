@@ -1,17 +1,21 @@
 import React from 'react';
-import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin, Statistic } from 'antd';
-import { getReviewStats } from '../utils';
+import {
+  Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis,
+} from 'recharts';
+import {
+  Row, Col, Card, Spin, Statistic,
+} from 'antd';
 import moment from 'moment';
+import { getReviewStats } from '../utils';
 
 export default function FrequencyChartView(reviews) {
-  const lineChart = reviews => {
-    const reviewDates = reviews.map(review => moment(review.createdAt));
+  const lineChart = (reviews) => {
+    const reviewDates = reviews.map((review) => moment(review.createdAt));
     const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
-    let data = [];
-    for (var i = 0; i < sortedDates.length - 1; i++) {
-      var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
+    const data = [];
+    for (let i = 0; i < sortedDates.length - 1; i++) {
+      const diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
       data.push({ reviewIdx: i + 1, date: sortedDates[i + 1], gap: diff });
     }
 
@@ -33,11 +37,11 @@ export default function FrequencyChartView(reviews) {
                 <Label value="Review Number" offset={-15} position="insideBottom" />
               </XAxis>
               <YAxis
-                label={
+                label={(
                   <Text x={0} y={0} dx={40} dy={150} offset={0} angle={-90}>
                     Days Between Reviews
                   </Text>
-                }
+                )}
               />
               <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
             </LineChart>

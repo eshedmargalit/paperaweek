@@ -1,6 +1,6 @@
-import { Paper, Notes, Review } from './types';
+import { Paper, Notes, Review, User } from './types';
 
-export const blankUser = {
+export const blankUser: User = {
   displayName: '',
   reviews: [],
   readingList: [],

@@ -16,10 +16,8 @@ class DraftPageRedux extends Component {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return {
-    auth,
-  };
-};
+const mapStateToProps = ({ auth }) => ({
+  auth,
+});
 
 export default connect(mapStateToProps, null)(DraftPageRedux);

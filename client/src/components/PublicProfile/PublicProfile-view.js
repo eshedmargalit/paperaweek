@@ -7,7 +7,9 @@ import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
 import Preferences from '../Preferences';
 
-export default function PublicProfileView({ loading, userDisplayName, reviews, reviewIdToOpen, isOwnPage, onChange }) {
+export default function PublicProfileView({
+  loading, userDisplayName, reviews, reviewIdToOpen, isOwnPage, onChange,
+}) {
   const pageHeaderProps = {
     pageHeaderTitle: `${userDisplayName}'s Reviews`,
     onPageBack: null,
@@ -26,7 +28,7 @@ export default function PublicProfileView({ loading, userDisplayName, reviews, r
   // map reviewId to review
   let reviewToOpen = null;
   if (reviews) {
-    reviewToOpen = reviews.find(review => review._id === reviewIdToOpen);
+    reviewToOpen = reviews.find((review) => review._id === reviewIdToOpen);
   }
 
   const profileView = reviews ? (
@@ -42,7 +44,7 @@ export default function PublicProfileView({ loading, userDisplayName, reviews, r
             reviews={reviews}
             reviewToOpen={reviewToOpen}
             pageHeaderProps={pageHeaderProps}
-            hideFooter={true}
+            hideFooter
           />
         </Col>
       </Row>

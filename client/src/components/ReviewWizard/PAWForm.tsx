@@ -7,20 +7,36 @@ import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './Form
 import { reviewFields } from './utils';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Notes, Paper } from '../../types';
-import { PAWProps, OnClickEventType } from './types';
+import { Notes, Paper, Review, Maybe } from '../../types';
+import { OnClickEventType } from './types';
+import { uniq as _uniq } from 'lodash';
+
+const parseKeywords = (keywords: Maybe<string | string[]>): string[] => {
+  if (!keywords) {
+    return [];
+  }
+
+  if (Array.isArray(keywords)) {
+    keywords = keywords.join(',');
+  }
+  return _uniq(
+    keywords.split(',').map(item => {
+      return item.trim().toLowerCase();
+    })
+  );
+};
 
 interface PAWFormProps {
   initialPaper: Paper;
   initialNotes: Notes;
-  onChange: (formValues: PAWProps) => void;
-  onSubmit: (formValues: PAWProps) => void;
+  onChange: (formValues: Review) => void;
+  onSubmit: (formValues: Review) => void;
 }
 export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps): JSX.Element {
   const debouncedOnChange = _.debounce(onChange, 2000);
-  const initialValues = {
-    ...initialPaper,
-    ...initialNotes,
+  const initialValues: Review = {
+    paper: initialPaper,
+    notes: initialNotes,
   };
 
   const validationSchema = Yup.object({
@@ -46,10 +62,13 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
       validationSchema={validationSchema}
       onSubmit={values => onSubmit(values)}
       validate={values => {
+        if (values.paper.keywords) {
+          values.paper.keywords = parseKeywords(values.paper.keywords);
+        }
         debouncedOnChange(values);
       }}
     >
-      {({ handleSubmit }: { handleSubmit: OnClickEventType; values: PAWProps }) => (
+      {({ handleSubmit }: { handleSubmit: OnClickEventType}) => (
         <Form>
           <div>
             <h2> Paper Information </h2>

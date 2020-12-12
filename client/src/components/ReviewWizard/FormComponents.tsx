@@ -15,7 +15,7 @@ interface FieldInputPropsWithLabel {
   id?: string;
 }
 
-const DatePickerField = ({ ...props }: FieldInputProps<''>) => {
+const DatePickerField = ({ ...props }: FieldInputProps<string>) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
 

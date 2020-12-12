@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { notification } from 'antd';
 import { setReview, updateReviews } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
-import { notification } from 'antd';
 
-const openNotificationWithIcon = type => {
+const openNotificationWithIcon = (type) => {
   notification[type]({
     message: 'Link Copied!',
   });
@@ -13,23 +13,21 @@ const openNotificationWithIcon = type => {
 
 export default function ReviewReaderRedux() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
-  const reviews = useSelector(state => state.reviews);
+  const user = useSelector((state) => state.user);
+  const reviews = useSelector((state) => state.reviews);
   const { reviewList } = reviews;
 
-  const deleteReview = reviewToDelete => {
-    let newReviews = reviewList.filter(rev => {
-      return rev !== reviewToDelete;
-    });
+  const deleteReview = (reviewToDelete) => {
+    const newReviews = reviewList.filter((rev) => rev !== reviewToDelete);
     dispatch(updateReviews(newReviews));
     axios.delete(`/api/papers/${reviewToDelete._id}`);
   };
 
-  const handleModalEdit = reviewContent => {
+  const handleModalEdit = (reviewContent) => {
     dispatch(setReview(null, reviewContent));
   };
 
-  const handleModalCopy = review => {
+  const handleModalCopy = (review) => {
     const link = `${window.location.origin}/profiles/${user.googleId}/${review._id}`;
     navigator.clipboard.writeText(link);
     openNotificationWithIcon('success');

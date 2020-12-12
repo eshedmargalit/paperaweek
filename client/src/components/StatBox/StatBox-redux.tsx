@@ -4,10 +4,11 @@ import { setReview } from '../../actions';
 import { RootState } from '../../reducers';
 import { blankReview } from '../../templates';
 import StatBoxView from './StatBox-view';
+import { Review } from '../../types';
 
 export default function StatBoxRedux() {
   const dispatch = useDispatch();
-  const reviews = useSelector((state: RootState) => state.reviews.reviewList);
+  const reviews: Review[] = useSelector((state: RootState) => state.reviews.reviewList);
 
   const setBlankReview = () => {
     dispatch(setReview(blankReview));

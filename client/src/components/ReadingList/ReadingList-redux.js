@@ -1,23 +1,22 @@
 import React from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import arrayMove from 'array-move';
 import { setReview, updateReadingList, updateDraftId } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
 
-import arrayMove from 'array-move';
-
 export default function ReadingListRedux() {
   const dispatch = useDispatch();
-  const readingList = useSelector(state => state.readingList);
+  const readingList = useSelector((state) => state.readingList);
 
-  const updateReadingListFunc = async newReadingList => {
+  const updateReadingListFunc = async (newReadingList) => {
     dispatch(updateReadingList(newReadingList));
 
     const res = await axios.put('api/readingList', newReadingList);
     dispatch(updateReadingList(res.data));
   };
 
-  const handleEditClick = value => {
+  const handleEditClick = (value) => {
     dispatch(updateDraftId(null));
     dispatch(setReview(value._id, null));
   };
@@ -27,10 +26,8 @@ export default function ReadingListRedux() {
     updateReadingListFunc(newReadingList);
   };
 
-  const removeFromReadingList = paper => {
-    let newReadingList = readingList.filter(currPaper => {
-      return currPaper !== paper;
-    });
+  const removeFromReadingList = (paper) => {
+    const newReadingList = readingList.filter((currPaper) => currPaper !== paper);
     updateReadingListFunc(newReadingList);
   };
 

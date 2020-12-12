@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
 import { useIsMounted } from '../../hooks';
-import { Maybe, MongoID, Notes, Paper } from '../../types';
+import { Maybe, MongoID, Notes, Paper, Review } from '../../types';
 import { RootState } from '../../reducers';
 
 const statuses = {
@@ -14,8 +14,8 @@ const statuses = {
 };
 
 // do not export
-const draftSaver = (paper: Paper, notes: Notes, draftId: Maybe<MongoID>) => {
-  const draftToSave = { paper, notes };
+const saveDraftToDB = (paper: Paper, notes: Notes, draftId: Maybe<MongoID>) => {
+  const draftToSave: Review = { paper, notes };
 
   const method = draftId ? 'put' : 'post';
   const url = '/api/drafts';
@@ -35,6 +35,9 @@ export const useSaveDraft = () => {
   const [lastSave, setLastSave] = useState<Maybe<Moment>>(null);
   const [autosaveStatus, setAutosaveStatus] = useState(statuses.UNSAVED);
 
+  /**
+   * The inner function `saveDraft` is frozen on the first invocation of this function, so even if draftId changes in the parent function, that change doesn't cause saveDraft to use the new value of draftId. If you use a ref, they stay synchronized
+   */
   const draftIdRef = useRef<Maybe<MongoID>>();
 
   useEffect(() => {
@@ -45,7 +48,7 @@ export const useSaveDraft = () => {
   const saveDraft = async (paper: Paper, notes: Notes) => {
     if (isMounted()) {
       setAutosaveStatus(statuses.SAVING);
-      const res = await draftSaver(paper, notes, draftIdRef.current || null);
+      const res = await saveDraftToDB(paper, notes, draftIdRef.current || null);
       if (res.status === 200) {
         setAutosaveStatus(statuses.SAVED);
         setLastSave(moment());
