@@ -10,8 +10,8 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { Review } from '../types';
 
-export const renderCommaSepList = (items: string[], key: string) => {
-  return items.map((item, i) => {
+export const renderCommaSepList = (items: string[], key: string) =>
+  items.map((item, i) => {
     let to_render;
     if (i === items.length - 1) {
       // last
@@ -32,23 +32,13 @@ export const renderCommaSepList = (items: string[], key: string) => {
       }
     } else if (i === items.length - 2) {
       // penultimate
-      to_render = (
-        <span>
-          {item}
-          {` `}
-        </span>
-      );
+      to_render = <span>{item} </span>;
     } else {
-      //all others
-      to_render = (
-        <span>
-          {item},{` `}
-        </span>
-      );
+      // all others
+      to_render = <span>{item}, </span>;
     }
     return <span key={key}>{to_render}</span>;
   });
-};
 
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {
   const numAuthors = authorList.length;
@@ -57,7 +47,7 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
     return authorList;
   }
 
-  let newAuthorList: string[] = [];
+  const newAuthorList: string[] = [];
   newAuthorList.push(authorList[0]);
   newAuthorList.push(authorList[1]);
   newAuthorList.push('...');
@@ -70,11 +60,11 @@ export const shortenAuthors = (authors: string[]): string => {
   let author_string: string = '';
 
   if (authors.length === 2) {
-    author_string = authors[0].split(' ').pop() + ' and ' + authors[1].split(' ').pop();
+    author_string = `${authors[0].split(' ').pop()} and ${authors[1].split(' ').pop()}`;
   } else if (authors.length === 1) {
     author_string = authors[0];
   } else {
-    author_string = authors[0].split(' ').pop() + ' et al.';
+    author_string = `${authors[0].split(' ').pop()} et al.`;
   }
 
   return author_string;
@@ -82,7 +72,7 @@ export const shortenAuthors = (authors: string[]): string => {
 
 export const shortenString = (str: string, cutoff: number): string => {
   if (str.length >= cutoff) {
-    str = str.substring(0, cutoff) + '...';
+    str = `${str.substring(0, cutoff)}...`;
   }
   return str;
 };
@@ -90,15 +80,15 @@ export const shortenString = (str: string, cutoff: number): string => {
 export type HSLString = string;
 export type HexString = string;
 export const getTagColor = (tag: string): HSLString => {
-  var hash = 0;
-  for (var i = 0; i < tag.length; i++) {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
     hash = tag.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  var shortened = hash % 360;
+  const shortened = hash % 360;
   const saturation = '80%';
   const lightness = '30%';
-  return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
+  return `hsl(${shortened},${saturation},${lightness})`;
 };
 
 export interface ReviewStats {
@@ -115,9 +105,9 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
   const reviewDates = reviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
-  let diffs = [];
-  for (var i = 0; i < sortedDates.length - 1; i++) {
-    var diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
+  const diffs = [];
+  for (let i = 0; i < sortedDates.length - 1; i++) {
+    const diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
     diffs.push(diff);
   }
 

@@ -25,7 +25,7 @@ export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProp
         <Col>
           <h6> Getting Started </h6>
           <p>
-            <strong>Option 1</strong>: Click{` `}
+            <strong>Option 1</strong>: Click{' '}
             <Button onClick={setBlankReview} size="small">
               Create Manual Entry <PlusCircleOutlined />
             </Button>{' '}

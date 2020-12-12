@@ -42,24 +42,22 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack })
 
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <SaveFilled />
-          {` `}Saved to Drafts {timePassedText}
+          <SaveFilled /> Saved to Drafts
+          {timePassedText}
         </div>
       );
       break;
     case 'saving':
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <SaveTwoTone spin />
-          {` `}Saving...
+          <SaveTwoTone spin /> Saving...
         </div>
       );
       break;
     case 'saveFailed':
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <SaveTwoTone twoToneColor="#f5222d" />
-          {` `} Failed to save
+          <SaveTwoTone twoToneColor="#f5222d" /> Failed to save
         </div>
       );
       break;
@@ -67,7 +65,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack })
     // do nothing
   }
 
-  let wizardRender = (
+  const wizardRender = (
     <div className="width80">
       <div style={{ display: 'flex' }}>
         <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />

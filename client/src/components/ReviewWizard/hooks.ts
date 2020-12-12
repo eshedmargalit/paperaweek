@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useIsMounted } from '../../hooks';
 import axios from 'axios';
-import moment, {Moment} from 'moment';
+import moment, { Moment } from 'moment';
+import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Notes, Paper } from '../../types';
-import { RootState} from '../../reducers'
+import { RootState } from '../../reducers';
 
 const statuses = {
   UNSAVED: 'unsaved',
@@ -64,5 +64,10 @@ export const useSaveDraft = () => {
     }
   };
 
-  return { autosaveStatus, lastSave, saveDraft, deleteActiveDraft };
+  return {
+    autosaveStatus,
+    lastSave,
+    saveDraft,
+    deleteActiveDraft,
+  };
 };

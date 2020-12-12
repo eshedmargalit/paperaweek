@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import Fuse from 'fuse.js';
+import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import { Maybe, Review } from '../../types';
 
 const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
@@ -74,13 +74,13 @@ export default function SearchableReviewDisplayContainer({
 
   // render
   const modalProps = {
-    deleteConfirmHandler: deleteConfirmHandler,
-    handleModalClose: handleModalClose,
+    deleteConfirmHandler,
+    handleModalClose,
     handleModalEdit: modalEditHandler,
-    handleModalCopy: handleModalCopy,
-    showModal: showModal,
+    handleModalCopy,
+    showModal,
     modalReview: selectedReview,
-    renderMath: renderMath,
+    renderMath,
     itemName: itemName || 'Review',
   };
 

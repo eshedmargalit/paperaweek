@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
 import ReviewWizardContainer from './ReviewWizard-container';
 import { updateReadingList, updateReviews, setReview } from '../../actions/index';
 import { blankPaper, blankReview } from './utils.js';
-import _ from 'lodash';
 import { useSaveDraft } from './hooks.js';
 
 export default function ReviewWizardRedux() {
@@ -29,16 +29,14 @@ export default function ReviewWizardRedux() {
     let newReadingList = readingList;
 
     if (paperId) {
-      newReadingList = readingList.filter(currPaper => {
-        return currPaper._id !== paperId;
-      });
+      newReadingList = readingList.filter(currPaper => currPaper._id !== paperId);
     }
 
     // update reading list in global state
     dispatch(updateReadingList(newReadingList));
 
     // update reading list in DB and re-update global state
-    let res = await axios.put('api/readingList', newReadingList);
+    const res = await axios.put('api/readingList', newReadingList);
     dispatch(updateReadingList(res.data));
   };
 
@@ -56,7 +54,7 @@ export default function ReviewWizardRedux() {
     };
 
     // send the request to the server
-    let res = await axios({ method, url, data });
+    const res = await axios({ method, url, data });
 
     if (res.status === 200) {
       dispatch(updateReviews(res.data));
@@ -69,7 +67,7 @@ export default function ReviewWizardRedux() {
   };
 
   // figure out if we already have a paper or a review
-  let { paperId, reviewContent } = activeReview;
+  const { paperId, reviewContent } = activeReview;
 
   // always use the paperId if it exists, if not fall back to raw review (without a paper id)
   let paper;

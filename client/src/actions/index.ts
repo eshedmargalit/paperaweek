@@ -14,7 +14,7 @@ import { FetchUserAction, SetReviewAction } from './types';
 import { Maybe, MongoID, Paper, Review, User } from '../types';
 
 export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>) => {
-  let user = await axios.get<User>('/api/current_user');
+  const user = await axios.get<User>('/api/current_user');
 
   if (!user.data) {
     return;
@@ -37,16 +37,12 @@ export const updateDrafts = (newDrafts: Review[]) => ({
   payload: newDrafts,
 });
 
-export const updateReadingList = (newReadingList: Paper[]) => {
-  return {
-    type: UPDATE_READING_LIST,
-    payload: newReadingList,
-  };
-};
+export const updateReadingList = (newReadingList: Paper[]) => ({
+  type: UPDATE_READING_LIST,
+  payload: newReadingList,
+});
 
-export const updateReviews = (newReviews: Review[]) => {
-  return {
-    type: UPDATE_REVIEWS,
-    payload: newReviews,
-  };
-};
+export const updateReviews = (newReviews: Review[]) => ({
+  type: UPDATE_REVIEWS,
+  payload: newReviews,
+});

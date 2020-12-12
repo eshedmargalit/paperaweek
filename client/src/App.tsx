@@ -30,7 +30,7 @@ export default function App() {
         <Switch>
           <Route path="/profiles/:userId/:reviewIdToOpen?" component={PublicProfile} />
           <Route exact path="/" render={props => <Login {...props} justSignedOut={false} />} />
-          <Route exact path="/signout" render={props => <Login {...props} justSignedOut={true} />} />
+          <Route exact path="/signout" render={props => <Login {...props} justSignedOut />} />
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/form" component={ReviewWizard} />
           <Route exact path="/drafts" component={DraftPage} />

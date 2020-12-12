@@ -49,11 +49,9 @@ const renderSearchResults = (
             </div>
           </div>
           <em>
-            {journal}
-            {` `}
-            {year}
+            {journal} {year}
           </em>
-          <div></div>
+          <div />
         </div>
       </Popover>
     );
@@ -127,12 +125,10 @@ export default function PaperSearchBarView({
   let searchRender: Maybe<JSX.Element | JSX.Element[]> = null;
   if (query === '') {
     searchRender = <StatBox />;
+  } else if (renderedSearchResults.length) {
+    searchRender = renderedSearchResults;
   } else {
-    if (renderedSearchResults.length) {
-      searchRender = renderedSearchResults;
-    } else {
-      searchRender = noResultsAlert;
-    }
+    searchRender = noResultsAlert;
   }
 
   return (

@@ -4,7 +4,7 @@ import { Form, FieldArray, Formik } from 'formik';
 import * as Yup from 'yup';
 import _ from 'lodash';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
-import { reviewFields } from './utils.js';
+import { reviewFields } from './utils';
 import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Notes, Paper } from '../../types';
@@ -63,11 +63,11 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
                 <MonthPicker label="Publication Date" name="date" />
               </Col>
               <Col {...reviewItemColSpan}>
-                <label htmlFor={'authors'}>Authors</label>
+                <label htmlFor="authors">Authors</label>
                 <FieldArray name="authors" component={DynamicList} />
               </Col>
               <Col {...reviewItemColSpan}>
-                <label htmlFor={'institutions'}>Institutions</label>
+                <label htmlFor="institutions">Institutions</label>
                 <FieldArray name="institutions" component={DynamicList} />
               </Col>
               <Col lg={8} sm={12}>

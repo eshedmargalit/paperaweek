@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 import { FETCH_USER, UPDATE_READING_LIST } from '../actions/actionTypes';
 import { FetchUserAction, UpdateReadingListAction } from '../actions/types';
 import { Paper } from '../types';
+
 const initialState: Paper[] = [];
 
 const reducer: Reducer<Paper[], FetchUserAction | UpdateReadingListAction> = (state = initialState, action) => {

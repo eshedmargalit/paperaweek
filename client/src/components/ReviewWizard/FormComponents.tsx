@@ -73,7 +73,7 @@ export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) =>
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
           <div key={index}>
-            <Field name={`${name}.${index}`} autoFocus={true} />
+            <Field name={`${name}.${index}`} autoFocus />
             <Button
               tabIndex={-1}
               className="dynamic-delete-button"
@@ -106,7 +106,7 @@ export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderP
         fieldArray.map((_, index: number) => (
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
-            <Field as="textarea" name={`${name}.${index}`} autoFocus={true} />
+            <Field as="textarea" name={`${name}.${index}`} autoFocus />
             <Button tabIndex={-1} className="dynamic-delete-button" onClick={pop}>
               <CloseOutlined />
             </Button>

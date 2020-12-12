@@ -9,7 +9,7 @@ import PaperSearchBarContainer from './PaperSearchBar-container';
 
 export default function PaperSearchBarRedux() {
   const dispatch = useDispatch();
-  let readingList = useSelector((state: RootState) => state.readingList);
+  const readingList = useSelector((state: RootState) => state.readingList);
 
   /**
    * Sets the review in the redux store to be the default "blank" review, overwriting any existing review
@@ -43,7 +43,7 @@ export default function PaperSearchBarRedux() {
    */
   const handleStartReview = (paper: Paper) => {
     const review: Review = {
-      paper: paper,
+      paper,
       notes: blankNotes,
     };
     dispatch(setReview(review));

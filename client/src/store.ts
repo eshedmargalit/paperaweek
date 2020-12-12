@@ -1,6 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './reducers';
 import thunk from 'redux-thunk';
+import rootReducer from './reducers';
+
+function test(arg: number) {
+  return 5;
+}
 
 const composeEnhancers =
   // @ts-ignore

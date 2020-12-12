@@ -55,9 +55,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
       title: 'Year Published',
       dataIndex: ['paper', 'date'],
       render: (date: Date) => <span>{moment(date, 'YYYY-MM').format('YYYY')}</span>,
-      sorter: (a: Review, b: Review) => {
-        return moment(a.paper.date).diff(moment(b.paper.date));
-      },
+      sorter: (a: Review, b: Review) => moment(a.paper.date).diff(moment(b.paper.date)),
     },
     {
       title: 'Journal',
@@ -68,9 +66,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
       title: 'Review Date',
       dataIndex: 'createdAt',
       render: (date: Date) => <span>{moment(date).format('MMMM Do, YYYY')}</span>,
-      sorter: (a: Review, b: Review) => {
-        return moment(a.createdAt).diff(moment(b.createdAt));
-      },
+      sorter: (a: Review, b: Review) => moment(a.createdAt).diff(moment(b.createdAt)),
       defaultSortOrder: 'descend',
     },
     {
@@ -82,13 +78,11 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 
   return (
     <Table
-      onRow={(review, reviewIndex) => {
-        return {
-          onClick: () => {
-            reviewClicked(review);
-          },
-        };
-      }}
+      onRow={(review, reviewIndex) => ({
+        onClick: () => {
+          reviewClicked(review);
+        },
+      })}
       rowKey={review => review._id!}
       columns={columns}
       dataSource={reviews}
@@ -217,7 +211,7 @@ export default function SearchableReviewDisplayView({
   );
 
   let reviewModal = null;
-  let modalFooter = [
+  const modalFooter = [
     <Link to="/form" key="edit">
       <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
         Edit this {itemName}

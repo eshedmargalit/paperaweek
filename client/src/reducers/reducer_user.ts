@@ -12,9 +12,9 @@ const reducer: Reducer<User, FetchUserAction> = (state = initialState, action) =
     case FETCH_USER:
       if (payload) {
         return payload;
-      } else {
-        return state;
       }
+      return state;
+
     default:
       return state;
   }
