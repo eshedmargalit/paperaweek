@@ -31,7 +31,7 @@ interface SearchableReviewDisplayContainerProps {
   hideFooter: boolean;
   deleteItemFunc: (selectedReview: Review) => void;
   handleModalEdit: (selectedReview: Review) => void;
-  handleModalCopy: (selectedReview: Review) => void;
+  handleModalCopy: () => void;
 }
 
 export default function SearchableReviewDisplayContainer({
@@ -44,10 +44,10 @@ export default function SearchableReviewDisplayContainer({
   deleteItemFunc,
   handleModalEdit,
   handleModalCopy,
-}: SearchableReviewDisplayContainerProps) {
+}: SearchableReviewDisplayContainerProps): JSX.Element {
   const [query, setQuery] = useState('');
   const [selectedReview, setSelectedReview] = useState<Maybe<Review>>(reviewToOpen);
-  const [showModal, setShowModal] = useState(reviewToOpen != null);
+  const [showModal, setShowModal] = useState(reviewToOpen !== null);
 
   const reviewClicked = (review: Review) => {
     setSelectedReview(review);

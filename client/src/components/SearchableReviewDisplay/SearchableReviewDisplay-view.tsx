@@ -120,7 +120,7 @@ const renderTags = (tags: string[], handleSearch: SearchHandler) => {
 interface ModalProps {
   deleteConfirmHandler: VoidHandler;
   handleModalEdit: VoidHandler;
-  handleModalCopy: (review: Review) => void;
+  handleModalCopy: VoidHandler;
   handleModalClose: VoidHandler;
   showModal: boolean;
   modalReview: Maybe<Review>;
@@ -229,8 +229,8 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={() => handleModalCopy}>
-        Copy Link to this {itemName}
+      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={handleModalCopy}>
+        ()){' '}
       </Button>
     );
     modalFooter.splice(0, 0, copyButton);
