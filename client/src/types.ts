@@ -3,6 +3,7 @@ export type Maybe<T> = T | null;
  * MongoID represents a Mongo object ID, is always a string
  */
 export type MongoID = string;
+export type Color = string;
 
 export interface Paper {
   id?: MongoID;

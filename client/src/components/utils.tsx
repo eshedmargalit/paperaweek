@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 
 import 'katex/dist/katex.min.css';
 import { Review } from '../types';
+import { darkGray, pawGreen, pawRed } from '../colors';
 
 export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
   items.map((item, i) => {
@@ -97,7 +98,7 @@ export interface ReviewStats {
 
 export const getReviewStats = (reviews: Review[]): ReviewStats => {
   if (reviews.length === 0) {
-    return { numReviews: 0, ppwString: '0', ppwColor: '#222222' };
+    return { numReviews: 0, ppwString: '0', ppwColor: darkGray };
   }
 
   const reviewDates = reviews.map(review => moment(review.createdAt));
@@ -113,7 +114,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
   const ppw = sortedDates.length / totalWeeks;
   const ppwString = ppw.toFixed(2);
 
-  const ppwColor = ppw >= 1 ? '#237804' : '#a8071a';
+  const ppwColor = ppw >= 1 ? pawGreen : pawRed;
   const numReviews = reviews.length;
 
   return { numReviews, ppwString, ppwColor };
