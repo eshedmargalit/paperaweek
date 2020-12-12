@@ -10,11 +10,7 @@ const reducer: Reducer<User, FetchUserAction> = (state = initialState, action) =
   const { type, payload } = action;
   switch (type) {
     case FETCH_USER:
-      if (payload) {
-        return payload;
-      }
-      return state;
-
+      return payload || state;
     default:
       return state;
   }
