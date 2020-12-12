@@ -4,16 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
 import ReviewWizardContainer from './ReviewWizard-container';
 import { updateReadingList, updateReviews, setReview } from '../../actions/index';
-import { blankPaper, blankReview } from './utils.js';
-import { useSaveDraft } from './hooks.js';
+import { blankPaper, blankReview } from './utils';
+import { useSaveDraft } from './hooks';
+import { RootState } from '../../reducers';
+import { Paper, Review } from '../../types';
 
-export default function ReviewWizardRedux() {
+export default function ReviewWizardRedux(): JSX.Element {
   const dispatch = useDispatch();
 
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const activeReview = useSelector(state => state.activeReview);
-  const readingList = useSelector(state => state.readingList);
+  const activeReview: Review = useSelector((state: RootState) => state.activeReview);
+  const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
 
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 

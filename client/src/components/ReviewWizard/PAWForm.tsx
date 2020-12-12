@@ -16,7 +16,7 @@ interface PAWFormProps {
   onChange: (formValues: PAWProps) => void;
   onSubmit: (formValues: PAWProps) => void;
 }
-export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps) {
+export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps): JSX.Element {
   const debouncedOnChange = _.debounce(onChange, 2000);
   const initialValues = {
     ...initialPaper,
@@ -44,14 +44,12 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
-      }}
+      onSubmit={values => onSubmit(values)}
       validate={values => {
         debouncedOnChange(values);
       }}
     >
-      {({ values, handleSubmit }: { handleSubmit: OnClickEventType; values: PAWProps }) => (
+      {({ handleSubmit }: { handleSubmit: OnClickEventType; values: PAWProps }) => (
         <Form>
           <div>
             <h2> Paper Information </h2>

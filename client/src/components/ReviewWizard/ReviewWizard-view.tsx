@@ -16,10 +16,11 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack })
 
   let autosaveIcon;
   switch (autosaveStatus) {
-    case 'unsaved':
+    case 'unsaved': {
       autosaveIcon = null;
       break;
-    case 'saved':
+    }
+    case 'saved': {
       let secSinceSave = 0;
       let minSinceSave = 0;
       if (currentMoment) {
@@ -47,6 +48,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack })
         </div>
       );
       break;
+    }
     case 'saving':
       autosaveIcon = (
         <div key="autosave" className="save-icon">

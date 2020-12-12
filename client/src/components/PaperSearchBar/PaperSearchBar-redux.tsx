@@ -7,7 +7,7 @@ import { blankNotes, blankReview } from '../../templates';
 import { Paper, Review } from '../../types';
 import PaperSearchBarContainer from './PaperSearchBar-container';
 
-export default function PaperSearchBarRedux() {
+export default function PaperSearchBarRedux(): JSX.Element {
   const dispatch = useDispatch();
   const readingList = useSelector((state: RootState) => state.readingList);
 

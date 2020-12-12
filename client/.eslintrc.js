@@ -47,5 +47,6 @@ module.exports = {
     'react/destructuring-assignment': 'off',
     'react/props-types': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'prefer-destructuring': ['error', { object: true, array: false }],
   },
 };

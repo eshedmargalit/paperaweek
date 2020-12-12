@@ -1,7 +1,8 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-plusplus */
 import React from 'react';
 import moment from 'moment';
 
-// @ts-ignore
 import { InlineMath, BlockMath } from 'react-katex';
 import math from 'remark-math';
 
@@ -10,20 +11,20 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { Review } from '../types';
 
-export const renderCommaSepList = (items: string[], key: string) =>
+export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
   items.map((item, i) => {
-    let to_render;
+    let toRender;
     if (i === items.length - 1) {
       // last
       if (items.length === 1) {
-        to_render = (
+        toRender = (
           <span>
             {item}
             <br />
           </span>
         );
       } else {
-        to_render = (
+        toRender = (
           <span>
             and {item}
             <br />
@@ -32,12 +33,12 @@ export const renderCommaSepList = (items: string[], key: string) =>
       }
     } else if (i === items.length - 2) {
       // penultimate
-      to_render = <span>{item} </span>;
+      toRender = <span>{item} </span>;
     } else {
       // all others
-      to_render = <span>{item}, </span>;
+      toRender = <span>{item}, </span>;
     }
-    return <span key={key}>{to_render}</span>;
+    return <span key={key}>{toRender}</span>;
   });
 
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {
@@ -57,28 +58,25 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
 };
 
 export const shortenAuthors = (authors: string[]): string => {
-  let author_string = '';
+  let authorString = '';
 
   if (authors.length === 2) {
-    author_string = `${authors[0].split(' ').pop()} and ${authors[1].split(' ').pop()}`;
+    authorString = `${authors[0].split(' ').pop()} and ${authors[1].split(' ').pop()}`;
   } else if (authors.length === 1) {
-    author_string = authors[0];
+    authorString = authors[0];
   } else {
-    author_string = `${authors[0].split(' ').pop()} et al.`;
+    authorString = `${authors[0].split(' ').pop()} et al.`;
   }
 
-  return author_string;
+  return authorString;
 };
 
-export const shortenString = (str: string, cutoff: number): string => {
-  if (str.length >= cutoff) {
-    str = `${str.substring(0, cutoff)}...`;
-  }
-  return str;
-};
+export const shortenString = (str: string, cutoff: number): string =>
+  str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str;
 
 export type HSLString = string;
 export type HexString = string;
+
 export const getTagColor = (tag: string): HSLString => {
   let hash = 0;
   for (let i = 0; i < tag.length; i++) {
@@ -123,7 +121,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
 
 export const isDOI = (query: string): boolean => query.startsWith('10.') || query.includes('doi.org');
 
-export const wrapMarkdownWithMath = (s: string) => {
+export const wrapMarkdownWithMath = (s: string): JSX.Element => {
   const renderers = {
     // @ts-ignore
     inlineMath: ({ value }) => <InlineMath math={value} />,

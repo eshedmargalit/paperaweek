@@ -1,8 +1,10 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { Button } from 'antd';
 import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { Maybe } from '../../types';
 
 interface FieldInputPropsWithLabel {
   label: string;
@@ -31,7 +33,7 @@ const DatePickerField = ({ ...props }: FieldInputProps<''>) => {
   );
 };
 
-export const TextField = ({ label, ...props }: FieldInputPropsWithLabel) => {
+export const TextField = ({ label, ...props }: FieldInputPropsWithLabel): JSX.Element => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
@@ -45,7 +47,7 @@ export const TextField = ({ label, ...props }: FieldInputPropsWithLabel) => {
   );
 };
 
-export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel) => {
+export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel): JSX.Element => {
   const [field, meta] = useField(props);
   return (
     <div className="form-item">
@@ -56,7 +58,7 @@ export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel) => {
   );
 };
 
-export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) => {
+export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps): Maybe<JSX.Element> => {
   const { values } = form;
   const fieldArray = values[name];
 
@@ -90,7 +92,7 @@ export const DynamicList = ({ name, push, pop, form }: FieldArrayRenderProps) =>
   );
 };
 
-export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderProps) => {
+export const DynamicTextAreaList = ({ name, push, pop, form }: FieldArrayRenderProps): Maybe<JSX.Element> => {
   const { values } = form;
   const fieldArray = values[name];
 

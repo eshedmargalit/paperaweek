@@ -11,13 +11,12 @@ import ReviewWizardView from './ReviewWizard-view';
 import { PAWProps } from './types';
 import { Notes, Paper, Review, Maybe } from '../../types';
 
-const _MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
+const MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
 
 const parseKeywords = (keywords: string | string[]) => {
-  if (Array.isArray(keywords)) {
-    keywords = keywords.join(',');
-  }
-  return _uniq(keywords.split(',').map(item => item.trim().toLowerCase()));
+  const keywordString = Array.isArray(keywords) ? keywords.join(', ') : keywords;
+
+  return _uniq(keywordString.split(',').map(item => item.trim().toLowerCase()));
 };
 
 const repackageValues = (values: PAWProps): Review => ({
@@ -61,7 +60,7 @@ export default function ReviewWizardContainer({
   saveDraft,
   autosaveStatus,
   lastSave,
-}: ReviewWizardContainerProps) {
+}: ReviewWizardContainerProps): JSX.Element {
   // set state variables for paper and Notes
   const [paper, setPaper] = useState(initialPaper);
   const [notes, setNotes] = useState(initialNotes);
@@ -71,6 +70,8 @@ export default function ReviewWizardContainer({
   const [redirectHome, setRedirectHome] = useState(false);
 
   const previewModal = (newValues: PAWProps) => {
+    // This shadowing is fine -- it's easy to tell what's going on
+    // eslint-disable-next-line no-shadow
     const { paper, notes } = repackageValues(newValues);
     setPaper(paper);
     setNotes(notes);
@@ -81,11 +82,12 @@ export default function ReviewWizardContainer({
   const autosave = useCallback(
     _.debounce((newPaper, newReview) => {
       saveDraft(newPaper, newReview);
-    }, _MS_BETWEEN_DRAFT_SAVES),
+    }, MS_BETWEEN_DRAFT_SAVES),
     []
   );
 
   const onChangeHandler = (newValues: PAWProps) => {
+    // eslint-disable-next-line no-shadow
     const { paper, notes } = repackageValues(newValues);
     setPaper(paper);
     setNotes(notes);

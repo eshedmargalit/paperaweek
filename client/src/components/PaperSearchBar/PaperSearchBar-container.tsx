@@ -5,9 +5,9 @@ import { Paper } from '../../types';
 import { isDOI } from '../utils';
 import PaperSearchBarView from './PaperSearchBar-view';
 
-const interpret = async (query: string): Promise<Paper[]> => {
+const interpret = async (input: string): Promise<Paper[]> => {
   // first regex to replace any dashes or underscores with a space
-  query = query.replace(/[-_]/g, ' ').toLowerCase();
+  let query = input.replace(/[-_]/g, ' ').toLowerCase();
 
   // second regex to delete single quotes, double quotes, and slashes
   query = query.replace(/['"/\\]/g, '');
@@ -16,7 +16,8 @@ const interpret = async (query: string): Promise<Paper[]> => {
   return response.data;
 };
 
-const doiSearch = async (query: string): Promise<Paper[]> => {
+const doiSearch = async (input: string): Promise<Paper[]> => {
+  let query = input;
   if (query.includes('doi.org')) {
     // catches both doi.org and dx.doi.org
     query = new URL(query).pathname.substr(1);
@@ -40,7 +41,7 @@ export default function PaperSearchBarContainer({
   setBlankReview,
   handleReadingListAdd,
   handleStartReview,
-}: PaperSearchBarContainerProps) {
+}: PaperSearchBarContainerProps): JSX.Element {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<Paper[]>([]);
@@ -57,8 +58,8 @@ export default function PaperSearchBarContainer({
 
     // if searchQuery looks like a DOI, call that API instead of interpretation
     const apiCall = isDOI(searchQuery) ? doiSearch : interpret;
-    const searchResults = await apiCall(searchQuery);
-    setSearchResults(searchResults);
+    const resultPapers: Paper[] = await apiCall(searchQuery);
+    setSearchResults(resultPapers);
     setLoading(false);
   };
 

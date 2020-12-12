@@ -22,7 +22,6 @@ const handleModalDelete = (onOkHandler: VoidHandler) => {
     okType: 'danger',
     cancelText: 'No',
     onOk: onOkHandler,
-    onCancel() {},
   });
 };
 
@@ -92,10 +91,10 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 };
 
 const renderTags = (tags: string[], handleSearch: SearchHandler) => {
-  let tag_render = null;
+  let tagRender = null;
 
   if (tags && tags.length > 0) {
-    tag_render = tags.map(tag => {
+    tagRender = tags.map(tag => {
       if (tag === '') {
         return null;
       }
@@ -115,7 +114,7 @@ const renderTags = (tags: string[], handleSearch: SearchHandler) => {
       );
     });
   }
-  return tag_render;
+  return tagRender;
 };
 
 interface ModalProps {
@@ -147,7 +146,7 @@ export default function SearchableReviewDisplayView({
   modalProps,
   hideFooter,
   pageHeaderProps,
-}: SearchableReviewDisplayViewProps) {
+}: SearchableReviewDisplayViewProps): JSX.Element {
   const {
     deleteConfirmHandler,
     handleModalEdit,

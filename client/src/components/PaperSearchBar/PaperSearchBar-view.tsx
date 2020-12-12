@@ -14,7 +14,7 @@ const renderSearchResults = (
 ) => {
   const renderedSearchResults = searchResults.map((result: Paper) => {
     const { id, title, journal, date, authors } = result;
-    const year = new Date(date).getFullYear();
+    const year: Maybe<number> = date ? new Date(date).getFullYear() : null;
     const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
     const popOverContent = (
@@ -77,7 +77,7 @@ export default function PaperSearchBarView({
   searchResults,
   loading,
   query,
-}: PaperSearchBarViewProps) {
+}: PaperSearchBarViewProps): JSX.Element {
   const renderedSearchResults = renderSearchResults(searchResults, handleReadingListAdd, handleStartReview);
   const searchArea = (
     <div>
