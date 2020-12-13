@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { Row, Col } from 'antd';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
-import { Row, Col } from 'antd';
 
 import './Home.scss';
 

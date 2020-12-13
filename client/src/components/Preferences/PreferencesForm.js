@@ -10,7 +10,7 @@ export default function PreferencesForm({ initialValues, saveResults }) {
 
   const [profileText, setProfileText] = useState(initialProfileText);
 
-  const onValuesChange = values => {
+  const onValuesChange = (values) => {
     const newText = values.publicProfile ? 'is publicly visible' : 'is not publicly visible';
     setProfileText(newText);
 
@@ -29,8 +29,10 @@ export default function PreferencesForm({ initialValues, saveResults }) {
       <Form.Item name="publicProfile" label="Make Profile Public?" valuePropName="checked">
         <Switch />
       </Form.Item>
-      Your profile{` `}
-      {profileText}!
+      Your profile
+      {' '}
+      {profileText}
+      !
     </Form>
   );
 }

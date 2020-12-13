@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
-import { Space, Switch, Modal, Tag } from 'antd';
+import {
+  Space, Switch, Modal, Tag,
+} from 'antd';
 import moment from 'moment';
-import { renderCommaSepList, wrapMarkdownWithMath } from '../utils.js';
 import axios from 'axios';
+import { renderCommaSepList, wrapMarkdownWithMath } from '../utils';
 
-const getTagColor = tag => {
-  var hash = 0;
-  for (var i = 0; i < tag.length; i++) {
+const getTagColor = (tag) => {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
     hash = tag.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  var shortened = hash % 360;
+  const shortened = hash % 360;
   const saturation = '80%';
   const lightness = '30%';
-  return 'hsl(' + shortened + ',' + saturation + ',' + lightness + ')';
+  return `hsl(${shortened},${saturation},${lightness})`;
 };
 
-const renderTags = tags => {
+const renderTags = (tags) => {
   let tag_render = null;
 
   if (tags && tags.length > 0) {
-    tag_render = tags.map(tag => {
+    tag_render = tags.map((tag) => {
       if (tag === '') {
         return null;
       }
@@ -40,14 +42,16 @@ export default function ReviewModal(props) {
   const reviewObj = props.review;
   if (!reviewObj) return null;
 
-  let { paper, review } = reviewObj;
+  const { paper, review } = reviewObj;
   const date_str = moment(paper.date, 'YYYY-MM').format('MMMM YYYY');
 
   let doi_tag = null;
   if (paper.doi) {
     doi_tag = (
-      <a href={'http://dx.doi.org/' + paper.doi} target="_blank" rel="noopener noreferrer">
-        ({paper.doi})
+      <a href={`http://dx.doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer">
+        (
+        {paper.doi}
+        )
       </a>
     );
   }
@@ -75,13 +79,13 @@ export default function ReviewModal(props) {
     },
   ];
 
-  const reviewBody = fields.map(field => {
+  const reviewBody = fields.map((field) => {
     let empty = true;
-    let to_render = (
+    const to_render = (
       <div key={field.heading}>
         <strong>{field.heading}</strong>
         <ul>
-          {review[field.review_key].map(point => {
+          {review[field.review_key].map((point) => {
             if (point !== '') {
               empty = false;
             }
@@ -101,7 +105,7 @@ export default function ReviewModal(props) {
     </div>
   );
 
-  const handleLatexToggle = async isChecked => {
+  const handleLatexToggle = async (isChecked) => {
     setRenderMath(isChecked);
 
     // set preference in user profile
@@ -118,7 +122,9 @@ export default function ReviewModal(props) {
   const toggleSwitch = (
     <Space align="start">
       <div>
-        <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} /> Render
+        <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} />
+        {' '}
+        Render
       </div>
       <div>{wrapMarkdownWithMath('$\\rm\\LaTeX$ + Markdown')}</div>
     </Space>
@@ -130,8 +136,14 @@ export default function ReviewModal(props) {
         <div>
           {renderCommaSepList(paper.authors)}
           {renderCommaSepList(paper.institutions)}
-          Published in {paper.journal} in {date_str}
-          {` `}
+          Published in
+          {' '}
+          {paper.journal}
+          {' '}
+          in
+          {' '}
+          {date_str}
+          {' '}
           {doi_tag}
         </div>
         <br />
