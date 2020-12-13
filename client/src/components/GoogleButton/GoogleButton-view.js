@@ -18,9 +18,9 @@ function GoogleButtonView({ colorMode }) {
       onMouseLeave={() => setButtonMode('normal')}
       onClick={() => setButtonMode('pressed')}
       href="/auth/google"
-      size={'large'}
+      size="large"
     >
-      <img src={src} height={'100%'} alt="Sign in with Google Button" />
+      <img src={src} height="100%" alt="Sign in with Google Button" />
     </a>
   );
 

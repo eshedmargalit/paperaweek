@@ -7,8 +7,16 @@ export default function MinimalStatBoxView({ userDisplayName, reviews }) {
     <Row>
       <p>
         {' '}
-        Stats will begin to appear when {userDisplayName} has at least 3 reviews written.{' '}
-        <strong>{3 - reviews.length}</strong> to go!{' '}
+        Stats will begin to appear when
+        {' '}
+        {userDisplayName}
+        {' '}
+        has at least 3 reviews written.
+        {' '}
+        <strong>{3 - reviews.length}</strong>
+        {' '}
+        to go!
+        {' '}
       </p>
     </Row>
   );

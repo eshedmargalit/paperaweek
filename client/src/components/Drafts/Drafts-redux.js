@@ -2,13 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { setReview, updateDraftId, updateDrafts, fetchUser } from '../../actions';
+import {
+  setReview, updateDraftId, updateDrafts, fetchUser,
+} from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
 export default function DraftsRedux() {
   const dispatch = useDispatch();
-  const drafts = useSelector(state => state.drafts);
-  const renderMath = useSelector(state => state.user.renderMath);
+  const drafts = useSelector((state) => state.drafts);
+  const renderMath = useSelector((state) => state.user.renderMath);
   const [redirectHome, setRedirectHome] = useState(false);
 
   useEffect(() => {
@@ -21,17 +23,15 @@ export default function DraftsRedux() {
   }
 
   // function to delete the specified draft
-  const deleteDraft = draftToDelete => {
-    const newDrafts = drafts.filter(draft => {
-      return draft !== draftToDelete;
-    });
+  const deleteDraft = (draftToDelete) => {
+    const newDrafts = drafts.filter((draft) => draft !== draftToDelete);
     dispatch(updateDrafts(newDrafts));
 
     axios.delete(`/api/drafts/${draftToDelete._id}`);
   };
 
   // function to edit the specified draft
-  const handleModalEdit = draft => {
+  const handleModalEdit = (draft) => {
     const draftId = draft._id;
     const draftContent = {
       paper: draft.paper,

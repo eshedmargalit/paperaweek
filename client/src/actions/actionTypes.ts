@@ -1,0 +1,6 @@
+export const FETCH_USER = 'FETCH_USER';
+export const UPDATE_DRAFTS = 'UPDATE_DRAFTS';
+export const UPDATE_DRAFT_ID = 'UPDATE_DRAFT_ID';
+export const UPDATE_READING_LIST = 'UPDATE_READING_LIST';
+export const UPDATE_REVIEWS = 'UPDATE_REVIEWS';
+export const SET_REVIEW = 'SET_REVIEW';

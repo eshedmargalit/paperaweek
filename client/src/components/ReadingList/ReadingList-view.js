@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Empty, List, PageHeader } from 'antd';
-import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
+import {
+  Button, Empty, List, PageHeader,
+} from 'antd';
+import {
+  OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined,
+} from '@ant-design/icons';
 import { sortableContainer, sortableElement, sortableHandle } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
@@ -15,7 +19,9 @@ const DragHandle = sortableHandle(() => (
   <MenuOutlined style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} />
 ));
 
-const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandler, deleteClickHandler }) => (
+const SortableItem = sortableElement(({
+  height, value, sortIndex, editClickHandler, deleteClickHandler,
+}) => (
   <List.Item style={{ height }}>
     <div className="reading-list__item">
       <DragHandle />
@@ -49,26 +55,26 @@ const SortableItem = sortableElement(({ height, value, sortIndex, editClickHandl
   </List.Item>
 ));
 
-const SortableInfiniteList = sortableContainer(({ items, editClickHandler, deleteClickHandler }) => {
-  return (
-    <List bordered={true}>
-      <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
-        {items.map((value, index) => (
-          <SortableItem
-            key={`item-${value.title}`}
-            index={index}
-            sortIndex={index}
-            value={value}
-            editClickHandler={editClickHandler}
-            deleteClickHandler={deleteClickHandler}
-          />
-        ))}
-      </Infinite>
-    </List>
-  );
-});
+const SortableInfiniteList = sortableContainer(({ items, editClickHandler, deleteClickHandler }) => (
+  <List bordered>
+    <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
+      {items.map((value, index) => (
+        <SortableItem
+          key={`item-${value.title}`}
+          index={index}
+          sortIndex={index}
+          value={value}
+          editClickHandler={editClickHandler}
+          deleteClickHandler={deleteClickHandler}
+        />
+      ))}
+    </Infinite>
+  </List>
+));
 
-export default function ReadingListView({ onSortEnd, items, handleEditClick, handleDeleteClick }) {
+export default function ReadingListView({
+  onSortEnd, items, handleEditClick, handleDeleteClick,
+}) {
   const noList = (
     <div className="empty-list ant-list-bordered" style={{ height: LIST_HEIGHT }}>
       <Empty description={<span>Add papers to your reading list from the search bar!</span>} />

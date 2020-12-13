@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import PublicProfileContainer from './PublicProfile-container';
 
-const getProfileData = async userId => {
+const getProfileData = async (userId) => {
   let resp = null;
   try {
     resp = await axios.get(`/api/profiles/${userId}`);

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Col, notification, Row } from 'antd';
+import {
+  Card, Col, notification, Row,
+} from 'antd';
 import { CalendarOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
@@ -24,7 +26,7 @@ export default function Login({ justSignedOut, location }) {
     }
   });
 
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
   const redirect = (
     <Redirect
       to={{
