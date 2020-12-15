@@ -34,7 +34,7 @@ export const setReview = (review: Review): SetReviewAction => ({
   payload: review,
 });
 
-export const updateDraftId = (draftId?: Maybe<MongoID>): UpdateDraftIdAction => ({
+export const updateDraftId = (draftId: Maybe<MongoID>): UpdateDraftIdAction => ({
   type: UPDATE_DRAFT_ID,
   payload: draftId,
 });
