@@ -41,5 +41,11 @@ export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProp
     </Card>
   );
 
-  return reviews.length > 2 ? <div>{FrequencyChart(reviews)}</div> : <div>{emptyStats}</div>;
+  return reviews.length > 2 ? (
+    <div>
+      <FrequencyChart reviews={reviews} />
+    </div>
+  ) : (
+    <div>{emptyStats}</div>
+  );
 }

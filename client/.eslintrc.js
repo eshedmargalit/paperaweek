@@ -48,5 +48,6 @@ module.exports = {
     'react/prop-types': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
   },
 };
