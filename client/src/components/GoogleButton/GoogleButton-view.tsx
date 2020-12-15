@@ -26,7 +26,6 @@ function GoogleButtonView({ colorMode }: GoogleButtonViewProps): JSX.Element {
       onMouseLeave={() => setButtonMode('normal')}
       onClick={() => setButtonMode('pressed')}
       href="/auth/google"
-      // size="large"
     >
       <img src={imageSource} height="100%" alt="Sign in with Google Button" />
     </a>

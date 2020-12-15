@@ -32,13 +32,8 @@ export default function DraftsRedux(): JSX.Element {
 
   // function to edit the specified draft
   const handleModalEdit = (draft: Review) => {
-    const draftId = draft._id;
-    const draftContent: Review = {
-      paper: draft.paper,
-      notes: draft.notes,
-    };
-    dispatch(updateDraftId(draftId || null));
-    dispatch(setReview(draftContent));
+    dispatch(updateDraftId(draft._id || null));
+    dispatch(setReview(draft));
   };
 
   const pageHeaderProps = {
