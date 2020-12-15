@@ -67,7 +67,7 @@ function isFARP(props: void | FieldArrayRenderProps): props is FieldArrayRenderP
   return !!props;
 }
 
-export const DynamicList: FunctionComponent<undefined | FieldArrayRenderProps> = props => {
+export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = props => {
   if (!isFARP(props)) return null;
 
   const { form, push, pop, name } = props;
