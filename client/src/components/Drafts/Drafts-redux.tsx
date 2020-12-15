@@ -27,13 +27,11 @@ export default function DraftsRedux(): JSX.Element {
     const newDrafts = drafts.filter(draft => draft !== draftToDelete);
     dispatch(updateDrafts(newDrafts));
 
-    // eslint-disable-next-line no-underscore-dangle
     axios.delete(`/api/drafts/${draftToDelete._id}`);
   };
 
   // function to edit the specified draft
   const handleModalEdit = (draft: Review) => {
-    // eslint-disable-next-line no-underscore-dangle
     const draftId = draft._id;
     const draftContent: Review = {
       paper: draft.paper,

@@ -49,5 +49,6 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'no-underscore-dangle': ['error', { allow: '_id' }],
   },
 };
