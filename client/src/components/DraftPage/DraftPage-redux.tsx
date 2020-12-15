@@ -7,12 +7,12 @@ import Drafts from '../Drafts';
 function DraftPageRedux(): JSX.Element {
   const auth = useSelector((state: RootState) => state.auth);
 
-  return auth ? (
+  if (!auth) return <Redirect to="/" push />;
+
+  return (
     <div className="width80">
       <Drafts />
     </div>
-  ) : (
-    <Redirect to="/" push />
   );
 }
 
