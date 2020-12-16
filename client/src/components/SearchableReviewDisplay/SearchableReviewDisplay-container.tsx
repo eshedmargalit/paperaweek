@@ -24,14 +24,14 @@ const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
 
 interface SearchableReviewDisplayContainerProps {
   reviews: Review[];
-  reviewToOpen: Review;
+  reviewToOpen?: Review;
   renderMath: boolean;
   itemName: string;
   pageHeaderProps: { pageHeaderTitle: string; onPageBack: () => void };
   hideFooter: boolean;
   deleteItemFunc: (selectedReview: Review) => void;
   handleModalEdit: (selectedReview: Review) => void;
-  handleModalCopy: () => void;
+  handleModalCopy?: () => void;
 }
 
 export default function SearchableReviewDisplayContainer({
@@ -46,7 +46,7 @@ export default function SearchableReviewDisplayContainer({
   handleModalCopy,
 }: SearchableReviewDisplayContainerProps): JSX.Element {
   const [query, setQuery] = useState('');
-  const [selectedReview, setSelectedReview] = useState<Maybe<Review>>(reviewToOpen);
+  const [selectedReview, setSelectedReview] = useState<Review | undefined>(reviewToOpen);
   const [showModal, setShowModal] = useState(reviewToOpen !== null);
 
   const reviewClicked = (review: Review) => {

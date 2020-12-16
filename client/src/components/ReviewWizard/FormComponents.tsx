@@ -67,8 +67,9 @@ function isFARP(props: void | FieldArrayRenderProps): props is FieldArrayRenderP
   return !!props;
 }
 
-export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
+export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = props => {
   if (!isFARP(props)) return null;
+
   const { form, push, pop, name } = props;
   const { values } = form;
   const fieldArray = values[name];
