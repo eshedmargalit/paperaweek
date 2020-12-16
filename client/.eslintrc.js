@@ -45,8 +45,10 @@ module.exports = {
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
     'react/require-default-props': 'off',
     'react/destructuring-assignment': 'off',
-    'react/props-types': 'off',
+    'react/prop-types': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'no-underscore-dangle': ['error', { allow: '_id' }],
   },
 };

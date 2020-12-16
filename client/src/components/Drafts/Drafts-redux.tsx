@@ -2,15 +2,15 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import {
-  setReview, updateDraftId, updateDrafts, fetchUser,
-} from '../../actions';
+import { setReview, updateDraftId, updateDrafts, fetchUser } from '../../actions';
+import { RootState } from '../../reducers';
+import { Review } from '../../types';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 
-export default function DraftsRedux() {
+export default function DraftsRedux(): JSX.Element {
   const dispatch = useDispatch();
-  const drafts = useSelector((state) => state.drafts);
-  const renderMath = useSelector((state) => state.user.renderMath);
+  const drafts: Review[] = useSelector((state: RootState) => state.drafts);
+  const renderMath: boolean = useSelector((state: RootState) => state.user.renderMath);
   const [redirectHome, setRedirectHome] = useState(false);
 
   useEffect(() => {
@@ -23,22 +23,17 @@ export default function DraftsRedux() {
   }
 
   // function to delete the specified draft
-  const deleteDraft = (draftToDelete) => {
-    const newDrafts = drafts.filter((draft) => draft !== draftToDelete);
+  const deleteDraft = (draftToDelete: Review) => {
+    const newDrafts = drafts.filter(draft => draft !== draftToDelete);
     dispatch(updateDrafts(newDrafts));
 
     axios.delete(`/api/drafts/${draftToDelete._id}`);
   };
 
   // function to edit the specified draft
-  const handleModalEdit = (draft) => {
-    const draftId = draft._id;
-    const draftContent = {
-      paper: draft.paper,
-      review: draft.review,
-    };
-    dispatch(updateDraftId(draftId));
-    dispatch(setReview(null, draftContent));
+  const handleModalEdit = (draft: Review) => {
+    dispatch(updateDraftId(draft._id || null));
+    dispatch(setReview(draft));
   };
 
   const pageHeaderProps = {
@@ -49,11 +44,9 @@ export default function DraftsRedux() {
   return (
     <SearchableReviewDisplay
       reviews={drafts}
-      reviewToOpen={null}
       renderMath={renderMath}
       deleteItemFunc={deleteDraft}
       handleModalEdit={handleModalEdit}
-      handleModalCopy={null}
       pageHeaderProps={pageHeaderProps}
       itemName="Draft"
     />
