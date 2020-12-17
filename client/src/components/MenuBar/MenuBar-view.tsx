@@ -27,8 +27,8 @@ const Menu = (
   isSmallScreen: boolean
 ) => {
   const [collapsed, setCollapsed] = useState(true);
-  const signedIn = displayName !== '';
-  const profileButton = (
+  const signedIn: boolean = displayName !== '';
+  const profileButton: JSX.Element = (
     <li className="menu__item">
       <a type="text" href={`/profiles/${googleId}`} className="right">
         <UnorderedListOutlined /> My Profile
@@ -36,7 +36,7 @@ const Menu = (
     </li>
   );
 
-  const signoutButton = (
+  const signoutButton: JSX.Element = (
     <li className="menu__item">
       <a type="text" href="/api/logout" className="signout right">
         <LogoutOutlined /> Sign Out
@@ -44,7 +44,7 @@ const Menu = (
     </li>
   );
 
-  const userNameDisplay = (
+  const userNameDisplay: JSX.Element = (
     <span>
       <span className="userIcon">
         <UserOutlined />
@@ -53,7 +53,7 @@ const Menu = (
     </span>
   );
 
-  const brandHeader = (
+  const brandHeader: JSX.Element = (
     <li className="menu__item">
       <Link to="/dashboard">
         <h5>{signedIn ? userNameDisplay : 'Paper-A-Week'}</h5>
@@ -61,7 +61,7 @@ const Menu = (
     </li>
   );
 
-  const expandedMenu = (
+  const expandedMenu: JSX.Element = (
     <ul className="menu">
       <span className="flex">{brandHeader}</span>
 
@@ -74,7 +74,13 @@ const Menu = (
     </ul>
   );
 
-  const hiddenItems = [
+  interface HiddenItem {
+    name: 'drafts' | 'profileButton' | 'signoutButton' | 'info';
+    requireSignIn: boolean;
+    content: JSX.Element;
+  }
+
+  const hiddenItems: HiddenItem[] = [
     {
       name: 'drafts',
       requireSignIn: true,
@@ -97,7 +103,7 @@ const Menu = (
     },
   ];
 
-  const hiddenContent = hiddenItems.map(item => {
+  const hiddenContent: Maybe<JSX.Element>[] = hiddenItems.map(item => {
     if (collapsed) {
       return null;
     }
@@ -112,7 +118,7 @@ const Menu = (
   // eslint-disable-next-line no-nested-ternary
   const menuHeight = collapsed ? '0px' : signedIn ? '130px' : '30px';
 
-  const collapsedMenu = (
+  const collapsedMenu: JSX.Element = (
     <ul className="menu collapsed">
       <span className="flex">
         {brandHeader}
@@ -137,7 +143,7 @@ const Menu = (
 export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps): JSX.Element {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
-  const draftMenuItem =
+  const draftMenuItem: Maybe<JSX.Element> =
     numberOfDrafts === 0 ? null : (
       <>
         <Link to="/drafts">
@@ -159,7 +165,7 @@ export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps):
     </div>
   );
 
-  const infoPopover = (
+  const infoPopover: JSX.Element = (
     <Popover content={infoContent} title="About Paper-A-Week" placement="bottomRight">
       <div>
         <InfoCircleOutlined /> About
