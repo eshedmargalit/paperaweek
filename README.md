@@ -28,6 +28,13 @@ MONGO_URI=
 REACT_APP_MSCOG_KEY1=
 ```
 
+#### Mongo Databases
+
+We have two databases, one for development/staging, and one used in deployment.
+The deployment database should never be used during writing or testing of code.
+
+##### Development/Staging
+
 For development, we use the Mongo Atlas cluster "pawnonprodcluster" and the database
 `paw`. An example connection string for that database looks like:
 
@@ -36,6 +43,8 @@ mongodb+srv://<user>:<password>@pawnonprodcluster.ewbc6.mongodb.net/paw?retryWri
 ```
 
 where `user` and `password` correspond to your credentials on the Mongo Atlas project.
+
+##### Deployment
 
 For deployment, we use the Mongo Atlas cluster "paperaweekdev" with the database `test`.
 An example connection string for that database looks like:
