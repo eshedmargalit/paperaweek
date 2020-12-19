@@ -4,16 +4,15 @@
 
 ### Backend Stack
 
-- [Search Engine][microsoft cognitive services](https://azure.microsoft.com/en-us/services/cognitive-services/)
-- [Object Document Mapping (ODM)][mongoose](https://mongoosejs.com/)
-- [Server] Node.js + [Express.js](https://expressjs.com/)
-- [Testing][mocha](https://mochajs.org/)
-- [Deployment] Google Cloud Run + Docker
+- Search Engine: [Microsoft Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/)
+- Object Document Mapping (ODM): [Mongoose](https://mongoosejs.com/)
+- Server: Node.js + [Express.js](https://expressjs.com/)
+- Deployment: Google Cloud Run + Docker
 
 ### Frontend Stack
 
-- [Components and Style][ant design](https://ant.design/)
-- [JS Library] React + Redux
+- Components and Style: [ant design](https://ant.design/)
+- JS Library: React + Redux
 
 ## Development
 
@@ -27,6 +26,22 @@ GOOGLE_CLIENT_SECRET=
 COOKIE_KEY=
 MONGO_URI=
 REACT_APP_MSCOG_KEY1=
+```
+
+For development, we use the Mongo Atlas cluster "pawnonprodcluster" and the database
+`paw`. An example connection string for that database looks like:
+
+```text
+mongodb+srv://<user>:<password>@pawnonprodcluster.ewbc6.mongodb.net/paw?retryWrites=true&w=majority
+```
+
+where `user` and `password` correspond to your credentials on the Mongo Atlas project.
+
+For deployment, we use the Mongo Atlas cluster "paperaweekdev" with the database `test`.
+An example connection string for that database looks like:
+
+```text
+mongodb+srv://<user>:<password>@paperaweekdev-luhxd.mongodb.net/test?retryWrites=true"
 ```
 
 ### Code Style
