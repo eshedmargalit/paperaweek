@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Row, Col, Spin, PageHeader } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import NotFound from '../NotFound/NotFound';
 
@@ -9,10 +9,10 @@ import MinimalStatBox from '../MinimalStatBox';
 import Preferences from '../Preferences';
 import { Maybe, Profile, Review } from '../../types';
 
-export interface PublicProfileViewProps extends Profile {
+export interface PublicProfileViewProps extends Partial<Profile> {
   loading: boolean;
   reviewIdToOpen: Review['_id'];
-  onChange: never;
+  onChange: VoidFunction;
 }
 
 export default function PublicProfileView({
@@ -38,7 +38,7 @@ export default function PublicProfileView({
   ) : null;
 
   // map reviewId to review
-  const reviewToOpen: Review | undefined = reviews.find(review => review._id === reviewIdToOpen);
+  const reviewToOpen: Review | undefined = reviews ? reviews.find(review => review._id === reviewIdToOpen) : undefined;
 
   const profileView: JSX.Element = reviews ? (
     <>

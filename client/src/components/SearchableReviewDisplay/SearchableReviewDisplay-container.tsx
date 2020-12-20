@@ -26,12 +26,12 @@ const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
 interface SearchableReviewDisplayContainerProps {
   reviews: Review[];
   reviewToOpen?: Review;
-  renderMath: boolean;
-  itemName: string;
+  renderMath?: boolean;
+  itemName?: string;
   pageHeaderProps: PageHeaderProps;
   hideFooter: boolean;
-  deleteItemFunc: (selectedReview: Review) => void;
-  handleModalEdit: (selectedReview: Review) => void;
+  deleteItemFunc?: (selectedReview: Review) => void;
+  handleModalEdit?: (selectedReview: Review) => void;
   handleModalCopy?: () => void;
 }
 
