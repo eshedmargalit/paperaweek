@@ -46,3 +46,9 @@ export interface User {
   publicProfile: boolean;
   renderMath: boolean;
 }
+
+export interface Profile {
+  userDisplayName: string;
+  reviews: Review[];
+  isOwnPage: boolean;
+}

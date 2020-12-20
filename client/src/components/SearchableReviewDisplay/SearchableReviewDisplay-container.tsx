@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Fuse from 'fuse.js';
 import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import { Maybe, Review } from '../../types';
+import { PageHeaderProps } from 'antd/lib/page-header';
 
 const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
   if (query === '') {
@@ -27,7 +28,7 @@ interface SearchableReviewDisplayContainerProps {
   reviewToOpen?: Review;
   renderMath: boolean;
   itemName: string;
-  pageHeaderProps: { pageHeaderTitle: string; onPageBack: () => void };
+  pageHeaderProps: PageHeaderProps;
   hideFooter: boolean;
   deleteItemFunc: (selectedReview: Review) => void;
   handleModalEdit: (selectedReview: Review) => void;
@@ -55,7 +56,7 @@ export default function SearchableReviewDisplayContainer({
   };
 
   const handleModalClose = () => {
-    setSelectedReview(null);
+    setSelectedReview(undefined);
     setShowModal(false);
   };
 

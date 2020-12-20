@@ -4,10 +4,11 @@ import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { ColumnsType } from 'antd/es/table';
+import { PageHeaderProps } from 'antd/lib/page-header';
 import { shortenAuthors, shortenString, getTagColor } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import './SearchableReviewDisplay.scss';
-import { Maybe, Review } from '../../types';
+import { Review } from '../../types';
 
 const { confirm } = Modal;
 
@@ -103,6 +104,7 @@ const renderTags = (tags: string[], handleSearch: SearchHandler) => {
           color={getTagColor(tag)}
           onClick={e => {
             e.stopPropagation();
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             handleSearch(`${e.target.innerHTML}`);
           }}
@@ -120,10 +122,10 @@ const renderTags = (tags: string[], handleSearch: SearchHandler) => {
 interface ModalProps {
   deleteConfirmHandler: VoidHandler;
   handleModalEdit: VoidHandler;
-  handleModalCopy: VoidHandler;
+  handleModalCopy?: VoidHandler;
   handleModalClose: VoidHandler;
   showModal: boolean;
-  modalReview: Maybe<Review>;
+  modalReview?: Review;
   renderMath: boolean;
   itemName: string;
 }
@@ -135,7 +137,7 @@ interface SearchableReviewDisplayViewProps {
   reviews: Review[];
   modalProps: ModalProps;
   hideFooter: boolean;
-  pageHeaderProps: { pageHeaderTitle: string; onPageBack: () => void };
+  pageHeaderProps: PageHeaderProps;
 }
 
 export default function SearchableReviewDisplayView({
@@ -158,16 +160,11 @@ export default function SearchableReviewDisplayView({
     itemName,
   } = modalProps;
 
-  const { pageHeaderTitle, onPageBack } = pageHeaderProps;
+  const pageHeader: JSX.Element = (
+    <PageHeader {...pageHeaderProps} avatar={pageHeaderProps.onBack ? undefined : { icon: <ReadOutlined /> }} />
+  );
 
-  let pageHeader;
-  if (onPageBack) {
-    pageHeader = <PageHeader title={pageHeaderTitle} onBack={onPageBack} />;
-  } else {
-    pageHeader = <PageHeader title={pageHeaderTitle} avatar={{ icon: <ReadOutlined /> }} />;
-  }
-
-  const searchRow = (
+  const searchRow: JSX.Element = (
     <Row className="review-reader">
       <Col lg={8} sm={24}>
         {pageHeader}

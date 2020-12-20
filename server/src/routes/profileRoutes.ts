@@ -2,13 +2,13 @@ import { Application } from 'express';
 import { IReview } from '../models/Review';
 import UserModel, { IUser } from '../models/User';
 
-interface FilteredData {
+interface Profile {
   userDisplayName?: string;
   reviews?: IReview[];
   isOwnPage?: boolean;
 }
 
-function filterUserData(user: IUser): FilteredData {
+function filterUserData(user: IUser): Profile {
   if (user.publicProfile) {
     return {
       userDisplayName: user.displayName,
