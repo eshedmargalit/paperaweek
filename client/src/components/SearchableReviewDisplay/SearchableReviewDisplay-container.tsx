@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Fuse from 'fuse.js';
-import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
-import { Maybe, Review } from '../../types';
 import { PageHeaderProps } from 'antd/lib/page-header';
+import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
+import { Review } from '../../types';
 
 const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
   if (query === '') {

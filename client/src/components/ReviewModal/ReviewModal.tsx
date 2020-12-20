@@ -5,6 +5,14 @@ import axios from 'axios';
 import { renderCommaSepList, wrapMarkdownWithMath } from '../utils';
 import { Maybe, Review } from '../../types';
 
+export interface ReviewModalProps {
+  review: Review;
+  renderMath: boolean;
+  visible: boolean;
+  onClose: VoidFunction;
+  footer: Maybe<JSX.Element[]>;
+}
+
 const getTagColor = (tag: string) => {
   let hash = 0;
   for (let i = 0; i < tag.length; i++) {
@@ -55,14 +63,6 @@ const fields = [
     reviewKey: 'other_points',
   },
 ] as const;
-
-export interface ReviewModalProps {
-  review: Review;
-  renderMath: boolean;
-  visible: boolean;
-  onClose: never;
-  footer: never;
-}
 
 export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const [renderMath, setRenderMath] = useState<boolean>(props.renderMath);

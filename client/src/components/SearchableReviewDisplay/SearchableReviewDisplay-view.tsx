@@ -15,6 +15,34 @@ const { confirm } = Modal;
 type SearchHandler = (q: string) => void;
 type VoidHandler = () => void;
 
+const renderTags = (tags: string[], handleSearch: SearchHandler) => {
+  let tagRender = null;
+
+  if (tags && tags.length > 0) {
+    tagRender = tags.map(tag => {
+      if (tag === '') {
+        return null;
+      }
+      return (
+        <Tag
+          color={getTagColor(tag)}
+          onClick={e => {
+            e.stopPropagation();
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            handleSearch(`${e.target.innerHTML}`);
+          }}
+          style={{ marginBottom: '8px' }}
+          key={tag}
+        >
+          {tag}
+        </Tag>
+      );
+    });
+  }
+  return tagRender;
+};
+
 const handleModalDelete = (onOkHandler: VoidHandler) => {
   confirm({
     title: 'Are you sure delete this review?',
@@ -42,8 +70,8 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
     {
       title: 'One Sentence',
       dataIndex: ['paper', 'one_sentence'],
-      render: (one_sentence: string) => (
-        <span>{shortenString(one_sentence, displaySettings.oneSentenceStringLengthLimit)}</span>
+      render: (oneSentence: string) => (
+        <span>{shortenString(oneSentence, displaySettings.oneSentenceStringLengthLimit)}</span>
       ),
     },
     {
@@ -78,45 +106,19 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 
   return (
     <Table
-      onRow={(review, reviewIndex) => ({
+      onRow={review => ({
         onClick: () => {
           reviewClicked(review);
         },
       })}
+      // TODO: Create a type in which _id is required and use it here instead of Review
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       rowKey={review => review._id!}
       columns={columns}
       dataSource={reviews}
       pagination={reviews.length > 10 && { position: ['bottomRight'] }}
     />
   );
-};
-
-const renderTags = (tags: string[], handleSearch: SearchHandler) => {
-  let tagRender = null;
-
-  if (tags && tags.length > 0) {
-    tagRender = tags.map(tag => {
-      if (tag === '') {
-        return null;
-      }
-      return (
-        <Tag
-          color={getTagColor(tag)}
-          onClick={e => {
-            e.stopPropagation();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            handleSearch(`${e.target.innerHTML}`);
-          }}
-          style={{ marginBottom: '8px' }}
-          key={tag}
-        >
-          {tag}
-        </Tag>
-      );
-    });
-  }
-  return tagRender;
 };
 
 interface ModalProps {
@@ -206,7 +208,6 @@ export default function SearchableReviewDisplayView({
     </Row>
   );
 
-  let reviewModal = null;
   const modalFooter = [
     <Link to="/form" key="edit">
       <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
@@ -234,15 +235,6 @@ export default function SearchableReviewDisplayView({
   }
 
   const footer = hideFooter ? null : modalFooter;
-  reviewModal = (
-    <ReviewModal
-      review={modalReview}
-      visible={showModal}
-      renderMath={renderMath}
-      onClose={handleModalClose}
-      footer={footer}
-    />
-  );
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 
@@ -250,7 +242,15 @@ export default function SearchableReviewDisplayView({
     <>
       {searchRow}
       {reviewsTable}
-      {reviewModal}
+      {modalReview && (
+        <ReviewModal
+          review={modalReview}
+          visible={showModal}
+          renderMath={renderMath}
+          onClose={handleModalClose}
+          footer={footer}
+        />
+      )}
     </>
   );
 }
