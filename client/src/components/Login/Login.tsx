@@ -1,42 +1,48 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Card, Col, notification, Row,
-} from 'antd';
+import { Card, Col, notification, Row } from 'antd';
 import { CalendarOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import GoogleButton from '../GoogleButton';
 import './Login.scss';
+import { RootState } from '../../reducers';
+import { User } from '../../types';
+
+interface LoginProps {
+  justSignedOut: boolean;
+  location: Location;
+}
 
 const openNotification = () => {
   notification.open({
     message: 'Logout successful, see you soon!',
     icon: <SmileOutlined />,
-    onClick: () => {
-      console.log('Notification Clicked!');
-    },
   });
 };
 
-export default function Login({ justSignedOut, location }) {
+export default function Login({ justSignedOut, location }: LoginProps): JSX.Element {
   useEffect(() => {
     if (justSignedOut) {
       openNotification();
     }
   });
 
-  const auth = useSelector((state) => state.auth);
-  const redirect = (
-    <Redirect
-      to={{
-        pathname: '/dashboard',
-        state: { from: location },
-      }}
-    />
-  );
+  const user: User = useSelector((state: RootState) => state.auth);
 
-  const login = (
+  if (!user) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/dashboard',
+          state: { from: location },
+        }}
+      />
+    );
+  }
+
+  return (
     <div>
       <LazyHero
         className="login__lazy-hero"
@@ -50,7 +56,7 @@ export default function Login({ justSignedOut, location }) {
         <GoogleButton colorMode="dark" />
       </LazyHero>
       <div className="login__bottom-tray">
-        <Row gutter={16} type="flex">
+        <Row gutter={16}>
           <Col span={12}>
             <Card style={{ height: '100%' }}>
               <Card.Meta
@@ -73,5 +79,4 @@ export default function Login({ justSignedOut, location }) {
       </div>
     </div>
   );
-  return auth ? redirect : login;
 }

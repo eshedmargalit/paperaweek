@@ -12,41 +12,48 @@ import {
 import { useMedia } from 'react-media';
 
 import './MenuBar.scss';
+import { Maybe, User } from '../../types';
 
-const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) => {
+export interface MenuBarViewProps {
+  user: User;
+  numberOfDrafts: number;
+}
+
+const Menu = (
+  displayName: string,
+  googleId: User['googleId'],
+  draftMenuItem: Maybe<JSX.Element>,
+  infoPopover: JSX.Element,
+  isSmallScreen: boolean
+) => {
   const [collapsed, setCollapsed] = useState(true);
-  const signedIn = displayName !== '';
-  const profileButton = (
+  const signedIn: boolean = displayName !== '';
+  const profileButton: JSX.Element = (
     <li className="menu__item">
       <a type="text" href={`/profiles/${googleId}`} className="right">
-        <UnorderedListOutlined />
-        {' '}
-        My Profile
+        <UnorderedListOutlined /> My Profile
       </a>
     </li>
   );
 
-  const signoutButton = (
+  const signoutButton: JSX.Element = (
     <li className="menu__item">
       <a type="text" href="/api/logout" className="signout right">
-        <LogoutOutlined />
-        {' '}
-        Sign Out
+        <LogoutOutlined /> Sign Out
       </a>
     </li>
   );
 
-  const userNameDisplay = (
+  const userNameDisplay: JSX.Element = (
     <span>
       <span className="userIcon">
         <UserOutlined />
-      </span>
-      {' '}
+      </span>{' '}
       {displayName}
     </span>
   );
 
-  const brandHeader = (
+  const brandHeader: JSX.Element = (
     <li className="menu__item">
       <Link to="/dashboard">
         <h5>{signedIn ? userNameDisplay : 'Paper-A-Week'}</h5>
@@ -54,7 +61,7 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
     </li>
   );
 
-  const expandedMenu = (
+  const expandedMenu: JSX.Element = (
     <ul className="menu">
       <span className="flex">{brandHeader}</span>
 
@@ -67,7 +74,13 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
     </ul>
   );
 
-  const hiddenItems = [
+  interface HiddenItem {
+    name: 'drafts' | 'profileButton' | 'signoutButton' | 'info';
+    requireSignIn: boolean;
+    content: JSX.Element;
+  }
+
+  const hiddenItems: HiddenItem[] = [
     {
       name: 'drafts',
       requireSignIn: true,
@@ -90,7 +103,7 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
     },
   ];
 
-  const hiddenContent = hiddenItems.map((item) => {
+  const hiddenContent: Maybe<JSX.Element>[] = hiddenItems.map(item => {
     if (collapsed) {
       return null;
     }
@@ -102,9 +115,10 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
   });
 
   const menuHiddenClass = collapsed ? 'menuHidden' : 'menuExpanded';
+  // eslint-disable-next-line no-nested-ternary
   const menuHeight = collapsed ? '0px' : signedIn ? '130px' : '30px';
 
-  const collapsedMenu = (
+  const collapsedMenu: JSX.Element = (
     <ul className="menu collapsed">
       <span className="flex">
         {brandHeader}
@@ -126,49 +140,35 @@ const Menu = (displayName, googleId, draftMenuItem, infoPopover, isSmallScreen) 
   return isSmallScreen ? collapsedMenu : expandedMenu;
 };
 
-export default function MenuBarView({ user, numberOfDrafts }) {
+export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps): JSX.Element {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
-  const draftMenuItem = numberOfDrafts === 0 || (
-    <>
-      <Link to="/drafts">
-        Drafts
-        {' '}
-        <Badge count={numberOfDrafts} className="menu__badge" />
-      </Link>
-    </>
-  );
+  const draftMenuItem: Maybe<JSX.Element> =
+    numberOfDrafts === 0 ? null : (
+      <>
+        <Link to="/drafts">
+          Drafts <Badge count={numberOfDrafts} className="menu__badge" />
+        </Link>
+      </>
+    );
 
   const infoContent = (
     <div className="infoContent">
-      Paper-a-Week began as an experiment in accountability, hosted on
-      {' '}
+      Paper-a-Week began as an experiment in accountability, hosted on{' '}
       <a href="https://www.eshedmargalit.com/#/PaperReviews">my personal website</a>
-      . The goal is simple: build a
-      literature-reading habit by writing a structured review of one paper per week. Reviews can be searched, sorted,
-      and shared with others. Thank you for using Paper-A-Week, I hope it helps you!
-      <hr />
-      {' '}
-      If you have suggestions or
-      run into problems, please send me an email at
-      <code>eshed [dot] margalit [at] gmail [dot] com</code>
-      {' '}
-      <br />
-      <br />
-      {' '}
-      Happy reviewing!
-      <br />
-      {' '}
-      -Eshed
+      . The goal is simple: build a literature-reading habit by writing a structured review of one paper per week.
+      Reviews can be searched, sorted, and shared with others. Thank you for using Paper-A-Week, I hope it helps you!
+      <hr /> If you have suggestions or run into problems, please send me an email at
+      <code>eshed [dot] margalit [at] gmail [dot] com</code> <br />
+      <br /> Happy reviewing!
+      <br /> -Eshed
     </div>
   );
 
-  const infoPopover = (
+  const infoPopover: JSX.Element = (
     <Popover content={infoContent} title="About Paper-A-Week" placement="bottomRight">
       <div>
-        <InfoCircleOutlined />
-        {' '}
-        About
+        <InfoCircleOutlined /> About
       </div>
     </Popover>
   );

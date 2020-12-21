@@ -37,6 +37,7 @@ export interface Review {
 }
 
 export interface User {
+  googleId: string;
   displayName: string;
   reviews: Review[];
   readingList: Paper[];
