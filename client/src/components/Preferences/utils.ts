@@ -1,3 +1,6 @@
+// These aren't typed because they're so specific and not reusable, the inferred literal type serves
+// our purposes just fine.
+
 export const formItemLayout = {
   labelCol: {
     xl: { span: 3 },
