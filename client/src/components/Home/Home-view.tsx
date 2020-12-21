@@ -6,10 +6,16 @@ import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
+import { User } from '../../types';
 
-export default function HomeView({ auth }) {
-  const loginRedirect = <Redirect to="/" push />;
-  const homeRender = (
+export interface HomeViewProps {
+  user: User;
+}
+
+export default function HomeView({ user }: HomeViewProps) {
+  if (!user) return <Redirect to="/" push />;
+
+  return (
     <div className="width80">
       <Row>
         <Col lg={{ span: '16' }} sm={{ span: '24' }}>
@@ -26,6 +32,4 @@ export default function HomeView({ auth }) {
       </Row>
     </div>
   );
-
-  return auth ? homeRender : loginRedirect;
 }
