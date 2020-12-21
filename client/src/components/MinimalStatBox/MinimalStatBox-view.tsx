@@ -4,7 +4,7 @@ import { getReviewStats } from '../utils';
 import { Review } from '../../types';
 
 interface MinimimalStatBoxViewProps {
-  userDisplayName: string;
+  userDisplayName?: string;
   reviews: Review[];
 }
 

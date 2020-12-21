@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-plusplus */
-import React from 'react';
+import React, { ElementType } from 'react';
 import moment from 'moment';
 
 import { InlineMath, BlockMath } from 'react-katex';
@@ -122,14 +122,21 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
 
 export const isDOI = (query: string): boolean => query.startsWith('10.') || query.includes('doi.org');
 
-export const wrapMarkdownWithMath = (s: string): JSX.Element => {
-  const renderers = {
-    // @ts-ignore
+/**
+ * This type comes from the ReactMarkdown package. We're declaring it ourselves because it isn't exported.
+ */
+type RenderersProps = { [nodeType: string]: ElementType };
+
+export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
+  const renderers: RenderersProps = {
     inlineMath: ({ value }) => <InlineMath math={value} />,
 
-    // @ts-ignore
     math: ({ value }) => <BlockMath math={value} />,
   };
 
-  return <ReactMarkdown plugins={[math]} renderers={renderers} children={s} />;
+  return (
+    <ReactMarkdown plugins={[math]} renderers={renderers}>
+      {markdownString}
+    </ReactMarkdown>
+  );
 };
