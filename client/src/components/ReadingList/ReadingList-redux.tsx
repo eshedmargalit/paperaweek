@@ -16,8 +16,8 @@ export default function ReadingListRedux(): JSX.Element {
   const updateReadingListFunc = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));
 
-    const res = await axios.put('api/readingList', newReadingList);
-    dispatch(updateReadingList(res.data));
+    const { data } = await axios.put<Paper[]>('api/readingList', newReadingList);
+    dispatch(updateReadingList(data));
   };
 
   const handleEditClick = (paper: Paper) => {
