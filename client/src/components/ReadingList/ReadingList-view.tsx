@@ -2,19 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Empty, List, PageHeader } from 'antd';
 import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
-import {
-  SortableContainer,
-  SortableContainerProps,
-  SortableElement,
-  SortableElementProps,
-  SortableHandle,
-  SortEndHandler,
-} from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortableHandle, SortEndHandler } from 'react-sortable-hoc';
 import moment from 'moment';
 import Infinite from 'react-infinite';
 import { shortenAuthors } from '../utils';
 import './ReadingList.scss';
-import { Paper, Review } from '../../types';
+import { Paper } from '../../types';
 
 const LIST_HEIGHT = 340;
 const ITEM_HEIGHT = 130;
@@ -73,12 +66,13 @@ const SortableInfiniteList = SortableContainer(
       <Infinite containerHeight={LIST_HEIGHT} elementHeight={ITEM_HEIGHT}>
         {items.map((value, index) => (
           <SortableItem
+            height={ITEM_HEIGHT}
             key={`item-${value.title}`}
             index={index}
             sortIndex={index}
             value={value}
-            editClickHandler={handleEditClick}
-            deleteClickHandler={handleDeleteClick}
+            handleEditClick={handleEditClick}
+            handleDeleteClick={handleDeleteClick}
           />
         ))}
       </Infinite>
@@ -89,7 +83,7 @@ const SortableInfiniteList = SortableContainer(
 export interface ReadingListViewProps {
   onSortEnd: SortEndHandler;
   items: Paper[];
-  handleEditClick: (review: Review) => void;
+  handleEditClick: (paper: Paper) => void;
   handleDeleteClick: (paper: Paper) => void;
 }
 
@@ -109,8 +103,8 @@ export default function ReadingListView({
     <SortableInfiniteList
       onSortEnd={onSortEnd}
       items={items}
-      editClickHandler={handleEditClick}
-      deleteClickHandler={handleDeleteClick}
+      handleEditClick={handleEditClick}
+      handleDeleteClick={handleDeleteClick}
       useDragHandle
     />
   );
