@@ -3,12 +3,12 @@ import { Card, Row, Statistic } from 'antd';
 import { getReviewStats } from '../utils';
 import { Review } from '../../types';
 
-interface MinimimalStatBoxViewProps {
+export interface MinimalStatBoxViewProps {
   userDisplayName?: string;
   reviews: Review[];
 }
 
-export default function MinimalStatBoxView({ userDisplayName, reviews }: MinimimalStatBoxViewProps): JSX.Element {
+export default function MinimalStatBoxView({ userDisplayName, reviews }: MinimalStatBoxViewProps): JSX.Element {
   const emptyStats = (
     <Row>
       <p>
