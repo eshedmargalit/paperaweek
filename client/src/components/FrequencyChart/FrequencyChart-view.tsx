@@ -25,6 +25,12 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
     data.push({ reviewIdx: i + 1, date: sortedDates[i + 1], gap: diff });
   }
 
+  const yAxisText = (
+    <Text x={0} y={0} dx={40} dy={150} offset={0} angle={-90}>
+      Days Between Reviews
+    </Text>
+  );
+
   let chart = <Spin />;
 
   if (data) {
@@ -46,15 +52,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
             <XAxis dataKey="reviewIdx">
               <Label value="Review Number" offset={-15} position="insideBottom" />
             </XAxis>
-            <YAxis
-              // eslint-disable-next-line prettier/prettier
-              label={
-                <Text x={0} y={0} dx={40} dy={150} offset={0} angle={-90}>
-                  Days Between Reviews
-                </Text>
-                // eslint-disable-next-line prettier/prettier
-              }
-            />
+            <YAxis label={yAxisText} />
             <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
           </LineChart>
         </ResponsiveContainer>
