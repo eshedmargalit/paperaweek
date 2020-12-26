@@ -43,24 +43,28 @@ const renderTags = (tags: string[] | undefined) => {
 
 const fields = [
   {
-    heading: 'Background',
-    reviewKey: 'background_points',
+    heading: 'Overview',
+    notesKey: 'overview',
   },
   {
-    heading: 'Approach',
-    reviewKey: 'approach_points',
+    heading: 'Background',
+    notesKey: 'background',
+  },
+  {
+    heading: 'Methods',
+    notesKey: 'methods',
   },
   {
     heading: 'Results',
-    reviewKey: 'results_points',
+    notesKey: 'results',
   },
   {
     heading: 'Conclusions',
-    reviewKey: 'conclusions_points',
+    notesKey: 'conclusions',
   },
   {
     heading: 'Other Information',
-    reviewKey: 'other_points',
+    notesKey: 'other',
   },
 ] as const;
 
@@ -83,7 +87,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
       <div key={field.heading}>
         <strong>{field.heading}</strong>
         <ul>
-          {notes[field.reviewKey].map(point => {
+          {notes[field.notesKey].map((point: string) => {
             if (point !== '') {
               empty = false;
             }
@@ -99,7 +103,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const titleDiv = (
     <div>
       <div>{paper.title}</div>
-      <div>{renderTags(paper.keywords)}</div>
+      <div>{renderTags(notes.keywords)}</div>
     </div>
   );
 
@@ -137,7 +141,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
         <br />
         <strong>TLDR</strong>
         <br />
-        {paper.one_sentence}
+        {notes.tldr}
         <hr />
         <div style={{ float: 'right' }}>{toggleSwitch}</div>
         {reviewBody}

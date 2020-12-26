@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { PageHeader } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
+import { Maybe } from '../../types';
 
-function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }) {
+interface ReviewWizardViewProps {
+  autosaveStatus: string;
+  lastSave: Maybe<Moment>;
+  form: JSX.Element;
+  modal: JSX.Element;
+  onPageBack: () => void;
+}
+function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
 
   useEffect(() => {

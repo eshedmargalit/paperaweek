@@ -5,6 +5,7 @@ import { Card, Col, notification, Row } from 'antd';
 import { CalendarOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
+import { Location } from 'history';
 import GoogleButton from '../GoogleButton';
 import './Login.scss';
 import { RootState } from '../../reducers';

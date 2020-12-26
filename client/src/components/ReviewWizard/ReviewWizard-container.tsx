@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import _, { uniq as _uniq } from 'lodash';
+import { debounce as _debounce } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
@@ -10,19 +10,6 @@ import ReviewWizardView from './ReviewWizard-view';
 import { Notes, Paper, Review, Maybe } from '../../types';
 
 const MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
-
-// TODO: use this somewhere
-const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
-  if (Array.isArray(keywords)) {
-    return keywords;
-  }
-
-  return _uniq(
-    keywords.split(',').map(item => {
-      return item.trim().toLowerCase();
-    })
-  );
-};
 
 interface ReviewWizardContainerProps {
   initialPaper: Paper;
@@ -61,7 +48,7 @@ export default function ReviewWizardContainer({
 
   // save at most every 5 seconds
   const autosave = useCallback(
-    _.debounce((newPaper, newReview) => {
+    _debounce((newPaper, newReview) => {
       saveDraft(newPaper, newReview);
     }, MS_BETWEEN_DRAFT_SAVES),
     []
@@ -111,7 +98,13 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={{ paper, notes }} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
+      <ReviewModal
+        review={{ paper, notes }}
+        visible={showModal}
+        onClose={onModalCancel}
+        footer={modalFooter}
+        renderMath
+      />
     </div>
   );
 

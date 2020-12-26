@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Button, Col, Row } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
-import { debounce as _debounce } from 'lodash';
+import { debounce as _debounce, uniq as _uniq } from 'lodash';
 import React, { useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as Yup from 'yup';
@@ -11,6 +11,18 @@ import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './Form
 import './ReviewWizard.scss';
 import { OnClickEventType } from './types';
 import { bulletNoteFields } from './utils';
+
+const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
+  if (Array.isArray(keywords)) {
+    return keywords;
+  }
+
+  return _uniq(
+    keywords.split(',').map(item => {
+      return item.trim().toLowerCase();
+    })
+  );
+};
 
 interface PAWFormProps {
   initialPaper: Paper;
@@ -48,7 +60,9 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
       validationSchema={validationSchema}
       onSubmit={values => onSubmit(values)}
       validate={values => {
-        debouncedOnChange(values);
+        const valuesToReturn = values;
+        valuesToReturn.notes.keywords = splitKeywordsIntoArray(values.notes.keywords);
+        debouncedOnChange(valuesToReturn);
       }}
     >
       {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (
