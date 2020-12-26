@@ -32,7 +32,7 @@ interface SearchableReviewDisplayContainerProps {
   hideFooter: boolean;
   deleteItemFunc?: (selectedReview: Review) => void;
   handleModalEdit?: (selectedReview: Review) => void;
-  handleModalCopy?: () => void;
+  handleModalCopy?: (selectedReview: Review) => void;
 }
 
 export default function SearchableReviewDisplayContainer({
@@ -61,15 +61,21 @@ export default function SearchableReviewDisplayContainer({
   };
 
   const deleteConfirmHandler = () => {
-    if (selectedReview) {
+    if (selectedReview && deleteItemFunc) {
       deleteItemFunc(selectedReview);
     }
     setShowModal(false);
   };
 
-  const modalEditHandler = () => {
-    if (selectedReview) {
+  const editReviewIfSelected = () => {
+    if (selectedReview && handleModalEdit) {
       handleModalEdit(selectedReview);
+    }
+  };
+
+  const copyReviewIfSelected = () => {
+    if (selectedReview && handleModalCopy) {
+      handleModalCopy(selectedReview);
     }
   };
 
@@ -77,11 +83,11 @@ export default function SearchableReviewDisplayContainer({
   const modalProps = {
     deleteConfirmHandler,
     handleModalClose,
-    handleModalEdit: modalEditHandler,
-    handleModalCopy,
+    handleModalEdit: editReviewIfSelected,
+    handleModalCopy: copyReviewIfSelected,
     showModal,
     modalReview: selectedReview,
-    renderMath,
+    renderMath: renderMath || true,
     itemName: itemName || 'Review',
   };
 

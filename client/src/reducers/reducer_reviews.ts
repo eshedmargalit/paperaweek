@@ -3,7 +3,7 @@ import { UPDATE_REVIEWS, FETCH_USER } from '../actions/actionTypes';
 import { FetchUserAction, UpdateReviewsAction } from '../actions/types';
 import { Review } from '../types';
 
-interface LoadingReviewList {
+export interface LoadingReviewList {
   reviewList: Review[];
   loading: boolean;
 }
