@@ -1,6 +1,7 @@
 import { Paper, Notes, Review, User } from './types';
 
 export const blankUser: User = {
+  googleId: '',
   displayName: '',
   reviews: [],
   readingList: [],
