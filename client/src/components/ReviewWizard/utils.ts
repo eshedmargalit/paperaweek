@@ -1,30 +1,33 @@
-type ReviewFieldKey = 'background_points' | 'approach_points' | 'results_points' | 'conclusions_points' | 'summary_points' | 'other_points';
+type BulletNoteField = 'overview' | 'background' | 'methods' | 'results' | 'conclusions' | 'other';
 
-interface ReviewFieldConfig { fieldName: ReviewFieldKey; label: string; }
+interface BulletNoteFieldConfig {
+  fieldName: BulletNoteField;
+  label: string;
+}
 
-export const reviewFields: ReviewFieldConfig[] = [
+export const bulletNoteFields: BulletNoteFieldConfig[] = [
   {
-    fieldName: 'background_points',
+    fieldName: 'overview',
     label: 'Background Info',
   },
   {
-    fieldName: 'approach_points',
+    fieldName: 'background',
     label: 'Approach',
   },
   {
-    fieldName: 'results_points',
+    fieldName: 'methods',
     label: 'Results',
   },
   {
-    fieldName: 'conclusions_points',
+    fieldName: 'results',
     label: 'Conclusions',
   },
   {
-    fieldName: 'summary_points',
+    fieldName: 'conclusions',
     label: 'Summary',
   },
   {
-    fieldName: 'other_points',
+    fieldName: 'other',
     label: 'Other',
   },
 ];

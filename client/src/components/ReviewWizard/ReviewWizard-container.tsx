@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import _ from 'lodash';
+import _, { uniq as _uniq } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
@@ -10,6 +10,19 @@ import ReviewWizardView from './ReviewWizard-view';
 import { Notes, Paper, Review, Maybe } from '../../types';
 
 const MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
+
+// TODO: use this somewhere
+const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
+  if (Array.isArray(keywords)) {
+    return keywords;
+  }
+
+  return _uniq(
+    keywords.split(',').map(item => {
+      return item.trim().toLowerCase();
+    })
+  );
+};
 
 interface ReviewWizardContainerProps {
   initialPaper: Paper;
@@ -21,6 +34,7 @@ interface ReviewWizardContainerProps {
   autosaveStatus: string;
   lastSave: Maybe<Moment>;
 }
+
 export default function ReviewWizardContainer({
   initialPaper,
   initialNotes,

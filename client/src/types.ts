@@ -6,7 +6,7 @@ export type MongoID = string;
 export type Color = string;
 
 export interface Paper {
-  id?: MongoID;
+  _id?: MongoID;
   createdAt?: Date;
   title: string;
   authors: string[];
@@ -15,18 +15,17 @@ export interface Paper {
   journal?: string;
   doi?: string;
   url?: string;
-  keywords?: string[];
-  one_sentence?: string;
-  review_date?: Date;
 }
 
 export interface Notes {
-  summary_points: string[];
-  background_points: string[];
-  approach_points: string[];
-  results_points: string[];
-  conclusions_points: string[];
-  other_points: string[];
+  overview: string[];
+  background: string[];
+  methods: string[];
+  results: string[];
+  conclusions: string[];
+  other: string[];
+  tldr: string;
+  keywords: string[];
 }
 
 export interface Review {

@@ -1,30 +1,16 @@
+// Not sure how to resolve this error to be honest... moving the <FieldArray> inside the <label> doesn't help
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import { Button, Col, Row } from 'antd';
+import { FieldArray, Form, Formik } from 'formik';
+import { debounce as _debounce } from 'lodash';
 import React, { useEffect } from 'react';
-import { Row, Col, Button } from 'antd';
-import { Form, FieldArray, Formik } from 'formik';
-import * as Yup from 'yup';
-import _ from 'lodash';
-import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
-import { reviewFields } from './utils';
-import './ReviewWizard.scss';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Notes, Paper, Review, Maybe } from '../../types';
+import * as Yup from 'yup';
+import { Notes, Paper, Review } from '../../types';
+import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
+import './ReviewWizard.scss';
 import { OnClickEventType } from './types';
-import { uniq as _uniq } from 'lodash';
-
-const parseKeywords = (keywords: Maybe<string | string[]>): string[] => {
-  if (!keywords) {
-    return [];
-  }
-
-  if (Array.isArray(keywords)) {
-    keywords = keywords.join(',');
-  }
-  return _uniq(
-    keywords.split(',').map(item => {
-      return item.trim().toLowerCase();
-    })
-  );
-};
+import { bulletNoteFields } from './utils';
 
 interface PAWFormProps {
   initialPaper: Paper;
@@ -33,7 +19,7 @@ interface PAWFormProps {
   onSubmit: (formValues: Review) => void;
 }
 export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps): JSX.Element {
-  const debouncedOnChange = _.debounce(onChange, 2000);
+  const debouncedOnChange = _debounce(onChange, 2000);
   const initialValues: Review = {
     paper: initialPaper,
     notes: initialNotes,
@@ -62,13 +48,10 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
       validationSchema={validationSchema}
       onSubmit={values => onSubmit(values)}
       validate={values => {
-        if (values.paper.keywords) {
-          values.paper.keywords = parseKeywords(values.paper.keywords);
-        }
         debouncedOnChange(values);
       }}
     >
-      {({ handleSubmit }: { handleSubmit: OnClickEventType}) => (
+      {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (
         <Form>
           <div>
             <h2> Paper Information </h2>
@@ -100,7 +83,7 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
             <hr />
             <h2> Your Review </h2>
             <Row className="form-group">
-              {reviewFields.map(({ fieldName, label }) => (
+              {bulletNoteFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
                   <FieldArray name={fieldName} component={DynamicTextAreaList} />

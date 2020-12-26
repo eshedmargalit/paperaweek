@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import _ from 'lodash';
 import ReviewWizardContainer from './ReviewWizard-container';
 import { updateReadingList, updateReviews, setReview } from '../../actions/index';
-import { blankPaper, blankReview } from './utils';
+import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
 import { Paper, Review } from '../../types';
@@ -21,17 +20,16 @@ export default function ReviewWizardRedux(): JSX.Element {
 
   // if the review is restarted, set the review in state to have no id, but keep
   // the contents
-  const restartReview = reviewContent => {
-    const reviewId = null;
-    dispatch(setReview(reviewId, reviewContent));
+  const restartReview = (review: Review) => {
+    dispatch(setReview(review));
   };
 
   const deleteReadingListEntry = async () => {
-    const { paperId } = activeReview;
+    const { _id } = activeReview;
     let newReadingList = readingList;
 
-    if (paperId) {
-      newReadingList = readingList.filter(currPaper => currPaper._id !== paperId);
+    if (_id) {
+      newReadingList = readingList.filter(currPaper => currPaper._id !== _id);
     }
 
     // update reading list in global state
@@ -42,17 +40,17 @@ export default function ReviewWizardRedux(): JSX.Element {
     dispatch(updateReadingList(res.data));
   };
 
-  const submitReview = async reviewObject => {
+  const submitReview = async (review: Review) => {
     // start the submission spinner
     setSubmitLoading(true);
 
-    const reviewId = activeReview.reviewContent ? activeReview.reviewContent._id : null;
+    const id = activeReview ? activeReview._id : null;
 
-    const method = reviewId ? 'put' : 'post';
+    const method = id ? 'put' : 'post';
     const url = '/api/papers';
     const data = {
-      review: reviewObject,
-      id: reviewId,
+      review,
+      id,
     };
 
     // send the request to the server
@@ -68,24 +66,10 @@ export default function ReviewWizardRedux(): JSX.Element {
     setSubmitLoading(false);
   };
 
-  // figure out if we already have a paper or a review
-  const { paperId, reviewContent } = activeReview;
+  const { paper, notes } = activeReview;
 
-  // always use the paperId if it exists, if not fall back to raw review (without a paper id)
-  let paper;
-  let review;
-
-  if (paperId) {
-    paper = _.find(readingList, { _id: paperId });
-  } else if (reviewContent) {
-    ({ paper, review } = reviewContent);
-  }
-
-  // set initial paper and review
-  // spread operator makes second argument overwrite first in case of key conflict
-  // this approach guarantees the initial object contains all necessary keys
   const initialPaper = { ...blankPaper, ...paper };
-  const initialReview = { ...blankReview, ...review };
+  const initialNotes = { ...blankNotes, ...notes };
 
   return (
     <ReviewWizardContainer
@@ -96,7 +80,7 @@ export default function ReviewWizardRedux(): JSX.Element {
       lastSave={lastSave}
       autosaveStatus={autosaveStatus}
       initialPaper={initialPaper}
-      initialReview={initialReview}
+      initialNotes={initialNotes}
     />
   );
 }
