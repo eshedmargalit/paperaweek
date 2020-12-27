@@ -11,7 +11,7 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
-import NAText from './SearchableReviewDisplay/NAText';
+import NAText from './NAText';
 
 export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
   items.map((item, i) => {

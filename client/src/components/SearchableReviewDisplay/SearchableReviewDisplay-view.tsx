@@ -8,7 +8,7 @@ import { PageHeaderProps } from 'antd/lib/page-header';
 import { isNull as _isNull } from 'lodash';
 import { shortenAuthors, getTagColor, shortenTableString } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import NAText from './NAText';
+import NAText from '../NAText';
 import './SearchableReviewDisplay.scss';
 import { Review } from '../../types';
 
