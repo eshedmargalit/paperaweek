@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Button, Card, Row, Col } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import FrequencyChart from '../FrequencyChart';
 
 import './StatBox.scss';
@@ -27,7 +28,9 @@ export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProp
           <p>
             <strong>Option 1</strong>: Click{' '}
             <Button onClick={setBlankReview} size="small">
-              Create Manual Entry <PlusCircleOutlined />
+              <Link to="/form">
+                Create Manual Entry <PlusCircleOutlined />
+              </Link>
             </Button>{' '}
             to start a review from scratch.
           </p>
