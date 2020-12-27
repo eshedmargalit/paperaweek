@@ -11,7 +11,7 @@ interface StatBoxViewProps {
   reviews: Review[];
   setBlankReview: () => void;
 }
-export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProps) {
+export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProps): JSX.Element {
   const emptyStats = (
     <Card title="Your Stats" style={{ marginTop: 5 }}>
       <Row>
@@ -34,7 +34,7 @@ export default function StatBoxView({ reviews, setBlankReview }: StatBoxViewProp
 
           <p>
             <strong>Option 2</strong>: Search for topics or authors with the search bar above. Click a result to add it
-            to your reading list for later, or "Start Review Now" to begin a review right away.
+            to your reading list for later, or &quot;Start Review Now&quot; to begin a review right away.
           </p>
         </Col>
       </Row>

@@ -11,6 +11,7 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
+import NAText from './NAText';
 
 export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
   items.map((item, i) => {
@@ -58,7 +59,7 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
   return newAuthorList;
 };
 
-export const shortenAuthors = (authors: string[]): string => {
+export const shortenAuthors = (authors: string[]): JSX.Element => {
   let authorString = '';
 
   if (authors.length === 2) {
@@ -69,11 +70,16 @@ export const shortenAuthors = (authors: string[]): string => {
     authorString = `${authors[0].split(' ').pop()} et al.`;
   }
 
-  return authorString;
+  return authorString === '' ? <NAText /> : <span>{authorString}</span>;
 };
 
-export const shortenString = (str: string, cutoff: number): string =>
-  str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str;
+export const shortenTableString = (str: string, cutoff: number): JSX.Element => {
+  if (str === '') {
+    return <NAText />;
+  }
+
+  return <span>{str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str}</span>;
+};
 
 export type HSLString = string;
 export type HexString = string;

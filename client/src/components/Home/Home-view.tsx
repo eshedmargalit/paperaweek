@@ -12,7 +12,7 @@ export interface HomeViewProps {
   user: User;
 }
 
-export default function HomeView({ user }: HomeViewProps) {
+export default function HomeView({ user }: HomeViewProps): JSX.Element {
   if (!user) return <Redirect to="/" push />;
 
   return (

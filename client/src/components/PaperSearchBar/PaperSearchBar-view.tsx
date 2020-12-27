@@ -13,7 +13,7 @@ const renderSearchResults = (
   handleStartReview: (paper: Paper) => void
 ) => {
   const renderedSearchResults = searchResults.map((result: Paper) => {
-    const { id, title, journal, date, authors } = result;
+    const { _id, title, journal, date, authors } = result;
     const year: Maybe<number> = date ? new Date(date).getFullYear() : null;
     const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4), 'author_names');
 
@@ -39,7 +39,7 @@ const renderSearchResults = (
     );
 
     return (
-      <Popover content={popOverContent} trigger="click" key={id} placement="right">
+      <Popover content={popOverContent} trigger="click" key={_id} placement="right">
         <div className="searchResult">
           <div className="paperSearch__result">
             <div>

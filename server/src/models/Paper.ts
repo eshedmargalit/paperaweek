@@ -8,9 +8,6 @@ export interface IPaper {
   journal: string;
   doi: string;
   url: string;
-  keywords: string[];
-  one_sentence: string;
-  review_date: string;
 }
 
 export interface PaperDocument extends IPaper, Document {}
@@ -24,9 +21,6 @@ const PaperSchema = new Schema(
     journal: String,
     doi: String,
     url: String,
-    keywords: [{ type: String }],
-    one_sentence: String,
-    review_date: String,
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

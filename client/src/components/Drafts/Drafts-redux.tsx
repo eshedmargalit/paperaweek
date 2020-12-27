@@ -37,8 +37,8 @@ export default function DraftsRedux(): JSX.Element {
   };
 
   const pageHeaderProps = {
-    pageHeaderTitle: 'Read Your Drafts',
-    onPageBack: () => setRedirectHome(true),
+    title: 'Your Drafts',
+    onBack: () => setRedirectHome(true),
   };
 
   return (
@@ -49,6 +49,7 @@ export default function DraftsRedux(): JSX.Element {
       handleModalEdit={handleModalEdit}
       pageHeaderProps={pageHeaderProps}
       itemName="Draft"
+      hideFooter={false}
     />
   );
 }

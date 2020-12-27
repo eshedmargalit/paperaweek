@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import _ from 'lodash';
+import { debounce as _debounce } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
@@ -21,6 +21,7 @@ interface ReviewWizardContainerProps {
   autosaveStatus: string;
   lastSave: Maybe<Moment>;
 }
+
 export default function ReviewWizardContainer({
   initialPaper,
   initialNotes,
@@ -47,7 +48,7 @@ export default function ReviewWizardContainer({
 
   // save at most every 5 seconds
   const autosave = useCallback(
-    _.debounce((newPaper, newReview) => {
+    _debounce((newPaper, newReview) => {
       saveDraft(newPaper, newReview);
     }, MS_BETWEEN_DRAFT_SAVES),
     []
@@ -56,7 +57,7 @@ export default function ReviewWizardContainer({
   const onChangeHandler = (newValues: Review) => {
     setPaper(newValues.paper);
     setNotes(newValues.notes);
-    autosave(paper, notes);
+    autosave(newValues.paper, newValues.notes);
   };
 
   /*
@@ -97,7 +98,13 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={{ paper, notes }} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
+      <ReviewModal
+        review={{ paper, notes }}
+        visible={showModal}
+        onClose={onModalCancel}
+        footer={modalFooter}
+        renderMath
+      />
     </div>
   );
 
