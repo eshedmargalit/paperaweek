@@ -70,7 +70,7 @@ export const shortenAuthors = (authors: string[]): JSX.Element => {
     authorString = `${authors[0].split(' ').pop()} et al.`;
   }
 
-  return authorString === '' ? <NAText /> : <span>authorString</span>;
+  return authorString === '' ? <NAText /> : <span>{authorString}</span>;
 };
 
 export const shortenTableString = (str: string, cutoff: number): JSX.Element => {
