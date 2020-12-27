@@ -14,14 +14,11 @@ import { IPaper } from '../models/Paper';
 const targets = ['title', 'journal', 'DOI', 'author', 'year', 'month', 'url'] as const;
 type Target = typeof targets[number];
 type ParsedData = Record<Target, string>;
-export type ParsedPaper = {
-  paper: Partial<IPaper>;
-  id: string;
-};
+export type ParsedPaper = Partial<IPaper>;
 
 const regExs = {} as Record<Target, RegExp>;
 
-targets.forEach((target) => {
+targets.forEach(target => {
   regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, 'g');
 });
 
@@ -34,7 +31,7 @@ export const parsedDoiToPaper = (parsedData: Partial<ParsedData>): ParsedPaper |
   const authors = parsedData.author.split(' and ');
 
   // authors have last names first, so we reverse the order
-  const authorsReordered = authors.map((author) => {
+  const authorsReordered = authors.map(author => {
     const parts = author.split(', ');
     return `${parts[1]} ${parts[0]}`;
   });
@@ -50,13 +47,13 @@ export const parsedDoiToPaper = (parsedData: Partial<ParsedData>): ParsedPaper |
     date,
     institutions: null, // needs to be null instead of [] for front-end to render correctly
   };
-  return { paper, id: parsedData.title };
+  return paper;
 };
 
 export const doiToPaper = (doiString: string): ParsedPaper | null => {
   const parsedData: Partial<ParsedData> = {};
 
-  targets.forEach((target) => {
+  targets.forEach(target => {
     const matchingData = doiString.trim().match(regExs[target]);
     if (!matchingData) return;
     parsedData[target] = matchingData[0];

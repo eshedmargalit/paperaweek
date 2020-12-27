@@ -13,7 +13,7 @@ import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
 
-export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
+export const renderCommaSepList = (items: string[]): JSX.Element[] =>
   items.map((item, i) => {
     let toRender;
     if (i === items.length - 1) {
@@ -40,7 +40,7 @@ export const renderCommaSepList = (items: string[], key: string): JSX.Element[] 
       // all others
       toRender = <span>{item}, </span>;
     }
-    return <span key={key}>{toRender}</span>;
+    return <span key={item}>{toRender}</span>;
   });
 
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {

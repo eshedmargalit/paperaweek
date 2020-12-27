@@ -68,5 +68,5 @@ export const processEntities = (entities: Entity[]): ParsedPaper[] =>
       journal: journal_name,
       url: entity_url,
     };
-    return { paper, id: entity.Id.toString() };
+    return paper;
   });
