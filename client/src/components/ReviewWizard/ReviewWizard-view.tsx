@@ -2,9 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { PageHeader } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
+import { PageHeaderProps } from 'antd/lib/page-header';
+import { Maybe } from '../../types';
 
-function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }) {
+interface ReviewWizardViewProps {
+  autosaveStatus: string;
+  lastSave: Maybe<Moment>;
+  form: JSX.Element;
+  modal: JSX.Element;
+  onPageBack: PageHeaderProps['onBack'];
+}
+function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
 
   useEffect(() => {
@@ -43,8 +52,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack })
 
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <SaveFilled /> Saved to Drafts
-          {timePassedText}
+          <SaveFilled /> Saved to Drafts {timePassedText}
         </div>
       );
       break;

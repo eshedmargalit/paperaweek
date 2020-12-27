@@ -83,8 +83,8 @@ export default function SearchableReviewDisplayContainer({
   const modalProps = {
     deleteConfirmHandler,
     handleModalClose,
-    handleModalEdit: editReviewIfSelected,
-    handleModalCopy: copyReviewIfSelected,
+    handleModalEdit: handleModalEdit && editReviewIfSelected,
+    handleModalCopy: handleModalCopy && copyReviewIfSelected,
     showModal,
     modalReview: selectedReview,
     renderMath: renderMath || true,

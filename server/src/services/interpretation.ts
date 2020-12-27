@@ -7,9 +7,12 @@ export const capitalCase = (input: string): string => {
     return '';
   }
 
-  const words = input.toLowerCase().trim().split(' ');
+  const words = input
+    .toLowerCase()
+    .trim()
+    .split(' ');
 
-  const filtered = words.filter((word) => word !== '');
+  const filtered = words.filter(word => word !== '');
 
   return filtered.reduce(
     (accum, word) =>
@@ -22,19 +25,24 @@ export const capitalCase = (input: string): string => {
 };
 
 export const processEntities = (entities: Entity[]): ParsedPaper[] =>
-  entities.map((entity) => {
+  entities.map(entity => {
     // sort authors by position (first author first, etc)
-    const authors = _.sortBy(entity.AA, [(o) => o.S]);
+    const authors = _.sortBy(entity.AA, [o => o.S]);
 
     // filter down to unique authors and remove empty entries
-    let author_names = _.uniq(authors.map((author) => capitalCase(author.DAuN.split('.').join('')))).filter(
-      (name) => name !== ''
+    let author_names = _.uniq(authors.map(author => capitalCase(author.DAuN.split('.').join('')))).filter(
+      name => name !== ''
     );
 
     // filter down to unique institutions and remove empty entries
-    let institutions = _.uniq(authors.map((author) => capitalCase(author.DAfN).split('.').join('').trim())).filter(
-      (name) => name !== ''
-    );
+    let institutions = _.uniq(
+      authors.map(author =>
+        capitalCase(author.DAfN)
+          .split('.')
+          .join('')
+          .trim()
+      )
+    ).filter(name => name !== '');
 
     if (author_names === undefined || author_names.length === 0) {
       author_names = [''];
@@ -55,7 +63,7 @@ export const processEntities = (entities: Entity[]): ParsedPaper[] =>
       title: entity.DN,
       authors: author_names,
       institutions,
-      date: new Date(entity.D).toString(),
+      date: new Date(entity.D),
       doi: entity.DOI,
       journal: journal_name,
       url: entity_url,

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';

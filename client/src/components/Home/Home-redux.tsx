@@ -5,7 +5,7 @@ import { RootState } from '../../reducers';
 import { User } from '../../types';
 import HomeContainer from './Home-container';
 
-export default function HomeRedux() {
+export default function HomeRedux(): JSX.Element {
   const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.auth);
 

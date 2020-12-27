@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react';
 
-export const useIsMounted = () => {
+export const useIsMounted = (): (() => boolean) => {
   const mountedRef = useRef(false);
 
   // Basically the same as "useDidMount" because it has no dependencies

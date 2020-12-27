@@ -3,13 +3,15 @@ import Paper, { IPaper } from './Paper';
 
 export interface IReview {
   paper: IPaper;
-  review: {
-    summary_points: string[];
-    background_points: string[];
-    approach_points: string[];
-    results_points: string[];
-    conclusions_points: string[];
-    other_points: string[];
+  notes: {
+    overview: string[];
+    background: string[];
+    methods: string[];
+    results: string[];
+    conclusions: string[];
+    other: string[];
+    tldr: string;
+    keywords: string[];
   };
 }
 
@@ -18,13 +20,15 @@ export interface ReviewDocument extends IReview, Document {}
 const ReviewSchema = new Schema(
   {
     paper: Paper.schema,
-    review: {
-      summary_points: [{ type: String }],
-      background_points: [{ type: String }],
-      approach_points: [{ type: String }],
-      results_points: [{ type: String }],
-      conclusions_points: [{ type: String }],
-      other_points: [{ type: String }],
+    notes: {
+      overview: [{ type: String }],
+      background: [{ type: String }],
+      methods: [{ type: String }],
+      results: [{ type: String }],
+      conclusions: [{ type: String }],
+      other: [{ type: String }],
+      tldr: String,
+      keywords: [{ type: String }],
     },
     _id: Schema.Types.ObjectId,
   },

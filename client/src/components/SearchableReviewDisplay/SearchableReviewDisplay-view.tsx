@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, ReadOutlined, LinkOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { ColumnsType } from 'antd/es/table';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import { shortenAuthors, shortenString, getTagColor } from '../utils';
+import { isNull as _isNull } from 'lodash';
+import { shortenAuthors, getTagColor, shortenTableString } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
+import NAText from '../NAText';
 import './SearchableReviewDisplay.scss';
 import { Review } from '../../types';
 
@@ -15,11 +17,9 @@ const { confirm } = Modal;
 type SearchHandler = (q: string) => void;
 type VoidHandler = () => void;
 
-const renderTags = (tags: string[], handleSearch: SearchHandler) => {
-  let tagRender = null;
-
+const renderTags = (tags: string[], handleSearch: SearchHandler): JSX.Element => {
   if (tags && tags.length > 0) {
-    tagRender = tags.map(tag => {
+    const renderedTags = tags.map(tag => {
       if (tag === '') {
         return null;
       }
@@ -39,8 +39,12 @@ const renderTags = (tags: string[], handleSearch: SearchHandler) => {
         </Tag>
       );
     });
+    if (renderedTags.every(_isNull)) {
+      return <NAText />;
+    }
+    return <span>{renderedTags}</span>;
   }
-  return tagRender;
+  return <NAText />;
 };
 
 const handleModalDelete = (onOkHandler: VoidHandler) => {
@@ -58,26 +62,24 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
   const displaySettings = {
     titleStringLengthLimit: 150,
     journalStringLengthLimit: 30,
-    oneSentenceStringLengthLimit: 80,
+    tldrStringLengthLimit: 80,
   };
 
   const columns: ColumnsType<Review> = [
     {
       title: 'Title',
       dataIndex: ['paper', 'title'],
-      render: (title: string) => <span>{shortenString(title, displaySettings.titleStringLengthLimit)}</span>,
+      render: (title: string) => shortenTableString(title, displaySettings.titleStringLengthLimit),
     },
     {
       title: 'One Sentence',
-      dataIndex: ['paper', 'one_sentence'],
-      render: (oneSentence: string) => (
-        <span>{shortenString(oneSentence, displaySettings.oneSentenceStringLengthLimit)}</span>
-      ),
+      dataIndex: ['notes', 'tldr'],
+      render: (tldr: string) => shortenTableString(tldr, displaySettings.tldrStringLengthLimit),
     },
     {
       title: 'Authors',
       dataIndex: ['paper', 'authors'],
-      render: (authorList: string[]) => <span>{shortenAuthors(authorList)}</span>,
+      render: (authorList: string[]) => shortenAuthors(authorList),
     },
     {
       title: 'Year Published',
@@ -88,7 +90,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
     {
       title: 'Journal',
       dataIndex: ['paper', 'journal'],
-      render: (journal: string) => <span>{shortenString(journal, displaySettings.journalStringLengthLimit)}</span>,
+      render: (journal: string) => shortenTableString(journal, displaySettings.journalStringLengthLimit),
     },
     {
       title: 'Review Date',
@@ -99,7 +101,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
     },
     {
       title: 'Keywords',
-      dataIndex: ['paper', 'keywords'],
+      dataIndex: ['notes', 'keywords'],
       render: (keywords: string[]) => renderTags(keywords, handleSearch),
     },
   ];
@@ -123,7 +125,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 
 interface ModalProps {
   deleteConfirmHandler: VoidHandler;
-  handleModalEdit: VoidHandler;
+  handleModalEdit?: VoidHandler;
   handleModalCopy?: VoidHandler;
   handleModalClose: VoidHandler;
   showModal: boolean;
@@ -227,8 +229,9 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={handleModalCopy}>
-        ()){' '}
+      <Button key="copy" type="dashed" className="footer-btn" icon={<LinkOutlined />} onClick={handleModalCopy}>
+        {' '}
+        Copy Link
       </Button>
     );
     modalFooter.splice(0, 0, copyButton);
