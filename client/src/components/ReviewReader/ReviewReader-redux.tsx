@@ -28,7 +28,7 @@ export default function ReviewReaderRedux(): JSX.Element {
     dispatch(updateReviews(newReviews));
 
     // remove the review from the Users list
-    axios.delete(`/api/papers/${reviewToDelete._id}`);
+    axios.delete(`/api/reviews/${reviewToDelete._id}`);
   };
 
   const populateFormWithReview = (review: Review) => {

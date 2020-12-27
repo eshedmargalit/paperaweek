@@ -47,7 +47,7 @@ export default function ReviewWizardRedux(): JSX.Element {
     const id = activeReview ? activeReview._id : null;
 
     const method = id ? 'put' : 'post';
-    const url = '/api/papers';
+    const url = '/api/reviews';
     const data = {
       review,
       id,

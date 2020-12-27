@@ -6,12 +6,12 @@ import PaperModel from '../models/Paper';
 import ReviewModel from '../models/Review';
 
 module.exports = (app: Application) => {
-  app.post('/api/papers', requireLogin, async (req, res) => {
+  app.post('/api/reviews', requireLogin, async (req, res) => {
     const { review } = req.body;
-    const newPaper = new PaperModel(review.paper);
+    const { paper, notes } = review;
     const newReview = new ReviewModel({
-      paper: newPaper,
-      review: review.review,
+      paper: new PaperModel(paper),
+      notes,
       _id: new Types.ObjectId(),
     });
 
@@ -20,10 +20,11 @@ module.exports = (app: Application) => {
     res.send(JSON.stringify(req.user.reviews));
   });
 
-  app.put('/api/papers', requireLogin, async (req, res) => {
+  app.put('/api/reviews', requireLogin, async (req, res) => {
     const { review } = req.body;
+    const { paper, notes } = review;
     try {
-      const newPaper = new PaperModel(review.paper);
+      const newPaper = new PaperModel(paper);
       const user = await UserModel.findOneAndUpdate(
         {
           googleId: req.user.googleId,
@@ -32,7 +33,7 @@ module.exports = (app: Application) => {
         {
           $set: {
             'reviews.$.paper': newPaper,
-            'reviews.$.review': review.review,
+            'reviews.$.notes': notes,
           },
         },
         { new: true } // return updated post
@@ -47,7 +48,7 @@ module.exports = (app: Application) => {
     }
   });
 
-  app.delete('/api/papers/:id', requireLogin, async (req, res) => {
+  app.delete('/api/reviews/:id', requireLogin, async (req, res) => {
     try {
       UserModel.findOneAndUpdate(
         { googleId: req.user.googleId },
