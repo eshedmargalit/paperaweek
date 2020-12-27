@@ -57,7 +57,6 @@ export default function ReviewWizardContainer({
   const onChangeHandler = (newValues: Review) => {
     setPaper(newValues.paper);
     setNotes(newValues.notes);
-    autosave(paper, notes);
   };
 
   /*
