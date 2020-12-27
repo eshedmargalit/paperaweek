@@ -54,7 +54,9 @@ export default function Login({ justSignedOut, location }: LoginProps): JSX.Elem
       >
         <h1>Paper a Week</h1>
         <h5>Read a paper a week. That's it.</h5>
-        <GoogleButton type="dark" />
+        <a href="/auth/google">
+          <GoogleButton type="dark" />
+        </a>
       </LazyHero>
       <div className="login__bottom-tray">
         <Row gutter={16}>
