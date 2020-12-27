@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DeleteOutlined, EditOutlined, ReadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, ReadOutlined, LinkOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
 import moment from 'moment';
 import { ColumnsType } from 'antd/es/table';
@@ -125,7 +125,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 
 interface ModalProps {
   deleteConfirmHandler: VoidHandler;
-  handleModalEdit: VoidHandler;
+  handleModalEdit?: VoidHandler;
   handleModalCopy?: VoidHandler;
   handleModalClose: VoidHandler;
   showModal: boolean;
@@ -229,8 +229,9 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="footer-btn" icon={<EditOutlined />} onClick={handleModalCopy}>
-        ()){' '}
+      <Button key="copy" type="dashed" className="footer-btn" icon={<LinkOutlined />} onClick={handleModalCopy}>
+        {' '}
+        Copy Link
       </Button>
     );
     modalFooter.splice(0, 0, copyButton);

@@ -143,7 +143,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
         <br />
         {notes.tldr}
         <hr />
-        <div style={{ float: 'right' }}>{toggleSwitch}</div>
+        {toggleSwitch}
         {reviewBody}
       </Modal>
     </div>
