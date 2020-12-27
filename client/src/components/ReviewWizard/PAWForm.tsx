@@ -60,9 +60,10 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
       validationSchema={validationSchema}
       onSubmit={values => onSubmit(values)}
       validate={values => {
-        const valuesToReturn = values;
-        valuesToReturn.notes.keywords = splitKeywordsIntoArray(values.notes.keywords);
-        debouncedOnChange(valuesToReturn);
+        debouncedOnChange({
+          ...values,
+          notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
+        });
       }}
     >
       {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (

@@ -3,6 +3,7 @@ import { PageHeader } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
+import { PageHeaderProps } from 'antd/lib/page-header';
 import { Maybe } from '../../types';
 
 interface ReviewWizardViewProps {
@@ -10,7 +11,7 @@ interface ReviewWizardViewProps {
   lastSave: Maybe<Moment>;
   form: JSX.Element;
   modal: JSX.Element;
-  onPageBack: () => void;
+  onPageBack: PageHeaderProps['onBack'];
 }
 function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
