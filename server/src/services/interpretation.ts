@@ -30,19 +30,8 @@ export const processEntities = (entities: Entity[]): ParsedPaper[] =>
     const authors = _.sortBy(entity.AA, [o => o.S]);
 
     // filter down to unique authors and remove empty entries
-    let author_names = _.uniq(authors.map(author => capitalCase(author.DAuN.split('.').join('')))).filter(
-      name => name !== ''
-    );
-
-    // filter down to unique institutions and remove empty entries
-    let institutions = _.uniq(
-      authors.map(author =>
-        capitalCase(author.DAfN)
-          .split('.')
-          .join('')
-          .trim()
-      )
-    ).filter(name => name !== '');
+    let author_names = _.uniq(authors.map(author => author.DAuN).filter(name => name !== ''));
+    let institutions = _.uniq(authors.map(author => author.DAfN).filter(name => name !== ''));
 
     if (author_names === undefined || author_names.length === 0) {
       author_names = [''];

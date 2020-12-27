@@ -59,7 +59,7 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
   return newAuthorList;
 };
 
-export const shortenAuthors = (authors: string[]): JSX.Element => {
+export const shortenAuthors = (authors: string[]): JSX.Element | string => {
   let authorString = '';
 
   if (authors.length === 2) {
@@ -70,7 +70,7 @@ export const shortenAuthors = (authors: string[]): JSX.Element => {
     authorString = `${authors[0].split(' ').pop()} et al.`;
   }
 
-  return authorString === '' ? <NAText /> : <span>{authorString}</span>;
+  return authorString === '' ? <NAText /> : authorString;
 };
 
 export const shortenTableString = (str: string, cutoff: number): JSX.Element => {
