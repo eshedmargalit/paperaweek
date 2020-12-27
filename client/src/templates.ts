@@ -12,8 +12,8 @@ export const blankUser: User = {
 
 export const blankPaper: Paper = {
   title: '',
-  authors: [],
-  institutions: [],
+  authors: [''],
+  institutions: [''],
   date: new Date(),
   journal: '',
   doi: '',
@@ -21,14 +21,14 @@ export const blankPaper: Paper = {
 };
 
 export const blankNotes: Notes = {
-  overview: [],
-  background: [],
-  methods: [],
-  results: [],
-  conclusions: [],
-  other: [],
+  overview: [''],
+  background: [''],
+  methods: [''],
+  results: [''],
+  conclusions: [''],
+  other: [''],
   tldr: '',
-  keywords: [],
+  keywords: [''],
 };
 
 export const blankReview: Review = {

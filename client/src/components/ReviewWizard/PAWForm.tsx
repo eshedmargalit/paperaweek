@@ -71,27 +71,27 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
             <h2> Paper Information </h2>
             <Row className="form-group">
               <Col {...reviewItemColSpan}>
-                <TextField label="Title" name="title" type="text" />
+                <TextField label="Title" name="paper.title" type="text" />
               </Col>
               <Col {...reviewItemColSpan}>
-                <MonthPicker label="Publication Date" name="date" />
+                <MonthPicker label="Publication Date" name="paper.date" />
               </Col>
               <Col {...reviewItemColSpan}>
-                <label htmlFor="authors">Authors</label>
-                <FieldArray name="authors" component={DynamicList} />
+                <label htmlFor="paper.authors">Authors</label>
+                <FieldArray name="paper.authors" component={DynamicList} />
               </Col>
               <Col {...reviewItemColSpan}>
-                <label htmlFor="institutions">Institutions</label>
-                <FieldArray name="institutions" component={DynamicList} />
+                <label htmlFor="paper.institutions">Institutions</label>
+                <FieldArray name="paper.institutions" component={DynamicList} />
               </Col>
               <Col lg={8} sm={12}>
-                <TextField label="Journal" name="journal" type="text" />
+                <TextField label="Journal" name="paper.journal" type="text" />
               </Col>
               <Col lg={8} sm={12}>
-                <TextField label="URL" name="url" type="text" />
+                <TextField label="URL" name="paper.url" type="text" />
               </Col>
               <Col lg={8} sm={12}>
-                <TextField label="DOI" name="doi" type="text" />
+                <TextField label="DOI" name="paper.doi" type="text" />
               </Col>
             </Row>
             <hr />
@@ -100,16 +100,16 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
               {bulletNoteFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
-                  <FieldArray name={fieldName} component={DynamicTextAreaList} />
+                  <FieldArray name={`notes.${fieldName}`} component={DynamicTextAreaList} />
                 </Col>
               ))}
             </Row>
             <Row>
               <Col {...reviewItemColSpan}>
-                <TextField label="One Sentence Summary" name="one_sentence" type="text" />
+                <TextField label="One Sentence Summary" name="notes.tldr" type="text" />
               </Col>
               <Col {...reviewItemColSpan}>
-                <TextField label="Keywords" name="keywords" type="text" placeholder="human, fmri, statistics" />
+                <TextField label="Keywords" name="notes.keywords" type="text" placeholder="human, fmri, statistics" />
               </Col>
             </Row>
             <br />

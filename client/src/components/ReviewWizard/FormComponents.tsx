@@ -4,6 +4,7 @@ import { Button } from 'antd';
 import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { get as _get } from 'lodash';
 
 import { Maybe } from '../../types';
 
@@ -72,7 +73,9 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
 
   const { form, push, pop, name } = props;
   const { values } = form;
-  const fieldArray = values[name];
+
+  // _get allows indexing with strings containing a mix of dots and brackets
+  const fieldArray = _get(values, name);
 
   // bail if the field array isn't actually an array. Helps TS figure out what's going on
   if (!Array.isArray(fieldArray)) {
@@ -108,7 +111,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
   if (!isFARP(props)) return null;
   const { form, push, pop, name } = props;
   const { values } = form;
-  const fieldArray = values[name];
+  const fieldArray = _get(values, name);
 
   // bail if the field array isn't actually an array. Helps TS figure out what's going on
   if (!Array.isArray(fieldArray)) {
