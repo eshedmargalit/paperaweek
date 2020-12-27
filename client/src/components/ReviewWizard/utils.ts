@@ -8,23 +8,23 @@ interface BulletNoteFieldConfig {
 export const bulletNoteFields: BulletNoteFieldConfig[] = [
   {
     fieldName: 'overview',
-    label: 'Background Info',
+    label: 'Overview',
   },
   {
     fieldName: 'background',
-    label: 'Approach',
+    label: 'Background',
   },
   {
     fieldName: 'methods',
-    label: 'Results',
+    label: 'Methods',
   },
   {
     fieldName: 'results',
-    label: 'Conclusions',
+    label: 'Results',
   },
   {
     fieldName: 'conclusions',
-    label: 'Summary',
+    label: 'Conclusions',
   },
   {
     fieldName: 'other',
