@@ -37,7 +37,7 @@ export default function DraftsRedux(): JSX.Element {
   };
 
   const pageHeaderProps = {
-    title: 'Read Your Drafts',
+    title: 'Your Drafts',
     onBack: () => setRedirectHome(true),
   };
 

@@ -51,8 +51,7 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }:
 
       autosaveIcon = (
         <div key="autosave" className="save-icon">
-          <SaveFilled /> Saved to Drafts
-          {timePassedText}
+          <SaveFilled /> Saved to Drafts {timePassedText}
         </div>
       );
       break;
