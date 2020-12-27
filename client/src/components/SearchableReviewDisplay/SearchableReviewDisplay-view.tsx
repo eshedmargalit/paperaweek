@@ -58,7 +58,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
   const displaySettings = {
     titleStringLengthLimit: 150,
     journalStringLengthLimit: 30,
-    oneSentenceStringLengthLimit: 80,
+    tldrStringLengthLimit: 80,
   };
 
   const columns: ColumnsType<Review> = [
@@ -69,10 +69,8 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
     },
     {
       title: 'One Sentence',
-      dataIndex: ['paper', 'one_sentence'],
-      render: (oneSentence: string) => (
-        <span>{shortenString(oneSentence, displaySettings.oneSentenceStringLengthLimit)}</span>
-      ),
+      dataIndex: ['notes', 'tldr'],
+      render: (tldr: string) => <span>{shortenString(tldr, displaySettings.tldrStringLengthLimit)}</span>,
     },
     {
       title: 'Authors',
@@ -99,7 +97,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
     },
     {
       title: 'Keywords',
-      dataIndex: ['paper', 'keywords'],
+      dataIndex: ['notes', 'keywords'],
       render: (keywords: string[]) => renderTags(keywords, handleSearch),
     },
   ];
