@@ -6,7 +6,7 @@ import { blankReview } from '../../templates';
 import StatBoxView from './StatBox-view';
 import { Review } from '../../types';
 
-export default function StatBoxRedux() {
+export default function StatBoxRedux(): JSX.Element {
   const dispatch = useDispatch();
   const reviews: Review[] = useSelector((state: RootState) => state.reviews.reviewList);
 

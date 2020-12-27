@@ -27,7 +27,13 @@ const saveDraftToDB = (paper: Paper, notes: Notes, draftId: Maybe<MongoID>) => {
   return axios({ method, url, data });
 };
 
-export const useSaveDraft = () => {
+interface returnProps {
+  autosaveStatus: string;
+  lastSave: Maybe<Moment>;
+  saveDraft: (paper: Paper, notes: Notes) => Promise<void>;
+  deleteActiveDraft: () => void;
+}
+export const useSaveDraft = (): returnProps => {
   const isMounted = useIsMounted();
 
   const activeDraft = useSelector((state: RootState) => state.activeDraft);
