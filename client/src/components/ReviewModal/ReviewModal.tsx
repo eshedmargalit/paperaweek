@@ -134,8 +134,8 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
     <div>
       <Modal title={titleDiv} visible={props.visible} onCancel={props.onClose} footer={props.footer} width="80%">
         <div>
-          {renderCommaSepList(paper.authors, 'authors')}
-          {paper.institutions ? renderCommaSepList(paper.institutions, 'institutions') : null}
+          {renderCommaSepList(paper.authors)}
+          {paper.institutions ? renderCommaSepList(paper.institutions) : null}
           Published in {paper.journal} in {paperDate} {doiTag}
         </div>
         <br />
