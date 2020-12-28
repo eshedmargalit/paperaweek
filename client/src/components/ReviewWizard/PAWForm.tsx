@@ -53,7 +53,10 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
     <Formik
       initialValues={initialValues}
       onSubmit={values => {
-        onSubmit(values);
+        onSubmit({
+          ...values,
+          notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
+        });
       }}
       validate={values => {
         debouncedOnChange({
