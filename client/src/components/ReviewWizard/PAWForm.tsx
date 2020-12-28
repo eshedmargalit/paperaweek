@@ -5,7 +5,6 @@ import { FieldArray, Form, Formik } from 'formik';
 import { debounce as _debounce, uniq as _uniq } from 'lodash';
 import React, { useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import * as Yup from 'yup';
 import { Notes, Paper, Review } from '../../types';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import './ReviewWizard.scss';
@@ -37,10 +36,6 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
     notes: initialNotes,
   };
 
-  const validationSchema = Yup.object({
-    title: Yup.string().required('Required'),
-  });
-
   const reviewItemColSpan = {
     lg: 12,
     sm: 24,
@@ -57,8 +52,9 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={values => onSubmit(values)}
+      onSubmit={values => {
+        onSubmit(values);
+      }}
       validate={values => {
         debouncedOnChange({
           ...values,
