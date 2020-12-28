@@ -71,7 +71,7 @@ function isFARP(props: void | FieldArrayRenderProps): props is FieldArrayRenderP
 export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = props => {
   if (!isFARP(props)) return null;
 
-  const { form, push, pop, name } = props;
+  const { form, push, remove, name } = props;
   const { values } = form;
 
   // _get allows indexing with strings containing a mix of dots and brackets
@@ -93,7 +93,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
             <Button
               tabIndex={-1}
               className="dynamic-delete-button"
-              onClick={pop} // remove a listItem from the list
+              onClick={() => remove(index)} // remove a listItem from the list
             >
               <CloseOutlined />
             </Button>
@@ -109,7 +109,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
 
 export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
   if (!isFARP(props)) return null;
-  const { form, push, pop, name } = props;
+  const { form, push, remove, name } = props;
   const { values } = form;
   const fieldArray = _get(values, name);
 
@@ -126,7 +126,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
           <div key={index} className="bullet-text-area">
             <div className="bullet">&bull;</div>
             <Field as="textarea" name={`${name}.${index}`} autoFocus />
-            <Button tabIndex={-1} className="dynamic-delete-button" onClick={pop}>
+            <Button tabIndex={-1} className="dynamic-delete-button" onClick={() => remove(index)}>
               <CloseOutlined />
             </Button>
           </div>

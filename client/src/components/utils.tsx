@@ -13,7 +13,7 @@ import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
 
-export const renderCommaSepList = (items: string[], key: string): JSX.Element[] =>
+export const renderCommaSepList = (items: string[]): JSX.Element[] =>
   items.map((item, i) => {
     let toRender;
     if (i === items.length - 1) {
@@ -40,7 +40,7 @@ export const renderCommaSepList = (items: string[], key: string): JSX.Element[] 
       // all others
       toRender = <span>{item}, </span>;
     }
-    return <span key={key}>{toRender}</span>;
+    return <span key={item}>{toRender}</span>;
   });
 
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {
@@ -59,7 +59,7 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
   return newAuthorList;
 };
 
-export const shortenAuthors = (authors: string[]): JSX.Element => {
+export const shortenAuthors = (authors: string[]): JSX.Element | string => {
   let authorString = '';
 
   if (authors.length === 2) {
@@ -70,7 +70,7 @@ export const shortenAuthors = (authors: string[]): JSX.Element => {
     authorString = `${authors[0].split(' ').pop()} et al.`;
   }
 
-  return authorString === '' ? <NAText /> : <span>{authorString}</span>;
+  return authorString === '' ? <NAText /> : authorString;
 };
 
 export const shortenTableString = (str: string, cutoff: number): JSX.Element => {

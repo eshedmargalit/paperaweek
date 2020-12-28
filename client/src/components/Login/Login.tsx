@@ -30,9 +30,9 @@ export default function Login({ justSignedOut, location }: LoginProps): JSX.Elem
     }
   });
 
-  const user: User = useSelector((state: RootState) => state.auth);
+  const auth: User = useSelector((state: RootState) => state.auth);
 
-  if (!user) {
+  if (auth) {
     return (
       <Redirect
         to={{
