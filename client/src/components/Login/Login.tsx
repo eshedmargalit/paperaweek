@@ -10,29 +10,16 @@ import GoogleButton from 'react-google-button';
 import './Login.scss';
 import { RootState } from '../../reducers';
 import { User } from '../../types';
+import { blankUser } from '../../templates';
 
 interface LoginProps {
-  justSignedOut: boolean;
   location: Location;
 }
 
-const openNotification = () => {
-  notification.open({
-    message: 'Logout successful, see you soon!',
-    icon: <SmileOutlined />,
-  });
-};
+export default function Login({ location }: LoginProps): JSX.Element {
+  const user: User = useSelector((state: RootState) => state.user);
 
-export default function Login({ justSignedOut, location }: LoginProps): JSX.Element {
-  useEffect(() => {
-    if (justSignedOut) {
-      openNotification();
-    }
-  });
-
-  const auth: User = useSelector((state: RootState) => state.auth);
-
-  if (auth) {
+  if (user !== blankUser) {
     return (
       <Redirect
         to={{
