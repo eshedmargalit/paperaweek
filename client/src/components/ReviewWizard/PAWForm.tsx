@@ -5,7 +5,7 @@ import { FieldArray, Form, Formik } from 'formik';
 import { debounce as _debounce, uniq as _uniq } from 'lodash';
 import React, { useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Notes, Paper, Review } from '../../types';
+import { Review } from '../../types';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import './ReviewWizard.scss';
 import { OnClickEventType } from './types';
@@ -24,17 +24,12 @@ const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
 };
 
 interface PAWFormProps {
-  initialPaper: Paper;
-  initialNotes: Notes;
+  initialReview: Review;
   onChange: (formValues: Review) => void;
   onSubmit: (formValues: Review) => void;
 }
-export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit }: PAWFormProps): JSX.Element {
+export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormProps): JSX.Element {
   const debouncedOnChange = _debounce(onChange, 2000);
-  const initialValues: Review = {
-    paper: initialPaper,
-    notes: initialNotes,
-  };
 
   const reviewItemColSpan = {
     lg: 12,
@@ -51,7 +46,7 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialReview}
       onSubmit={values => {
         onSubmit({
           ...values,
@@ -64,6 +59,8 @@ export default function PAWForm({ initialPaper, initialNotes, onChange, onSubmit
           notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
         });
       }}
+      validateOnBlur
+      validateOnChange={false}
     >
       {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (
         <Form>
