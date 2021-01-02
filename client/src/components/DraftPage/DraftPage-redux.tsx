@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProtected } from '../../hooks/useProtected';
+import { useProtected } from '../../hooks';
 
 import Drafts from '../Drafts';
 
