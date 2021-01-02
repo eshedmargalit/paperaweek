@@ -1,21 +1,12 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import PaperSearchBar from '../PaperSearchBar';
 import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
-import { User } from '../../types';
-import { blankUser } from '../../templates';
 
-export interface HomeViewProps {
-  user: User;
-}
-
-export default function HomeView({ user }: HomeViewProps): JSX.Element {
-  if (user === blankUser) return <Redirect to="/" push />;
-
+export default function HomeView(): JSX.Element {
   return (
     <div className="width80">
       <Row>

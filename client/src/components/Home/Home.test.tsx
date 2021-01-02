@@ -10,13 +10,6 @@ import { RootState } from '../../reducers';
 const renderHome = (initialState?: RootState) => renderWithRouterRedux(<Home />, { initialState });
 
 describe('<Home />', () => {
-  describe('when nobody is logged in', () => {
-    it('redirects when no user is present', () => {
-      renderWithRouterRedux(<Home />, { redirectTo: '/' });
-      expect(screen.getByText(/Redirected to a new page./)).toBeDefined();
-    });
-  });
-
   describe('with a user logged in', () => {
     const initialState: RootState = { ...getBlankInitialState(), auth: { ...blankUser, displayName: 'Jim Henderson' } };
 
