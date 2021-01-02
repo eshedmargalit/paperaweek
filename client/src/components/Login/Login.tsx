@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Col, notification, Row } from 'antd';
-import { CalendarOutlined, SmileOutlined, TeamOutlined } from '@ant-design/icons';
+import { Card, Col, Row } from 'antd';
+import { CalendarOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
