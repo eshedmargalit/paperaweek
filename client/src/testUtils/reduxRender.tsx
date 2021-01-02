@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import { create } from 'lodash';
 import rootReducer, { RootState } from '../reducers';
 
 interface RenderWithRouterReduxOptions {
