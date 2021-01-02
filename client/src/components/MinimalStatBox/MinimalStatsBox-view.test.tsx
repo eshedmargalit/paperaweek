@@ -11,7 +11,7 @@ const renderStatBoxView = (props?: Partial<MinimalStatBoxViewProps>) => {
   return render(<MinimalStatBoxView {...defaultProps} {...props} />);
 };
 
-describe('MinimalStatBoxView', () => {
+describe('<MinimalStatBoxView />', () => {
   describe('with no reviews', () => {
     it('renders without crashing', () => {
       renderStatBoxView();
