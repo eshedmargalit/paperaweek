@@ -25,7 +25,7 @@ export default function ReviewWizardRedux(): JSX.Element {
   };
 
   const deleteReadingListEntry = async () => {
-    const { _id } = activeReview;
+    const { _id } = activeReview.paper;
     let newReadingList = readingList;
 
     if (_id) {
