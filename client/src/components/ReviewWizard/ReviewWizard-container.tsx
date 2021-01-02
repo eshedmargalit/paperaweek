@@ -1,15 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { debounce as _debounce } from 'lodash';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
 import { Review, Maybe } from '../../types';
-
-const MS_BETWEEN_DRAFT_SAVES = 5 * 1000;
 
 interface ReviewWizardContainerProps {
   initialReview: Review;
@@ -39,17 +36,9 @@ export default function ReviewWizardContainer({
     setShowModal(true);
   };
 
-  // save at most every 5 seconds
-  const autosave = useCallback(
-    _debounce(newReview => {
-      saveDraft(newReview);
-    }, MS_BETWEEN_DRAFT_SAVES),
-    []
-  );
-
   const onChangeHandler = (newReview: Review) => {
     setReview(newReview);
-    autosave(newReview);
+    saveDraft(newReview);
   };
 
   const form = <PAWForm initialReview={initialReview} onSubmit={previewModal} onChange={onChangeHandler} />;
