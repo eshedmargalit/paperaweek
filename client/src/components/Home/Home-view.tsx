@@ -7,13 +7,14 @@ import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
 import { User } from '../../types';
+import { blankUser } from '../../templates';
 
 export interface HomeViewProps {
   user: User;
 }
 
 export default function HomeView({ user }: HomeViewProps): JSX.Element {
-  if (!user) return <Redirect to="/" push />;
+  if (user === blankUser) return <Redirect to="/" push />;
 
   return (
     <div className="width80">

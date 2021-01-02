@@ -70,6 +70,7 @@ export default function ReviewWizardRedux(): JSX.Element {
 
   const initialPaper = { ...blankPaper, ...paper };
   const initialNotes = { ...blankNotes, ...notes };
+  const initialReview = { paper: initialPaper, notes: initialNotes };
 
   return (
     <ReviewWizardContainer
@@ -79,8 +80,7 @@ export default function ReviewWizardRedux(): JSX.Element {
       submitLoading={submitLoading}
       lastSave={lastSave}
       autosaveStatus={autosaveStatus}
-      initialPaper={initialPaper}
-      initialNotes={initialNotes}
+      initialReview={initialReview}
     />
   );
 }
