@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { inRange } from 'lodash';
 import { rest } from 'msw';
 import { fetchUser, setReview, updateDraftId, updateDrafts, updateReadingList, updateReviews } from '.';
 
