@@ -29,8 +29,7 @@ export default function App(): JSX.Element {
         <Route path="/" component={MenuBar} />
         <Switch>
           <Route path="/profiles/:userId/:reviewIdToOpen?" component={PublicProfile} />
-          <Route exact path="/" render={props => <Login {...props} justSignedOut={false} />} />
-          <Route exact path="/signout" render={props => <Login {...props} justSignedOut />} />
+          <Route exact path="/" component={Login} />
           <Route exact path="/dashboard" component={Home} />
           <Route exact path="/form" component={ReviewWizard} />
           <Route exact path="/drafts" component={DraftPage} />

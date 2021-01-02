@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
 import { useIsMounted } from '../../hooks';
-import { Maybe, MongoID, Notes, Paper, Review } from '../../types';
+import { Maybe, MongoID, Review } from '../../types';
 import { RootState } from '../../reducers';
 
 const statuses = {
@@ -14,13 +14,11 @@ const statuses = {
 };
 
 // do not export
-const saveDraftToDB = (paper: Paper, notes: Notes, draftId: Maybe<MongoID>) => {
-  const draftToSave: Review = { paper, notes };
-
+const saveDraftToDB = (draft: Review, draftId: Maybe<MongoID>) => {
   const method = draftId ? 'put' : 'post';
   const url = '/api/drafts';
   const data = {
-    draft: draftToSave,
+    draft,
     id: draftId,
   };
 
@@ -30,7 +28,7 @@ const saveDraftToDB = (paper: Paper, notes: Notes, draftId: Maybe<MongoID>) => {
 interface returnProps {
   autosaveStatus: string;
   lastSave: Maybe<Moment>;
-  saveDraft: (paper: Paper, notes: Notes) => Promise<void>;
+  saveDraft: (draft: Review) => Promise<void>;
   deleteActiveDraft: () => void;
 }
 export const useSaveDraft = (): returnProps => {
@@ -51,10 +49,10 @@ export const useSaveDraft = (): returnProps => {
   }, [draftId]);
 
   // saveDraft function
-  const saveDraft = async (paper: Paper, notes: Notes) => {
+  const saveDraft = async (draft: Review) => {
     if (isMounted()) {
       setAutosaveStatus(statuses.SAVING);
-      const res = await saveDraftToDB(paper, notes, draftIdRef.current || null);
+      const res = await saveDraftToDB(draft, draftIdRef.current || null);
       if (res.status === 200) {
         setAutosaveStatus(statuses.SAVED);
         setLastSave(moment());
