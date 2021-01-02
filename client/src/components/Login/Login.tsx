@@ -6,7 +6,7 @@ import { CalendarOutlined, TeamOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
-import GoogleButton from 'react-google-button';
+import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
 import { RootState } from '../../reducers';
 import { User } from '../../types';
