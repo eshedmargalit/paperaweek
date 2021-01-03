@@ -7,8 +7,10 @@ import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
 import { Paper, Review } from '../../types';
+import { useProtected } from '../../hooks/useProtected';
 
 export default function ReviewWizardRedux(): JSX.Element {
+  useProtected();
   const dispatch = useDispatch();
 
   const [submitLoading, setSubmitLoading] = useState(false);
