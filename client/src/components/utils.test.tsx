@@ -1,5 +1,8 @@
+/* eslint-disable no-console */
+/* eslint-disable no-return-assign */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { before } from 'lodash';
 import {
   getTagColor,
   HSLString,
@@ -221,6 +224,12 @@ describe('utils', () => {
   });
 
   describe('wrapMarkdownWithMath', () => {
+    // This is silly, but the react-katex library throws an ugly warning: https://github.com/talyssonoc/react-katex/issues/59
+    // so we'll just suppress it :)
+    const originalConsoleWarn = console.warn;
+    beforeAll(() => (console.warn = jest.fn()));
+    afterAll(() => (console.warn = originalConsoleWarn));
+
     it('does not alter non-math string', () => {
       const testString = 'The Year I Named the Constellations';
       render(wrapMarkdownWithMath(testString));
