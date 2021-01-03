@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { renderCommaSepList } from './utils';
+import { removeMiddleAuthors, renderCommaSepList } from './utils';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -28,6 +28,46 @@ describe('utils', () => {
       expect(screen.getByText(/Donkey,/)).toBeDefined();
       expect(screen.getByText(/Fiona/)).toBeDefined();
       expect(screen.getByText('and Father Time')).toBeDefined();
+    });
+  });
+
+  describe('removeMiddleAuthors', () => {
+    const scenarios: {
+      description: string;
+      authorList: string[];
+      numKeepEitherEnd: number;
+      expectedResult: string[];
+    }[] = [
+      {
+        description: 'with zero authors',
+        authorList: [],
+        numKeepEitherEnd: 0,
+        expectedResult: [],
+      },
+      {
+        description: 'few authors, keeping many on each end',
+        authorList: ['Piranesi', 'The Other'],
+        numKeepEitherEnd: 100,
+        expectedResult: ['Piranesi', 'The Other'],
+      },
+      {
+        description: 'many authors, keep 0 on either end',
+        authorList: ['Piranesi', 'The Other'],
+        numKeepEitherEnd: 0,
+        expectedResult: ['Piranesi', 'The Other'],
+      },
+      {
+        description: 'many authors, keep 2 on either end',
+        authorList: ['Piranesi', 'The Other', 'The Biscuit Box Man', 'Sixteen', "Sylvia D'Agostino"],
+        numKeepEitherEnd: 2,
+        expectedResult: ['Piranesi', 'The Other', '...', 'Sixteen', "Sylvia D'Agostino"],
+      },
+    ];
+
+    scenarios.forEach(({ description, authorList, numKeepEitherEnd, expectedResult }) => {
+      it(`returns the correct result ${description}`, () => {
+        expect(removeMiddleAuthors(authorList, numKeepEitherEnd)).toEqual(expectedResult);
+      });
     });
   });
 });
