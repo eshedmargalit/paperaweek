@@ -1,6 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-console */
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { RootState } from '../../reducers';
@@ -54,6 +54,23 @@ describe('<Drafts />', () => {
       const draftRow = screen.getByText(/it was nice/);
       userEvent.click(draftRow);
       expect(screen.getByText(/Delete this Draft/)).toBeDefined();
+    });
+
+    it('deletes a draft from Redux when the delete button is clicked', async () => {
+      renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
+
+      // Find the draft's row and click on it.
+      userEvent.click(screen.getByText(/it was nice/));
+
+      // Now that the modal is open, find and click the delete button
+      userEvent.click(screen.getByText(/Delete this Draft/));
+
+      // Wait for antd to render the confirm modal, then click Yes
+      await waitFor(() => screen.getByText('Yes'));
+      userEvent.click(screen.getByText('Yes'));
+
+      // Wait for the async logic to complete and for the draft to disappear
+      await waitFor(() => expect(screen.queryByText(/it was nice/)).toBeNull());
     });
   });
 });

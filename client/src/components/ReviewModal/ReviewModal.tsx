@@ -132,7 +132,14 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
 
   return (
     <div>
-      <Modal title={titleDiv} visible={props.visible} onCancel={props.onClose} footer={props.footer} width="80%">
+      <Modal
+        title={titleDiv}
+        visible={props.visible}
+        onCancel={props.onClose}
+        footer={props.footer}
+        destroyOnClose
+        width="80%"
+      >
         <div>
           {renderCommaSepList(paper.authors)}
           {paper.institutions ? renderCommaSepList(paper.institutions) : null}
