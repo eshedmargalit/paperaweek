@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { removeMiddleAuthors, renderCommaSepList } from './utils';
+import { removeMiddleAuthors, renderCommaSepList, shortenAuthors } from './utils';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -67,6 +67,49 @@ describe('utils', () => {
     scenarios.forEach(({ description, authorList, numKeepEitherEnd, expectedResult }) => {
       it(`returns the correct result ${description}`, () => {
         expect(removeMiddleAuthors(authorList, numKeepEitherEnd)).toEqual(expectedResult);
+      });
+    });
+  });
+
+  describe('shortenAuthors', () => {
+    // TODO EM: would this ever happen? Can we revise the functionality and rmeove this test?
+    it('returns NAText when a single blank author is provided', () => {
+      const output = shortenAuthors(['']);
+      render(output as JSX.Element);
+      expect(screen.getByText('N/A')).toBeDefined();
+    });
+
+    it('returns NAText when no authors are provided', () => {
+      const output = shortenAuthors([]);
+      render(output as JSX.Element);
+      expect(screen.getByText('N/A')).toBeDefined();
+    });
+
+    const scenarios: {
+      description: string;
+      authors: string[];
+      expectedOutput: string;
+    }[] = [
+      {
+        description: 'with 2 authors',
+        authors: ['Stephen Curry', 'Klay Thompson'],
+        expectedOutput: 'Curry and Thompson',
+      },
+      {
+        description: 'with 1 author',
+        authors: ['Stephen Curry'],
+        expectedOutput: 'Stephen Curry',
+      },
+      {
+        description: 'with 3 authors',
+        authors: ['Stephen Curry', 'Klay Thompson', 'Billy the Shooter'],
+        expectedOutput: 'Curry et al.',
+      },
+    ];
+
+    scenarios.forEach(({ description, authors, expectedOutput }) => {
+      it(`returns the right string ${description}`, () => {
+        expect(shortenAuthors(authors)).toEqual(expectedOutput);
       });
     });
   });

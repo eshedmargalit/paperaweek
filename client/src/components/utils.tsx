@@ -60,6 +60,8 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
 };
 
 export const shortenAuthors = (authors: string[]): JSX.Element | string => {
+  if (!authors.length) return <NAText />;
+
   let authorString = '';
 
   if (authors.length === 2) {
