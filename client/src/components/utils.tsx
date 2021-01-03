@@ -46,7 +46,7 @@ export const renderCommaSepList = (items: string[]): JSX.Element[] =>
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {
   const numAuthors = authorList.length;
   const numKeepTotal = numKeepEitherEnd * 2;
-  if (numAuthors <= numKeepTotal || numKeepTotal <= 2) {
+  if (numAuthors <= numKeepTotal || numKeepTotal === 0) {
     return authorList;
   }
 

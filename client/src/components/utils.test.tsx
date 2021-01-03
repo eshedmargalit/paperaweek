@@ -2,7 +2,6 @@
 /* eslint-disable no-return-assign */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { before } from 'lodash';
 import {
   getTagColor,
   HSLString,
@@ -57,19 +56,19 @@ describe('utils', () => {
         expectedResult: [],
       },
       {
-        description: 'few authors, keeping many on each end',
+        description: 'with few authors, keeping many on each end',
         authorList: ['Piranesi', 'The Other'],
         numKeepEitherEnd: 100,
         expectedResult: ['Piranesi', 'The Other'],
       },
       {
-        description: 'many authors, keep 0 on either end',
+        description: 'with many authors, keep 0 on either end',
         authorList: ['Piranesi', 'The Other'],
         numKeepEitherEnd: 0,
         expectedResult: ['Piranesi', 'The Other'],
       },
       {
-        description: 'many authors, keep 2 on either end',
+        description: 'with many authors, keep 2 on either end',
         authorList: ['Piranesi', 'The Other', 'The Biscuit Box Man', 'Sixteen', "Sylvia D'Agostino"],
         numKeepEitherEnd: 2,
         expectedResult: ['Piranesi', 'The Other', '...', 'Sixteen', "Sylvia D'Agostino"],
