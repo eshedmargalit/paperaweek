@@ -72,5 +72,18 @@ describe('<Drafts />', () => {
       // Wait for the async logic to complete and for the draft to disappear
       await waitFor(() => expect(screen.queryByText(/it was nice/)).toBeNull());
     });
+
+    it('redirects the user to the edit form when the edit button is clicked', async () => {
+      renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts, redirectTo: '/form' });
+
+      // Find the draft's row and click on it.
+      userEvent.click(screen.getByText(/it was nice/));
+
+      // Now that the modal is open, find and click the edit button
+      userEvent.click(screen.getByText(/Edit this Draft/));
+
+      // Confirm that we navigate to the "form" after clicking edit
+      expect(screen.getByText(/Redirected to a new page/)).toBeDefined();
+    });
   });
 });
