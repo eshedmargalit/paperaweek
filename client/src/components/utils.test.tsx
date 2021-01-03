@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { removeMiddleAuthors, renderCommaSepList, shortenAuthors } from './utils';
+import { removeMiddleAuthors, renderCommaSepList, shortenAuthors, shortenTableString } from './utils';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -110,6 +110,54 @@ describe('utils', () => {
     scenarios.forEach(({ description, authors, expectedOutput }) => {
       it(`returns the right string ${description}`, () => {
         expect(shortenAuthors(authors)).toEqual(expectedOutput);
+      });
+    });
+  });
+
+  describe('shortenTableString', () => {
+    const scenarios: {
+      description: string;
+      inString: string;
+      cutoff: number;
+      expectedText: string;
+    }[] = [
+      {
+        description: 'with no string',
+        inString: '',
+        cutoff: -5,
+        expectedText: 'N/A',
+      },
+      {
+        // TODO EM: is this desired?
+        description: 'with a string and a negative cutoff',
+        inString: 'testing one two',
+        cutoff: -5,
+        expectedText: '...',
+      },
+      {
+        description: 'with a string and a small cutoff',
+        inString: 'testing one two',
+        cutoff: 5,
+        expectedText: 'testi...',
+      },
+      {
+        description: 'with a string and a huge cutoff',
+        inString: 'testing one two',
+        cutoff: 500,
+        expectedText: 'testing one two',
+      },
+      {
+        description: 'with a string and no cutoff',
+        inString: 'testing one two',
+        cutoff: 0,
+        expectedText: '...',
+      },
+    ];
+
+    scenarios.forEach(({ description, inString, cutoff, expectedText }) => {
+      it(`renders the correct element ${description}`, () => {
+        render(shortenTableString(inString, cutoff));
+        expect(screen.getByText(expectedText)).toBeDefined();
       });
     });
   });
