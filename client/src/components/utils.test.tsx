@@ -1,6 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { removeMiddleAuthors, renderCommaSepList, shortenAuthors, shortenTableString } from './utils';
+import {
+  getTagColor,
+  HSLString,
+  removeMiddleAuthors,
+  renderCommaSepList,
+  shortenAuthors,
+  shortenTableString,
+} from './utils';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -159,6 +166,36 @@ describe('utils', () => {
         render(shortenTableString(inString, cutoff));
         expect(screen.getByText(expectedText)).toBeDefined();
       });
+    });
+  });
+
+  describe('getTagColor', () => {
+    const scenarios: {
+      description: string;
+      input: string;
+      output: HSLString;
+    }[] = [
+      {
+        description: 'with no tag',
+        input: '',
+        output: 'hsl(0,80%,30%)',
+      },
+      {
+        description: 'with some tag',
+        input: 'i am a tag',
+        output: 'hsl(-354,80%,30%)',
+      },
+    ];
+
+    scenarios.forEach(({ description, input, output }) => {
+      it(`returns the right HSLString ${description}`, () => {
+        expect(getTagColor(input)).toEqual(output);
+      });
+    });
+
+    it('returns the same color for the same tag', () => {
+      const tag = 'tag';
+      expect(getTagColor(tag)).toEqual(getTagColor(tag));
     });
   });
 });
