@@ -8,6 +8,7 @@ import {
   renderCommaSepList,
   shortenAuthors,
   shortenTableString,
+  wrapMarkdownWithMath,
 } from './utils';
 
 describe('utils', () => {
@@ -216,6 +217,20 @@ describe('utils', () => {
     it('cannot be fooled by mere mortals', () => {
       expect(isDOI('   doI.org   ')).toBeFalsy();
       expect(isDOI('10 .1.1')).toBeFalsy();
+    });
+  });
+
+  describe('wrapMarkdownWithMath', () => {
+    it('does not alter non-math string', () => {
+      const testString = 'The Year I Named the Constellations';
+      render(wrapMarkdownWithMath(testString));
+      expect(screen.getByText(testString)).toBeDefined();
+    });
+
+    it('renders math strings with markdown', () => {
+      render(wrapMarkdownWithMath('$\\sum_0^\\infty$'));
+      expect(screen.getAllByText(/∑/)).toBeDefined();
+      expect(screen.getAllByText(/∞/)).toBeDefined();
     });
   });
 });
