@@ -2,6 +2,7 @@
 /* eslint-disable no-return-assign */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { before } from 'lodash';
 import {
   getTagColor,
   HSLString,
