@@ -19,7 +19,7 @@
     "cognitive-services": "^1.2.3",
     "formik": "^2.2.3",
     "fuse.js": "^3.4.5",
-    "history": "^5.0.0",
+    "history": "^4.0.0",
     "http-proxy-middleware": "^0.19.1",
     "katex": "^0.12.0",
     "lodash": "^4.17.20",
