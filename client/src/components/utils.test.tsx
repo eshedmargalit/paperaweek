@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import {
   getTagColor,
   HSLString,
+  isDOI,
   removeMiddleAuthors,
   renderCommaSepList,
   shortenAuthors,
@@ -196,6 +197,25 @@ describe('utils', () => {
     it('returns the same color for the same tag', () => {
       const tag = 'tag';
       expect(getTagColor(tag)).toEqual(getTagColor(tag));
+    });
+  });
+
+  describe.skip('getReviewStats', () => {
+    // TODO: once review data deserialization is figured out, write this test
+  });
+
+  describe('isDOI', () => {
+    it('recognizes DOIs starting with 10', () => {
+      expect(isDOI('10.1.1')).toBeTruthy();
+    });
+
+    it('recognizes DOIs with doi.org', () => {
+      expect(isDOI('   doi.org   ')).toBeTruthy();
+    });
+
+    it('cannot be fooled by mere mortals', () => {
+      expect(isDOI('   doI.org   ')).toBeFalsy();
+      expect(isDOI('10 .1.1')).toBeFalsy();
     });
   });
 });
