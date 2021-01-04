@@ -37,7 +37,6 @@ describe('<MenuBar />', () => {
     it("shows the user's name", () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState });
       expect(screen.getByText(displayName)).toBeDefined();
-      screen.debug();
     });
 
     // TODO EM: I think this should be a <Link /> so that it's easier to test.
@@ -47,5 +46,7 @@ describe('<MenuBar />', () => {
 
       await waitFor(() => expect(screen.getByText(/Redirect/)).toBeDefined());
     });
+
+    // TODO find a sane way to test the hidden menu by mocking `window.matchMedia`
   });
 });
