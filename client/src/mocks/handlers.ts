@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
-import { blankUser } from '../templates';
+import { blankPaper, blankUser } from '../templates';
 
 export const handlers = [
   rest.get('/api/current_user', (_req, res, ctx) => {
@@ -9,5 +9,11 @@ export const handlers = [
   }),
   rest.delete('/api/drafts/:draftId', (_req, res, ctx) => {
     return res(ctx.status(200));
+  }),
+  rest.get('/api/searchBar/interpret/:query', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Interpret Title' }, blankPaper]));
+  }),
+  rest.get('/api/doi/*', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ ...blankPaper, title: 'Test DOI Title' }));
   }),
 ];

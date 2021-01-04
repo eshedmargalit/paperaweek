@@ -135,7 +135,7 @@ export default function PaperSearchBarView({
     <div>
       <br />
       {searchArea}
-      {loading ? <Spin className="searchResult loading-spinner" /> : searchRender}
+      {loading ? <Spin data-testid="paper-searchbar-spinner" className="searchResult loading-spinner" /> : searchRender}
     </div>
   );
 }
