@@ -16,4 +16,7 @@ export const handlers = [
   rest.get('/api/doi/*', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ ...blankPaper, title: 'Test DOI Title' }));
   }),
+  rest.put('/api/readingList', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Paper Title' }, blankPaper]));
+  }),
 ];

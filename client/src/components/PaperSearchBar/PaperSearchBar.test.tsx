@@ -84,5 +84,54 @@ describe('<PaperSearchBar />', () => {
       // Once no result comes back from our mocked API, confirm our custom message is rendered
       await waitFor(() => expect(screen.getByText('No Results Found')).toBeDefined());
     });
+
+    describe('result interaction', () => {
+      it('shows both options on click', async () => {
+        // Render some basic results
+        renderWithRouterRedux(<PaperSearchBar />);
+
+        // Type in a search query
+        const searchInput = screen.getByPlaceholderText(/search by/);
+        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
+        await waitFor(() => screen.getByText('Test DOI Title'));
+
+        // Click on the item
+        userEvent.click(screen.getByText('Test DOI Title'));
+
+        // Confirm both popover options are present
+        expect(screen.getByText(/Add to Reading List/)).toBeDefined();
+        expect(screen.getByText(/Start Review Now/)).toBeDefined();
+      });
+
+      it('adds results to the reading list', async () => {
+        // Render some basic results
+        renderWithRouterRedux(<PaperSearchBar />);
+
+        // Type in a search query
+        const searchInput = screen.getByPlaceholderText(/search by/);
+        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
+        await waitFor(() => screen.getByText('Test DOI Title'));
+
+        // Click on the item
+        userEvent.click(screen.getByText('Test DOI Title'));
+        userEvent.click(screen.getByText(/Add to Reading List/));
+      });
+
+      it('starts the review now', async () => {
+        // Render some basic results
+        renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
+
+        // Type in a search query
+        const searchInput = screen.getByPlaceholderText(/search by/);
+        userEvent.type(searchInput, 'test query');
+        await waitFor(() => screen.getByText('Test Interpret Title'));
+
+        // Click on the item
+        userEvent.click(screen.getByText('Test Interpret Title'));
+        userEvent.click(screen.getByText(/Start Review Now/));
+
+        expect(screen.getByText(/Redirected/)).toBeDefined();
+      });
+    });
   });
 });
