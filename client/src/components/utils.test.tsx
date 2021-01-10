@@ -138,7 +138,6 @@ describe('utils', () => {
         expectedText: 'N/A',
       },
       {
-        // TODO EM: is this desired?
         description: 'with a string and a negative cutoff',
         inString: 'testing one two',
         cutoff: -5,

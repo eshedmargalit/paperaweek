@@ -11,7 +11,7 @@ export default function DraftsRedux(): JSX.Element {
   const dispatch = useDispatch();
   const drafts: Review[] = useSelector((state: RootState) => state.drafts);
   const renderMath: boolean = useSelector((state: RootState) => state.user.renderMath);
-  const { back } = useHistory();
+  const { goBack } = useHistory();
 
   // function to delete the specified draft
   const deleteDraft = (draftToDelete: Review) => {
@@ -29,7 +29,7 @@ export default function DraftsRedux(): JSX.Element {
 
   const pageHeaderProps = {
     title: 'Your Drafts',
-    onBack: () => back(),
+    onBack: goBack,
   };
 
   return (
