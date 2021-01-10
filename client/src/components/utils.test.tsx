@@ -83,7 +83,6 @@ describe('utils', () => {
   });
 
   describe('shortenAuthors', () => {
-    // TODO EM: would this ever happen? Can we revise the functionality and rmeove this test?
     it('returns NAText when a single blank author is provided', () => {
       const output = shortenAuthors(['']);
       render(output as JSX.Element);
@@ -139,11 +138,10 @@ describe('utils', () => {
         expectedText: 'N/A',
       },
       {
-        // TODO EM: is this desired?
         description: 'with a string and a negative cutoff',
         inString: 'testing one two',
         cutoff: -5,
-        expectedText: '...',
+        expectedText: 'testing one two',
       },
       {
         description: 'with a string and a small cutoff',
@@ -157,12 +155,6 @@ describe('utils', () => {
         cutoff: 500,
         expectedText: 'testing one two',
       },
-      {
-        description: 'with a string and no cutoff',
-        inString: 'testing one two',
-        cutoff: 0,
-        expectedText: '...',
-      },
     ];
 
     scenarios.forEach(({ description, inString, cutoff, expectedText }) => {
@@ -174,29 +166,6 @@ describe('utils', () => {
   });
 
   describe('getTagColor', () => {
-    const scenarios: {
-      description: string;
-      input: string;
-      output: HSLString;
-    }[] = [
-      {
-        description: 'with no tag',
-        input: '',
-        output: 'hsl(0,80%,30%)',
-      },
-      {
-        description: 'with some tag',
-        input: 'i am a tag',
-        output: 'hsl(-354,80%,30%)',
-      },
-    ];
-
-    scenarios.forEach(({ description, input, output }) => {
-      it(`returns the right HSLString ${description}`, () => {
-        expect(getTagColor(input)).toEqual(output);
-      });
-    });
-
     it('returns the same color for the same tag', () => {
       const tag = 'tag';
       expect(getTagColor(tag)).toEqual(getTagColor(tag));

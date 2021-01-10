@@ -80,6 +80,10 @@ export const shortenTableString = (str: string, cutoff: number): JSX.Element => 
     return <NAText />;
   }
 
+  if (cutoff <= 0) {
+    return <span>{str}</span>;
+  }
+
   return <span>{str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str}</span>;
 };
 
