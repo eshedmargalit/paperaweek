@@ -11,7 +11,7 @@ export interface Paper {
   title: string;
   authors: string[];
   institutions?: string[] | null;
-  date?: Date;
+  date: Date;
   journal?: string;
   doi?: string;
   url?: string;
