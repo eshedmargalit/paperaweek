@@ -15,7 +15,7 @@ describe('<Login />', () => {
 
   describe('with a logged-in user', () => {
     it('redirects to the dashboard', () => {
-      const initialState = { ...getBlankInitialState(), user: { ...blankUser, display: 'Piranesi' } };
+      const initialState = { ...getBlankInitialState(), user: { ...blankUser, displayName: 'Piranesi' } };
       renderWithRouterRedux(<Login location={createLocation('/')} />, { redirectTo: '/dashboard', initialState });
       expect(screen.getByText('Redirected to a new page.')).toBeDefined();
     });
