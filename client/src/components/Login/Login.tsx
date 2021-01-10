@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Col, Row } from 'antd';
-import { CalendarOutlined, TeamOutlined } from '@ant-design/icons';
+import { Button, Col, Modal, Row } from 'antd';
+import { LoginOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
@@ -11,13 +11,24 @@ import './Login.scss';
 import { RootState } from '../../reducers';
 import { User } from '../../types';
 import { blankUser } from '../../templates';
+import background from './textured-background.png';
+import logo from './logo.png';
+import demo from './demo.png';
 
 interface LoginProps {
   location: Location;
 }
 
+const featureList = [
+  'Find papers online, automatically import metadata, and write one review per week',
+  'Search through reviews you’ve written',
+  'Share your reviews with colleagues',
+  'Our Review Form makes it easy to write thorough, structured reviews including Markdown and LaTeX',
+];
+
 export default function Login({ location }: LoginProps): JSX.Element {
   const user: User = useSelector((state: RootState) => state.user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (user !== blankUser) {
     return (
@@ -31,42 +42,37 @@ export default function Login({ location }: LoginProps): JSX.Element {
   }
 
   return (
-    <div>
-      <LazyHero
-        className="login__lazy-hero"
-        minHeight="80vh"
-        opacity={0.7}
-        parallaxOffset={100}
-        imageSrc="https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1661&q=80"
-      >
-        <h1>Paper a Week</h1>
-        <h5>Read a paper a week. That's it.</h5>
-        <a href="/auth/google">
-          <GoogleButton type="dark" />
-        </a>
-      </LazyHero>
-      <div className="login__bottom-tray">
+    <div className="login-page">
+      <LazyHero className="login__lazy-hero" minHeight="100vh" opacity={0.6} parallaxOffset={100} imageSrc={background}>
+        <img className="logo" src={logo} alt="logo" />
         <Row gutter={16}>
-          <Col span={12}>
-            <Card style={{ height: '100%' }}>
-              <Card.Meta
-                avatar={<CalendarOutlined />}
-                title="Because reading papers is hard"
-                description="Make it easy with Paper-a-week. Find papers online, automatically import metadata, and fill out the review form to write one detailed review per week. Future you will thank you."
-              />
-            </Card>
+          <Col span={8} offset={3}>
+            <ul className="feature-list">
+              {featureList.map(feature => {
+                return <li key={feature}>{feature}</li>;
+              })}
+            </ul>
           </Col>
           <Col span={12}>
-            <Card>
-              <Card.Meta
-                avatar={<TeamOutlined />}
-                title="Because you're smart"
-                description="Make your profile public to allow others to learn from your summaries and insights. Share interesting papers or find inspiration in other profiles!"
-              />
-            </Card>
+            <div className="product-title">
+              <img src={demo} className="demo" alt="demo" />
+              <h5>Read a paper a week. That's it.</h5>
+              <Button shape="round" size="large" icon={<LoginOutlined />} onClick={() => setIsModalOpen(true)}>
+                Sign In
+              </Button>
+            </div>
           </Col>
         </Row>
-      </div>
+      </LazyHero>
+      <Modal footer={null} destroyOnClose visible={isModalOpen} onCancel={() => setIsModalOpen(false)}>
+        <div className="modal-body">
+          <h3>Sign in to Paper a Week</h3>
+          <br />
+          <a href="/auth/google">
+            <GoogleButton type="dark" />
+          </a>
+        </div>
+      </Modal>
     </div>
   );
 }
