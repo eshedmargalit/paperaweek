@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { Redirect } from 'react-router-dom';
@@ -41,7 +41,13 @@ export default function ReviewWizardContainer({
     saveDraft(newReview);
   };
 
-  const form = <PAWForm initialReview={initialReview} onSubmit={previewModal} onChange={onChangeHandler} />;
+  const form = (
+    <PAWForm
+      initialReview={initialReview}
+      onSubmit={useCallback(previewModal, [])}
+      onChange={useCallback(onChangeHandler, [])}
+    />
+  );
 
   // what should happen if the review modal is exited?
   const onModalCancel = () => {
