@@ -23,7 +23,9 @@ export default function DraftsRedux(): JSX.Element {
 
   // function to edit the specified draft
   const handleModalEdit = (draft: Review) => {
-    dispatch(updateDraftId(draft._id || null));
+    // a draft should always have an ID if we got to it through this view
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    dispatch(updateDraftId(draft._id!));
     dispatch(setReview(draft));
   };
 

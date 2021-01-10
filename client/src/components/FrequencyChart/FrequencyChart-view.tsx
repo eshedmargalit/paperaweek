@@ -33,7 +33,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
 
   let chart = <Spin />;
 
-  if (data) {
+  if (data.length) {
     chart = (
       <div style={{ display: 'block', lineHeight: 0 }}>
         <ResponsiveContainer width="100%" height={195}>
