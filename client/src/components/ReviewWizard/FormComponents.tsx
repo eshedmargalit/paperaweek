@@ -17,19 +17,18 @@ interface FieldInputPropsWithLabel {
 }
 
 const DatePickerField = ({ ...props }: FieldInputProps<string>) => {
-  const { setFieldValue } = useFormikContext();
-  const [field] = useField(props);
+  const [, field, { setValue }] = useField(props);
 
   return (
     <DatePicker
-      {...field}
       {...props}
+      {...field}
       selected={(field.value && new Date(field.value)) || null}
       dateFormat="MM/yyyy"
       showMonthYearPicker
       showPopperArrow={false}
       onChange={val => {
-        setFieldValue(field.name, val);
+        setValue(val);
       }}
     />
   );
