@@ -46,7 +46,7 @@ export const renderCommaSepList = (items: string[]): JSX.Element[] =>
 export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: number): string[] => {
   const numAuthors = authorList.length;
   const numKeepTotal = numKeepEitherEnd * 2;
-  if (numAuthors <= numKeepTotal) {
+  if (numAuthors <= numKeepTotal || numKeepTotal === 0) {
     return authorList;
   }
 
@@ -60,6 +60,8 @@ export const removeMiddleAuthors = (authorList: string[], numKeepEitherEnd: numb
 };
 
 export const shortenAuthors = (authors: string[]): JSX.Element | string => {
+  if (!authors.length) return <NAText />;
+
   let authorString = '';
 
   if (authors.length === 2) {
@@ -76,6 +78,10 @@ export const shortenAuthors = (authors: string[]): JSX.Element | string => {
 export const shortenTableString = (str: string, cutoff: number): JSX.Element => {
   if (str === '') {
     return <NAText />;
+  }
+
+  if (cutoff <= 0) {
+    return <span>{str}</span>;
   }
 
   return <span>{str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str}</span>;

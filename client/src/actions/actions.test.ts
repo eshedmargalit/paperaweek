@@ -1,9 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { rest } from 'msw';
-import { fetchUser } from '.';
+import { fetchUser, setReview, updateDraftId, updateDrafts, updateReadingList, updateReviews } from '.';
 
 import { server } from '../mocks/server';
-import { blankUser } from '../templates';
-import { FETCH_USER } from './actionTypes';
+import { blankPaper, blankReview, blankUser } from '../templates';
+import {
+  FETCH_USER,
+  SET_REVIEW,
+  UPDATE_DRAFTS,
+  UPDATE_DRAFT_ID,
+  UPDATE_READING_LIST,
+  UPDATE_REVIEWS,
+} from './actionTypes';
 
 describe('redux actions', () => {
   describe('fetchUser', () => {
@@ -23,6 +31,27 @@ describe('redux actions', () => {
 
       await fetchUserFn(dispatchMock);
       expect(dispatchMock).toHaveBeenCalledWith({ payload: blankUser, type: FETCH_USER });
+    });
+  });
+
+  // These are all really simple, but we're chasing that sweet sweet test coverage
+  describe('other action creators', () => {
+    const scenarios: {
+      creator: any;
+      arg: any;
+      expectedType: any;
+    }[] = [
+      { creator: setReview, arg: blankReview, expectedType: SET_REVIEW },
+      { creator: updateDraftId, arg: 'Mongo ID', expectedType: UPDATE_DRAFT_ID },
+      { creator: updateDrafts, arg: [blankReview], expectedType: UPDATE_DRAFTS },
+      { creator: updateReadingList, arg: [blankPaper], expectedType: UPDATE_READING_LIST },
+      { creator: updateReviews, arg: [blankReview], expectedType: UPDATE_REVIEWS },
+    ];
+
+    scenarios.forEach(({ creator, arg, expectedType }) => {
+      it(`returns the right type for ${creator.name}`, () => {
+        expect(creator(arg).type).toBe(expectedType);
+      });
     });
   });
 });
