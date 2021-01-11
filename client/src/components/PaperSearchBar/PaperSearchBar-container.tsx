@@ -1,6 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
+import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 import { Paper } from '../../types';
 import { isDOI } from '../utils';
 import PaperSearchBarView from './PaperSearchBar-view';
@@ -12,8 +13,8 @@ const interpret = async (input: string): Promise<Paper[]> => {
   // second regex to delete single quotes, double quotes, and slashes
   query = query.replace(/['"/\\]/g, '');
 
-  const response = await axios.get<Paper[]>(`api/searchBar/interpret/${query}`);
-  return response.data;
+  const response = await axios.get<PaperResponse[]>(`api/searchBar/interpret/${query}`);
+  return response.data.map(constructPaperFromResponse);
 };
 
 const doiSearch = async (input: string): Promise<Paper[]> => {
@@ -27,8 +28,8 @@ const doiSearch = async (input: string): Promise<Paper[]> => {
     return [];
   }
 
-  const response = await axios.get<Paper>(`/api/doi/${query}`);
-  return [response.data];
+  const response = await axios.get<PaperResponse>(`/api/doi/${query}`);
+  return [constructPaperFromResponse(response.data)];
 };
 
 interface PaperSearchBarContainerProps {
