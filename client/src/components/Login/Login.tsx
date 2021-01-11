@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Col, Modal, Row } from 'antd';
+import { Button, Col, Popover, Row } from 'antd';
 import { LoginOutlined } from '@ant-design/icons';
 import { Redirect } from 'react-router-dom';
 import LazyHero from 'react-lazy-hero';
@@ -41,6 +41,14 @@ export default function Login({ location }: LoginProps): JSX.Element {
     );
   }
 
+  const LoginButton = (
+    <div className="modal-body">
+      <a href="/auth/google">
+        <GoogleButton type="dark" />
+      </a>
+    </div>
+  );
+
   return (
     <div className="login-page">
       <LazyHero className="login__lazy-hero" minHeight="100vh" opacity={0.6} parallaxOffset={100} imageSrc={background}>
@@ -57,22 +65,21 @@ export default function Login({ location }: LoginProps): JSX.Element {
             <div className="product-title">
               <img src={demo} className="demo" alt="demo" />
               <h5>Read a paper a week. That's it.</h5>
-              <Button shape="round" size="large" icon={<LoginOutlined />} onClick={() => setIsModalOpen(true)}>
-                Sign In
-              </Button>
+              <Popover
+                content={LoginButton}
+                trigger="click"
+                visible={isModalOpen}
+                placement="bottom"
+                onVisibleChange={() => setIsModalOpen(!isModalOpen)}
+              >
+                <Button shape="round" size="large" icon={<LoginOutlined />}>
+                  Sign In
+                </Button>
+              </Popover>
             </div>
           </Col>
         </Row>
       </LazyHero>
-      <Modal footer={null} destroyOnClose visible={isModalOpen} onCancel={() => setIsModalOpen(false)}>
-        <div className="modal-body">
-          <h3>Sign in to Paper a Week</h3>
-          <br />
-          <a href="/auth/google">
-            <GoogleButton type="dark" />
-          </a>
-        </div>
-      </Modal>
     </div>
   );
 }
