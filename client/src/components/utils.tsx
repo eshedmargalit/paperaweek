@@ -122,7 +122,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
     diffs.push(diff);
   }
 
-  const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0;
+  const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0
   const ppw = sortedDates.length / totalWeeks;
   const ppwString = ppw.toFixed(2);
 

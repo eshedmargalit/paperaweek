@@ -11,7 +11,7 @@ export interface Paper {
   title: string;
   authors: string[];
   institutions?: string[] | null;
-  date?: Date;
+  date: Date;
   journal?: string;
   doi?: string;
   url?: string;
@@ -41,7 +41,6 @@ export interface User {
   reviews: Review[];
   readingList: Paper[];
   drafts: Review[];
-  lastLogin?: number;
   publicProfile: boolean;
   renderMath: boolean;
 }

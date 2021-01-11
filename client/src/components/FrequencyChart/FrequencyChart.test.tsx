@@ -20,9 +20,9 @@ describe('<FrequencyChart />', () => {
       expect(screen.getAllByText('1')).toBeDefined();
     });
 
-    it('renders Infinity per Week', () => {
+    it('renders about 1 per week', () => {
       render(<FrequencyChart reviews={reviews} />);
-      expect(screen.getAllByText('Infinity')).toBeDefined();
+      expect(screen.getAllByText('1')).toBeDefined();
     });
   });
 
