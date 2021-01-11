@@ -21,11 +21,11 @@ $default-padding: 30px;
 
   .feature-list {
     text-align: left;
-    list-style-type: disc;
+    list-style-image: url('./airplane.png');
     font-size: 1.5em;
 
     li {
-      margin-bottom: $default-padding / 3;
+      margin-bottom: $default-padding;
     }
   }
 }
