@@ -41,7 +41,6 @@ export interface User {
   reviews: Review[];
   readingList: Paper[];
   drafts: Review[];
-  lastLogin?: number;
   publicProfile: boolean;
   renderMath: boolean;
 }
