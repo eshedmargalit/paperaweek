@@ -1,6 +1,7 @@
 /* Colors */
-$blue-light: rgba(100, 149, 237, 1);
-$blue-dark: rgba(73, 132, 238, 1);
+$light-gray: rgb(247, 247, 247);
+$primary-color: black;
+$hover-accent: darkgray;
 
 .right {
   float: right;
@@ -35,13 +36,13 @@ $blue-dark: rgba(73, 132, 238, 1);
 
 .menu {
   display: flex;
-  color: white;
+  color: $primary-color;
   justify-content: space-between;
   align-content: center;
   list-style: none;
   height: 42px;
   width: 100%;
-  background: linear-gradient(90deg, $blue-dark 0%, $blue-light 100%);
+  background: white;
   padding: 4px 12px 4px 12px;
   margin-block-end: 0px;
 
@@ -53,38 +54,38 @@ $blue-dark: rgba(73, 132, 238, 1);
   a {
     font-weight: 700;
     font-size: 1rem;
-    color: white;
+    color: $primary-color;
     float: left;
   }
 
   a:hover {
-    color: #ccc;
+    color: $hover-accent;
   }
 
   .ant-btn {
     &-background-ghost {
-      color: #fff;
+      color: lightgray;
     }
-    color: #888;
+    color: black;
     &:hover {
-      color: #fff;
+      color: $hover-accent;
     }
     &:active {
-      color: #fff;
+      color: $hover-accent;
     }
   }
 
   .ant-btn-default:hover {
-    color: #111;
+    color: $hover-accent;
   }
 
   h5 {
     text-align: left;
-    color: #fff;
+    color: $primary-color;
   }
 
   .userIcon {
-    color: #ccc;
+    color: $hover-accent;
   }
 
   &__item > a > h5 {
@@ -93,7 +94,7 @@ $blue-dark: rgba(73, 132, 238, 1);
   }
 
   &__item {
-    color: #fff;
+    color: $primary-color;
     font-weight: 700;
     font-size: 1rem;
     margin-left: 8px;
@@ -104,7 +105,7 @@ $blue-dark: rgba(73, 132, 238, 1);
   }
 
   .menu__badge .ant-badge-count {
-    background-color: #fff;
+    background-color: lightgray;
     color: #222;
     opacity: 0.5;
   }
