@@ -3,8 +3,9 @@ import React, { FunctionComponent } from 'react';
 import { Button } from 'antd';
 import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
-import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { get as _get } from 'lodash';
+import { CSSTransition, TransitionGroup } from 'react-transition-group'; // ES6
 
 import { Maybe } from '../../types';
 
@@ -83,23 +84,25 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
 
   return (
     <div>
-      {fieldArray &&
-        fieldArray.length > 0 &&
-        fieldArray.map((_, index: number) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <div key={index}>
-            <Field name={`${name}.${index}`} autoFocus />
-            <Button
-              tabIndex={-1}
-              className="dynamic-delete-button"
-              onClick={() => remove(index)} // remove a listItem from the list
-            >
-              <CloseOutlined />
-            </Button>
-          </div>
-        ))}
-      <Button style={{ width: '150px' }} onClick={() => push('')}>
-        <PlusOutlined />
+      <TransitionGroup className="dynamic-tg">
+        {fieldArray &&
+          fieldArray.length > 0 &&
+          fieldArray.map((_, index: number) => (
+            <CSSTransition key={index} timeout={250} classNames="move">
+              <div className="dynamic-field-container" key={index}>
+                <Field className="dynamic-field" name={`${name}.${index}`} autoFocus />
+                <Button
+                  icon={<DeleteOutlined />}
+                  tabIndex={-1}
+                  shape="circle"
+                  className="dynamic-delete-button"
+                  onClick={() => remove(index)}
+                />
+              </div>
+            </CSSTransition>
+          ))}
+      </TransitionGroup>
+      <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => push('')}>
         Add
       </Button>
     </div>
@@ -119,18 +122,24 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
 
   return (
     <div>
-      {fieldArray &&
-        fieldArray.length > 0 &&
-        fieldArray.map((_, index: number) => (
-          <div key={index} className="bullet-text-area">
-            <div className="bullet">&bull;</div>
-            <Field as="textarea" name={`${name}.${index}`} autoFocus />
-            <Button tabIndex={-1} className="dynamic-delete-button" onClick={() => remove(index)}>
-              <CloseOutlined />
-            </Button>
-          </div>
-        ))}
-      <Button className="dynamic-add-button" onClick={() => push('')}>
+      <TransitionGroup className="dynamic-tg">
+        {fieldArray &&
+          fieldArray.length > 0 &&
+          fieldArray.map((_, index: number) => (
+            <CSSTransition key={index} timeout={250} classNames="move">
+              <div key={index} className="bullet-text-area">
+                <Field className="dynamic-text-area" as="textarea" name={`${name}.${index}`} autoFocus />
+                <Button
+                  tabIndex={-1}
+                  icon={<DeleteOutlined />}
+                  className="dynamic-delete-button"
+                  onClick={() => remove(index)}
+                />
+              </div>
+            </CSSTransition>
+          ))}
+      </TransitionGroup>
+      <Button className="dynamic-add-button" shape="round" onClick={() => push('')}>
         <PlusOutlined />
         Add
       </Button>

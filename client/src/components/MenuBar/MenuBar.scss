@@ -2,6 +2,7 @@
 $light-gray: rgb(247, 247, 247);
 $primary-color: black;
 $hover-accent: darkgray;
+$green: #00b295;
 
 .right {
   float: right;
@@ -81,7 +82,7 @@ $hover-accent: darkgray;
 
   h5 {
     text-align: left;
-    color: $primary-color;
+    color: $green;
   }
 
   .userIcon {

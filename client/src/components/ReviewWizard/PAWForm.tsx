@@ -65,7 +65,9 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
       {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (
         <Form>
           <div>
-            <h2> Paper Information </h2>
+            <div className="section-title">
+              <h2> Paper Information </h2>
+            </div>
             <Row className="form-group">
               <Col {...reviewItemColSpan}>
                 <TextField label="Title" name="paper.title" type="text" />
@@ -91,8 +93,9 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
                 <TextField label="DOI" name="paper.doi" type="text" />
               </Col>
             </Row>
-            <hr />
-            <h2> Your Review </h2>
+            <div className="section-title">
+              <h2> Your Review </h2>
+            </div>
             <Row className="form-group">
               {bulletNoteFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>

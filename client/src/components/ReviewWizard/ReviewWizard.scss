@@ -1,3 +1,7 @@
+$blue-light: rgba(100, 149, 237, 1);
+$blue-dark: rgba(73, 132, 238, 1);
+$green: #00b295;
+
 input {
   border: 1px solid #ccc;
   width: 90%;
@@ -19,16 +23,17 @@ textarea {
   color: #999;
   transition: all 0.3s;
   margin-left: 3px;
+  padding: 0;
 
   &:hover {
     color: red;
   }
 }
 
-.dynamic-add-button {
-  width: 150px;
-  margin-left: 25px;
-}
+// .dynamic-add-button {
+//   width: 150px;
+//   margin-left: 25px;
+// }
 
 .bullet {
   margin-right: 20px;
@@ -71,4 +76,72 @@ label {
 
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+.section-title {
+  vertical-align: center;
+  width: 100%;
+  border-radius: 6px;
+  padding: 10px 10px;
+  background: linear-gradient(90deg, $green 0%, white 200%);
+
+  h2 {
+    font-size: x-large;
+    margin-bottom: 0;
+    color: white;
+  }
+}
+
+.form-item > input,
+.dynamic-field,
+.react-datepicker__input-container > input {
+  height: 40px;
+  border-radius: 6px;
+}
+
+.dynamic-text-area {
+  height: 80px;
+  border-radius: 6px;
+}
+
+.ant-row {
+  margin-bottom: 50px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.plus-button {
+  margin-top: 5px;
+}
+
+.dynamic-field-container {
+  margin-bottom: 5px;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.move-enter {
+  opacity: 0.01;
+  transform: translate(-40px, 0);
+}
+
+.move-enter-active {
+  opacity: 1;
+  transform: translate(0, 0);
+  transition: all 250ms ease-in;
+}
+
+.move-exit {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.move-exit-active {
+  opacity: 0.01;
+  transform: translate(-40px, 0);
+  transition: all 250ms ease-in;
 }
