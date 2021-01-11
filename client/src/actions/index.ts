@@ -18,15 +18,18 @@ import {
   UpdateReadingListAction,
   UpdateReviewsAction,
 } from './types';
-import { Maybe, MongoID, Paper, Review, User } from '../types';
+import { Maybe, MongoID, Paper, Review } from '../types';
+import { UserResponse, constructUserFromResponse } from '../dtos';
 
 export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>): Promise<void> => {
-  const user = await axios.get<User>('/api/current_user');
+  const userResponse = await axios.get<UserResponse>('/api/current_user');
 
-  if (!user.data) {
+  if (!userResponse.data) {
     return;
   }
-  dispatch({ type: FETCH_USER, payload: user.data });
+  const user = constructUserFromResponse(userResponse.data);
+
+  dispatch({ type: FETCH_USER, payload: user });
 };
 
 export const setReview = (review: Review): SetReviewAction => ({

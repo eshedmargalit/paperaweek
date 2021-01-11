@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
 import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
 import { RootState } from '../../reducers';
+import { fetchUser } from '../../actions';
 
 const statuses = {
   UNSAVED: 'unsaved',
@@ -33,6 +34,7 @@ interface returnProps {
 }
 export const useSaveDraft = (): returnProps => {
   const isMounted = useIsMounted();
+  const dispatch = useDispatch();
 
   const activeDraft = useSelector((state: RootState) => state.activeDraft);
   const [draftId, setDraftId] = useState(activeDraft);
@@ -66,8 +68,9 @@ export const useSaveDraft = (): returnProps => {
 
   // deleteActiveDraft function
   const deleteActiveDraft = async () => {
-    if (isMounted() && draftIdRef.current) {
+    if (draftIdRef.current) {
       await axios.delete(`api/drafts/${draftIdRef.current}`);
+      dispatch(fetchUser());
     }
   };
 
