@@ -51,17 +51,17 @@ export default function Login({ location }: LoginProps): JSX.Element {
 
   return (
     <div className="login-page">
-      <LazyHero className="login__lazy-hero" minHeight="100vh" opacity={0.6} parallaxOffset={100} imageSrc={background}>
+      <LazyHero className="login__lazy-hero" minHeight="95vh" opacity={0.6} parallaxOffset={100} imageSrc={background}>
         <img className="logo" src={logo} alt="logo" />
         <Row gutter={16}>
-          <Col span={8} offset={3}>
+          <Col md={8} offset={3} sm={24}>
             <ul className="feature-list">
               {featureList.map(feature => {
                 return <li key={feature}>{feature}</li>;
               })}
             </ul>
           </Col>
-          <Col span={12}>
+          <Col md={12} sm={24}>
             <div className="product-title">
               <img src={demo} className="demo" alt="demo" />
               <h5>Read a paper a week. That's it.</h5>
