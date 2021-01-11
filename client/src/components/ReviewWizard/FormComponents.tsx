@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent } from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
+import { Field, useField, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
-import { CloseOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { get as _get } from 'lodash';
 import { CSSTransition, TransitionGroup } from 'react-transition-group'; // ES6
 
@@ -91,13 +91,15 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
             <CSSTransition key={index} timeout={250} classNames="move">
               <div className="dynamic-field-container" key={index}>
                 <Field className="dynamic-field" name={`${name}.${index}`} autoFocus />
-                <Button
-                  icon={<DeleteOutlined />}
-                  tabIndex={-1}
-                  shape="circle"
-                  className="dynamic-delete-button"
-                  onClick={() => remove(index)}
-                />
+                {fieldArray.length > 1 && (
+                  <Button
+                    icon={<DeleteOutlined />}
+                    tabIndex={-1}
+                    shape="circle"
+                    className="dynamic-delete-button"
+                    onClick={() => remove(index)}
+                  />
+                )}
               </div>
             </CSSTransition>
           ))}
@@ -129,12 +131,14 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
             <CSSTransition key={index} timeout={250} classNames="move">
               <div key={index} className="bullet-text-area">
                 <Field className="dynamic-text-area" as="textarea" name={`${name}.${index}`} autoFocus />
-                <Button
-                  tabIndex={-1}
-                  icon={<DeleteOutlined />}
-                  className="dynamic-delete-button"
-                  onClick={() => remove(index)}
-                />
+                {fieldArray.length > 1 && (
+                  <Button
+                    tabIndex={-1}
+                    icon={<DeleteOutlined />}
+                    className="dynamic-delete-button"
+                    onClick={() => remove(index)}
+                  />
+                )}
               </div>
             </CSSTransition>
           ))}
