@@ -1,7 +1,9 @@
+@import '../../styles/colors.scss';
+
 /* Colors */
 $light-gray: rgb(247, 247, 247);
 $text-color: black;
-$hover-accent: darkgray;
+$hover-accent: $primary-color;
 
 .right {
   float: right;
@@ -81,11 +83,11 @@ $hover-accent: darkgray;
 
   h5 {
     text-align: left;
-    color: $text-color;
+    color: $primary-color;
   }
 
   .userIcon {
-    color: $hover-accent;
+    color: $primary-color;
   }
 
   &__item > a > h5 {

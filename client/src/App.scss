@@ -38,6 +38,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  &:hover {
+    color: $primary-color !important;
+    border-color: $primary-color !important;
+  }
 }
 
 .ant-avatar {
