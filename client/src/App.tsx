@@ -11,7 +11,7 @@ import PublicProfile from './components/PublicProfile';
 import NotFound from './components/NotFound/NotFound';
 import { fetchUser } from './actions';
 
-import './App.css';
+import './App.scss';
 
 export default function App(): JSX.Element {
   const dispatch = useDispatch();

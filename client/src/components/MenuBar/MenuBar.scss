@@ -1,7 +1,9 @@
+@import '../../styles/colors.scss';
+
 /* Colors */
 $light-gray: rgb(247, 247, 247);
-$primary-color: black;
-$hover-accent: darkgray;
+$text-color: black;
+$hover-accent: $primary-color;
 
 .right {
   float: right;
@@ -36,7 +38,7 @@ $hover-accent: darkgray;
 
 .menu {
   display: flex;
-  color: $primary-color;
+  color: $text-color;
   justify-content: space-between;
   align-content: center;
   list-style: none;
@@ -54,7 +56,7 @@ $hover-accent: darkgray;
   a {
     font-weight: 700;
     font-size: 1rem;
-    color: $primary-color;
+    color: $text-color;
     float: left;
   }
 
@@ -85,7 +87,7 @@ $hover-accent: darkgray;
   }
 
   .userIcon {
-    color: $hover-accent;
+    color: $primary-color;
   }
 
   &__item > a > h5 {
@@ -94,7 +96,7 @@ $hover-accent: darkgray;
   }
 
   &__item {
-    color: $primary-color;
+    color: $text-color;
     font-weight: 700;
     font-size: 1rem;
     margin-left: 8px;

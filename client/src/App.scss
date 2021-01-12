@@ -1,4 +1,5 @@
 @import '~antd/dist/antd.css';
+@import './styles/colors.scss';
 
 .App {
   text-align: left;
@@ -37,19 +38,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  &:hover {
+    color: $primary-color !important;
+    border-color: $primary-color !important;
   }
 }
 
 .ant-avatar {
-  background-color: #4984ee;
+  background-color: $primary-color;
 }
 
 .width-80 {
