@@ -23,7 +23,7 @@ describe('redux actions', () => {
       const dispatchMock = jest.fn();
 
       await fetchUserFn(dispatchMock);
-      expect(dispatchMock).not.toHaveBeenCalled();
+      expect(dispatchMock).not.toHaveBeenCalledWith({ type: FETCH_USER });
     });
 
     it('calls dispatch if a user is returned', async () => {
