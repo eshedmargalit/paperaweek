@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProtected } from '.';
+import { RootState } from '../../reducers';
 import { blankUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 
@@ -21,19 +22,25 @@ function TestComponent({ redirect }: { redirect?: string }): JSX.Element {
 
 describe('useProtected', () => {
   describe('redirect behavior', () => {
-    it('redirects to the default path if a user is present', () => {
-      renderWithRouterRedux(<TestComponent />);
+    const initialState: RootState = {
+      ...getBlankInitialState(),
+      auth: { loading: false, user: blankUser },
+    };
+
+    it('redirects to the default path if no user is present', () => {
+      renderWithRouterRedux(<TestComponent />, { initialState });
       expect(mockHistoryPush).toHaveBeenCalledWith('/');
     });
 
     it('redirects to a custom path if one is specific', () => {
-      renderWithRouterRedux(<TestComponent redirect="customPath" />);
+      renderWithRouterRedux(<TestComponent redirect="customPath" />, { initialState });
       expect(mockHistoryPush).toHaveBeenCalledWith('customPath');
     });
 
-    it('does not redirect if no user is present', () => {
-      const initialState = { ...getBlankInitialState(), auth: { ...blankUser, displayName: 'John' } };
-      renderWithRouterRedux(<TestComponent />, { initialState });
+    it('does not redirect if a user is present', () => {
+      renderWithRouterRedux(<TestComponent />, {
+        initialState: { ...initialState, auth: { user: { ...blankUser, displayName: 'John' }, loading: false } },
+      });
       expect(mockHistoryPush).not.toHaveBeenCalled();
     });
   });
