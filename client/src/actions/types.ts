@@ -1,6 +1,8 @@
 import { Maybe, MongoID, Paper, Review, User } from '../types';
 import {
   FETCH_USER,
+  FETCH_USER_FAILED,
+  FETCH_USER_LOADING,
   SET_REVIEW,
   UPDATE_DRAFTS,
   UPDATE_DRAFT_ID,
@@ -11,6 +13,14 @@ import {
 export interface FetchUserAction {
   type: typeof FETCH_USER;
   payload: User;
+}
+
+export interface FetchUserLoadingAction {
+  type: typeof FETCH_USER_LOADING;
+}
+
+export interface FetchUserFailedAction {
+  type: typeof FETCH_USER_FAILED;
 }
 
 export interface SetReviewAction {
