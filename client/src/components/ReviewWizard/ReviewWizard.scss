@@ -1,6 +1,13 @@
 @import '../../styles/colors.scss';
 
 .paw-form {
+  .react-datepicker__month-text--keyboard-selected {
+    background: $primary-color !important;
+    &:hover {
+      background: $dark-mint !important;
+    }
+  }
+
   padding-bottom: 5vh;
 
   input {
