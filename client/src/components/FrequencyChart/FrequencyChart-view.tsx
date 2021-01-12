@@ -4,6 +4,7 @@ import { Row, Col, Card, Spin, Statistic } from 'antd';
 import moment, { Moment } from 'moment';
 import { getReviewStats } from '../utils';
 import { Review } from '../../types';
+import './FrequencyChart.scss';
 
 interface FrequencyChartViewProps {
   reviews: Review[];
@@ -53,7 +54,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
               <Label value="Review Number" offset={-15} position="insideBottom" />
             </XAxis>
             <YAxis label={yAxisText} />
-            <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" stroke="#4984ee" />
+            <Line type="monotone" dot={false} strokeWidth={3} dataKey="gap" />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -75,17 +76,19 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   );
 
   return (
-    <Card title="Your Stats" style={{ marginTop: 5 }}>
-      <Row>
-        <Col lg={16} sm={24} xs={24}>
-          {' '}
-          {chart}
-        </Col>
-        <Col lg={8} sm={24} xs={24}>
-          {' '}
-          {statRender}
-        </Col>
-      </Row>
-    </Card>
+    <div className="frequency-chart">
+      <Card title="Your Stats" style={{ marginTop: 5 }}>
+        <Row>
+          <Col lg={16} sm={24} xs={24}>
+            {' '}
+            {chart}
+          </Col>
+          <Col lg={8} sm={24} xs={24}>
+            {' '}
+            {statRender}
+          </Col>
+        </Row>
+      </Card>
+    </div>
   );
 }

@@ -1,0 +1,7 @@
+@import '../../styles/colors.scss';
+
+.frequency-chart {
+  path.recharts-curve.recharts-line-curve {
+    stroke: $primary-color;
+  }
+}
