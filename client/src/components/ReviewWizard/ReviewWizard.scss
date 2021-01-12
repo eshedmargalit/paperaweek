@@ -2,146 +2,152 @@ $blue-light: rgba(100, 149, 237, 1);
 $blue-dark: rgba(73, 132, 238, 1);
 $green: #00b295;
 
-input {
-  border: 1px solid #ccc;
-  width: 90%;
-  padding-left: 6px;
-}
+.paw-form {
+  padding-bottom: 5vh;
 
-textarea {
-  border: 1px solid #ccc;
-  width: 90%;
-  padding-left: 6px;
-  margin-bottom: 8px !important;
-}
-
-.ant-btn.dynamic-delete-button {
-  cursor: pointer;
-  border: none;
-  box-shadow: none;
-  font-size: 18px;
-  color: #999;
-  transition: all 0.3s;
-  margin-left: 3px;
-  padding: 0;
-
-  &:hover {
-    color: red;
+  input {
+    border: 1px solid #ccc;
+    width: 90%;
+    padding-left: 6px;
   }
-}
 
-// .dynamic-add-button {
-//   width: 150px;
-//   margin-left: 25px;
-// }
+  textarea {
+    border: 1px solid #ccc;
+    width: 100%;
+    padding-left: 6px;
+    margin-bottom: 8px !important;
+  }
 
-.bullet {
-  margin-right: 20px;
-}
+  .ant-btn.dynamic-delete-button {
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+    font-size: 18px;
+    color: #999;
+    transition: all 0.3s;
+    margin-left: 3px;
+    padding: 0;
 
-.save-icon {
-  margin: 5px 0px;
-}
+    &:hover {
+      color: red;
+    }
+  }
 
-.ant-legacy-form-item {
-  margin-bottom: 2px !important;
+  .ant-btn-primary {
+    background: $green !important;
+  }
 
-  &-children {
+  .bullet {
+    margin-right: 20px;
+  }
+
+  .save-icon {
+    margin: 5px 0px;
+  }
+
+  .ant-legacy-form-item {
+    margin-bottom: 2px !important;
+
+    &-children {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  label {
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  .bullet-text-area {
     display: flex;
-    align-items: center;
+    width: 100%;
+
+    .ant-input-textarea {
+      width: 100%;
+    }
   }
-}
 
-label {
-  font-weight: bold;
-  margin-top: 15px;
-}
-.bullet-text-area {
-  display: flex;
-  width: 90%;
+  .form-item {
+    display: flex;
+    flex-direction: column;
+  }
 
-  .ant-input-textarea {
+  .react-datepicker__input-container {
+    width: inherit;
+  }
+
+  .react-datepicker-wrapper {
     width: 100%;
   }
-}
 
-.form-item {
-  display: flex;
-  flex-direction: column;
-}
+  .section-title {
+    vertical-align: center;
+    width: 100%;
+    border-radius: 6px;
+    padding: 10px 10px;
+    background: linear-gradient(90deg, $green 0%, white 200%);
 
-.react-datepicker__input-container {
-  width: inherit;
-}
-
-.react-datepicker-wrapper {
-  width: 100%;
-}
-
-.section-title {
-  vertical-align: center;
-  width: 100%;
-  border-radius: 6px;
-  padding: 10px 10px;
-  background: linear-gradient(90deg, $green 0%, white 200%);
-
-  h2 {
-    font-size: x-large;
-    margin-bottom: 0;
-    color: white;
+    h2 {
+      font-size: x-large;
+      margin-bottom: 0;
+      color: white;
+    }
   }
-}
 
-.form-item > input,
-.dynamic-field,
-.react-datepicker__input-container > input {
-  height: 40px;
-  border-radius: 6px;
-}
-
-.dynamic-text-area {
-  height: 80px;
-  border-radius: 6px;
-}
-
-.ant-row {
-  margin-bottom: 50px;
-
-  &:last-of-type {
-    margin-bottom: 0;
+  .form-item > input,
+  .dynamic-field,
+  .react-datepicker__input-container > input {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
   }
-}
 
-.plus-button {
-  margin-top: 5px;
-}
-
-.dynamic-field-container {
-  margin-bottom: 5px;
-
-  &:last-of-type {
-    margin-bottom: 0;
+  .dynamic-text-area {
+    height: 80px;
+    border-radius: 6px;
   }
-}
 
-.move-enter {
-  opacity: 0.01;
-  transform: translate(-40px, 0);
-}
+  .ant-row {
+    margin-bottom: 50px;
 
-.move-enter-active {
-  opacity: 1;
-  transform: translate(0, 0);
-  transition: all 250ms ease-in;
-}
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
 
-.move-exit {
-  opacity: 1;
-  transform: translate(0, 0);
-}
+  .plus-button {
+    margin-top: 5px;
+  }
 
-.move-exit-active {
-  opacity: 0.01;
-  transform: translate(-40px, 0);
-  transition: all 250ms ease-in;
+  .dynamic-field-container {
+    width: 100%;
+    display: flex;
+    margin-bottom: 5px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .move-enter {
+    opacity: 0.01;
+    transform: translate(-40px, 0);
+  }
+
+  .move-enter-active {
+    opacity: 1;
+    transform: translate(0, 0);
+    transition: all 250ms ease-in;
+  }
+
+  .move-exit {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  .move-exit-active {
+    opacity: 0.01;
+    transform: translate(-40px, 0);
+    transition: all 250ms ease-in;
+  }
 }

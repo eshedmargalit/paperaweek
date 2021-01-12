@@ -64,11 +64,11 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
     >
       {({ handleSubmit }: { handleSubmit: OnClickEventType }) => (
         <Form>
-          <div>
+          <div className="paw-form">
             <div className="section-title">
               <h2> Paper Information </h2>
             </div>
-            <Row className="form-group">
+            <Row className="form-group" gutter={16}>
               <Col {...reviewItemColSpan}>
                 <TextField label="Title" name="paper.title" type="text" />
               </Col>
@@ -83,20 +83,20 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
                 <label htmlFor="paper.institutions">Institutions</label>
                 <FieldArray name="paper.institutions" component={DynamicList} />
               </Col>
-              <Col lg={8} sm={12}>
+              <Col lg={8} sm={24}>
                 <TextField label="Journal" name="paper.journal" type="text" />
               </Col>
-              <Col lg={8} sm={12}>
+              <Col lg={8} sm={24}>
                 <TextField label="URL" name="paper.url" type="text" />
               </Col>
-              <Col lg={8} sm={12}>
+              <Col lg={8} sm={24}>
                 <TextField label="DOI" name="paper.doi" type="text" />
               </Col>
             </Row>
             <div className="section-title">
               <h2> Your Review </h2>
             </div>
-            <Row className="form-group">
+            <Row className="form-group" gutter={16}>
               {bulletNoteFields.map(({ fieldName, label }) => (
                 <Col key={label} {...reviewItemColSpan}>
                   <label htmlFor={fieldName}>{label}</label>
@@ -104,7 +104,7 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
                 </Col>
               ))}
             </Row>
-            <Row>
+            <Row gutter={16}>
               <Col {...reviewItemColSpan}>
                 <TextField label="One Sentence Summary" name="notes.tldr" type="text" />
               </Col>
@@ -113,7 +113,7 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
               </Col>
             </Row>
             <br />
-            <Button type="primary" onClick={handleSubmit}>
+            <Button shape="round" type="primary" onClick={handleSubmit}>
               Continue to Preview
             </Button>
           </div>
