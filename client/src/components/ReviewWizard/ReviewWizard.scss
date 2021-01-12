@@ -1,6 +1,4 @@
-$blue-light: rgba(100, 149, 237, 1);
-$blue-dark: rgba(73, 132, 238, 1);
-$green: #00b295;
+@import '../../styles/colors.scss';
 
 .paw-form {
   padding-bottom: 5vh;
@@ -34,7 +32,7 @@ $green: #00b295;
   }
 
   .ant-btn-primary {
-    background: $green !important;
+    background: $primary-color !important;
   }
 
   .bullet {
@@ -85,7 +83,7 @@ $green: #00b295;
     width: 100%;
     border-radius: 6px;
     padding: 10px 10px;
-    background: linear-gradient(90deg, $green 0%, white 200%);
+    background: linear-gradient(90deg, $primary-color 0%, white 200%);
 
     h2 {
       font-size: x-large;

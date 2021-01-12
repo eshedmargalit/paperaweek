@@ -1,8 +1,7 @@
 /* Colors */
 $light-gray: rgb(247, 247, 247);
-$primary-color: black;
+$text-color: black;
 $hover-accent: darkgray;
-$green: #00b295;
 
 .right {
   float: right;
@@ -37,7 +36,7 @@ $green: #00b295;
 
 .menu {
   display: flex;
-  color: $primary-color;
+  color: $text-color;
   justify-content: space-between;
   align-content: center;
   list-style: none;
@@ -55,7 +54,7 @@ $green: #00b295;
   a {
     font-weight: 700;
     font-size: 1rem;
-    color: $primary-color;
+    color: $text-color;
     float: left;
   }
 
@@ -82,7 +81,7 @@ $green: #00b295;
 
   h5 {
     text-align: left;
-    color: $green;
+    color: $text-color;
   }
 
   .userIcon {
@@ -95,7 +94,7 @@ $green: #00b295;
   }
 
   &__item {
-    color: $primary-color;
+    color: $text-color;
     font-weight: 700;
     font-size: 1rem;
     margin-left: 8px;
