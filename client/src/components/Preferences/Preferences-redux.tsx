@@ -16,7 +16,7 @@ export default function PreferencesRedux({ onChange }: PreferencesReduxProps): J
     onChange();
   };
 
-  const auth: User = useSelector((state: RootState) => state.auth);
+  const auth: User = useSelector((state: RootState) => state.auth.user);
   const user: User = useSelector((state: RootState) => state.user);
 
   const { publicProfile } = user;

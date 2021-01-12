@@ -8,10 +8,12 @@ import {
   UPDATE_READING_LIST,
   UPDATE_REVIEWS,
   SET_REVIEW,
+  FETCH_USER_LOADING,
+  FETCH_USER_FAILED,
 } from './actionTypes';
 
 import {
-  FetchUserAction,
+  AuthReducerAction,
   SetReviewAction,
   UpdateDraftIdAction,
   UpdateDraftsAction,
@@ -21,10 +23,13 @@ import {
 import { Maybe, MongoID, Paper, Review } from '../types';
 import { UserResponse, constructUserFromResponse } from '../dtos';
 
-export const fetchUser = () => async (dispatch: Dispatch<FetchUserAction>): Promise<void> => {
+export const fetchUser = () => async (dispatch: Dispatch<AuthReducerAction>): Promise<void> => {
+  dispatch({ type: FETCH_USER_LOADING });
+
   const userResponse = await axios.get<UserResponse>('/api/current_user');
 
   if (!userResponse.data) {
+    dispatch({ type: FETCH_USER_FAILED });
     return;
   }
   const user = constructUserFromResponse(userResponse.data);

@@ -9,8 +9,6 @@ import { fetchUser } from '../../actions';
 import { RootState } from '../../reducers';
 import { initialState as initialBlankUser } from '../../reducers/reducer_auth';
 
-import { User } from '../../types';
-
 interface UseProtectedOptions {
   redirectTo?: string;
 }
@@ -20,7 +18,7 @@ const DEFAULT_REDIRECT_PATH = '/';
 export function useProtected(options?: UseProtectedOptions): void {
   const { push } = useHistory();
   const dispatch = useDispatch();
-  const auth: User = useSelector((state: RootState) => state.auth);
+  const { user, loading } = useSelector((state: RootState) => state.auth);
 
   // by passing [dispatch] as the second argument of useEffect, we replicate the behavior
   // of componentDidMount + componentDidUnmount, but not componentDidUpdate
@@ -28,8 +26,8 @@ export function useProtected(options?: UseProtectedOptions): void {
     dispatch(fetchUser());
   }, [dispatch]);
 
-  // If this doesn't exist or is equivalent to an empty user, redirect
-  if (!auth || auth === initialBlankUser) {
+  if (!loading && user === initialBlankUser.user) {
+    // If this doesn't exist or is equivalent to an empty user, redirect
     push(options?.redirectTo || DEFAULT_REDIRECT_PATH);
   }
 }
