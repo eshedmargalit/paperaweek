@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import { FETCH_USER, FETCH_USER_FAILED, FETCH_USER_LOADING } from '../actions/actionTypes';
-import { FetchUserAction, FetchUserFailedAction, FetchUserLoadingAction } from '../actions/types';
+import { AuthReducerAction } from '../actions/types';
 import { blankUser } from '../templates';
 import { User } from '../types';
 
@@ -14,10 +14,7 @@ export const initialState: AuthState = {
   loading: true,
 };
 
-const reducer: Reducer<AuthState, FetchUserAction | FetchUserLoadingAction | FetchUserFailedAction> = (
-  state = initialState,
-  action
-) => {
+const reducer: Reducer<AuthState, AuthReducerAction> = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_USER_LOADING:
       return { ...state, loading: true };

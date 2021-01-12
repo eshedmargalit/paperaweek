@@ -23,6 +23,8 @@ export interface FetchUserFailedAction {
   type: typeof FETCH_USER_FAILED;
 }
 
+export type AuthReducerAction = FetchUserAction | FetchUserLoadingAction | FetchUserFailedAction;
+
 export interface SetReviewAction {
   type: typeof SET_REVIEW;
   payload: Review;

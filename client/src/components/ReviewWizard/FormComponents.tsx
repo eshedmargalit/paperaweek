@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent } from 'react';
 import { Button } from 'antd';
-import { Field, useField, useFormikContext, FieldInputProps, FieldArrayRenderProps } from 'formik';
+import { Field, useField, FieldInputProps, FieldArrayRenderProps } from 'formik';
 import DatePicker from 'react-datepicker';
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import { get as _get } from 'lodash';

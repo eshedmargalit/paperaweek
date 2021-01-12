@@ -13,9 +13,7 @@ import {
 } from './actionTypes';
 
 import {
-  FetchUserAction,
-  FetchUserFailedAction,
-  FetchUserLoadingAction,
+  AuthReducerAction,
   SetReviewAction,
   UpdateDraftIdAction,
   UpdateDraftsAction,
@@ -25,9 +23,7 @@ import {
 import { Maybe, MongoID, Paper, Review } from '../types';
 import { UserResponse, constructUserFromResponse } from '../dtos';
 
-export const fetchUser = () => async (
-  dispatch: Dispatch<FetchUserAction | FetchUserLoadingAction | FetchUserFailedAction>
-): Promise<void> => {
+export const fetchUser = () => async (dispatch: Dispatch<AuthReducerAction>): Promise<void> => {
   dispatch({ type: FETCH_USER_LOADING });
 
   const userResponse = await axios.get<UserResponse>('/api/current_user');
