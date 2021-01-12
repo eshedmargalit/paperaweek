@@ -4,16 +4,21 @@
   padding-bottom: 5vh;
 
   input {
-    border: 1px solid #ccc;
+    border: 1px solid $border-color;
     width: 90%;
     padding-left: 6px;
   }
 
   textarea {
-    border: 1px solid #ccc;
+    border: 1px solid $border-color;
     width: 100%;
     padding-left: 6px;
     margin-bottom: 8px !important;
+
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 1pt $primary-color;
+    }
   }
 
   .ant-btn.dynamic-delete-button {
