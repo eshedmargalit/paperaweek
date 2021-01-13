@@ -72,7 +72,7 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={review} visible={showModal} onClose={onModalCancel} footer={modalFooter} renderMath />
+      <ReviewModal review={review} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
     </div>
   );
 

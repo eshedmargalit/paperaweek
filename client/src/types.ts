@@ -42,7 +42,6 @@ export interface User {
   readingList: Paper[];
   drafts: Review[];
   publicProfile: boolean;
-  renderMath: boolean;
 }
 
 export interface Profile {
