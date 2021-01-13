@@ -1,5 +1,9 @@
 @import '../../styles/colors.scss';
 
+.ant-page-header-heading-extra {
+  margin: auto 0 !important;
+}
+
 .paw-form {
   .react-datepicker__month-text--keyboard-selected {
     background: $primary-color !important;
@@ -49,10 +53,6 @@
 
   .bullet {
     margin-right: 20px;
-  }
-
-  .save-icon {
-    margin: 5px 0px;
   }
 
   .ant-legacy-form-item {
