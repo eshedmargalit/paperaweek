@@ -6,6 +6,7 @@ import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
 import { RootState } from '../../reducers';
 import { fetchUser } from '../../actions';
+import { blankReview } from '../../templates';
 
 const statuses = {
   UNSAVED: 'unsaved',
@@ -52,6 +53,9 @@ export const useSaveDraft = (): returnProps => {
 
   // saveDraft function
   const saveDraft = async (draft: Review) => {
+    if (draft === blankReview) {
+      return;
+    }
     if (isMounted()) {
       setAutosaveStatus(statuses.SAVING);
       const res = await saveDraftToDB(draft, draftIdRef.current || null);
