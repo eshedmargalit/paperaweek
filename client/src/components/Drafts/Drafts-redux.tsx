@@ -10,7 +10,6 @@ import SearchableReviewDisplay from '../SearchableReviewDisplay';
 export default function DraftsRedux(): JSX.Element {
   const dispatch = useDispatch();
   const drafts: Review[] = useSelector((state: RootState) => state.drafts);
-  const renderMath: boolean = useSelector((state: RootState) => state.user.renderMath);
   const { goBack } = useHistory();
 
   // function to delete the specified draft
@@ -37,7 +36,6 @@ export default function DraftsRedux(): JSX.Element {
   return (
     <SearchableReviewDisplay
       reviews={drafts}
-      renderMath={renderMath}
       deleteItemFunc={deleteDraft}
       handleModalEdit={handleModalEdit}
       pageHeaderProps={pageHeaderProps}
