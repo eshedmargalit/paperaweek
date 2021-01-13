@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader } from 'antd';
+import { PageHeader, Button } from 'antd';
 import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import { Maybe } from '../../types';
+import HelpModal from './HelpModal';
 
 interface ReviewWizardViewProps {
   autosaveStatus: string;
@@ -15,6 +16,10 @@ interface ReviewWizardViewProps {
 }
 function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
+  const [showHelp, setShowHelp] = useState(false);
+
+  const closeHelpModal = () => setShowHelp(false);
+  const openHelpModal = () => setShowHelp(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -81,7 +86,9 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }:
         <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />
       </div>
       {form}
+      <Button onClick={openHelpModal}>Show Help</Button>
       {modal}
+      <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
     </div>
   );
   return wizardRender;
