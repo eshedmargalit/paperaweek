@@ -45,7 +45,6 @@ export default function ReviewReaderRedux(): JSX.Element {
   return (
     <SearchableReviewDisplay
       reviews={reviewList}
-      renderMath={user.renderMath}
       deleteItemFunc={deleteReview}
       handleModalEdit={populateFormWithReview}
       handleModalCopy={copyReviewURLToClipboard}

@@ -130,7 +130,6 @@ interface ModalProps {
   handleModalClose: VoidHandler;
   showModal: boolean;
   modalReview?: Review;
-  renderMath: boolean;
   itemName: string;
 }
 
@@ -160,7 +159,6 @@ export default function SearchableReviewDisplayView({
     handleModalClose,
     showModal,
     modalReview,
-    renderMath,
     itemName,
   } = modalProps;
 
@@ -246,13 +244,7 @@ export default function SearchableReviewDisplayView({
       {searchRow}
       {reviewsTable}
       {modalReview && (
-        <ReviewModal
-          review={modalReview}
-          visible={showModal}
-          renderMath={renderMath}
-          onClose={handleModalClose}
-          footer={footer}
-        />
+        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />
       )}
     </>
   );

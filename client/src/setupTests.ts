@@ -10,6 +10,8 @@ global.matchMedia =
     removeListener: jest.fn(),
   }));
 
+window.scrollTo = jest.fn();
+
 export {};
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());

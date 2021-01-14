@@ -6,7 +6,7 @@ import { updateReadingList, updateReviews, setReview } from '../../actions/index
 import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
-import { Paper, Review } from '../../types';
+import { Paper, Review, User } from '../../types';
 import { useProtected } from '../../hooks/useProtected';
 
 export default function ReviewWizardRedux(): JSX.Element {
@@ -19,6 +19,10 @@ export default function ReviewWizardRedux(): JSX.Element {
   const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
 
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
+
+  // determine if the user has no reviews or drafts and help should be shown on the form
+  const user: User = useSelector((state: RootState) => state.user);
+  const shouldShowHelp = user.reviews.length + user.drafts.length === 0;
 
   // if the review is restarted, set the review in state to have no id, but keep
   // the contents
@@ -83,6 +87,7 @@ export default function ReviewWizardRedux(): JSX.Element {
       lastSave={lastSave}
       autosaveStatus={autosaveStatus}
       initialReview={initialReview}
+      shouldShowHelp={shouldShowHelp}
     />
   );
 }
