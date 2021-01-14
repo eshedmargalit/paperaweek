@@ -89,7 +89,7 @@ function ReviewWizardView({
   }
 
   const helpButton = (
-    <Button onClick={openHelpModal} shape="round" icon={<QuestionCircleOutlined />}>
+    <Button key="help-button" onClick={openHelpModal} shape="round" icon={<QuestionCircleOutlined />}>
       Help
     </Button>
   );
