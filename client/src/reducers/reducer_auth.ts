@@ -4,7 +4,7 @@ import { AuthReducerAction } from '../actions/types';
 import { blankUser } from '../templates';
 import { User } from '../types';
 
-type AuthState = {
+export type AuthState = {
   user: User;
   loading: boolean;
 };
