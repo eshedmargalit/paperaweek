@@ -9,11 +9,12 @@ import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
 import { RootState } from '../../reducers';
-import { User } from '../../types';
+import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
 import background from './textured-background.png';
 import logo from './logo.png';
 import demo from './demo.png';
+import { AuthState } from '../../reducers/reducer_auth';
 
 interface LoginProps {
   location: Location;
@@ -26,9 +27,12 @@ const featureList = [
   'Our Review Form makes it easy to write thorough, structured reviews including Markdown and LaTeX',
 ];
 
-export default function Login({ location }: LoginProps): JSX.Element {
-  const user: User = useSelector((state: RootState) => state.user);
+export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
+  const { loading, user }: AuthState = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Instead of flashing a loading spinner for 1/4 second this is loading, just don't render anything
+  if (loading) return null;
 
   if (user !== blankUser) {
     return (

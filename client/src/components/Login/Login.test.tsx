@@ -8,14 +8,18 @@ import { blankUser } from '../../templates';
 describe('<Login />', () => {
   describe('without the user having logged in', () => {
     it('renders the landing page', () => {
-      renderWithRouterRedux(<Login location={createLocation('/')} />);
+      const initialState = { ...getBlankInitialState(), auth: { user: blankUser, loading: false } };
+      renderWithRouterRedux(<Login location={createLocation('/')} />, { initialState });
       expect(screen.getByText("Read a paper a week. That's it.")).toBeDefined();
     });
   });
 
   describe('with a logged-in user', () => {
     it('redirects to the dashboard', () => {
-      const initialState = { ...getBlankInitialState(), user: { ...blankUser, displayName: 'Piranesi' } };
+      const initialState = {
+        ...getBlankInitialState(),
+        auth: { user: { ...blankUser, displayName: 'Piranesi' }, loading: false },
+      };
       renderWithRouterRedux(<Login location={createLocation('/')} />, { redirectTo: '/dashboard', initialState });
       expect(screen.getByText('Redirected to a new page.')).toBeDefined();
     });
