@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader } from 'antd';
-import { SaveFilled, SaveTwoTone } from '@ant-design/icons';
+import { PageHeader, Button } from 'antd';
+import { QuestionCircleOutlined, SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import { Maybe } from '../../types';
+import HelpModal from './HelpModal';
 
 interface ReviewWizardViewProps {
   autosaveStatus: string;
@@ -12,9 +13,21 @@ interface ReviewWizardViewProps {
   form: JSX.Element;
   modal: JSX.Element;
   onPageBack: PageHeaderProps['onBack'];
+  shouldShowHelp: boolean;
 }
-function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
+function ReviewWizardView({
+  autosaveStatus,
+  lastSave,
+  form,
+  modal,
+  onPageBack,
+  shouldShowHelp,
+}: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
+  const [showHelp, setShowHelp] = useState(shouldShowHelp);
+
+  const closeHelpModal = () => setShowHelp(false);
+  const openHelpModal = () => setShowHelp(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -75,13 +88,20 @@ function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }:
     // do nothing
   }
 
+  const helpButton = (
+    <Button key="help-button" onClick={openHelpModal} shape="round" icon={<QuestionCircleOutlined />}>
+      Help
+    </Button>
+  );
+
   const wizardRender = (
     <div className="width80">
       <div style={{ display: 'flex' }}>
-        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />
+        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon, helpButton]} />
       </div>
       {form}
       {modal}
+      <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
     </div>
   );
   return wizardRender;

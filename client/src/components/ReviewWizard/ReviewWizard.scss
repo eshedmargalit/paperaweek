@@ -1,7 +1,8 @@
 @import '../../styles/colors.scss';
 
 .ant-page-header-heading-extra {
-  margin: auto 0 !important;
+  display: flex;
+  align-items: center;
 }
 
 .paw-form {
@@ -159,5 +160,19 @@
     opacity: 0.01;
     transform: translate(-40px, 0);
     transition: all 250ms ease-in;
+  }
+}
+.latex-demo {
+  textarea {
+    border: 1px solid $border-color;
+    width: 90%;
+    padding-left: 6px;
+    margin-bottom: 8px !important;
+    border-radius: 6px;
+
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 1pt $primary-color;
+    }
   }
 }
