@@ -7,7 +7,6 @@ export const blankUser: User = {
   readingList: [],
   drafts: [],
   publicProfile: false,
-  renderMath: false,
 };
 
 export const blankPaper: Paper = {

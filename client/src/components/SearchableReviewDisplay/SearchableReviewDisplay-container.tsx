@@ -26,7 +26,6 @@ const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
 interface SearchableReviewDisplayContainerProps {
   reviews: Review[];
   reviewToOpen?: Review;
-  renderMath?: boolean;
   itemName?: string;
   pageHeaderProps: PageHeaderProps;
   hideFooter: boolean;
@@ -38,7 +37,6 @@ interface SearchableReviewDisplayContainerProps {
 export default function SearchableReviewDisplayContainer({
   reviews,
   reviewToOpen,
-  renderMath,
   itemName,
   pageHeaderProps,
   hideFooter,
@@ -87,7 +85,6 @@ export default function SearchableReviewDisplayContainer({
     handleModalCopy: handleModalCopy && copyReviewIfSelected,
     showModal,
     modalReview: selectedReview,
-    renderMath: renderMath || true,
     itemName: itemName || 'Review',
   };
 

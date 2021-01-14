@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import { Space, Switch, Modal, Tag } from 'antd';
+import React from 'react';
+import { Modal, Tag } from 'antd';
 import moment from 'moment';
-import axios from 'axios';
 import { renderCommaSepList, wrapMarkdownWithMath } from '../utils';
 import { Maybe, Review } from '../../types';
 
 export interface ReviewModalProps {
   review: Review;
-  renderMath: boolean;
   visible: boolean;
   onClose: VoidFunction;
   footer: Maybe<JSX.Element[]>;
@@ -69,9 +67,6 @@ const fields = [
 ] as const;
 
 export default function ReviewModal(props: ReviewModalProps): JSX.Element {
-  const [renderMath, setRenderMath] = useState<boolean>(props.renderMath);
-  const [switchLoading, setSwitchLoading] = useState(false);
-
   const { paper, notes } = props.review;
   const paperDate: string = moment(paper.date, 'YYYY-MM').format('MMMM YYYY');
 
@@ -91,7 +86,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
             if (point !== '') {
               empty = false;
             }
-            return <li key={point}>{renderMath ? wrapMarkdownWithMath(point) : point}</li>;
+            return <li key={point}>{wrapMarkdownWithMath(point)}</li>;
           })}
         </ul>
       </div>
@@ -105,29 +100,6 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
       <div>{paper.title}</div>
       <div>{renderTags(notes.keywords)}</div>
     </div>
-  );
-
-  const handleLatexToggle = async (isChecked: boolean) => {
-    setRenderMath(isChecked);
-
-    // set preference in user profile
-    const values = { renderMath: isChecked };
-    setSwitchLoading(true);
-    try {
-      await axios.put('/api/user', values);
-    } catch (err) {
-      setRenderMath(!isChecked);
-    }
-    setSwitchLoading(false);
-  };
-
-  const toggleSwitch: JSX.Element = (
-    <Space align="start">
-      <div>
-        <Switch defaultChecked={renderMath} onChange={handleLatexToggle} loading={switchLoading} /> Render
-      </div>
-      <div>{wrapMarkdownWithMath('$\\rm\\LaTeX$ + Markdown')}</div>
-    </Space>
   );
 
   return (
@@ -149,8 +121,6 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
         <strong>TLDR</strong>
         <br />
         {notes.tldr}
-        <hr />
-        {toggleSwitch}
         {reviewBody}
       </Modal>
     </div>
