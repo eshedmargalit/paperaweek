@@ -13,10 +13,18 @@ interface ReviewWizardViewProps {
   form: JSX.Element;
   modal: JSX.Element;
   onPageBack: PageHeaderProps['onBack'];
+  shouldShowHelp: boolean;
 }
-function ReviewWizardView({ autosaveStatus, lastSave, form, modal, onPageBack }: ReviewWizardViewProps): JSX.Element {
+function ReviewWizardView({
+  autosaveStatus,
+  lastSave,
+  form,
+  modal,
+  onPageBack,
+  shouldShowHelp,
+}: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
-  const [showHelp, setShowHelp] = useState(false);
+  const [showHelp, setShowHelp] = useState(shouldShowHelp);
 
   const closeHelpModal = () => setShowHelp(false);
   const openHelpModal = () => setShowHelp(true);
