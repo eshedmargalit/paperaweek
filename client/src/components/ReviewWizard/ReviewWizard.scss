@@ -161,3 +161,17 @@
     transition: all 250ms ease-in;
   }
 }
+.latex-demo {
+  textarea {
+    border: 1px solid $border-color;
+    width: 90%;
+    padding-left: 6px;
+    margin-bottom: 8px !important;
+    border-radius: 6px;
+
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 0 1pt $primary-color;
+    }
+  }
+}
