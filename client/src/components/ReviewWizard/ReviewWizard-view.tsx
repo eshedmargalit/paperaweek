@@ -88,15 +88,18 @@ function ReviewWizardView({
     // do nothing
   }
 
+  const helpButton = (
+    <Button onClick={openHelpModal} shape="round" icon={<QuestionCircleOutlined />}>
+      Help
+    </Button>
+  );
+
   const wizardRender = (
     <div className="width80">
       <div style={{ display: 'flex' }}>
-        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon]} />
+        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon, helpButton]} />
       </div>
       {form}
-      <Button onClick={openHelpModal} shape="round" icon={<QuestionCircleOutlined />}>
-        Help
-      </Button>
       {modal}
       <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
     </div>

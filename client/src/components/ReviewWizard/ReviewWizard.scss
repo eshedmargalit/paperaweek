@@ -1,7 +1,8 @@
 @import '../../styles/colors.scss';
 
 .ant-page-header-heading-extra {
-  margin: auto 0 !important;
+  display: flex;
+  align-items: center;
 }
 
 .paw-form {

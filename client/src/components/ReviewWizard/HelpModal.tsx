@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Modal, Button } from 'antd';
 import { ModalFuncProps } from 'antd/lib/modal';
+import { LinkOutlined } from '@ant-design/icons';
 import LatexDemo from './LatexDemo';
 
 export default function HelpModal({ visible, onCancel, onOk }: ModalFuncProps): JSX.Element {
@@ -13,10 +14,12 @@ export default function HelpModal({ visible, onCancel, onOk }: ModalFuncProps): 
             <h5>Full Markdown Support</h5>
             <p>
               Enhance your notes with Markdown features like creating lists, italicizing and bolding important content,
-              make tables, and more.
+              making tables, and more.
             </p>
             <a href="https://devhints.io/markdown" target="_blank" rel="noopener noreferrer">
-              <Button shape="round">Markdown Cheatsheet</Button>
+              <Button shape="round" icon={<LinkOutlined />}>
+                Markdown Cheatsheet
+              </Button>
             </a>
           </Col>
           <Col lg={12} sm={24}>
