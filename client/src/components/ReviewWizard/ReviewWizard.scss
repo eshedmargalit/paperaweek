@@ -32,6 +32,8 @@
     @include text-area-styles();
     outline: none !important;
     padding-top: 2px;
+    min-height: 40px;
+    border-radius: 6px;
   }
 
   textarea {
@@ -123,8 +125,7 @@
     border-radius: 6px;
   }
 
-  .dynamic-text-area,
-  .preview-text-area {
+  .dynamic-text-area {
     height: 80px;
     border-radius: 6px;
   }
