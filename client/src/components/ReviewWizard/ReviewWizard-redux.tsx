@@ -6,7 +6,7 @@ import { updateReadingList, updateReviews, setReview } from '../../actions/index
 import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
-import { Paper, Review, User } from '../../types';
+import { Paper, Review } from '../../types';
 import { useProtected } from '../../hooks/useProtected';
 import { AuthState } from '../../reducers/reducer_auth';
 
