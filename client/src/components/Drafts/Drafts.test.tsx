@@ -7,6 +7,7 @@ import { RootState } from '../../reducers';
 import { blankNotes, blankReview } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import DraftsRedux from './Drafts-redux';
+import { suppressWarnings } from '../../testUtils/suppressWarnings';
 
 const mockGoBack = jest.fn();
 
@@ -34,11 +35,7 @@ describe('<Drafts />', () => {
   });
 
   describe('drafts table', () => {
-    // This is silly, but the react-katex library throws an ugly warning: https://github.com/talyssonoc/react-katex/issues/59
-    // so we'll just suppress it :)
-    const originalConsoleWarn = console.warn;
-    beforeAll(() => (console.warn = jest.fn()));
-    afterAll(() => (console.warn = originalConsoleWarn));
+    suppressWarnings();
 
     it('renders without crashing', () => {
       renderWithRouterRedux(<DraftsRedux />);

@@ -4,7 +4,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
   getTagColor,
-  HSLString,
   isDOI,
   removeMiddleAuthors,
   renderCommaSepList,
@@ -12,6 +11,7 @@ import {
   shortenTableString,
   wrapMarkdownWithMath,
 } from './utils';
+import { suppressWarnings } from '../testUtils/suppressWarnings';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -192,11 +192,7 @@ describe('utils', () => {
   });
 
   describe('wrapMarkdownWithMath', () => {
-    // This is silly, but the react-katex library throws an ugly warning: https://github.com/talyssonoc/react-katex/issues/59
-    // so we'll just suppress it :)
-    const originalConsoleWarn = console.warn;
-    beforeAll(() => (console.warn = jest.fn()));
-    afterAll(() => (console.warn = originalConsoleWarn));
+    suppressWarnings();
 
     it('does not alter non-math string', () => {
       const testString = 'The Year I Named the Constellations';
