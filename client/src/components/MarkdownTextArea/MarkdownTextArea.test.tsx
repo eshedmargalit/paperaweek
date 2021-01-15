@@ -42,7 +42,7 @@ describe('MarkdownTextArea', () => {
   describe('when markdown should not be rendered', () => {
     suppressWarnings();
 
-    it('renders markdown', async () => {
+    it('does not render markdown', async () => {
       renderMDTextArea('testItem', 'testValue', false);
       const input = screen.getByRole('textbox');
 
