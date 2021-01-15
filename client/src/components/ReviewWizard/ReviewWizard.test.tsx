@@ -13,7 +13,7 @@ describe('<ReviewWizard />', () => {
 
   describe('help modal', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
-      const initialState = getBlankInitialState();
+      const initialState = { ...getBlankInitialState(), auth: { user: blankUser, loading: false } };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });

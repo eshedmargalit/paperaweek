@@ -8,6 +8,7 @@ import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
 import { Paper, Review, User } from '../../types';
 import { useProtected } from '../../hooks/useProtected';
+import { AuthState } from '../../reducers/reducer_auth';
 
 export default function ReviewWizardRedux(): JSX.Element {
   useProtected();
@@ -21,8 +22,8 @@ export default function ReviewWizardRedux(): JSX.Element {
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 
   // determine if the user has no reviews or drafts and help should be shown on the form
-  const user: User = useSelector((state: RootState) => state.user);
-  const shouldShowHelp = user.reviews.length + user.drafts.length === 0;
+  const { user, loading }: AuthState = useSelector((state: RootState) => state.auth);
+  const shouldShowHelp = !loading && user.reviews.length + user.drafts.length === 0;
 
   // if the review is restarted, set the review in state to have no id, but keep
   // the contents

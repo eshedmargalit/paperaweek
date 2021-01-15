@@ -38,10 +38,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  // border-color: $primary-darker;
 
   &:hover {
     color: $primary-color !important;
+    border-color: $primary-lighter !important;
+  }
+}
+
+.ant-btn-primary {
+  border-color: $primary-darker !important;
+  background-color: $primary-lighter !important;
+
+  &:hover {
     border-color: $primary-color !important;
+    background-color: white !important;
+    color: $primary-color !important;
+    text-shadow: unset !important;
   }
 }
 
