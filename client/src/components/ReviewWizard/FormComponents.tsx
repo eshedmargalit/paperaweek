@@ -8,6 +8,7 @@ import { get as _get } from 'lodash';
 import { CSSTransition, TransitionGroup } from 'react-transition-group'; // ES6
 
 import { Maybe } from '../../types';
+import MarkdownTextArea from '../MarkdownTextArea';
 
 interface FieldInputPropsWithLabel {
   label: string;
@@ -130,7 +131,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
           fieldArray.map((_, index: number) => (
             <CSSTransition key={index} timeout={250} classNames="move">
               <div key={index} className="bullet-text-area">
-                <Field className="dynamic-text-area" as="textarea" name={`${name}.${index}`} autoFocus />
+                <MarkdownTextArea formFieldName={`${name}.${index}`} />
                 {fieldArray.length > 1 && (
                   <Button
                     tabIndex={-1}

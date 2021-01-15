@@ -1,5 +1,7 @@
 @import '../../styles/colors.scss';
 
+$dynamic-text-area-min-height: 80px;
+
 .ant-page-header-heading-extra {
   display: flex;
   align-items: center;
@@ -21,11 +23,23 @@
     padding-left: 6px;
   }
 
-  textarea {
+  @mixin text-area-styles {
     border: 1px solid $border-color;
     width: 100%;
     padding-left: 6px;
     margin-bottom: 8px !important;
+  }
+
+  .preview-text-area {
+    @include text-area-styles();
+    outline: none !important;
+    padding-top: 2px;
+    min-height: $dynamic-text-area-min-height;
+    border-radius: 6px;
+  }
+
+  textarea {
+    @include text-area-styles();
 
     &:focus {
       outline: none !important;
@@ -114,7 +128,7 @@
   }
 
   .dynamic-text-area {
-    height: 80px;
+    height: $dynamic-text-area-min-height;
     border-radius: 6px;
   }
 

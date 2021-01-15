@@ -4,7 +4,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
   getTagColor,
-  HSLString,
   isDOI,
   removeMiddleAuthors,
   renderCommaSepList,
@@ -12,6 +11,7 @@ import {
   shortenTableString,
   wrapMarkdownWithMath,
 } from './utils';
+import { suppressWarnings } from '../testUtils/suppressWarnings';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -22,23 +22,23 @@ describe('utils', () => {
     it('renders one item without a comma separator', () => {
       const output = renderCommaSepList(['Shrek']);
       render(<div>{output}</div>);
-      expect(screen.getByText(/Shrek/)).toBeDefined();
+      expect(screen.getByText(/Shrek/)).toBeInTheDocument();
     });
 
     it('renders two items without a comma separator and an "and"', () => {
       const output = renderCommaSepList(['Shrek', 'Donkey']);
       render(<div>{output}</div>);
-      expect(screen.getByText('Shrek')).toBeDefined();
-      expect(screen.getByText('and Donkey')).toBeDefined();
+      expect(screen.getByText('Shrek')).toBeInTheDocument();
+      expect(screen.getByText('and Donkey')).toBeInTheDocument();
     });
 
     it('renders 3 or more items with comma separation', () => {
       const output = renderCommaSepList(['Shrek', 'Donkey', 'Fiona', 'Father Time']);
       render(<div>{output}</div>);
-      expect(screen.getByText(/Shrek,/)).toBeDefined();
-      expect(screen.getByText(/Donkey,/)).toBeDefined();
-      expect(screen.getByText(/Fiona/)).toBeDefined();
-      expect(screen.getByText('and Father Time')).toBeDefined();
+      expect(screen.getByText(/Shrek,/)).toBeInTheDocument();
+      expect(screen.getByText(/Donkey,/)).toBeInTheDocument();
+      expect(screen.getByText(/Fiona/)).toBeInTheDocument();
+      expect(screen.getByText('and Father Time')).toBeInTheDocument();
     });
   });
 
@@ -86,13 +86,13 @@ describe('utils', () => {
     it('returns NAText when a single blank author is provided', () => {
       const output = shortenAuthors(['']);
       render(output as JSX.Element);
-      expect(screen.getByText('N/A')).toBeDefined();
+      expect(screen.getByText('N/A')).toBeInTheDocument();
     });
 
     it('returns NAText when no authors are provided', () => {
       const output = shortenAuthors([]);
       render(output as JSX.Element);
-      expect(screen.getByText('N/A')).toBeDefined();
+      expect(screen.getByText('N/A')).toBeInTheDocument();
     });
 
     const scenarios: {
@@ -160,7 +160,7 @@ describe('utils', () => {
     scenarios.forEach(({ description, inString, cutoff, expectedText }) => {
       it(`renders the correct element ${description}`, () => {
         render(shortenTableString(inString, cutoff));
-        expect(screen.getByText(expectedText)).toBeDefined();
+        expect(screen.getByText(expectedText)).toBeInTheDocument();
       });
     });
   });
@@ -192,16 +192,12 @@ describe('utils', () => {
   });
 
   describe('wrapMarkdownWithMath', () => {
-    // This is silly, but the react-katex library throws an ugly warning: https://github.com/talyssonoc/react-katex/issues/59
-    // so we'll just suppress it :)
-    const originalConsoleWarn = console.warn;
-    beforeAll(() => (console.warn = jest.fn()));
-    afterAll(() => (console.warn = originalConsoleWarn));
+    suppressWarnings();
 
     it('does not alter non-math string', () => {
       const testString = 'The Year I Named the Constellations';
       render(wrapMarkdownWithMath(testString));
-      expect(screen.getByText(testString)).toBeDefined();
+      expect(screen.getByText(testString)).toBeInTheDocument();
     });
 
     it('renders math strings with markdown', () => {

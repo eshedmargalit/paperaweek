@@ -6,19 +6,16 @@ import userEvent from '@testing-library/user-event';
 import ReviewWizard from '.';
 import { renderWithRouterRedux, getBlankInitialState } from '../../testUtils/reduxRender';
 import { blankReview, blankUser } from '../../templates';
+import { suppressWarnings } from '../../testUtils/suppressWarnings';
 
 describe('<ReviewWizard />', () => {
-  // This is silly, but the react-katex library throws an ugly warning: https://github.com/talyssonoc/react-katex/issues/59
-  // so we'll just suppress it :)
-  const originalConsoleWarn = console.warn;
-  beforeAll(() => (console.warn = jest.fn()));
-  afterAll(() => (console.warn = originalConsoleWarn));
+  suppressWarnings();
 
   describe('help modal', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
       const initialState = getBlankInitialState();
       renderWithRouterRedux(<ReviewWizard />, { initialState });
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeDefined());
+      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });
 
     it('does not open automatically if at least 1 review is present', async () => {
@@ -37,7 +34,7 @@ describe('<ReviewWizard />', () => {
       const initialState = getBlankInitialState();
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       userEvent.click(screen.getByText(/Help/));
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeDefined());
+      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });
   });
 });

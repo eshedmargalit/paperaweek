@@ -11,6 +11,6 @@ function TestComponent(): JSX.Element {
 xdescribe('useIsMounted', () => {
   it('returns false before the component is mounted', async () => {
     render(<TestComponent />);
-    expect(screen.getByText(/true/)).toBeDefined();
+    expect(screen.getByText(/true/)).toBeInTheDocument();
   });
 });
