@@ -11,7 +11,10 @@ const renderHome = (initialState?: RootState) => renderWithRouterRedux(<Home />,
 
 describe('<Home />', () => {
   describe('with a user logged in', () => {
-    const initialState: RootState = { ...getBlankInitialState(), auth: { ...blankUser, displayName: 'Jim Henderson' } };
+    const initialState: RootState = {
+      ...getBlankInitialState(),
+      auth: { user: { ...blankUser, displayName: 'Jim Henderson' }, loading: false },
+    };
 
     it('renders without crashing', () => {
       renderHome(initialState);
@@ -24,12 +27,12 @@ describe('<Home />', () => {
 
     it('has a reading list', () => {
       renderHome(initialState);
-      expect(screen.getByText(/Reading List/)).toBeDefined();
+      expect(screen.getByText(/Reading List/)).toBeInTheDocument();
     });
 
     it('has review list', () => {
       renderHome(initialState);
-      expect(screen.getByText(/Read Your Reviews/)).toBeDefined();
+      expect(screen.getByText(/Read Your Reviews/)).toBeInTheDocument();
     });
   });
 });

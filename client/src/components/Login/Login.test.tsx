@@ -10,7 +10,7 @@ describe('<Login />', () => {
     it('renders the landing page', () => {
       const initialState = { ...getBlankInitialState(), auth: { user: blankUser, loading: false } };
       renderWithRouterRedux(<Login location={createLocation('/')} />, { initialState });
-      expect(screen.getByText("Read a paper a week. That's it.")).toBeDefined();
+      expect(screen.getByText("Read a paper a week. That's it.")).toBeInTheDocument();
     });
   });
 
@@ -21,7 +21,7 @@ describe('<Login />', () => {
         auth: { user: { ...blankUser, displayName: 'Piranesi' }, loading: false },
       };
       renderWithRouterRedux(<Login location={createLocation('/')} />, { redirectTo: '/dashboard', initialState });
-      expect(screen.getByText('Redirected to a new page.')).toBeDefined();
+      expect(screen.getByText('Redirected to a new page.')).toBeInTheDocument();
     });
   });
 });

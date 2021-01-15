@@ -10,15 +10,15 @@ describe('<PaperSearchBar />', () => {
   describe('header', () => {
     it('provides usage instructions', () => {
       renderWithRouterRedux(<PaperSearchBar />);
-      expect(screen.getByText(/Write a Review/)).toBeDefined();
-      expect(screen.getByText(/Search online for papers/)).toBeDefined();
+      expect(screen.getByText(/Write a Review/)).toBeInTheDocument();
+      expect(screen.getByText(/Search online for papers/)).toBeInTheDocument();
     });
   });
 
   describe('search input', () => {
     it('shows the right placeholder', () => {
       renderWithRouterRedux(<PaperSearchBar />);
-      expect(screen.getByPlaceholderText(/search by DOI, title, author, or journal/)).toBeDefined();
+      expect(screen.getByPlaceholderText(/search by DOI, title, author, or journal/)).toBeInTheDocument();
     });
 
     describe('when search is not a doi', () => {
@@ -34,7 +34,7 @@ describe('<PaperSearchBar />', () => {
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('Test Interpret Title')).toBeDefined());
+        await waitFor(() => expect(screen.getByText('Test Interpret Title')).toBeInTheDocument());
       });
     });
 
@@ -51,7 +51,7 @@ describe('<PaperSearchBar />', () => {
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('Test DOI Title')).toBeDefined());
+        await waitFor(() => expect(screen.getByText('Test DOI Title')).toBeInTheDocument());
       });
     });
   });
@@ -60,13 +60,13 @@ describe('<PaperSearchBar />', () => {
     it('the first one redirects to the form page', () => {
       renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
       userEvent.click(screen.getAllByText(/Create Manual Entry/)[0]);
-      expect(screen.getByText(/Redirected to a new page/)).toBeDefined();
+      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
     });
 
     it('the second one redirects to the form page', () => {
       renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
       userEvent.click(screen.getAllByText(/Create Manual Entry/)[1]);
-      expect(screen.getByText(/Redirected to a new page/)).toBeDefined();
+      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
     });
   });
 
@@ -82,7 +82,7 @@ describe('<PaperSearchBar />', () => {
       userEvent.type(searchInput, 'notFound');
 
       // Once no result comes back from our mocked API, confirm our custom message is rendered
-      await waitFor(() => expect(screen.getByText('No Results Found')).toBeDefined());
+      await waitFor(() => expect(screen.getByText('No Results Found')).toBeInTheDocument());
     });
 
     describe('result interaction', () => {
@@ -99,8 +99,8 @@ describe('<PaperSearchBar />', () => {
         userEvent.click(screen.getByText('Test DOI Title'));
 
         // Confirm both popover options are present
-        expect(screen.getByText(/Add to Reading List/)).toBeDefined();
-        expect(screen.getByText(/Start Review Now/)).toBeDefined();
+        expect(screen.getByText(/Add to Reading List/)).toBeInTheDocument();
+        expect(screen.getByText(/Start Review Now/)).toBeInTheDocument();
       });
 
       it('adds results to the reading list', async () => {
@@ -130,7 +130,7 @@ describe('<PaperSearchBar />', () => {
         userEvent.click(screen.getByText('Test Interpret Title'));
         userEvent.click(screen.getByText(/Start Review Now/));
 
-        expect(screen.getByText(/Redirected/)).toBeDefined();
+        expect(screen.getByText(/Redirected/)).toBeInTheDocument();
       });
     });
   });
