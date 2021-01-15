@@ -1,5 +1,7 @@
 @import '../../styles/colors.scss';
 
+$dynamic-text-area-min-height: 80px;
+
 .ant-page-header-heading-extra {
   display: flex;
   align-items: center;
@@ -32,7 +34,7 @@
     @include text-area-styles();
     outline: none !important;
     padding-top: 2px;
-    min-height: 40px;
+    min-height: $dynamic-text-area-min-height;
     border-radius: 6px;
   }
 
@@ -126,7 +128,7 @@
   }
 
   .dynamic-text-area {
-    height: 80px;
+    height: $dynamic-text-area-min-height;
     border-radius: 6px;
   }
 

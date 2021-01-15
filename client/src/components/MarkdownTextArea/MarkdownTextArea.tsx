@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import { useField } from 'formik';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { wrapMarkdownWithMath } from '../utils';
 
 interface MarkdownTextAreaProps {
@@ -11,6 +11,7 @@ interface MarkdownTextAreaProps {
 function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: MarkdownTextAreaProps): JSX.Element {
   const [, { value }, { setValue }] = useField<string>(formFieldName);
   const [isFocused, setIsFocused] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const focus = () => setIsFocused(true);
   const unfocus = () => setIsFocused(false);
@@ -23,6 +24,7 @@ function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: Markdo
     </div>
   ) : (
     <textarea
+      ref={textAreaRef}
       onFocus={focus}
       onBlur={unfocus}
       className="dynamic-text-area"
