@@ -1,3 +1,18 @@
-.profileUrl {
-  margin-left: 5px;
+.preferences-form {
+  margin-top: 5vh;
+
+  &__card {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
+    margin: 0 10px 5vh 0 !important;
+    width: 300px !important;
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: 600;
+    }
+  }
+
+  .profileUrl {
+    margin-left: 5px;
+  }
 }

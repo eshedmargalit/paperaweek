@@ -1,3 +1,4 @@
+import './PublicProfile.scss';
 import React from 'react';
 
 import { Row, Col, Spin } from 'antd';
@@ -41,7 +42,7 @@ export default function PublicProfileView({
   const reviewToOpen: Review | undefined = reviews ? reviews.find(review => review._id === reviewIdToOpen) : undefined;
 
   const profileView: JSX.Element = reviews ? (
-    <>
+    <div className="public-profile">
       <Row>
         <Col span={24}>
           <MinimalStatBox userDisplayName={userDisplayName} reviews={reviews} />
@@ -57,7 +58,7 @@ export default function PublicProfileView({
           />
         </Col>
       </Row>
-    </>
+    </div>
   ) : (
     <NotFound />
   );
