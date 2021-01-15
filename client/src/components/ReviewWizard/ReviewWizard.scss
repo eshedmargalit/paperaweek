@@ -21,11 +21,21 @@
     padding-left: 6px;
   }
 
-  textarea {
+  @mixin text-area-styles {
     border: 1px solid $border-color;
     width: 100%;
     padding-left: 6px;
     margin-bottom: 8px !important;
+  }
+
+  .preview-text-area {
+    @include text-area-styles();
+    outline: none !important;
+    padding-top: 2px;
+  }
+
+  textarea {
+    @include text-area-styles();
 
     &:focus {
       outline: none !important;
@@ -113,7 +123,8 @@
     border-radius: 6px;
   }
 
-  .dynamic-text-area {
+  .dynamic-text-area,
+  .preview-text-area {
     height: 80px;
     border-radius: 6px;
   }
