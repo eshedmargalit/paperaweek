@@ -15,7 +15,7 @@ describe('<ReviewWizard />', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
       const initialState = getBlankInitialState();
       renderWithRouterRedux(<ReviewWizard />, { initialState });
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeDefined());
+      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });
 
     it('does not open automatically if at least 1 review is present', async () => {
@@ -34,7 +34,7 @@ describe('<ReviewWizard />', () => {
       const initialState = getBlankInitialState();
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       userEvent.click(screen.getByText(/Help/));
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeDefined());
+      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });
   });
 });

@@ -13,7 +13,7 @@ describe('<MenuBar />', () => {
 
     it('shows the application name', () => {
       renderWithRouterRedux(<MenuBarRedux />);
-      expect(screen.getByText(/Paper-A-Week/)).toBeDefined();
+      expect(screen.getByText(/Paper-A-Week/)).toBeInTheDocument();
     });
 
     it('shows the information icon with information on hover', async () => {
@@ -21,7 +21,7 @@ describe('<MenuBar />', () => {
 
       userEvent.hover(screen.getByLabelText('info-circle'));
       await waitFor(() =>
-        expect(screen.getByText(/Paper-a-Week began as an experiment in accountability/)).toBeDefined()
+        expect(screen.getByText(/Paper-a-Week began as an experiment in accountability/)).toBeInTheDocument()
       );
     });
   });
@@ -36,7 +36,7 @@ describe('<MenuBar />', () => {
 
     it("shows the user's name", () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState });
-      expect(screen.getByText(displayName)).toBeDefined();
+      expect(screen.getByText(displayName)).toBeInTheDocument();
     });
 
     // TODO EM: I think this should be a <Link /> so that it's easier to test.
@@ -44,7 +44,7 @@ describe('<MenuBar />', () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState, redirectTo: '/profiles/' });
       userEvent.click(screen.getByText('My Profile'));
 
-      await waitFor(() => expect(screen.getByText(/Redirect/)).toBeDefined());
+      await waitFor(() => expect(screen.getByText(/Redirect/)).toBeInTheDocument());
     });
 
     // TODO find a sane way to test the hidden menu by mocking `window.matchMedia`

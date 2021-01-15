@@ -19,7 +19,7 @@ describe('<MinimalStatBox />', () => {
 
     it('tells the user to get some writing in!', () => {
       renderStatBoxView();
-      expect(screen.getByText(/Stats will begin to appear/)).toBeDefined();
+      expect(screen.getByText(/Stats will begin to appear/)).toBeInTheDocument();
     });
   });
 
@@ -34,7 +34,7 @@ describe('<MinimalStatBox />', () => {
 
     it('tells the user how many are left', () => {
       renderStatBoxView(props);
-      expect(screen.getByText(/1/)).toBeDefined();
+      expect(screen.getByText(/1/)).toBeInTheDocument();
     });
   });
 
@@ -49,7 +49,7 @@ describe('<MinimalStatBox />', () => {
 
     it('shows the statistics panel', () => {
       renderStatBoxView(props);
-      expect(screen.getByText(/Papers per Week/)).toBeDefined();
+      expect(screen.getByText(/Papers per Week/)).toBeInTheDocument();
     });
   });
 });

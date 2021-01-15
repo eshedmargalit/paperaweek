@@ -43,14 +43,14 @@ describe('<Drafts />', () => {
 
     it('renders the draft information in the table', () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
-      expect(screen.getByText(/it was nice/)).toBeDefined();
+      expect(screen.getByText(/it was nice/)).toBeInTheDocument();
     });
 
     it('displays more options and actions when user clicks on a draft', () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
       const draftRow = screen.getByText(/it was nice/);
       userEvent.click(draftRow);
-      expect(screen.getByText(/Delete this Draft/)).toBeDefined();
+      expect(screen.getByText(/Delete this Draft/)).toBeInTheDocument();
     });
 
     it('deletes a draft from Redux when the delete button is clicked', async () => {
@@ -80,7 +80,7 @@ describe('<Drafts />', () => {
       userEvent.click(screen.getByText(/Edit this Draft/));
 
       // Confirm that we navigate to the "form" after clicking edit
-      expect(screen.getByText(/Redirected to a new page/)).toBeDefined();
+      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
     });
   });
 });
