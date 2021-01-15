@@ -9,7 +9,7 @@ interface MarkdownTextAreaProps {
 }
 
 function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: MarkdownTextAreaProps): JSX.Element {
-  const [, { value }, { setValue }] = useField<string>(formFieldName);
+  const [field, { value }, { setValue }] = useField<string>(formFieldName);
   const [isFocused, setIsFocused] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -24,9 +24,16 @@ function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: Markdo
     </div>
   ) : (
     <textarea
+      {...field}
       ref={textAreaRef}
       onFocus={focus}
-      onBlur={unfocus}
+      onBlur={e => {
+        // Call Formik's onBlur first, this might be to trigger autosave
+        field.onBlur(e);
+
+        // Call our unfocus after, to switch back to the markdown render
+        unfocus();
+      }}
       className="dynamic-text-area"
       autoFocus
       value={value}
