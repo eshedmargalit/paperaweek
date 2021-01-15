@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
+import { isEqual as _isEqual } from 'lodash';
 import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
 import { RootState } from '../../reducers';
@@ -53,9 +54,10 @@ export const useSaveDraft = (): returnProps => {
 
   // saveDraft function
   const saveDraft = async (draft: Review) => {
-    if (draft === blankReview) {
+    if (_isEqual(draft, blankReview)) {
       return;
     }
+
     if (isMounted()) {
       setAutosaveStatus(statuses.SAVING);
       const res = await saveDraftToDB(draft, draftIdRef.current || null);

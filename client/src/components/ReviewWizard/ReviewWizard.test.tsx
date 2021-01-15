@@ -13,19 +13,19 @@ describe('<ReviewWizard />', () => {
 
   describe('help modal', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
-      const initialState = getBlankInitialState();
+      const initialState = {
+        ...getBlankInitialState(),
+        auth: { user: { ...blankUser, reviews: [] }, loading: false },
+      };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
     });
 
     it('does not open automatically if at least 1 review is present', async () => {
-      const initialState = { ...getBlankInitialState(), user: { ...blankUser, reviews: [blankReview] } };
-      renderWithRouterRedux(<ReviewWizard />, { initialState });
-      await waitFor(() => expect(screen.queryByText(/Try it yourself/)).toBeNull());
-    });
-
-    it('does not open automatically if at least 1 draft is present', async () => {
-      const initialState = { ...getBlankInitialState(), user: { ...blankUser, drafts: [blankReview] } };
+      const initialState = {
+        ...getBlankInitialState(),
+        auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false },
+      };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       await waitFor(() => expect(screen.queryByText(/Try it yourself/)).toBeNull());
     });
