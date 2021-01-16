@@ -1,5 +1,20 @@
+@import '../../styles/colors.scss';
+
 .preferences-form {
   margin-top: 5vh;
+
+  .ant-switch-checked {
+    background-color: $primary-color !important;
+  }
+
+  .toggle-public {
+    p {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: white;
+      margin: 0 5px !important;
+    }
+  }
 
   &__card {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;

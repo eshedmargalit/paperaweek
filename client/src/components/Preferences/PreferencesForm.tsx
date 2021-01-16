@@ -23,23 +23,19 @@ export default function PreferencesForm({ initialValues, saveResults }: Preferen
     <Formik layout="vertical" onSubmit={onSubmit} initialValues={initialValues}>
       {({ submitForm, values, setFieldValue }) => (
         <div className="preferences-form">
-          <Card className="preferences-form__card">
-            <h2>Is Profile Public</h2>
-            <Switch
-              checked={values.publicProfile}
-              onChange={() => {
-                setFieldValue('publicProfile', !values.publicProfile);
-                submitForm();
-              }}
-            />
-          </Card>
-          {values.publicProfile ? (
-            <div className="section-title">
-              <h2>Your Public Profile</h2>
+          <div className="section-title flex">
+            <h2>Your Profile</h2>
+            <div className="flex toggle-public">
+              <p>Make Public?</p>
+              <Switch
+                checked={values.publicProfile}
+                onChange={() => {
+                  setFieldValue('publicProfile', !values.publicProfile);
+                  submitForm();
+                }}
+              />
             </div>
-          ) : (
-            <PrivacyExplainer />
-          )}
+          </div>
         </div>
       )}
     </Formik>
