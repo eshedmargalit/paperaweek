@@ -36,7 +36,5 @@ export const blankReview: Review = {
 };
 
 export const blankProfile: Profile = {
-  userDisplayName: '',
-  reviews: [blankReview],
   isOwnPage: true,
 };

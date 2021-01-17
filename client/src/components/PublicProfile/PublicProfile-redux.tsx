@@ -43,15 +43,11 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
     const profileData = await getProfileData(userId);
     setLoading(false);
 
-    // TODO: un-ignore once we update profileRoutes
     if (profileData) {
       setReviewIdToOpen(reviewIdToOpen);
-      // @ts-ignore
       setIsOwnPage(profileData.isOwnPage);
-      // @ts-ignore
       setReviews(profileData.reviews);
-      // @ts-ignore
-      setUserDisplayName(profileData.userDisplayName);
+      setUserDisplayName(profileData.userDisplayName || '');
     }
   };
 
