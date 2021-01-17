@@ -23,13 +23,22 @@ export default function ProfileHeader({
     saveResults(values);
   };
 
+  let headerText = 'Your Profile';
+  if (!isOwnPage) {
+    if (userDisplayName === '') {
+      headerText = 'Private Profile';
+    } else {
+      headerText = `${userDisplayName}'s Profile`;
+    }
+  }
+
   return (
     <Formik onSubmit={onSubmit} initialValues={initialValues}>
       {({ submitForm, values, setFieldValue }) => (
         <div className="profile-header">
           <p>{isOwnPage}</p>
           <div className="section-title flex">
-            <h2>{isOwnPage ? 'Your Profile' : `${userDisplayName}'s Profile`}</h2>
+            <h2>{headerText}</h2>
             {isOwnPage && (
               <div className="flex toggle-public">
                 <p>Make Public?</p>

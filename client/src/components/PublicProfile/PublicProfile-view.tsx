@@ -3,7 +3,6 @@ import React from 'react';
 
 import { Row, Col, Spin, Alert } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import NotFound from '../NotFound/NotFound';
 
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';
@@ -43,20 +42,18 @@ export default function PublicProfileView({
   // map reviewId to review
   const reviewToOpen: Review | undefined = reviews ? reviews.find(review => review._id === reviewIdToOpen) : undefined;
 
-  const PrivacyExplainer = (): JSX.Element => {
-    return (
-      <Alert
-        message="Your Profile is Private"
-        description="Nobody can see your profile except for you. If you make your profile public, others will be able to see your name, your existing reviews, and your statistics."
-        type="info"
-        showIcon
-      />
-    );
-  };
-
-  // If it's your page, we'll explain what it means that your profile is inaccessible
-  // If it's not your page, we'll show you a 404 (for now, maybe a different element later)
-  const notPublic: JSX.Element = isOwnPage ? <PrivacyExplainer /> : <NotFound />;
+  const PrivacyExplainer = (): JSX.Element => (
+    <Alert
+      message={`${isOwnPage ? 'Your' : 'This'} Profile is Private`}
+      description={
+        isOwnPage
+          ? 'Nobody can see your profile except for you. If you make your profile public, others will be able to see your name, your existing reviews, and your statistics.'
+          : 'Only the owner of the profile will be able to make it public.'
+      }
+      type={isOwnPage ? 'info' : 'error'}
+      showIcon
+    />
+  );
 
   const profileView: JSX.Element = reviews ? (
     <div className="public-profile">
@@ -77,7 +74,11 @@ export default function PublicProfileView({
       </Row>
     </div>
   ) : (
-    <div className="public-profile">{notPublic}</div>
+    <div className="public-profile">
+      {/* If it's your page, we'll explain what it means that your profile is inaccessible */}
+      {/* If it's not your page, we'll just say that the profile is private */}
+      <PrivacyExplainer />
+    </div>
   );
 
   const toRender = loading ? <Spin /> : profileView;

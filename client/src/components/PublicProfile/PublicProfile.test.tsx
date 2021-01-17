@@ -84,9 +84,9 @@ describe('<PublicProfile />', () => {
         );
       });
 
-      it('shows the 404 page', async () => {
+      it('shows a privacy explainer page', async () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId: `not ${googleId}` }, false);
-        await waitFor(() => expect(screen.getByText(/Page not found/)).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText(/This Profile is Private/)).toBeInTheDocument());
       });
     });
 
