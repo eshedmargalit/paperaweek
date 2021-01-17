@@ -105,20 +105,6 @@ $dynamic-text-area-min-height: 80px;
     width: 100%;
   }
 
-  .section-title {
-    vertical-align: center;
-    width: 100%;
-    border-radius: 6px;
-    padding: 10px 10px;
-    background: linear-gradient(90deg, $primary-color 0%, white 200%);
-
-    h2 {
-      font-size: x-large;
-      margin-bottom: 0;
-      color: white;
-    }
-  }
-
   .form-item > input,
   .dynamic-field,
   .react-datepicker__input-container > input {

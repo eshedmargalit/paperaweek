@@ -45,7 +45,7 @@ export interface User {
 }
 
 export interface Profile {
-  userDisplayName: string;
-  reviews: Review[];
+  userDisplayName?: string;
+  reviews?: Review[];
   isOwnPage: boolean;
 }
