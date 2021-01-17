@@ -4,22 +4,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { RouteComponentProps } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
-import { Profile, Review, User } from '../../types';
+import { Maybe, Profile, Review, User } from '../../types';
 
-interface MatchParams {
+export interface PublicProfileMatchParams {
   userId: User['googleId'];
   reviewIdToOpen: Review['_id'];
 }
 
-type PublicProfileReduxProps = RouteComponentProps<MatchParams>;
-
-// Record<string, never> is a fancy way of saying it's always going to be an empty object: {}
-type PrivateReview = Record<string, never>;
+export type PublicProfileReduxProps = RouteComponentProps<PublicProfileMatchParams>;
 
 // TODO returning string or {} or Profile or null is criminal
-const getProfileData = async (userId: User['googleId']): Promise<PrivateReview | Profile | null> => {
+const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>> => {
   try {
-    const { data } = await axios.get<Profile | PrivateReview>(`/api/profiles/${userId}`);
+    const { data } = await axios.get<Profile>(`/api/profiles/${userId}`);
     return data;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -43,15 +40,11 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
     const profileData = await getProfileData(userId);
     setLoading(false);
 
-    // TODO: un-ignore once we update profileRoutes
     if (profileData) {
       setReviewIdToOpen(reviewIdToOpen);
-      // @ts-ignore
       setIsOwnPage(profileData.isOwnPage);
-      // @ts-ignore
       setReviews(profileData.reviews);
-      // @ts-ignore
-      setUserDisplayName(profileData.userDisplayName);
+      setUserDisplayName(profileData.userDisplayName || '');
     }
   };
 

@@ -67,4 +67,19 @@
 
 .flex {
   display: flex;
+  align-items: center;
+}
+
+.section-title {
+  vertical-align: center;
+  width: 100%;
+  border-radius: 6px;
+  padding: 10px 10px;
+  background: linear-gradient(90deg, $primary-color 0%, white 200%);
+
+  h2 {
+    font-size: x-large;
+    margin-bottom: 0;
+    color: white;
+  }
 }
