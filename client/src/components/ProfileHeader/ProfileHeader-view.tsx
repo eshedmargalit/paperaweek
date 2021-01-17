@@ -37,7 +37,6 @@ export default function ProfileHeader({
             {isOwnPage && (
               <div className="flex toggle-public">
                 <p>Make Public?</p>
-
                 <Switch
                   checked={values.publicProfile}
                   onChange={() => {
