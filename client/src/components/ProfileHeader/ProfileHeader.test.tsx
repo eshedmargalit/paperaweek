@@ -1,17 +1,23 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithFormik } from '../../testUtils/formikRender';
-import ProfileHeader, { ProfileHeaderProps } from './ProfileHeader-view';
+import ProfileHeader from '.';
+import { ProfileHeaderReduxProps } from './ProfileHeader-redux';
+import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
+import { blankUser } from '../../templates';
 
-const defaultProps: ProfileHeaderProps = {
-  initialValues: { publicProfile: true },
-  saveResults: jest.fn(),
+const defaultProps: ProfileHeaderReduxProps = {
+  onChange: jest.fn(),
   isOwnPage: true,
   userDisplayName: 'The Other',
 };
 
-function renderProfileHeader(props?: ProfileHeaderProps) {
-  return renderWithFormik(<ProfileHeader {...defaultProps} {...props} />, 'testItem', 'testValue');
+function renderProfileHeader(props?: ProfileHeaderReduxProps) {
+  return renderWithRouterRedux(
+    renderWithFormik(<ProfileHeader {...defaultProps} {...props} />, 'testItem', 'testValue'),
+    { initialState: { ...getBlankInitialState(), auth: { user: blankUser, loading: false } } }
+  );
 }
 
 describe('<ProfileHeader />', () => {
@@ -31,11 +37,22 @@ describe('<ProfileHeader />', () => {
         expect(screen.getByRole('switch')).toBeInTheDocument();
       });
     });
+
+    describe('public toggle', () => {
+      it('calls the API when clicked', async () => {
+        renderProfileHeader();
+
+        const toggleSwitch = screen.getByRole('switch');
+        userEvent.click(toggleSwitch);
+
+        await waitFor(() => expect(toggleSwitch).toHaveAttribute('aria-checked', 'true'));
+      });
+    });
   });
 
   describe("when visiting another user's profile", () => {
     const userDisplayName = 'Big Daniel';
-    const props: ProfileHeaderProps = { ...defaultProps, isOwnPage: false, userDisplayName };
+    const props: ProfileHeaderReduxProps = { ...defaultProps, isOwnPage: false, userDisplayName };
 
     it('does not allow you to decide if their profile is visible', () => {
       renderProfileHeader(props);

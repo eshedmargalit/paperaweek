@@ -19,4 +19,7 @@ export const handlers = [
   rest.put('/api/readingList', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Paper Title' }, blankPaper]));
   }),
+  rest.put('/api/user', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(blankUser));
+  }),
 ];

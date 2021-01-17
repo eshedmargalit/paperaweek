@@ -7,7 +7,7 @@ import { ProfileHeaderValues } from './types';
 import ProfileHeader from './ProfileHeader-view';
 import { AuthState } from '../../reducers/reducer_auth';
 
-interface ProfileHeaderReduxProps {
+export interface ProfileHeaderReduxProps {
   onChange: () => void;
   isOwnPage: Profile['isOwnPage'];
   userDisplayName: Profile['userDisplayName'];
