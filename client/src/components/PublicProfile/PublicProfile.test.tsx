@@ -44,26 +44,29 @@ describe('<PublicProfile />', () => {
   describe('when the profile belongs to the logged-in user', () => {
     describe('when the profile is private', () => {
       it('renders without crashing', async () => {
-        renderWithMatchOptions('12345', 'reviewId', { ...blankUser, googleId: '12345' }, false);
+        const googleId = '12345';
+        renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, false);
         await waitFor(() => expect(screen.getByText(/Nobody can see/)).toBeInTheDocument());
       });
     });
 
     describe('when the profile is public', () => {
       const userDisplayName = 'The Notorious 321';
+      const googleId = '321';
+
       beforeEach(() => {
         server.use(
-          rest.get('/api/profiles/321', (_req, res, ctx) => {
+          rest.get(`/api/profiles/${googleId}`, (_req, res, ctx) => {
             return res(
               ctx.status(200),
-              ctx.json({ isOwnPage: true, reviews: [{ ...blankReview, _id: '123' }], userDisplayName })
+              ctx.json({ isOwnPage: true, reviews: [{ ...blankReview, _id: googleId }], userDisplayName })
             );
           })
         );
       });
 
       it("shows the user's review", async () => {
-        renderWithMatchOptions('321', 'reviewId', { ...blankUser, googleId: '321' }, true);
+        renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, true);
         await waitFor(() => expect(screen.getByText(`${userDisplayName}'s Reviews`)).toBeInTheDocument());
       });
     });
@@ -71,11 +74,41 @@ describe('<PublicProfile />', () => {
 
   describe('when the profile does not belong to the logged-in user', () => {
     describe('when the profile is private', () => {
-      xit('shows the 404 page', () => {});
+      const googleId = '456';
+
+      beforeEach(() => {
+        server.use(
+          rest.get(`/api/profiles/${googleId}`, (_req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ isOwnPage: false }));
+          })
+        );
+      });
+
+      it('shows the 404 page', async () => {
+        renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId: `not ${googleId}` }, false);
+        await waitFor(() => expect(screen.getByText(/Page not found/)).toBeInTheDocument());
+      });
     });
 
     describe('when the profile is public', () => {
-      xit("shows the user's review", () => {});
+      const googleId = '678';
+      const userDisplayName = 'The Notorious 678';
+
+      beforeEach(() => {
+        server.use(
+          rest.get(`/api/profiles/${googleId}`, (_req, res, ctx) => {
+            return res(
+              ctx.status(200),
+              ctx.json({ isOwnPage: false, reviews: [{ ...blankReview, _id: 'reviewId' }], userDisplayName })
+            );
+          })
+        );
+      });
+
+      it("shows the user's review", async () => {
+        renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId: `not ${googleId}` }, false);
+        await waitFor(() => expect(screen.getByText(`${userDisplayName}'s Reviews`)).toBeInTheDocument());
+      });
     });
   });
 });

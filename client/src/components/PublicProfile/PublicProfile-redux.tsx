@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { RouteComponentProps } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
-import { Profile, Review, User } from '../../types';
+import { Maybe, Profile, Review, User } from '../../types';
 
 export interface PublicProfileMatchParams {
   userId: User['googleId'];
@@ -13,13 +13,10 @@ export interface PublicProfileMatchParams {
 
 export type PublicProfileReduxProps = RouteComponentProps<PublicProfileMatchParams>;
 
-// Record<string, never> is a fancy way of saying it's always going to be an empty object: {}
-type PrivateReview = Record<string, never>;
-
 // TODO returning string or {} or Profile or null is criminal
-const getProfileData = async (userId: User['googleId']): Promise<PrivateReview | Profile | null> => {
+const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>> => {
   try {
-    const { data } = await axios.get<Profile | PrivateReview>(`/api/profiles/${userId}`);
+    const { data } = await axios.get<Profile>(`/api/profiles/${userId}`);
     return data;
   } catch (err) {
     // eslint-disable-next-line no-console

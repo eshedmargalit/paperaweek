@@ -13,10 +13,6 @@ export interface ProfileHeaderProps {
   userDisplayName: Profile['userDisplayName'];
 }
 
-// function PrivacyExplainer(): JSX.Element {
-//   return <div>Yo shit secure, dawg</div>;
-// }
-
 export default function ProfileHeader({
   initialValues,
   saveResults,
