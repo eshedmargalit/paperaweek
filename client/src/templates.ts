@@ -1,4 +1,4 @@
-import { Paper, Notes, Review, User } from './types';
+import { Paper, Notes, Review, User, Profile } from './types';
 
 export const blankUser: User = {
   googleId: '',
@@ -33,4 +33,10 @@ export const blankNotes: Notes = {
 export const blankReview: Review = {
   paper: blankPaper,
   notes: blankNotes,
+};
+
+export const blankProfile: Profile = {
+  userDisplayName: '',
+  reviews: [blankReview],
+  isOwnPage: true,
 };

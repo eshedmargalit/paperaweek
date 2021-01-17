@@ -6,12 +6,12 @@ import { RouteComponentProps } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
 import { Profile, Review, User } from '../../types';
 
-interface MatchParams {
+export interface PublicProfileMatchParams {
   userId: User['googleId'];
   reviewIdToOpen: Review['_id'];
 }
 
-type PublicProfileReduxProps = RouteComponentProps<MatchParams>;
+export type PublicProfileReduxProps = RouteComponentProps<PublicProfileMatchParams>;
 
 // Record<string, never> is a fancy way of saying it's always going to be an empty object: {}
 type PrivateReview = Record<string, never>;

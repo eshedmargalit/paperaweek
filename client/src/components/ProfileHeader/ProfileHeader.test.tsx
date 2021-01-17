@@ -1,7 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithFormik } from '../../testUtils/formikRender';
 import ProfileHeader from '.';
 import { ProfileHeaderReduxProps } from './ProfileHeader-redux';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
@@ -14,10 +13,9 @@ const defaultProps: ProfileHeaderReduxProps = {
 };
 
 function renderProfileHeader(props?: ProfileHeaderReduxProps) {
-  return renderWithRouterRedux(
-    renderWithFormik(<ProfileHeader {...defaultProps} {...props} />, 'testItem', 'testValue'),
-    { initialState: { ...getBlankInitialState(), auth: { user: blankUser, loading: false } } }
-  );
+  return renderWithRouterRedux(<ProfileHeader {...defaultProps} {...props} />, {
+    initialState: { ...getBlankInitialState(), auth: { user: blankUser, loading: false } },
+  });
 }
 
 describe('<ProfileHeader />', () => {

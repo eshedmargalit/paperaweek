@@ -2,12 +2,12 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MarkdownTextArea from './MarkdownTextArea';
-import { renderWithFormik } from '../../testUtils/formikRender';
+import { wrapWithFormik } from '../../testUtils/withFormik';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
 
 function renderMDTextArea<T>(fieldName: string, fieldValue: T, shouldRenderMarkdown = true) {
   render(
-    renderWithFormik(
+    wrapWithFormik(
       <div>
         <MarkdownTextArea formFieldName={fieldName} shouldRenderMarkdown={shouldRenderMarkdown} />
         <p>Some Other Element</p>
