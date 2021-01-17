@@ -98,7 +98,11 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
                     tabIndex={-1}
                     shape="circle"
                     className="dynamic-delete-button"
-                    onClick={() => remove(index)}
+                    onClick={() => {
+                      remove(index);
+                      // Validate the form to make sure any validation side-effects happen
+                      form.validateForm();
+                    }}
                   />
                 )}
               </div>
@@ -137,7 +141,11 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
                     tabIndex={-1}
                     icon={<DeleteOutlined />}
                     className="dynamic-delete-button"
-                    onClick={() => remove(index)}
+                    onClick={() => {
+                      remove(index);
+                      // Validate the form to make sure any validation side-effects happen
+                      form.validateForm();
+                    }}
                   />
                 )}
               </div>
