@@ -4,8 +4,6 @@ import { Button } from 'antd';
 import { Field, useField, FieldInputProps, FieldArrayRenderProps, getIn } from 'formik';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { CSSTransition, TransitionGroup } from 'react-transition-group'; // ES6
-
 import { Maybe } from '../../types';
 import MarkdownTextArea from '../MarkdownTextArea';
 
@@ -83,26 +81,22 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
 
   return (
     <div>
-      <TransitionGroup className="dynamic-tg">
-        {fieldArray &&
-          fieldArray.length > 0 &&
-          fieldArray.map((_, index: number) => (
-            <CSSTransition key={index} timeout={250} classNames="move">
-              <div className="dynamic-field-container" key={index}>
-                <Field className="dynamic-field" name={`${name}.${index}`} />
-                {fieldArray.length > 1 && (
-                  <Button
-                    icon={<DeleteOutlined />}
-                    tabIndex={-1}
-                    shape="circle"
-                    className="dynamic-delete-button"
-                    onClick={() => remove(index)}
-                  />
-                )}
-              </div>
-            </CSSTransition>
-          ))}
-      </TransitionGroup>
+      {fieldArray &&
+        fieldArray.length > 0 &&
+        fieldArray.map((_, index: number) => (
+          <div className="dynamic-field-container" key={index}>
+            <Field className="dynamic-field" name={`${name}.${index}`} />
+            {fieldArray.length > 1 && (
+              <Button
+                icon={<DeleteOutlined />}
+                tabIndex={-1}
+                shape="circle"
+                className="dynamic-delete-button"
+                onClick={() => remove(index)}
+              />
+            )}
+          </div>
+        ))}
       <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => push('')}>
         Add
       </Button>
@@ -124,25 +118,21 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
 
   return (
     <div>
-      <TransitionGroup className="dynamic-tg">
-        {fieldArray &&
-          fieldArray.length > 0 &&
-          fieldArray.map((_, index: number) => (
-            <CSSTransition key={index} timeout={250} classNames="move">
-              <div key={index} className="bullet-text-area">
-                <MarkdownTextArea formFieldName={`${name}.${index}`} />
-                {fieldArray.length > 1 && (
-                  <Button
-                    tabIndex={-1}
-                    icon={<DeleteOutlined />}
-                    className="dynamic-delete-button"
-                    onClick={() => remove(index)}
-                  />
-                )}
-              </div>
-            </CSSTransition>
-          ))}
-      </TransitionGroup>
+      {fieldArray &&
+        fieldArray.length > 0 &&
+        fieldArray.map((_, index: number) => (
+          <div key={index} className="bullet-text-area">
+            <MarkdownTextArea formFieldName={`${name}.${index}`} />
+            {fieldArray.length > 1 && (
+              <Button
+                tabIndex={-1}
+                icon={<DeleteOutlined />}
+                className="dynamic-delete-button"
+                onClick={() => remove(index)}
+              />
+            )}
+          </div>
+        ))}
       <Button className="dynamic-add-button" shape="round" onClick={() => push('')}>
         <PlusOutlined />
         Add

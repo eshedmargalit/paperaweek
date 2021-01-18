@@ -143,17 +143,6 @@ $dynamic-text-area-min-height: 80px;
       margin-bottom: 0;
     }
   }
-
-  .move-enter {
-    opacity: 0.01;
-    transform: translate(-40px, 0);
-  }
-
-  .move-enter-active {
-    opacity: 1;
-    transform: translate(0, 0);
-    transition: all 250ms ease-in;
-  }
 }
 .latex-demo {
   textarea {
