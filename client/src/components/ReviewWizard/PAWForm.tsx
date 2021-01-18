@@ -68,10 +68,7 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
     <Formik
       initialValues={initialReview}
       onSubmit={values => {
-        onSubmit({
-          ...values,
-          notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
-        });
+        onSubmit(convertFormValues(values));
       }}
       validationSchema={PAWFormSchema}
       validateOnBlur

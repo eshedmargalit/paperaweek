@@ -89,7 +89,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
           fieldArray.map((_, index: number) => (
             <CSSTransition key={index} timeout={250} classNames="move">
               <div className="dynamic-field-container" key={index}>
-                <Field className="dynamic-field" name={`${name}.${index}`} tabIndex={0} />
+                <Field className="dynamic-field" name={`${name}.${index}`} />
                 {fieldArray.length > 1 && (
                   <Button
                     icon={<DeleteOutlined />}
