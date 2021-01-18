@@ -23,10 +23,11 @@ const PAWFormSchema = Yup.object().shape({
     authors: Yup.array()
       .of(
         Yup.string()
-          .required('Paper must have at least one author.')
+          .required('Paper author must have at least one character.')
           .min(1)
       )
-      .min(1),
+      .min(1)
+      .required('Paper must have at least one author.'),
     title: Yup.string()
       .required('Paper must have a title.')
       .min(1),
