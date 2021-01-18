@@ -3,15 +3,21 @@
 import { Button, Col, Row } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
 import { debounce as _debounce, uniq as _uniq } from 'lodash';
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as Yup from 'yup';
 import { Review } from '../../types';
+import { DraftSaver } from './DraftSaver';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import './ReviewWizard.scss';
 import { OnClickEventType } from './types';
 import { bulletNoteFields } from './utils';
 
+/**
+ * Schema Rules in Plain English
+ * 1. At least one author, each other must have at least one character in their name
+ * 2. A title with at least one character
+ */
 const PAWFormSchema = Yup.object().shape({
   paper: Yup.object().shape({
     authors: Yup.array()
@@ -20,7 +26,7 @@ const PAWFormSchema = Yup.object().shape({
           .required('Paper must have at least one author.')
           .min(1)
       )
-      .length(1),
+      .min(1),
     title: Yup.string()
       .required('Paper must have a title.')
       .min(1),
@@ -39,28 +45,16 @@ const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
   );
 };
 
+const convertFormValues = (values: Review) => ({
+  ...values,
+  notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
+});
+
 interface PAWFormProps {
   initialReview: Review;
   onChange: (formValues: Review) => void;
   onSubmit: (formValues: Review) => void;
 }
-
-const DraftSaver = ({
-  values,
-  saveFn,
-}: {
-  values: PAWFormProps['initialReview'];
-  saveFn: PAWFormProps['onChange'];
-}) => {
-  useEffect(() => {
-    saveFn({
-      ...values,
-      notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
-    });
-  }, [values]);
-
-  return null;
-};
 
 export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormProps): JSX.Element {
   const debouncedOnChange = _debounce(onChange, 2000);
@@ -85,7 +79,7 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
     >
       {({ handleSubmit, values }: { handleSubmit: OnClickEventType; values: Review }) => (
         <Form>
-          <DraftSaver values={values} saveFn={debouncedOnChange} />
+          <DraftSaver values={values} converter={convertFormValues} saveFn={debouncedOnChange} />
           <div className="paw-form">
             <div className="section-title">
               <h2> Paper Information </h2>
