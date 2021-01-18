@@ -150,17 +150,6 @@ $dynamic-text-area-min-height: 80px;
     transform: translate(0, 0);
     transition: all 250ms ease-in;
   }
-
-  .move-exit {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-
-  .move-exit-active {
-    opacity: 0.01;
-    transform: translate(-40px, 0);
-    transition: all 250ms ease-in;
-  }
 }
 .latex-demo {
   textarea {
