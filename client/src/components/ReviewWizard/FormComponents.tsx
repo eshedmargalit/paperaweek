@@ -100,8 +100,10 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
                     className="dynamic-delete-button"
                     onClick={() => {
                       remove(index);
-                      // Validate the form to make sure any validation side-effects happen
-                      form.validateForm();
+                      setTimeout(() => {
+                        // Validate the form to make sure any validation side-effects happen
+                        form.validateForm();
+                      }, 1000);
                     }}
                   />
                 )}
@@ -143,8 +145,10 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
                     className="dynamic-delete-button"
                     onClick={() => {
                       remove(index);
-                      // Validate the form to make sure any validation side-effects happen
-                      form.validateForm();
+                      setTimeout(() => {
+                        // Validate the form to make sure any validation side-effects happen
+                        form.validateForm();
+                      }, 1000);
                     }}
                   />
                 )}
