@@ -85,7 +85,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
           <div className="dynamic-field-container" key={index}>
-            <Field className="dynamic-field" name={`${name}.${index}`} />
+            <Field className="dynamic-field" name={`${name}.${index}`} aria-label={`${name}.${index}`} />
             {fieldArray.length > 1 && (
               <Button
                 icon={<DeleteOutlined />}
@@ -122,7 +122,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
           <div key={index} className="bullet-text-area">
-            <MarkdownTextArea formFieldName={`${name}.${index}`} />
+            <MarkdownTextArea formFieldName={`${name}.${index}`} aria-label={`${name}.${index}`} />
             {fieldArray.length > 1 && (
               <Button
                 tabIndex={-1}

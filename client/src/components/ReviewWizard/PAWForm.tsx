@@ -84,7 +84,7 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
             </div>
             <Row className="form-group" gutter={16}>
               <Col {...reviewItemColSpan}>
-                <TextField label="Title" name="paper.title" type="text" />
+                <TextField label="Title" name="paper.title" type="text" id="paper.title" />
               </Col>
               <Col {...reviewItemColSpan}>
                 <MonthPicker label="Publication Date" name="paper.date" />
