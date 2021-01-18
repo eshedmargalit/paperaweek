@@ -8,6 +8,10 @@ $dynamic-text-area-min-height: 80px;
 }
 
 .paw-form {
+  .error {
+    color: darkred;
+  }
+
   .react-datepicker__month-text--keyboard-selected {
     background: $primary-color !important;
     &:hover {
@@ -138,17 +142,6 @@ $dynamic-text-area-min-height: 80px;
     &:last-of-type {
       margin-bottom: 0;
     }
-  }
-
-  .move-enter {
-    opacity: 0.01;
-    transform: translate(-40px, 0);
-  }
-
-  .move-enter-active {
-    opacity: 1;
-    transform: translate(0, 0);
-    transition: all 250ms ease-in;
   }
 }
 .latex-demo {

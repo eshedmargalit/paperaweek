@@ -31,10 +31,56 @@ describe('<ReviewWizard />', () => {
     });
 
     it('opens on click', async () => {
-      const initialState = getBlankInitialState();
-      renderWithRouterRedux(<ReviewWizard />, { initialState });
+      renderWithRouterRedux(<ReviewWizard />);
       userEvent.click(screen.getByText(/Help/));
       await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
+    });
+  });
+
+  describe('form validation', () => {
+    it('does not get angry before any fields are touched', () => {
+      renderWithRouterRedux(<ReviewWizard />);
+      expect(screen.queryByText(/Paper must have a title/)).not.toBeInTheDocument();
+    });
+
+    it('gets angry when there is no title', async () => {
+      renderWithRouterRedux(<ReviewWizard />);
+
+      const titleInput = screen.getByLabelText('Title');
+
+      //  Start typing, but click away while it's still blank
+      userEvent.type(titleInput, '');
+      userEvent.click(screen.getByText(/Paper Information/));
+
+      await waitFor(() => expect(screen.getByText(/Paper must have a title/)).toBeInTheDocument());
+
+      // Now make sure it goes away
+      userEvent.type(titleInput, 'The Great Burger Article');
+      userEvent.click(screen.getByText(/Paper Information/));
+
+      await waitFor(() => expect(screen.queryByText(/Paper must have a title/)).not.toBeInTheDocument());
+    });
+
+    it('validates when there are no authors', async () => {
+      renderWithRouterRedux(<ReviewWizard />);
+
+      const authorInput = screen.getByLabelText('paper.authors.0');
+
+      //  Start typing, but click away while it's still blank
+      userEvent.type(authorInput, '');
+      userEvent.click(screen.getByText(/Paper Information/));
+
+      await waitFor(() =>
+        expect(screen.getByText(/Paper author must have at least one character/)).toBeInTheDocument()
+      );
+
+      // Now make sure it goes away
+      userEvent.type(authorInput, 'Don McDon');
+      userEvent.click(screen.getByText(/Paper Information/));
+
+      await waitFor(() =>
+        expect(screen.queryByText(/Paper author must have at least one character/)).not.toBeInTheDocument()
+      );
     });
   });
 });
