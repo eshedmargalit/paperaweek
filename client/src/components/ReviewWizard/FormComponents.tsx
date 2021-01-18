@@ -1,10 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, { FunctionComponent } from 'react';
 import { Button } from 'antd';
-import { Field, useField, FieldInputProps, FieldArrayRenderProps } from 'formik';
+import { Field, useField, FieldInputProps, FieldArrayRenderProps, getIn } from 'formik';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { get as _get } from 'lodash';
 import { CSSTransition, TransitionGroup } from 'react-transition-group'; // ES6
 
 import { Maybe } from '../../types';
@@ -73,10 +72,9 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
   if (!isFARP(props)) return null;
 
   const { form, push, remove, name } = props;
-  const { values } = form;
+  const { values, errors, touched } = form;
 
-  // _get allows indexing with strings containing a mix of dots and brackets
-  const fieldArray = _get(values, name);
+  const fieldArray = getIn(values, name);
 
   // bail if the field array isn't actually an array. Helps TS figure out what's going on
   if (!Array.isArray(fieldArray)) {
@@ -91,20 +89,14 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
           fieldArray.map((_, index: number) => (
             <CSSTransition key={index} timeout={250} classNames="move">
               <div className="dynamic-field-container" key={index}>
-                <Field className="dynamic-field" name={`${name}.${index}`} autoFocus />
+                <Field className="dynamic-field" name={`${name}.${index}`} tabIndex={0} />
                 {fieldArray.length > 1 && (
                   <Button
                     icon={<DeleteOutlined />}
                     tabIndex={-1}
                     shape="circle"
                     className="dynamic-delete-button"
-                    onClick={() => {
-                      remove(index);
-                      setTimeout(() => {
-                        // Validate the form to make sure any validation side-effects happen
-                        form.validateForm();
-                      }, 1000);
-                    }}
+                    onClick={() => remove(index)}
                   />
                 )}
               </div>
@@ -114,6 +106,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
       <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => push('')}>
         Add
       </Button>
+      {getIn(touched, name) && getIn(errors, name) && <p className="error">{getIn(errors, name)}</p>}
     </div>
   );
 };
@@ -121,8 +114,8 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
 export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
   if (!isFARP(props)) return null;
   const { form, push, remove, name } = props;
-  const { values } = form;
-  const fieldArray = _get(values, name);
+  const { values, errors, touched } = form;
+  const fieldArray = getIn(values, name);
 
   // bail if the field array isn't actually an array. Helps TS figure out what's going on
   if (!Array.isArray(fieldArray)) {
@@ -143,13 +136,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
                     tabIndex={-1}
                     icon={<DeleteOutlined />}
                     className="dynamic-delete-button"
-                    onClick={() => {
-                      remove(index);
-                      setTimeout(() => {
-                        // Validate the form to make sure any validation side-effects happen
-                        form.validateForm();
-                      }, 1000);
-                    }}
+                    onClick={() => remove(index)}
                   />
                 )}
               </div>
@@ -160,6 +147,7 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
         <PlusOutlined />
         Add
       </Button>
+      {getIn(touched, name) && getIn(errors, name) && <p className="error">{getIn(errors, name)}</p>}
     </div>
   );
 };

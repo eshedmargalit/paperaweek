@@ -25,6 +25,7 @@ function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: Markdo
   ) : (
     <textarea
       {...field}
+      autoFocus={!!value}
       ref={textAreaRef}
       onFocus={focus}
       onBlur={e => {
@@ -35,7 +36,6 @@ function MarkdownTextArea({ formFieldName, shouldRenderMarkdown = true }: Markdo
         unfocus();
       }}
       className="dynamic-text-area"
-      autoFocus
       value={value}
       onChange={e => setValue(e.target.value)}
     />

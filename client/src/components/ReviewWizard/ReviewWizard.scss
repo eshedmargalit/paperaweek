@@ -8,6 +8,10 @@ $dynamic-text-area-min-height: 80px;
 }
 
 .paw-form {
+  .error {
+    color: darkred;
+  }
+
   .react-datepicker__month-text--keyboard-selected {
     background: $primary-color !important;
     &:hover {
