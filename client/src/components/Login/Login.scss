@@ -1,10 +1,12 @@
+@import '../../styles/common.scss';
+
 $default-padding: 30px;
 
 .login-page {
   .logo {
+    @include green-filter;
     width: 40%;
     margin-bottom: 5%;
-    filter: invert(45%) sepia(45%) saturate(2204%) hue-rotate(139deg) brightness(96%) contrast(102%);
   }
 
   .product-title {
