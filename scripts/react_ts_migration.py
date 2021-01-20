@@ -38,6 +38,10 @@ class Review:
         if self.data.get("paper") is None:
             return
 
+        if self.data.get("notes") is not None:
+            print("Review already converted, skipping")
+            return
+
         original_review = copy.deepcopy(self.data)
 
         self.data["paper"].pop("one_sentence")
@@ -108,9 +112,19 @@ class User:
             pprint.pprint(converted_drafts)
         else:
             print("This is not a dry run! Ahh!")
+            # first, save self to db to make sure object exists
+            db_object_without_immutables = copy.deepcopy(self._db_object)
+            db_object_without_immutables.pop("_id")
             database.collection.find_one_and_update(
                 {"googleId": self.googleId},
-                {"$set": {"reviews": converted_reviews, "drafts": converted_drafts,}},
+                {"$set": db_object_without_immutables},
+                upsert=True,
+            )
+
+            # now update all values with converted values
+            database.collection.find_one_and_update(
+                {"googleId": self.googleId},
+                {"$set": {"reviews": converted_reviews, "drafts": converted_drafts}},
                 upsert=True,
             )
 
@@ -139,6 +153,8 @@ def main() -> None:
     target = Database(args.target_db_name, args.target_uri)
 
     for user in source.get_all_users():
+        print(user)
+        print("==================")
         user.convert_reviews_and_drafts()
         user.save_to_db(target, dry_run=args.dry_run)
 
