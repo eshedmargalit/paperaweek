@@ -9,9 +9,7 @@ from pymongo import MongoClient
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "source_uri",
-        type=str,
-        help="Mongo URI for the source database",
+        "source_uri", type=str, help="Mongo URI for the source database",
     )
     parser.add_argument(
         "source_db_name",
@@ -19,9 +17,7 @@ def get_parser() -> argparse.ArgumentParser:
         help="Name of the database for the source database, e.g., 'paw'",
     )
     parser.add_argument(
-        "target_uri",
-        type=str,
-        help="Mongo URI for the target database",
+        "target_uri", type=str, help="Mongo URI for the target database",
     )
     parser.add_argument(
         "target_db_name",
@@ -40,6 +36,10 @@ class Review:
 
     def convert_v1_to_v2(self) -> None:
         if self.data.get("paper") is None:
+            return
+
+        if self.data.get("notes") is not None:
+            print("Review already converted, skipping")
             return
 
         original_review = copy.deepcopy(self.data)
