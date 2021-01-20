@@ -110,12 +110,7 @@ class User:
             print("This is not a dry run! Ahh!")
             database.collection.find_one_and_update(
                 {"googleId": self.googleId},
-                {
-                    "$set": {
-                        "reviews": self._convert_to_raw(self.reviews),
-                        "drafts": self._convert_to_raw(self.drafts),
-                    }
-                },
+                {"$set": {"reviews": converted_reviews, "drafts": converted_drafts,}},
                 upsert=True,
             )
 
