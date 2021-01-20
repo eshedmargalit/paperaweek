@@ -1,8 +1,7 @@
 import argparse
 import copy
-import os
 import pprint
-from typing import List, Tuple
+from typing import List
 
 from pymongo import MongoClient
 
