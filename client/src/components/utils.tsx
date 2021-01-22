@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import { InlineMath, BlockMath } from 'react-katex';
 import math from 'remark-math';
+import gfm from 'remark-gfm';
 
 import ReactMarkdown from 'react-markdown';
 
@@ -147,7 +148,7 @@ export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
   };
 
   return (
-    <ReactMarkdown plugins={[math]} renderers={renderers}>
+    <ReactMarkdown plugins={[gfm, math]} renderers={renderers}>
       {markdownString}
     </ReactMarkdown>
   );
