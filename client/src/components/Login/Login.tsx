@@ -73,7 +73,7 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
                 content={LoginButton}
                 trigger="click"
                 visible={isModalOpen}
-                placement="bottom"
+                placement="top"
                 onVisibleChange={() => setIsModalOpen(!isModalOpen)}
               >
                 <Button shape="round" size="large" icon={<LoginOutlined />}>
