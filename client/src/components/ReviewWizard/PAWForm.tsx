@@ -2,16 +2,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Button, Col, Row } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
-import { debounce as _debounce, uniq as _uniq } from 'lodash';
+import { uniq as _uniq } from 'lodash';
 import React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as Yup from 'yup';
 import { Review } from '../../types';
-import { DraftSaver } from './DraftSaver';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import './ReviewWizard.scss';
 import { OnClickEventType } from './types';
 import { bulletNoteFields } from './utils';
+import { DraftsContext } from '../../contexts';
 
 /**
  * Schema Rules in Plain English
@@ -46,7 +46,7 @@ const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
   );
 };
 
-const convertFormValues = (values: Review) => ({
+export const convertFormValues = (values: Review): Review => ({
   ...values,
   notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
 });
@@ -58,7 +58,7 @@ interface PAWFormProps {
 }
 
 export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormProps): JSX.Element {
-  const debouncedOnChange = _debounce(onChange, 2000);
+  const convertAndSave = (draft: Review) => onChange(convertFormValues(draft));
 
   const reviewItemColSpan = {
     lg: 12,
@@ -77,60 +77,87 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
     >
       {({ handleSubmit, values }: { handleSubmit: OnClickEventType; values: Review }) => (
         <Form>
-          <DraftSaver values={values} converter={convertFormValues} saveFn={debouncedOnChange} />
-          <div className="paw-form">
-            <div className="section-title">
-              <h2> Paper Information </h2>
-            </div>
-            <Row className="form-group" gutter={16}>
-              <Col {...reviewItemColSpan}>
-                <TextField label="Title" name="paper.title" type="text" id="paper.title" />
-              </Col>
-              <Col {...reviewItemColSpan}>
-                <MonthPicker label="Publication Date" name="paper.date" />
-              </Col>
-              <Col {...reviewItemColSpan}>
-                <label htmlFor="paper.authors">Authors</label>
-                <FieldArray name="paper.authors" component={DynamicList} />
-              </Col>
-              <Col {...reviewItemColSpan}>
-                <label htmlFor="paper.institutions">Institutions</label>
-                <FieldArray name="paper.institutions" component={DynamicList} />
-              </Col>
-              <Col lg={8} sm={24}>
-                <TextField label="Journal" name="paper.journal" type="text" />
-              </Col>
-              <Col lg={8} sm={24}>
-                <TextField label="URL" name="paper.url" type="text" />
-              </Col>
-              <Col lg={8} sm={24}>
-                <TextField label="DOI" name="paper.doi" type="text" />
-              </Col>
-            </Row>
-            <div className="section-title">
-              <h2> Your Review </h2>
-            </div>
-            <Row className="form-group" gutter={16}>
-              {bulletNoteFields.map(({ fieldName, label }) => (
-                <Col key={label} {...reviewItemColSpan}>
-                  <label htmlFor={fieldName}>{label}</label>
-                  <FieldArray name={`notes.${fieldName}`} component={DynamicTextAreaList} />
+          <DraftsContext.Provider value={convertAndSave}>
+            <div className="paw-form">
+              <div className="section-title">
+                <h2> Paper Information </h2>
+              </div>
+              <Row className="form-group" gutter={16}>
+                <Col {...reviewItemColSpan}>
+                  <TextField
+                    label="Title"
+                    name="paper.title"
+                    type="text"
+                    id="paper.title"
+                    onBlurHandler={() => convertAndSave(values)}
+                  />
                 </Col>
-              ))}
-            </Row>
-            <Row gutter={16}>
-              <Col {...reviewItemColSpan}>
-                <TextField label="One Sentence Summary" name="notes.tldr" type="text" />
-              </Col>
-              <Col {...reviewItemColSpan}>
-                <TextField label="Keywords" name="notes.keywords" type="text" placeholder="human, fmri, statistics" />
-              </Col>
-            </Row>
-            <br />
-            <Button shape="round" type="primary" onClick={handleSubmit}>
-              Continue to Preview
-            </Button>
-          </div>
+                <Col {...reviewItemColSpan}>
+                  <MonthPicker
+                    label="Publication Date"
+                    name="paper.date"
+                    onBlurHandler={() => convertAndSave(values)}
+                  />
+                </Col>
+                <Col {...reviewItemColSpan}>
+                  <label htmlFor="paper.authors">Authors</label>
+                  <FieldArray name="paper.authors" component={DynamicList} />
+                </Col>
+                <Col {...reviewItemColSpan}>
+                  <label htmlFor="paper.institutions">Institutions</label>
+                  <FieldArray name="paper.institutions" component={DynamicList} />
+                </Col>
+                <Col lg={8} sm={24}>
+                  <TextField
+                    label="Journal"
+                    name="paper.journal"
+                    type="text"
+                    onBlurHandler={() => convertAndSave(values)}
+                  />
+                </Col>
+                <Col lg={8} sm={24}>
+                  <TextField label="URL" name="paper.url" type="text" onBlurHandler={() => convertAndSave(values)} />
+                </Col>
+                <Col lg={8} sm={24}>
+                  <TextField label="DOI" name="paper.doi" type="text" onBlurHandler={() => convertAndSave(values)} />
+                </Col>
+              </Row>
+              <div className="section-title">
+                <h2> Your Review </h2>
+              </div>
+              <Row className="form-group" gutter={16}>
+                {bulletNoteFields.map(({ fieldName, label }) => (
+                  <Col key={label} {...reviewItemColSpan}>
+                    <label htmlFor={fieldName}>{label}</label>
+                    <FieldArray name={`notes.${fieldName}`} component={DynamicTextAreaList} />
+                  </Col>
+                ))}
+              </Row>
+              <Row gutter={16}>
+                <Col {...reviewItemColSpan}>
+                  <TextField
+                    label="One Sentence Summary"
+                    name="notes.tldr"
+                    type="text"
+                    onBlurHandler={() => convertAndSave(values)}
+                  />
+                </Col>
+                <Col {...reviewItemColSpan}>
+                  <TextField
+                    label="Keywords"
+                    name="notes.keywords"
+                    type="text"
+                    placeholder="human, fmri, statistics"
+                    onBlurHandler={() => convertAndSave(values)}
+                  />
+                </Col>
+              </Row>
+              <br />
+              <Button shape="round" type="primary" onClick={handleSubmit}>
+                Continue to Preview
+              </Button>
+            </div>
+          </DraftsContext.Provider>
         </Form>
       )}
     </Formik>

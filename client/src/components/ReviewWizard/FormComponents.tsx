@@ -1,11 +1,12 @@
 /* eslint-disable react/no-array-index-key */
-import React, { FunctionComponent } from 'react';
+import React, { useContext, FunctionComponent } from 'react';
 import { Button } from 'antd';
 import { Field, useField, FieldInputProps, FieldArrayRenderProps, getIn } from 'formik';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Maybe } from '../../types';
 import MarkdownTextArea from '../MarkdownTextArea';
+import { DraftsContext } from '../../contexts';
 
 interface FieldInputPropsWithLabel {
   label: string;
@@ -13,6 +14,7 @@ interface FieldInputPropsWithLabel {
   placeholder?: string;
   type?: string;
   id?: string;
+  onBlurHandler: () => void;
 }
 
 const DatePickerField = ({ ...props }: FieldInputProps<string>) => {
@@ -33,15 +35,22 @@ const DatePickerField = ({ ...props }: FieldInputProps<string>) => {
   );
 };
 
-export const TextField = ({ label, ...props }: FieldInputPropsWithLabel): JSX.Element => {
+export const TextField = ({ label, onBlurHandler, ...props }: FieldInputPropsWithLabel): JSX.Element => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
   const [field, meta] = useField(props);
+  const onBlur = (e: React.FocusEvent) => {
+    // call formik's onBlur
+    field.onBlur(e);
+
+    // call our onBlur
+    onBlurHandler();
+  };
   return (
     <div className="form-item">
       <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
+      <input className="text-input" {...field} {...props} onBlur={onBlur} />
       {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
     </div>
   );
@@ -78,6 +87,8 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
   if (!Array.isArray(fieldArray)) {
     return null;
   }
+  const convertAndSave = useContext(DraftsContext);
+  const onBlurHandler = () => convertAndSave && convertAndSave(form.values);
 
   return (
     <div>
@@ -85,7 +96,12 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
           <div className="dynamic-field-container" key={index}>
-            <Field className="dynamic-field" name={`${name}.${index}`} aria-label={`${name}.${index}`} />
+            <Field
+              className="dynamic-field"
+              name={`${name}.${index}`}
+              aria-label={`${name}.${index}`}
+              onBlur={onBlurHandler}
+            />
             {fieldArray.length > 1 && (
               <Button
                 icon={<DeleteOutlined />}
@@ -116,13 +132,20 @@ export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps
     return null;
   }
 
+  const convertAndSave = useContext(DraftsContext);
+  const onBlurHandler = () => convertAndSave && convertAndSave(form.values);
+
   return (
     <div>
       {fieldArray &&
         fieldArray.length > 0 &&
         fieldArray.map((_, index: number) => (
           <div key={index} className="bullet-text-area">
-            <MarkdownTextArea formFieldName={`${name}.${index}`} aria-label={`${name}.${index}`} />
+            <MarkdownTextArea
+              formFieldName={`${name}.${index}`}
+              aria-label={`${name}.${index}`}
+              onBlurHandler={onBlurHandler}
+            />
             {fieldArray.length > 1 && (
               <Button
                 tabIndex={-1}
