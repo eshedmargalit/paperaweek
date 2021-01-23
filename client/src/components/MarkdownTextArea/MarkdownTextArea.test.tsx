@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { noop as _noop } from 'lodash';
 import MarkdownTextArea from './MarkdownTextArea';
 import { wrapWithFormik } from '../../testUtils/withFormik';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
@@ -9,7 +10,7 @@ function renderMDTextArea<T>(fieldName: string, fieldValue: T, shouldRenderMarkd
   render(
     wrapWithFormik(
       <div>
-        <MarkdownTextArea formFieldName={fieldName} shouldRenderMarkdown={shouldRenderMarkdown} />
+        <MarkdownTextArea formFieldName={fieldName} shouldRenderMarkdown={shouldRenderMarkdown} onBlurHandler={_noop} />
         <p>Some Other Element</p>
       </div>,
       fieldName,
