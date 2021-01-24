@@ -65,6 +65,7 @@ export const useSaveDraft = (): returnProps => {
         setAutosaveStatus(statuses.SAVED);
         setLastSave(moment());
         setDraftId(res.data._id);
+        dispatch(fetchUser());
       } else {
         setAutosaveStatus(statuses.SAVE_FAILED);
         setLastSave(null);
