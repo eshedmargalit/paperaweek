@@ -79,7 +79,7 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
   if (!isFARP(props)) return null;
 
   const { form, push, remove, name } = props;
-  const { values, errors, touched } = form;
+  const { values, errors, touched, handleBlur } = form;
 
   const fieldArray = getIn(values, name);
 
@@ -100,7 +100,10 @@ export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = prop
               className="dynamic-field"
               name={`${name}.${index}`}
               aria-label={`${name}.${index}`}
-              onBlur={onBlurHandler}
+              onBlur={(e: React.FocusEvent) => {
+                handleBlur(e);
+                onBlurHandler();
+              }}
             />
             {fieldArray.length > 1 && (
               <Button
