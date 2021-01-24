@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { isEqual as _isEqual } from 'lodash';
 import { setReview, updateDraftId, updateDrafts } from '../../actions';
 import { RootState } from '../../reducers';
 import { Review } from '../../types';
@@ -13,11 +14,12 @@ export default function DraftsRedux(): JSX.Element {
   const { goBack } = useHistory();
 
   // function to delete the specified draft
-  const deleteDraft = (draftToDelete: Review) => {
-    const newDrafts = drafts.filter(draft => draft !== draftToDelete);
+  const deleteDraft = async (draftToDelete: Review) => {
+    const newDrafts = drafts.filter(draft => !_isEqual(draft, draftToDelete));
+
     dispatch(updateDrafts(newDrafts));
 
-    axios.delete(`/api/drafts/${draftToDelete._id}`);
+    await axios.delete(`/api/drafts/${draftToDelete._id}`);
   };
 
   // function to edit the specified draft

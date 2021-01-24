@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
+import { isEqual as _isEqual } from 'lodash';
 import { setReview, updateReviews } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { RootState } from '../../reducers';
@@ -21,14 +22,14 @@ export default function ReviewReaderRedux(): JSX.Element {
   const loadingReviewList: LoadingReviewList = useSelector((state: RootState) => state.reviews);
   const { reviewList } = loadingReviewList;
 
-  const deleteReview = (reviewToDelete: Review) => {
-    const newReviews = reviewList.filter(rev => rev !== reviewToDelete);
+  const deleteReview = async (reviewToDelete: Review) => {
+    const newReviews = reviewList.filter(rev => !_isEqual(rev, reviewToDelete));
 
     // update reviews in redux store
     dispatch(updateReviews(newReviews));
 
     // remove the review from the Users list
-    axios.delete(`/api/reviews/${reviewToDelete._id}`);
+    await axios.delete(`/api/reviews/${reviewToDelete._id}`);
   };
 
   const populateFormWithReview = (review: Review) => {

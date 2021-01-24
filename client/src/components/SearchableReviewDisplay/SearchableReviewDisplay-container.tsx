@@ -29,7 +29,7 @@ interface SearchableReviewDisplayContainerProps {
   itemName?: string;
   pageHeaderProps: PageHeaderProps;
   hideFooter: boolean;
-  deleteItemFunc?: (selectedReview: Review) => void;
+  deleteItemFunc?: (selectedReview: Review) => Promise<void>;
   handleModalEdit?: (selectedReview: Review) => void;
   handleModalCopy?: (selectedReview: Review) => void;
 }
@@ -58,9 +58,9 @@ export default function SearchableReviewDisplayContainer({
     setShowModal(false);
   };
 
-  const deleteConfirmHandler = () => {
+  const deleteConfirmHandler = async () => {
     if (selectedReview && deleteItemFunc) {
-      deleteItemFunc(selectedReview);
+      await deleteItemFunc(selectedReview);
     }
     setShowModal(false);
   };
