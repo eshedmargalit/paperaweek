@@ -49,7 +49,7 @@ const renderTags = (tags: string[], handleSearch: SearchHandler): JSX.Element =>
 
 const handleModalDelete = (onOkHandler: VoidHandler) => {
   confirm({
-    title: 'Are you sure delete this review?',
+    title: 'Are you sure you want to delete this entry?',
     content: "Once it's gone, it's gone forever!",
     okText: 'Yes',
     okType: 'danger',
