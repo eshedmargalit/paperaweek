@@ -77,7 +77,6 @@ export const useSaveDraft = (): returnProps => {
   const deleteActiveDraft = async () => {
     if (draftIdRef.current) {
       await axios.delete(`api/drafts/${draftIdRef.current}`);
-      dispatch(fetchUser());
     }
   };
 

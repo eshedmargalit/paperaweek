@@ -10,7 +10,6 @@ import { Review, Maybe } from '../../types';
 
 interface ReviewWizardContainerProps {
   initialReview: Review;
-  restartReview: (review: Review) => void;
   submitReview: (review: Review) => void;
   submitLoading: boolean;
   saveDraft: (draft: Review) => Promise<void>;
@@ -21,7 +20,6 @@ interface ReviewWizardContainerProps {
 
 export default function ReviewWizardContainer({
   initialReview,
-  restartReview,
   submitReview,
   submitLoading,
   saveDraft,
@@ -53,7 +51,6 @@ export default function ReviewWizardContainer({
 
   // what should happen if the review modal is exited?
   const onModalCancel = () => {
-    restartReview(review);
     setShowModal(false);
   };
 
