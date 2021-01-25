@@ -22,8 +22,9 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
 
   const data: Gap[] = [];
   for (let i = 0; i < sortedDates.length - 1; i++) {
-    const diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
-    data.push({ reviewIdx: i + 1, date: sortedDates[i + 1], gap: diff });
+    const diffHours = sortedDates[i + 1].diff(sortedDates[i], 'hours');
+    const diffDays = diffHours / 24;
+    data.push({ reviewIdx: i + 1, date: sortedDates[i + 1], gap: diffDays });
   }
 
   const yAxisText = (

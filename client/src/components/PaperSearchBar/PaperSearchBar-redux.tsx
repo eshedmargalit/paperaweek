@@ -24,9 +24,9 @@ export default function PaperSearchBarRedux(): JSX.Element {
   const updateReadingListFunc = async (newReadingList: Paper[]): Promise<void> => {
     dispatch(updateReadingList(newReadingList));
 
-    const res = await axios.put<Paper[]>('api/readingList', newReadingList);
-    if (res.data) {
-      dispatch(updateReadingList(res.data));
+    const { data } = await axios.put<Paper[]>('api/readingList', newReadingList);
+    if (data) {
+      dispatch(updateReadingList(data));
     }
   };
 

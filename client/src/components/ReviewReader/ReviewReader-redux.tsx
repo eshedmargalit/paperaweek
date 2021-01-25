@@ -3,11 +3,10 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import { setReview, updateReviews } from '../../actions';
+import { setReview, fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { RootState } from '../../reducers';
 import { Review, User } from '../../types';
-import { LoadingReviewList } from '../../reducers/reducer_reviews';
 
 const openSuccessfulCopyNotification = () => {
   notification.success({
@@ -18,17 +17,13 @@ const openSuccessfulCopyNotification = () => {
 export default function ReviewReaderRedux(): JSX.Element {
   const dispatch = useDispatch();
   const user: User = useSelector((state: RootState) => state.user);
-  const loadingReviewList: LoadingReviewList = useSelector((state: RootState) => state.reviews);
-  const { reviewList } = loadingReviewList;
 
-  const deleteReview = (reviewToDelete: Review) => {
-    const newReviews = reviewList.filter(rev => rev !== reviewToDelete);
+  const reviewList: Review[] = useSelector((state: RootState) => state.reviews.reviewList);
 
-    // update reviews in redux store
-    dispatch(updateReviews(newReviews));
-
+  const deleteReview = async (reviewToDelete: Review) => {
     // remove the review from the Users list
-    axios.delete(`/api/reviews/${reviewToDelete._id}`);
+    await axios.delete(`/api/reviews/${reviewToDelete._id}`);
+    dispatch(fetchUser());
   };
 
   const populateFormWithReview = (review: Review) => {

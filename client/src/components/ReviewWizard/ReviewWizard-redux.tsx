@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ReviewWizardContainer from './ReviewWizard-container';
-import { updateReadingList, updateReviews, setReview } from '../../actions/index';
+import { fetchUser } from '../../actions/index';
 import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
 import { RootState } from '../../reducers';
@@ -25,12 +25,6 @@ export default function ReviewWizardRedux(): JSX.Element {
   const { user, loading }: AuthState = useSelector((state: RootState) => state.auth);
   const shouldShowHelp = !loading && user.reviews.length + user.drafts.length === 0;
 
-  // if the review is restarted, set the review in state to have no id, but keep
-  // the contents
-  const restartReview = (review: Review) => {
-    dispatch(setReview(review));
-  };
-
   const deleteReadingListEntry = async () => {
     const { _id } = activeReview.paper;
     let newReadingList = readingList;
@@ -39,12 +33,8 @@ export default function ReviewWizardRedux(): JSX.Element {
       newReadingList = readingList.filter(currPaper => currPaper._id !== _id);
     }
 
-    // update reading list in global state
-    dispatch(updateReadingList(newReadingList));
-
     // update reading list in DB and re-update global state
-    const res = await axios.put('api/readingList', newReadingList);
-    dispatch(updateReadingList(res.data));
+    await axios.put('api/readingList', newReadingList);
   };
 
   const submitReview = async (review: Review) => {
@@ -61,12 +51,12 @@ export default function ReviewWizardRedux(): JSX.Element {
     };
 
     // send the request to the server
-    const res = await axios({ method, url, data });
+    const { status } = await axios({ method, url, data });
 
-    if (res.status === 200) {
-      dispatch(updateReviews(res.data));
+    if (status === 200) {
       deleteActiveDraft();
       deleteReadingListEntry();
+      dispatch(fetchUser());
     }
 
     // turn off the submission spinner
@@ -81,7 +71,6 @@ export default function ReviewWizardRedux(): JSX.Element {
 
   return (
     <ReviewWizardContainer
-      restartReview={restartReview}
       submitReview={submitReview}
       saveDraft={saveDraft}
       submitLoading={submitLoading}

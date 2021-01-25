@@ -9,7 +9,11 @@ function renderMDTextArea<T>(fieldName: string, fieldValue: T, shouldRenderMarkd
   render(
     wrapWithFormik(
       <div>
-        <MarkdownTextArea formFieldName={fieldName} shouldRenderMarkdown={shouldRenderMarkdown} />
+        <MarkdownTextArea
+          formFieldName={fieldName}
+          shouldRenderMarkdown={shouldRenderMarkdown}
+          onBlurHandler={jest.fn()}
+        />
         <p>Some Other Element</p>
       </div>,
       fieldName,

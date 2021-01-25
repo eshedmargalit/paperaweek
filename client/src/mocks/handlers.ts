@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { rest } from 'msw';
-import { blankPaper, blankProfile, blankUser } from '../templates';
+import { blankPaper, blankProfile, blankReview, blankUser } from '../templates';
 
 export const handlers = [
   rest.get('/api/current_user', (_req, res, ctx) => {
@@ -24,5 +24,8 @@ export const handlers = [
   }),
   rest.get('/api/profiles/*', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json(blankProfile));
+  }),
+  rest.post('/api/drafts', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(blankReview));
   }),
 ];
