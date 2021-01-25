@@ -2,8 +2,8 @@ import axios from 'axios';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { isEqual as _isEqual } from 'lodash';
-import { setReview, updateDraftId, updateDrafts } from '../../actions';
+import { cloneDeep as _cloneDeep } from 'lodash';
+import { fetchUser, setReview, updateDraftId } from '../../actions';
 import { RootState } from '../../reducers';
 import { Review } from '../../types';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
@@ -15,11 +15,8 @@ export default function DraftsRedux(): JSX.Element {
 
   // function to delete the specified draft
   const deleteDraft = async (draftToDelete: Review) => {
-    const newDrafts = drafts.filter(draft => !_isEqual(draft, draftToDelete));
-
-    dispatch(updateDrafts(newDrafts));
-
     await axios.delete(`/api/drafts/${draftToDelete._id}`);
+    dispatch(fetchUser());
   };
 
   // function to edit the specified draft
@@ -27,7 +24,9 @@ export default function DraftsRedux(): JSX.Element {
     // a draft should always have an ID if we got to it through this view
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dispatch(updateDraftId(draft._id!));
-    dispatch(setReview(draft));
+    const clone = _cloneDeep(draft);
+    delete clone._id;
+    dispatch(setReview(clone));
   };
 
   const pageHeaderProps = {
