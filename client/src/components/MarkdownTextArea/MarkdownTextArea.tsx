@@ -2,11 +2,12 @@
 import { useField } from 'formik';
 import React, { useRef, useState } from 'react';
 import { wrapMarkdownWithMath } from '../utils';
+import { Maybe } from '../../types';
 
 interface MarkdownTextAreaProps {
   formFieldName: string;
   shouldRenderMarkdown?: boolean;
-  onBlurHandler: () => void;
+  onBlurHandler: Maybe<() => void>;
 }
 
 function MarkdownTextArea({
@@ -38,7 +39,9 @@ function MarkdownTextArea({
         field.onBlur(e);
 
         // Call our custom onBlurHandler
-        onBlurHandler();
+        if (onBlurHandler) {
+          onBlurHandler();
+        }
 
         // Call our unfocus after, to switch back to the markdown render
         unfocus();
