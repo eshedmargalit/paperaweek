@@ -54,8 +54,8 @@ export default function ReviewWizardRedux(): JSX.Element {
     const { status } = await axios({ method, url, data });
 
     if (status === 200) {
-      deleteActiveDraft();
-      deleteReadingListEntry();
+      await deleteActiveDraft();
+      await deleteReadingListEntry();
       dispatch(fetchUser());
     }
 
