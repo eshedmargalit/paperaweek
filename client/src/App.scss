@@ -1,0 +1,85 @@
+@import '~antd/dist/antd.css';
+@import './styles/colors.scss';
+
+.App {
+  text-align: left;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.ant-page-header {
+  padding-left: 0px;
+}
+
+.anticon {
+  vertical-align: middle;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: $primary-color !important;
+    border-color: $primary-lighter !important;
+  }
+}
+
+.ant-btn-primary {
+  border-color: $primary-darker !important;
+  background-color: $primary-lighter !important;
+
+  &:hover {
+    border-color: $primary-color !important;
+    background-color: white !important;
+    color: $primary-color !important;
+    text-shadow: unset !important;
+  }
+}
+
+.ant-avatar {
+  background-color: $primary-color;
+}
+
+.width-80 {
+  width: 80%;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.section-title {
+  vertical-align: center;
+  width: 100%;
+  border-radius: 6px;
+  padding: 10px 10px;
+  background: linear-gradient(90deg, $primary-color 0%, white 200%);
+
+  h2 {
+    font-size: x-large;
+    margin-bottom: 0;
+    color: white;
+  }
+}

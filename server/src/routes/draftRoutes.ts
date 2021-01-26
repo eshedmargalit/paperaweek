@@ -12,11 +12,11 @@ module.exports = (app: Application) => {
 
   app.post('/api/drafts', requireLogin, async (req, res) => {
     const { draft } = req.body;
+    const { paper, notes } = draft;
 
-    const newPaper = new PaperModel(draft.paper);
     const newReview = new ReviewModel({
-      paper: newPaper,
-      review: draft.review,
+      paper: new PaperModel(paper),
+      notes,
       _id: new Types.ObjectId(),
     });
 
@@ -27,8 +27,9 @@ module.exports = (app: Application) => {
 
   app.put('/api/drafts', requireLogin, async (req, res) => {
     const { draft } = req.body;
+    const { paper, notes } = draft;
     try {
-      const newPaper = new PaperModel(draft.paper);
+      const newPaper = new PaperModel(paper);
       const user = await UserModel.findOneAndUpdate(
         {
           googleId: req.user.googleId,
@@ -37,7 +38,7 @@ module.exports = (app: Application) => {
         {
           $set: {
             'drafts.$.paper': newPaper,
-            'drafts.$.review': draft.review,
+            'drafts.$.notes': notes,
           },
         },
         { new: true } // return updated post

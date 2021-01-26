@@ -22,12 +22,11 @@ const createApp = (): Application => {
 
   require('./services/passport');
   require('./routes/authRoutes')(app);
-  require('./routes/paperRoutes')(app);
+  require('./routes/reviewRoutes')(app);
   require('./routes/readingListRoutes')(app);
   require('./routes/userRoutes')(app);
   require('./routes/draftRoutes')(app);
   require('./routes/searchBarRoutes')(app);
-  require('./routes/loginRoutes')(app);
   require('./routes/profileRoutes')(app);
   require('./routes/healthRoutes')(app);
 

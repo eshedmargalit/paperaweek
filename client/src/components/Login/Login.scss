@@ -1,24 +1,48 @@
-h1 h5 {
-  color: white;
+@import '../../styles/common.scss';
+
+$default-padding: 30px;
+
+.login-page {
+  .logo {
+    @include green-filter;
+    width: 40%;
+    margin-bottom: 5%;
+  }
+
+  .product-title {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .demo {
+      margin-bottom: 30px;
+      width: 70%;
+    }
+  }
+
+  .feature-list {
+    text-align: left;
+    list-style-image: url('./airplane.png');
+    font-size: 1.5em;
+
+    li {
+      margin-bottom: $default-padding;
+    }
+  }
 }
 
-h5 {
+.modal-body {
   text-align: center;
-}
+  font-size: 1.5em;
 
-.ant-btn {
-  outline: none;
-}
+  > a {
+    width: 240px; // This is the width of the GoogleButton itself
+    cursor: unset;
 
-.login__bottom-tray {
-  background: #ececec;
-  padding: 30px;
-}
-
-.ant-card {
-  height: 100%;
-}
-
-.login__lazy-hero {
-  overflow: hidden;
+    > div {
+      margin: 0 auto;
+    }
+  }
 }
