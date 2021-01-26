@@ -76,6 +76,9 @@ export const shortenAuthors = (authors: string[]): JSX.Element | string => {
   return authorString === '' ? <NAText /> : authorString;
 };
 
+export const shortenString = (str: string, cutoff: number): string =>
+  str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str;
+
 export const shortenTableString = (str: string, cutoff: number): JSX.Element => {
   if (str === '') {
     return <NAText />;
@@ -85,7 +88,7 @@ export const shortenTableString = (str: string, cutoff: number): JSX.Element => 
     return <span>{str}</span>;
   }
 
-  return <span>{str.length >= cutoff ? `${str.substring(0, cutoff)}...` : str}</span>;
+  return <span>{shortenString(str, cutoff)}</span>;
 };
 
 export type HSLString = string;
