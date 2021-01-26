@@ -4,7 +4,7 @@ import { testDOIString } from '../testData';
 describe('.doiToPaper', () => {
   describe('when input is a real DOI string', () => {
     it('parses correctly', () => {
-      expect(doiToPaper(testDOIString)?.paper.journal).toEqual('The Journal of Neuroscience');
+      expect(doiToPaper(testDOIString)?.journal).toEqual('The Journal of Neuroscience');
       expect(false).toBe(false);
     });
   });

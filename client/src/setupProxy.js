@@ -1,4 +1,5 @@
 const proxy = require('http-proxy-middleware');
+
 const BACKEND_URL = 'http://localhost:5000';
 
 module.exports = function(app) {

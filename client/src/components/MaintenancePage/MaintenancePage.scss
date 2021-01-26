@@ -1,0 +1,14 @@
+@import '../../styles/common.scss';
+
+.maintenance {
+  padding: 5vh;
+  width: 100%;
+  height: 100vh;
+
+  .logo {
+    @include green-filter;
+    display: block;
+    margin: 0 auto 5% auto;
+    width: 40%;
+  }
+}

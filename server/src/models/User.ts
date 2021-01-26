@@ -9,9 +9,7 @@ export interface IUser {
   readingList: PaperDocument[];
   reviews: ReviewDocument[];
   drafts: ReviewDocument[];
-  lastLogin: number;
   publicProfile: boolean;
-  renderMath: boolean;
 }
 
 export interface UserDocument extends Document, IUser {}
@@ -23,9 +21,7 @@ const UserSchema = new Schema(
     readingList: [Paper.schema],
     reviews: [Review.schema],
     drafts: [Review.schema],
-    lastLogin: Date,
     publicProfile: { type: Boolean, default: false },
-    renderMath: { type: Boolean, default: false },
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

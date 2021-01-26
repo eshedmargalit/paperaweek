@@ -1,9 +1,3 @@
-.empty-list {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .reading-list {
   &__item {
     display: inline-flex;
@@ -14,8 +8,18 @@
   &__form-button {
     padding-bottom: 4px;
   }
-}
 
-.ant-list-item-meta-content {
-  width: 100% !important;
+  .ant-list-item-meta-content {
+    width: 100% !important;
+  }
+
+  .ant-list-item-meta-title {
+    margin-right: 10px !important;
+  }
+
+  .empty-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 }

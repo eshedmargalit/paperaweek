@@ -10,5 +10,5 @@ FROM node:14-alpine
 WORKDIR /server
 COPY ./server .
 COPY --from=builder /usr/src/app/build ../client/build
-RUN yarn install --production
+RUN yarn --production
 CMD ["yarn", "start"]
