@@ -10,7 +10,7 @@ import { Review, Maybe } from '../../types';
 
 interface ReviewWizardContainerProps {
   initialReview: Review;
-  submitReview: (review: Review) => void;
+  submitReview: (review: Review) => Promise<void>;
   submitLoading: boolean;
   saveDraft: (draft: Review) => Promise<void>;
   autosaveStatus: string;
@@ -55,8 +55,8 @@ export default function ReviewWizardContainer({
   };
 
   // what should happen if modal is submitted?
-  const handleSubmission = () => {
-    submitReview(review);
+  const handleSubmission = async () => {
+    await submitReview(review);
     setRedirectHome(true);
   };
 
