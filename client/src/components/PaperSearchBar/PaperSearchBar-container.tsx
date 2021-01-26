@@ -13,8 +13,9 @@ const interpret = async (input: string): Promise<Paper[]> => {
   // second regex to delete single quotes, double quotes, and slashes
   query = query.replace(/['"/\\]/g, '');
 
-  const response = await axios.get<PaperResponse[]>(`api/searchBar/interpret/${query}`);
-  return response.data.map(constructPaperFromResponse);
+  const { data } = await axios.get<PaperResponse[]>(`api/searchBar/interpret/${query}`);
+
+  return data.map(constructPaperFromResponse);
 };
 
 const doiSearch = async (input: string): Promise<Paper[]> => {
@@ -28,8 +29,12 @@ const doiSearch = async (input: string): Promise<Paper[]> => {
     return [];
   }
 
-  const response = await axios.get<PaperResponse>(`/api/doi/${query}`);
-  return [constructPaperFromResponse(response.data)];
+  try {
+    const { data } = await axios.get<PaperResponse>(`/api/doi/${query}`);
+    return [constructPaperFromResponse(data)];
+  } catch (err) {
+    return [];
+  }
 };
 
 interface PaperSearchBarContainerProps {
