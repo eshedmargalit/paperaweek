@@ -27,7 +27,6 @@ export const fetchUser = () => async (dispatch: Dispatch<AuthReducerAction>): Pr
   dispatch({ type: FETCH_USER_LOADING });
 
   const userResponse = await axios.get<UserResponse>('/api/current_user');
-  console.log('fetch user');
 
   if (!userResponse.data) {
     dispatch({ type: FETCH_USER_FAILED });
