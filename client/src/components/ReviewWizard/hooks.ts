@@ -32,7 +32,7 @@ interface returnProps {
   autosaveStatus: string;
   lastSave: Maybe<Moment>;
   saveDraft: (draft: Review) => Promise<void>;
-  deleteActiveDraft: () => void;
+  deleteActiveDraft: () => Promise<void>;
 }
 export const useSaveDraft = (): returnProps => {
   const isMounted = useIsMounted();
