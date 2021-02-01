@@ -65,12 +65,7 @@ module.exports = (app: Application) => {
         entitySets.reduce((a, b) => a.concat(b), []),
         'title'
       );
-
-      if (entities.length === 0) {
-        res.send(JSON.stringify([]));
-      } else {
-        res.send(JSON.stringify(entities));
-      }
+      res.send(JSON.stringify(entities));
     } catch (err) {
       res.status(500).send('Server error');
     }
