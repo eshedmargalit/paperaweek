@@ -43,12 +43,9 @@ export interface Interpretation {
     {
       output: {
         entities: Entity[];
-        value: string;
       };
     }
   ];
-  parse: string;
-  logprob: number;
 }
 
 export interface InterpretationResponse {
