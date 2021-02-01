@@ -28,17 +28,24 @@ export interface Entity {
     S: number; // Author's numeric position in author list
   }>; // Author affiliation
 }
-
-export interface InterpretationResponse {
-  interpretations: [
+export interface Interpretation {
+  rules: [
     {
-      rules: [
-        {
-          output: {
-            entities: Entity[];
-          };
-        }
-      ];
+      output: {
+        entities: Entity[];
+        value: string;
+      };
     }
   ];
+  parse: string;
+  logprob: number;
+}
+
+export interface InterpretationResponse {
+  interpretations: Interpretation[];
+}
+
+export interface EvaluateResponse {
+  expr: string;
+  entities: Entity[];
 }

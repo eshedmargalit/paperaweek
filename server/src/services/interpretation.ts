@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Entity } from '../types/interpretation';
+import { Entity, Interpretation } from '../types/interpretation';
 import { ParsedPaper } from './doi';
 
 export const capitalCase = (input: string): string => {
@@ -7,12 +7,9 @@ export const capitalCase = (input: string): string => {
     return '';
   }
 
-  const words = input
-    .toLowerCase()
-    .trim()
-    .split(' ');
+  const words = input.toLowerCase().trim().split(' ');
 
-  const filtered = words.filter(word => word !== '');
+  const filtered = words.filter((word) => word !== '');
 
   return filtered.reduce(
     (accum, word) =>
@@ -24,14 +21,22 @@ export const capitalCase = (input: string): string => {
   );
 };
 
+export const processInterpretations = (interpretations: Interpretation[]): Entity[] => {
+  const extracted = interpretations.map((interpretation) => interpretation.rules[0].output.entities);
+
+  // flatten list of lists to a single list
+  // const sortFn = (a: Entity, b: Entity) => a.logprob - b.logprob;
+  return extracted.reduce((a, b) => a.concat(b), []);
+};
+
 export const processEntities = (entities: Entity[]): ParsedPaper[] =>
-  entities.map(entity => {
+  entities.map((entity) => {
     // sort authors by position (first author first, etc)
-    const authors = _.sortBy(entity.AA, [o => o.S]);
+    const authors = _.sortBy(entity.AA, [(o) => o.S]);
 
     // filter down to unique authors and remove empty entries
-    let author_names = _.uniq(authors.map(author => author.DAuN).filter(name => name !== ''));
-    let institutions = _.uniq(authors.map(author => author.DAfN).filter(name => name !== ''));
+    let author_names = _.uniq(authors.map((author) => author.DAuN).filter((name) => name !== ''));
+    let institutions = _.uniq(authors.map((author) => author.DAfN).filter((name) => name !== ''));
 
     if (author_names === undefined || author_names.length === 0) {
       author_names = [''];
