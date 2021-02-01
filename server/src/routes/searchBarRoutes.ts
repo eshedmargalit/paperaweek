@@ -34,11 +34,13 @@ module.exports = (app: Application) => {
     };
 
     const interpretConfigs: Partial<InterpretationParams>[] = [
+      // no autocomplete, return first interpretation only and its 5 best matches
       {
         complete: 0,
         count: 1,
         entityCount: 5,
       },
+      // treat query as autocomplete stem, return 3 best entities for each of the 3 best interpretations
       {
         complete: 1,
         count: 3,
