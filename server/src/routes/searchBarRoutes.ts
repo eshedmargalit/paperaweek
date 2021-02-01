@@ -1,13 +1,14 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { uniqBy as _uniqBy, flatten as _flatten } from 'lodash';
 import { Application } from 'express';
-import { processEntities } from '../services/interpretation';
-import { doiToPaper } from '../services/doi';
+import { processEntities, processInterpretations } from '../services/interpretation';
 import requireLogin from '../middlewares/requireLogin';
-import { InterpretationResponse } from '../types/interpretation';
+import { InterpretationParams, InterpretationResponse } from '../types/interpretation';
+import { IPaper } from '../models/Paper';
 
 const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
-const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
+const attributes = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 // Attributes:
 // key     | meaning
 // -----------------
@@ -24,48 +25,49 @@ const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 
 module.exports = (app: Application) => {
   app.get('/api/searchBar/interpret/:query', requireLogin, async (req, res) => {
-    const response = await axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
-      params: {
-        query: req.params.query,
+    const { query } = req.params;
+    const baseInterpretParams: Partial<InterpretationParams> = {
+      query,
+      attributes,
+      'subscription-key': process.env.REACT_APP_MSCOG_KEY1,
+      timeout: 1000,
+    };
+
+    const interpretConfigs: Partial<InterpretationParams>[] = [
+      // no autocomplete, return first interpretation only and its 5 best matches
+      {
+        complete: 0,
         count: 1,
-        'subscription-key': process.env.REACT_APP_MSCOG_KEY1,
-        entityCount: 15,
-        timeout: 200,
-        attributes: attrs,
+        entityCount: 5,
       },
-    });
+      // treat query as autocomplete stem, return 3 best entities for each of the 3 best interpretations
+      {
+        complete: 1,
+        count: 3,
+        entityCount: 3,
+      },
+    ];
 
-    const { interpretations } = response.data;
-
-    // No results, return with an empty array
-    if (!interpretations || !interpretations.length) {
-      res.send(JSON.stringify([]));
-      return;
-    }
-
-    // process
-    const processed = processEntities(interpretations[0].rules[0].output.entities);
-    res.send(JSON.stringify(processed));
-  });
-
-  app.get('/api/doi/:query*', requireLogin, async (req, res) => {
-    // :query* matches everything up to the first slash as the slug (query) and puts
-    // everything else in a field with key '0'. So we reconstruct the full url
-    // from those two pieces.
-    const fullQuery = `${req.params.query}${req.params['0']}`;
     try {
-      const resp = await axios.get<string>(`https://doi.org/${fullQuery}`, {
-        headers: { Accept: 'text/bibliography; style=bibtex' },
-      });
+      const responses: AxiosResponse<InterpretationResponse>[] = await Promise.all(
+        interpretConfigs.map((config) =>
+          axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
+            params: {
+              ...baseInterpretParams,
+              ...config,
+            },
+          })
+        )
+      );
 
-      if (!resp.data) {
-        return res.status(404).send('DOI Not Found');
-      }
+      const entities: Partial<IPaper>[] = _uniqBy(
+        _flatten(responses.map((resp) => processEntities(processInterpretations(resp.data.interpretations)))),
+        'title'
+      );
 
-      const parsedPaper = doiToPaper(resp.data);
-      res.send(JSON.stringify(parsedPaper));
+      res.send(JSON.stringify(entities));
     } catch (err) {
-      res.status(404).send('DOI Not Found');
+      res.status(500).send('Server error');
     }
   });
 };

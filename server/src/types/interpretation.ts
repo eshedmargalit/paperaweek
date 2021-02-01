@@ -29,16 +29,30 @@ export interface Entity {
   }>; // Author affiliation
 }
 
-export interface InterpretationResponse {
-  interpretations: [
+export interface InterpretationParams {
+  query: string;
+  attributes: string;
+  complete: number;
+  count: number;
+  entityCount: number;
+  'subscription-key': string;
+  timeout: number;
+}
+export interface Interpretation {
+  rules: [
     {
-      rules: [
-        {
-          output: {
-            entities: Entity[];
-          };
-        }
-      ];
+      output: {
+        entities: Entity[];
+      };
     }
   ];
+}
+
+export interface InterpretationResponse {
+  interpretations: Interpretation[];
+}
+
+export interface EvaluateResponse {
+  expr: string;
+  entities: Entity[];
 }
