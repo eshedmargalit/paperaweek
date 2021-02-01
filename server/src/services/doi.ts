@@ -18,7 +18,7 @@ export type ParsedPaper = Partial<IPaper>;
 
 const regExs = {} as Record<Target, RegExp>;
 
-targets.forEach(target => {
+targets.forEach((target) => {
   regExs[target] = new RegExp(`(?<=${target}={)(.*?)(?=})`, 'g');
 });
 
@@ -31,7 +31,7 @@ export const parsedDoiToPaper = (parsedData: Partial<ParsedData>): ParsedPaper |
   const authors = parsedData.author.split(' and ');
 
   // authors have last names first, so we reverse the order
-  const authorsReordered = authors.map(author => {
+  const authorsReordered = authors.map((author) => {
     const parts = author.split(', ');
     return `${parts[1]} ${parts[0]}`;
   });
@@ -53,7 +53,7 @@ export const parsedDoiToPaper = (parsedData: Partial<ParsedData>): ParsedPaper |
 export const doiToPaper = (doiString: string): ParsedPaper | null => {
   const parsedData: Partial<ParsedData> = {};
 
-  targets.forEach(target => {
+  targets.forEach((target) => {
     const matchingData = doiString.trim().match(regExs[target]);
     if (!matchingData) return;
     parsedData[target] = matchingData[0];
