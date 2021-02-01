@@ -28,6 +28,16 @@ export interface Entity {
     S: number; // Author's numeric position in author list
   }>; // Author affiliation
 }
+
+export interface InterpretationParams {
+  query: string;
+  attributes: string;
+  complete: number;
+  count: number;
+  entityCount: number;
+  'subscription-key': string;
+  timeout: number;
+}
 export interface Interpretation {
   rules: [
     {

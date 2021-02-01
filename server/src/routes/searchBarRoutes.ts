@@ -1,13 +1,14 @@
-import axios from 'axios';
-import { uniqBy as _uniqBy } from 'lodash';
+import axios, { AxiosResponse } from 'axios';
+import { uniqBy as _uniqBy, flatten as _flatten } from 'lodash';
 import { Application } from 'express';
 import { processEntities, processInterpretations } from '../services/interpretation';
 import requireLogin from '../middlewares/requireLogin';
-import { InterpretationResponse } from '../types/interpretation';
+import { InterpretationParams, InterpretationResponse } from '../types/interpretation';
+import { IPaper } from '../models/Paper';
 
 const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
-const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
+const attributes = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 // Attributes:
 // key     | meaning
 // -----------------
@@ -25,46 +26,43 @@ const attrs = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 module.exports = (app: Application) => {
   app.get('/api/searchBar/interpret/:query', requireLogin, async (req, res) => {
     const { query } = req.params;
+    const baseInterpretParams: Partial<InterpretationParams> = {
+      query,
+      attributes,
+      'subscription-key': process.env.REACT_APP_MSCOG_KEY1,
+      timeout: 1000,
+    };
+
+    const interpretConfigs: Partial<InterpretationParams>[] = [
+      {
+        complete: 0,
+        count: 1,
+        entityCount: 5,
+      },
+      {
+        complete: 1,
+        count: 3,
+        entityCount: 3,
+      },
+    ];
+
     try {
-      // get 5 results for best interpretation on exact match
-      const exactResponse = axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
-        params: {
-          query,
-          count: 1,
-          complete: 0,
-          entityCount: 5,
-          'subscription-key': process.env.REACT_APP_MSCOG_KEY1,
-          timeout: 1000,
-          attributes: attrs,
-        },
-      });
+      const responses: AxiosResponse<InterpretationResponse>[] = await Promise.all(
+        interpretConfigs.map((config) =>
+          axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
+            params: {
+              ...baseInterpretParams,
+              ...config,
+            },
+          })
+        )
+      );
 
-      // 3 x 3 interpretations x entities for partial matches
-      const partialResponse = axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
-        params: {
-          query,
-          count: 3,
-          complete: 1,
-          entityCount: 3,
-          'subscription-key': process.env.REACT_APP_MSCOG_KEY1,
-          timeout: 1000,
-          attributes: attrs,
-        },
-      });
-
-      // wait for both Promises to resolve
-      const results = await Promise.all([exactResponse, partialResponse]);
-
-      const entitySets = [
-        processEntities(processInterpretations(results[0].data.interpretations)),
-        processEntities(processInterpretations(results[1].data.interpretations)),
-      ];
-
-      // concatenate unique entities across interpretations
-      const entities = _uniqBy(
-        entitySets.reduce((a, b) => a.concat(b), []),
+      const entities: Partial<IPaper>[] = _uniqBy(
+        _flatten(responses.map((resp) => processEntities(processInterpretations(resp.data.interpretations)))),
         'title'
       );
+
       res.send(JSON.stringify(entities));
     } catch (err) {
       res.status(500).send('Server error');
