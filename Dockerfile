@@ -2,7 +2,7 @@
 FROM node:14-alpine as builder
 WORKDIR /usr/src/app
 COPY ./client ./
-RUN yarn install --production
+RUN yarn install
 RUN yarn build
 
 # Phase 2: Server Build
