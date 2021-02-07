@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin, Statistic } from 'antd';
+import { Row, Col, Card, Spin, Statistic, Menu, Dropdown, Space, Button } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+
 import moment, { Moment } from 'moment';
 import { getReviewStats } from '../utils';
-import { Review } from '../../types';
+import { Maybe, Review } from '../../types';
 import './FrequencyChart.scss';
 
 interface FrequencyChartViewProps {
@@ -16,8 +18,25 @@ interface Gap {
   gap: number;
 }
 
+const monthCutoffToString = (monthCutoff: Maybe<number>): string => {
+  if (!monthCutoff) {
+    return 'All Time';
+  }
+
+  if (monthCutoff === 12) {
+    return 'Past Year';
+  }
+
+  return `Past ${monthCutoff} Months`;
+};
+
 export default function FrequencyChartView({ reviews }: FrequencyChartViewProps): JSX.Element {
-  const reviewDates = reviews.map(review => moment(review.createdAt));
+  const [monthCutoff, setMonthCutoff] = useState<Maybe<number>>(6);
+
+  const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
+  const filteredReviews = reviews.filter(review => moment(review.createdAt).diff(pastCutoff) > 0);
+
+  const reviewDates = filteredReviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   const data: Gap[] = [];
@@ -62,7 +81,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
     );
   }
 
-  const { numReviews, ppwString, ppwColor } = getReviewStats(reviews);
+  const { numReviews, ppwString, ppwColor } = getReviewStats(filteredReviews);
 
   const statRender = (
     <div style={{ marginLeft: '10px' }}>
@@ -75,10 +94,41 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
       </div>
     </div>
   );
+  const menu = (
+    <Menu>
+      <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
+        Last 3 Months
+      </Menu.Item>
+      <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
+        Last 6 Months
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
+        Last Year
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
+        All Time
+      </Menu.Item>
+    </Menu>
+  );
+
+  const cardTitle = (
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <span>Your Stats</span>
+      <div style={{ float: 'right' }}>
+        Showing{` `}
+        <Dropdown overlay={menu}>
+          <Button className="ant-dropdown-link">
+            {monthCutoffToString(monthCutoff)} <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
+    </div>
+  );
 
   return (
     <div className="frequency-chart">
-      <Card title="Your Stats" style={{ marginTop: 5 }}>
+      <Card title={cardTitle} style={{ marginTop: 5 }}>
         <Row>
           <Col lg={16} sm={24} xs={24}>
             {' '}
