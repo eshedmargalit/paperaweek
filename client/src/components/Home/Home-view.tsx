@@ -5,6 +5,7 @@ import ReadingList from '../ReadingList';
 import ReviewReader from '../ReviewReader';
 
 import './Home.scss';
+import StatBox from '../StatBox';
 
 export default function HomeView(): JSX.Element {
   return (
@@ -12,6 +13,7 @@ export default function HomeView(): JSX.Element {
       <Row>
         <Col lg={{ span: '16' }} sm={{ span: '24' }}>
           <PaperSearchBar />
+          <StatBox />
         </Col>
         <Col lg={{ span: '7', offset: '1' }} sm={{ span: '24' }}>
           <ReadingList />
