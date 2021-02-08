@@ -56,16 +56,10 @@ describe('<PaperSearchBar />', () => {
     });
   });
 
-  describe('manual entry buttons', () => {
-    it('the first one redirects to the form page', () => {
+  describe('manual entry button', () => {
+    it('redirects to the form page', () => {
       renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
-      userEvent.click(screen.getAllByText(/Create Manual Entry/)[0]);
-      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
-    });
-
-    it('the second one redirects to the form page', () => {
-      renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
-      userEvent.click(screen.getAllByText(/Create Manual Entry/)[1]);
+      userEvent.click(screen.getByText(/Create Manual Entry/));
       expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
     });
   });

@@ -13,7 +13,9 @@ const renderSearchResults = (
   handleStartReview: (paper: Paper) => void
 ) => {
   const renderedSearchResults = searchResults.map((result: Paper) => (
-    <SearchResult result={result} handleReadingListAdd={handleReadingListAdd} handleStartReview={handleStartReview} />
+    <span key={result.title}>
+      <SearchResult result={result} handleReadingListAdd={handleReadingListAdd} handleStartReview={handleStartReview} />
+    </span>
   ));
 
   return renderedSearchResults.length ? (
