@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin, Statistic, Menu, Dropdown, Space, Button } from 'antd';
+import { Alert, Row, Col, Card, Spin, Statistic, Menu, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import moment, { Moment } from 'moment';
@@ -36,6 +36,56 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
   const filteredReviews = reviews.filter(review => moment(review.createdAt).diff(pastCutoff) > 0);
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
+        Last 3 Months
+      </Menu.Item>
+      <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
+        Last 6 Months
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
+        Last Year
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
+        All Time
+      </Menu.Item>
+    </Menu>
+  );
+
+  const cardTitle = (
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <span>Your Stats</span>
+      <div style={{ float: 'right' }}>
+        Showing{` `}
+        <Dropdown overlay={menu}>
+          <Button className="ant-dropdown-link">
+            {monthCutoffToString(monthCutoff)} <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
+    </div>
+  );
+
+  if (filteredReviews.length < 3) {
+    return (
+      <div className="frequency-chart">
+        <Card title={cardTitle} style={{ marginTop: 5 }}>
+          <Row>
+            <Col lg={24} sm={24} xs={24}>
+              <Alert
+                message="Not Enough Reviews in Time Window"
+                description="You need at least 3 reviews in the specified time period for statistics to appear."
+                type="info"
+                showIcon
+              />
+            </Col>
+          </Row>
+        </Card>
+      </div>
+    );
+  }
   const reviewDates = filteredReviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
@@ -91,37 +141,6 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
       <hr />
       <div style={{ width: '50%' }}>
         <Statistic title="Papers per Week" value={ppwString} valueStyle={{ color: ppwColor }} suffix="/ week" />
-      </div>
-    </div>
-  );
-  const menu = (
-    <Menu>
-      <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
-        Last 3 Months
-      </Menu.Item>
-      <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
-        Last 6 Months
-      </Menu.Item>
-      <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
-        Last Year
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
-        All Time
-      </Menu.Item>
-    </Menu>
-  );
-
-  const cardTitle = (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <span>Your Stats</span>
-      <div style={{ float: 'right' }}>
-        Showing{` `}
-        <Dropdown overlay={menu}>
-          <Button className="ant-dropdown-link">
-            {monthCutoffToString(monthCutoff)} <DownOutlined />
-          </Button>
-        </Dropdown>
       </div>
     </div>
   );
