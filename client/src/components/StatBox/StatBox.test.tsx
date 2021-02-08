@@ -1,11 +1,8 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { rest } from 'msw';
+import { screen } from '@testing-library/react';
 import moment from 'moment';
 import StatBox from '.';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
-import { server } from '../../mocks/server';
 import { blankReview, blankUser } from '../../templates';
 import { Review } from '../../types';
 
@@ -20,7 +17,20 @@ describe('<StatBox />', () => {
   });
 
   describe('when the user has fewer than 3 reviews', () => {
-    const reviews = [blankReview, blankReview];
+    const reviews: Review[] = [
+      {
+        ...blankReview,
+        createdAt: moment()
+          .subtract('1', 'weeks')
+          .toDate(),
+      },
+      {
+        ...blankReview,
+        createdAt: moment()
+          .subtract('2', 'weeks')
+          .toDate(),
+      },
+    ];
     const initialState = { ...getBlankInitialState(), user: { ...blankUser, reviews } };
 
     it('tells them stats will appear soon', () => {
