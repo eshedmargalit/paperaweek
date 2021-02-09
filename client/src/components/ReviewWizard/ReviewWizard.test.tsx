@@ -83,4 +83,20 @@ describe('<ReviewWizard />', () => {
       );
     });
   });
+
+  describe('field-specific tooltips', () => {
+    it('shows the right tooltip for the Overview field', async () => {
+      renderWithRouterRedux(<ReviewWizard />);
+      const tooltips = screen.getAllByLabelText('question-circle');
+      userEvent.hover(tooltips[1]);
+      await waitFor(() => expect(screen.getByText(/What are the key takeaways/)).toBeInTheDocument());
+    });
+
+    it('shows the right tooltip for the Other field', async () => {
+      renderWithRouterRedux(<ReviewWizard />);
+      const tooltips = screen.getAllByLabelText('question-circle');
+      userEvent.hover(tooltips[tooltips.length - 1]);
+      await waitFor(() => expect(screen.getByText(/linking to related papers/)).toBeInTheDocument());
+    });
+  });
 });

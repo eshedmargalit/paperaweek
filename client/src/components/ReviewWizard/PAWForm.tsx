@@ -1,11 +1,12 @@
 // Not sure how to resolve this error to be honest... moving the <FieldArray> inside the <label> doesn't help
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Row, Space, Tooltip } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
 import { uniq as _uniq } from 'lodash';
 import React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as Yup from 'yup';
+import { QuestionCircleFilled } from '@ant-design/icons';
 import { Review } from '../../types';
 import { DynamicList, DynamicTextAreaList, MonthPicker, TextField } from './FormComponents';
 import './ReviewWizard.scss';
@@ -126,9 +127,16 @@ export default function PAWForm({ initialReview, onChange, onSubmit }: PAWFormPr
                 <h2> Your Review </h2>
               </div>
               <Row className="form-group" gutter={16}>
-                {bulletNoteFields.map(({ fieldName, label }) => (
+                {bulletNoteFields.map(({ fieldName, label, tooltip }) => (
                   <Col key={label} {...reviewItemColSpan}>
-                    <label htmlFor={fieldName}>{label}</label>
+                    <label htmlFor={fieldName}>
+                      <Space>
+                        {label}
+                        <Tooltip title={tooltip}>
+                          <QuestionCircleFilled />
+                        </Tooltip>
+                      </Space>
+                    </label>
                     <FieldArray name={`notes.${fieldName}`} component={DynamicTextAreaList} />
                   </Col>
                 ))}
