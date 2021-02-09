@@ -56,9 +56,9 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   );
 
   const cardTitle = (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div className="card-title">
       <span>Your Stats</span>
-      <div style={{ float: 'right' }}>
+      <div>
         Showing{` `}
         <Dropdown overlay={dropdown}>
           <Button className="ant-dropdown-link">
@@ -72,9 +72,9 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   if (filteredReviews.length < 3) {
     return (
       <div className="frequency-chart">
-        <Card title={cardTitle} style={{ marginTop: 5 }}>
+        <Card title={cardTitle}>
           <Row>
-            <Col lg={24} sm={24} xs={24}>
+            <Col>
               <Alert
                 message="Not Enough Reviews in Time Window"
                 description="You need at least 3 reviews in the specified time period for statistics to appear."
@@ -107,7 +107,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
 
   if (data.length) {
     chart = (
-      <div style={{ display: 'block', lineHeight: 0 }}>
+      <div className="chart">
         <ResponsiveContainer width="100%" height={195}>
           <LineChart
             data={data}
@@ -135,20 +135,16 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   const { numReviews, ppwString, ppwColor } = getReviewStats(filteredReviews);
 
   const statRender = (
-    <div style={{ marginLeft: '10px' }}>
-      <div style={{ width: '50%' }}>
-        <Statistic title="Reviews" value={numReviews} suffix="written" />
-      </div>
+    <div className="stats">
+      <Statistic title="Reviews" value={numReviews} suffix="written" />
       <hr />
-      <div style={{ width: '50%' }}>
-        <Statistic title="Papers per Week" value={ppwString} valueStyle={{ color: ppwColor }} suffix="/ week" />
-      </div>
+      <Statistic title="Papers per Week" value={ppwString} valueStyle={{ color: ppwColor }} suffix="/ week" />
     </div>
   );
 
   return (
     <div className="frequency-chart">
-      <Card title={cardTitle} style={{ marginTop: 5 }}>
+      <Card title={cardTitle}>
         <Row>
           <Col lg={16} sm={24} xs={24}>
             {' '}
