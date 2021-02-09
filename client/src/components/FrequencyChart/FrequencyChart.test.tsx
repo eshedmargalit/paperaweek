@@ -79,14 +79,14 @@ describe('<FrequencyChart />', () => {
     }
     const reviews: Review[] = makeReviewArrayWeekly(12, 52);
     const scenarios: Scenario[] = [
-      // {
-      //   buttonText: 'Past 3 Months',
-      //   expectedText: /Not Enough Reviews/,
-      // },
-      // {
-      //   buttonText: 'Past 6 Months',
-      //   expectedText: /\.5/,
-      // },
+      {
+        buttonText: 'Past 3 Months',
+        expectedText: /Not Enough Reviews/,
+      },
+      {
+        buttonText: 'Past 6 Months',
+        expectedText: /\.5/,
+      },
       {
         buttonText: 'Past Year',
         expectedText: /\.7/,
@@ -103,11 +103,9 @@ describe('<FrequencyChart />', () => {
           render(<FrequencyChart reviews={reviews} />);
           const dropdown = screen.getByRole('button');
           userEvent.hover(dropdown);
-          // await waitFor(() => screen.getByText(buttonText));
-          // userEvent.click(screen.getByText(buttonText));
-          await waitFor(() => screen.getByText('Past Year'));
-          userEvent.click(screen.getByText('Past Year'));
-          expect(screen.getByText(/\.7/)).toBeInTheDocument();
+          await waitFor(() => screen.getByText(buttonText));
+          userEvent.click(screen.getByText(buttonText));
+          expect(screen.getByText(expectedText)).toBeInTheDocument();
         });
       });
     });
