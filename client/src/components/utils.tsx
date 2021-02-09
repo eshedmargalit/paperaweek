@@ -120,13 +120,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
   const reviewDates = reviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
-  const diffs = [];
-  for (let i = 0; i < sortedDates.length - 1; i++) {
-    const diff = sortedDates[i + 1].diff(sortedDates[i], 'days');
-    diffs.push(diff);
-  }
-
-  const totalWeeks = sortedDates[sortedDates.length - 1].diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0
+  const totalWeeks = moment().diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0
   const ppw = sortedDates.length / totalWeeks;
   const ppwString = ppw.toFixed(2);
   const ppwColor = ppw >= 0.99 ? pawGreen : pawRed;

@@ -4,4 +4,22 @@
   path.recharts-curve.recharts-line-curve {
     stroke: $primary-color;
   }
+
+  .ant-card {
+    margin-top: 5px;
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .chart {
+    display: block;
+    line-height: 0;
+  }
+
+  .stats {
+    margin-left: 10px;
+  }
 }
