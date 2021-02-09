@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Row, Col, Card, Spin, Statistic } from 'antd';
+import { Alert, Row, Col, Card, Spin, Statistic, Menu, Dropdown, Button } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+
 import moment, { Moment } from 'moment';
 import { getReviewStats } from '../utils';
-import { Review } from '../../types';
+import { Maybe, Review } from '../../types';
 import './FrequencyChart.scss';
 
 interface FrequencyChartViewProps {
@@ -16,8 +18,76 @@ interface Gap {
   gap: number;
 }
 
+type MonthCutoff = 3 | 6 | 12;
+const monthCutoffToString = (monthCutoff: Maybe<MonthCutoff>): string => {
+  if (!monthCutoff) {
+    return 'All Time';
+  }
+
+  if (monthCutoff === 12) {
+    return 'Past Year';
+  }
+
+  return `Past ${monthCutoff} Months`;
+};
+
 export default function FrequencyChartView({ reviews }: FrequencyChartViewProps): JSX.Element {
-  const reviewDates = reviews.map(review => moment(review.createdAt));
+  const [monthCutoff, setMonthCutoff] = useState<Maybe<MonthCutoff>>(6);
+
+  const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
+  const filteredReviews = reviews.filter(review => moment(review.createdAt).diff(pastCutoff) > 0);
+
+  const dropdown = (
+    <Menu>
+      <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
+        Past 3 Months
+      </Menu.Item>
+      <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
+        Past 6 Months
+      </Menu.Item>
+      <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
+        Past Year
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
+        All Time
+      </Menu.Item>
+    </Menu>
+  );
+
+  const cardTitle = (
+    <div className="card-title">
+      <span>Your Stats</span>
+      <div>
+        Showing{` `}
+        <Dropdown overlay={dropdown}>
+          <Button className="ant-dropdown-link">
+            {monthCutoffToString(monthCutoff)} <DownOutlined />
+          </Button>
+        </Dropdown>
+      </div>
+    </div>
+  );
+
+  if (filteredReviews.length < 3) {
+    return (
+      <div className="frequency-chart">
+        <Card title={cardTitle}>
+          <Row>
+            <Col>
+              <Alert
+                message="Not Enough Reviews in Time Window"
+                description="You need at least 3 reviews in the specified time period for statistics to appear."
+                type="info"
+                showIcon
+              />
+            </Col>
+          </Row>
+        </Card>
+      </div>
+    );
+  }
+  const reviewDates = filteredReviews.map(review => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   const data: Gap[] = [];
@@ -37,7 +107,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
 
   if (data.length) {
     chart = (
-      <div style={{ display: 'block', lineHeight: 0 }}>
+      <div className="chart">
         <ResponsiveContainer width="100%" height={195}>
           <LineChart
             data={data}
@@ -62,23 +132,19 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
     );
   }
 
-  const { numReviews, ppwString, ppwColor } = getReviewStats(reviews);
+  const { numReviews, ppwString, ppwColor } = getReviewStats(filteredReviews);
 
   const statRender = (
-    <div style={{ marginLeft: '10px' }}>
-      <div style={{ width: '50%' }}>
-        <Statistic title="Reviews" value={numReviews} suffix="written" />
-      </div>
+    <div className="stats">
+      <Statistic title="Reviews" value={numReviews} suffix="written" />
       <hr />
-      <div style={{ width: '50%' }}>
-        <Statistic title="Papers per Week" value={ppwString} valueStyle={{ color: ppwColor }} suffix="/ week" />
-      </div>
+      <Statistic title="Papers per Week" value={ppwString} valueStyle={{ color: ppwColor }} suffix="/ week" />
     </div>
   );
 
   return (
     <div className="frequency-chart">
-      <Card title="Your Stats" style={{ marginTop: 5 }}>
+      <Card title={cardTitle}>
         <Row>
           <Col lg={16} sm={24} xs={24}>
             {' '}
