@@ -52,25 +52,25 @@ describe('<StatBox />', () => {
       {
         ...blankReview,
         createdAt: moment()
-          .subtract('1', 'weeks')
+          .subtract(1, 'weeks')
           .toDate(),
       },
       {
         ...blankReview,
         createdAt: moment()
-          .subtract('2', 'weeks')
+          .subtract(2, 'weeks')
           .toDate(),
       },
       {
         ...blankReview,
         createdAt: moment()
-          .subtract('3', 'weeks')
+          .subtract(3, 'weeks')
           .toDate(),
       },
       {
         ...blankReview,
         createdAt: moment()
-          .subtract('4', 'weeks')
+          .subtract(4, 'weeks')
           .toDate(),
       },
     ];

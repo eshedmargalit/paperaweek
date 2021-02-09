@@ -18,7 +18,8 @@ interface Gap {
   gap: number;
 }
 
-const monthCutoffToString = (monthCutoff: Maybe<number>): string => {
+type MonthCutoff = 3 | 6 | 12;
+const monthCutoffToString = (monthCutoff: Maybe<MonthCutoff>): string => {
   if (!monthCutoff) {
     return 'All Time';
   }
@@ -31,21 +32,21 @@ const monthCutoffToString = (monthCutoff: Maybe<number>): string => {
 };
 
 export default function FrequencyChartView({ reviews }: FrequencyChartViewProps): JSX.Element {
-  const [monthCutoff, setMonthCutoff] = useState<Maybe<number>>(6);
+  const [monthCutoff, setMonthCutoff] = useState<Maybe<MonthCutoff>>(6);
 
   const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
   const filteredReviews = reviews.filter(review => moment(review.createdAt).diff(pastCutoff) > 0);
 
-  const menu = (
+  const dropdown = (
     <Menu>
       <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
-        Last 3 Months
+        Past 3 Months
       </Menu.Item>
       <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
-        Last 6 Months
+        Past 6 Months
       </Menu.Item>
       <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
-        Last Year
+        Past Year
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
@@ -59,7 +60,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
       <span>Your Stats</span>
       <div style={{ float: 'right' }}>
         Showing{` `}
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={dropdown}>
           <Button className="ant-dropdown-link">
             {monthCutoffToString(monthCutoff)} <DownOutlined />
           </Button>
