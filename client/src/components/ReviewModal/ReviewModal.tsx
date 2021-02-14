@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Modal } from 'antd';
-import { wrapMarkdownWithMath } from '../utils';
+import { wrapMarkdownWithMath, stringArrayHasNonEmpty } from '../utils';
 import { Maybe, Review } from '../../types';
 import PaperTable from './PaperTable';
 
@@ -42,7 +42,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const { paper, notes } = props.review;
 
   const reviewBody = fields.map(field => {
-    const nonEmpty = notes[field.notesKey].some(s => s !== '');
+    const nonEmpty = stringArrayHasNonEmpty(notes[field.notesKey]);
     const toRender = (
       <div key={field.heading}>
         <strong>{field.heading}</strong>

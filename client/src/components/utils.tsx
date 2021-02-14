@@ -14,6 +14,9 @@ import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
 
+export const stringNotEmpty = (s: string): boolean => s !== '';
+export const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some(item => stringNotEmpty(item));
+
 export const renderCommaSepList = (items: string[]): JSX.Element[] =>
   items.map((item, i) => {
     let toRender;

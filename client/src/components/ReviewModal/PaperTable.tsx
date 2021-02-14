@@ -1,26 +1,13 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Descriptions, Tag } from 'antd';
 import moment from 'moment';
 
 import { Notes, Paper } from '../../types';
-import { renderCommaSepList } from '../utils';
+import { renderCommaSepList, stringArrayHasNonEmpty, stringNotEmpty, getTagColor } from '../utils';
 
 type PaperTableProps = {
   paper: Paper;
 } & Pick<Notes, 'keywords'>;
-
-const getTagColor = (tag: string) => {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) {
-    // eslint-disable-next-line no-bitwise
-    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const shortened = hash % 360;
-  const saturation = '80%';
-  const lightness = '30%';
-  return `hsl(${shortened},${saturation},${lightness})`;
-};
 
 const renderTags = (tags: string[] | undefined) => {
   if (!tags || !tags.length) return null;
@@ -42,9 +29,6 @@ const SafeLink = ({ href, children }: { href: string; children: React.ReactNode 
     {children}
   </a>
 );
-
-const stringNotEmpty = (s: string): boolean => s !== '';
-const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some(item => stringNotEmpty(item));
 
 interface TableItem {
   label: string;
