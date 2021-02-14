@@ -1,28 +1,14 @@
 import React from 'react';
-import { Descriptions, Tag } from 'antd';
+import { Descriptions } from 'antd';
 import moment from 'moment';
 
 import { Notes, Paper } from '../../types';
-import { renderCommaSepList, stringArrayHasNonEmpty, stringNotEmpty, getTagColor } from '../utils';
+import { renderCommaSepList, stringArrayHasNonEmpty, stringNotEmpty } from '../utils';
+import TagList from '../TagList';
 
 type PaperTableProps = {
   paper: Paper;
 } & Pick<Notes, 'keywords'>;
-
-const renderTags = (tags: string[] | undefined) => {
-  if (!tags || !tags.length) return null;
-
-  return tags.map(tag => {
-    if (tag === '') {
-      return null;
-    }
-    return (
-      <Tag color={getTagColor(tag)} key={tag}>
-        {tag}
-      </Tag>
-    );
-  });
-};
 
 const SafeLink = ({ href, children }: { href: string; children: React.ReactNode }): JSX.Element => (
   <a href={href} target="_blank" rel="noopener noreferrer">
@@ -39,7 +25,7 @@ interface TableItem {
 export default function PaperTable({ paper, keywords }: PaperTableProps): JSX.Element {
   const { authors, institutions, journal, url, doi, date } = paper;
   const institutionsList = institutions ? <div>{renderCommaSepList(institutions)}</div> : <></>;
-  const keywordRender = keywords && keywords.length ? <div>{renderTags(keywords)}</div> : <></>;
+  const keywordRender = keywords && keywords.length ? <TagList tags={keywords} /> : <></>;
   const items: TableItem[] = [
     {
       label: 'Institutions',

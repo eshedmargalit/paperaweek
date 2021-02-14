@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, ReadOutlined, LinkOutlined } from '@ant-design/icons';
-import { Button, Col, Input, Modal, PageHeader, Row, Table, Tag } from 'antd';
+import { Button, Col, Input, Modal, PageHeader, Row, Table } from 'antd';
 import moment from 'moment';
 import { ColumnsType } from 'antd/es/table';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import { isNull as _isNull } from 'lodash';
-import { shortenAuthors, getTagColor, shortenTableString } from '../utils';
+import { shortenAuthors, shortenTableString, stringArrayHasNonEmpty } from '../utils';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import NAText from '../NAText';
 import './SearchableReviewDisplay.scss';
 import { Review } from '../../types';
+import TagList from '../TagList';
 
 const { confirm } = Modal;
 
@@ -18,31 +18,17 @@ type SearchHandler = (q: string) => void;
 type VoidHandler = () => void;
 
 const renderTags = (tags: string[], handleSearch: SearchHandler): JSX.Element => {
-  if (tags && tags.length > 0) {
-    const renderedTags = tags.map(tag => {
-      if (tag === '') {
-        return null;
-      }
-      return (
-        <Tag
-          color={getTagColor(tag)}
-          onClick={e => {
-            e.stopPropagation();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            handleSearch(`${e.target.innerHTML}`);
-          }}
-          style={{ marginBottom: '8px' }}
-          key={tag}
-        >
-          {tag}
-        </Tag>
-      );
-    });
-    if (renderedTags.every(_isNull)) {
-      return <NAText />;
-    }
-    return <span>{renderedTags}</span>;
+  if (stringArrayHasNonEmpty(tags)) {
+    return (
+      <TagList
+        tags={tags}
+        onClick={e => {
+          e.stopPropagation();
+          const input = e.target as HTMLElement;
+          handleSearch(`${input.innerHTML}`);
+        }}
+      />
+    );
   }
   return <NAText />;
 };
