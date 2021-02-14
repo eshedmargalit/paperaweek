@@ -3,6 +3,7 @@ import { Alert, Modal } from 'antd';
 import { wrapMarkdownWithMath, stringArrayHasNonEmpty, stringNotEmpty } from '../utils';
 import { Maybe, Review } from '../../types';
 import PaperTable from './PaperTable';
+import './ReviewModal.scss';
 
 export interface ReviewModalProps {
   review: Review;

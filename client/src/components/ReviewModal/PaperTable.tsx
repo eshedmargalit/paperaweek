@@ -69,12 +69,14 @@ export default function PaperTable({ paper, keywords }: PaperTableProps): JSX.El
   ];
 
   return (
-    <Descriptions bordered column={2}>
-      <Descriptions.Item label="Authors">{renderCommaSepList(authors)}</Descriptions.Item>
-      <Descriptions.Item label="Publication Date">{moment(date, 'YYYY-MM').format('MMMM YYYY')}</Descriptions.Item>
-      {items.map(({ label, render, guts }) =>
-        render ? <Descriptions.Item label={label}>{guts}</Descriptions.Item> : null
-      )}
-    </Descriptions>
+    <div className="review-modal__table">
+      <Descriptions bordered column={2}>
+        <Descriptions.Item label="Authors">{renderCommaSepList(authors)}</Descriptions.Item>
+        <Descriptions.Item label="Publication Date">{moment(date, 'YYYY-MM').format('MMMM YYYY')}</Descriptions.Item>
+        {items.map(({ label, render, guts }) =>
+          render ? <Descriptions.Item label={label}>{guts}</Descriptions.Item> : null
+        )}
+      </Descriptions>
+    </div>
   );
 }
