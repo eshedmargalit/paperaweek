@@ -63,21 +63,21 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   ) : null;
 
   return (
-    <div className="review-modal">
-      <Modal
-        title={paper.title}
-        visible={props.visible}
-        onCancel={props.onClose}
-        footer={props.footer}
-        destroyOnClose
-        width="80%"
-      >
+    <Modal
+      title={paper.title}
+      visible={props.visible}
+      onCancel={props.onClose}
+      footer={props.footer}
+      destroyOnClose
+      width="80%"
+    >
+      <div className="review-modal">
         <PaperTable paper={paper} keywords={notes.keywords} />
         <br />
         {tldr}
         <hr />
         {reviewBody}
-      </Modal>
-    </div>
+      </div>
+    </Modal>
   );
 }
