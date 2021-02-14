@@ -46,7 +46,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
     const nonEmpty = stringArrayHasNonEmpty(notes[field.notesKey]);
     const toRender = (
       <div key={field.heading}>
-        <strong>{field.heading}</strong>
+        <h6>{field.heading}</h6>
         <ul>
           {notes[field.notesKey].map((point: string) => {
             return <li key={point}>{wrapMarkdownWithMath(point)}</li>;
