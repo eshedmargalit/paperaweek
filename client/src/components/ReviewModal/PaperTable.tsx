@@ -60,7 +60,11 @@ export default function PaperTable({ paper, keywords }: PaperTableProps): JSX.El
         <Descriptions.Item label="Authors">{renderCommaSepList(authors)}</Descriptions.Item>
         <Descriptions.Item label="Publication Date">{moment(date, 'YYYY-MM').format('MMMM YYYY')}</Descriptions.Item>
         {items.map(({ label, render, guts }) =>
-          render ? <Descriptions.Item label={label}>{guts}</Descriptions.Item> : null
+          render ? (
+            <Descriptions.Item key={label} label={label}>
+              {guts}
+            </Descriptions.Item>
+          ) : null
         )}
       </Descriptions>
     </div>
