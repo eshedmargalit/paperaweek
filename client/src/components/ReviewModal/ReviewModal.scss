@@ -1,0 +1,17 @@
+@import '../../styles/colors.scss';
+
+.review-modal {
+  &__table {
+    .ant-descriptions-item-label {
+      font-weight: bold;
+    }
+  }
+  .ant-alert-info {
+    background-color: $primary-background;
+    border: 1px solid $primary-lighter;
+
+    .ant-alert-icon {
+      color: $primary-color;
+    }
+  }
+}
