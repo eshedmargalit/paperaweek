@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Modal } from 'antd';
-import { wrapMarkdownWithMath, stringArrayHasNonEmpty } from '../utils';
+import { wrapMarkdownWithMath, stringArrayHasNonEmpty, stringNotEmpty } from '../utils';
 import { Maybe, Review } from '../../types';
 import PaperTable from './PaperTable';
 
@@ -57,6 +57,10 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
     return nonEmpty ? toRender : null;
   });
 
+  const tldr = stringNotEmpty(notes.tldr) ? (
+    <Alert type="info" message="TLDR" description={notes.tldr} showIcon />
+  ) : null;
+
   return (
     <div className="review-modal">
       <Modal
@@ -69,7 +73,7 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
       >
         <PaperTable paper={paper} keywords={notes.keywords} />
         <br />
-        <Alert type="info" message="TLDR" description={notes.tldr} showIcon />
+        {tldr}
         <hr />
         {reviewBody}
       </Modal>
