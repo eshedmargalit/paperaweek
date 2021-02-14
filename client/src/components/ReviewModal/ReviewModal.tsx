@@ -1,8 +1,9 @@
 import React from 'react';
-import { Modal, Tag } from 'antd';
-import moment from 'moment';
-import { renderCommaSepList, wrapMarkdownWithMath } from '../utils';
+import { Alert, Modal } from 'antd';
+import { wrapMarkdownWithMath, stringArrayHasNonEmpty, stringNotEmpty } from '../utils';
 import { Maybe, Review } from '../../types';
+import PaperTable from './PaperTable';
+import './ReviewModal.scss';
 
 export interface ReviewModalProps {
   review: Review;
@@ -10,34 +11,6 @@ export interface ReviewModalProps {
   onClose: VoidFunction;
   footer: Maybe<JSX.Element[]>;
 }
-
-const getTagColor = (tag: string) => {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) {
-    // eslint-disable-next-line no-bitwise
-    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const shortened = hash % 360;
-  const saturation = '80%';
-  const lightness = '30%';
-  return `hsl(${shortened},${saturation},${lightness})`;
-};
-
-const renderTags = (tags: string[] | undefined) => {
-  if (!tags || !tags.length) return null;
-
-  return tags.map(tag => {
-    if (tag === '') {
-      return null;
-    }
-    return (
-      <Tag color={getTagColor(tag)} key={tag}>
-        {tag}
-      </Tag>
-    );
-  });
-};
 
 const fields = [
   {
@@ -68,61 +41,43 @@ const fields = [
 
 export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const { paper, notes } = props.review;
-  const paperDate: string = moment(paper.date, 'YYYY-MM').format('MMMM YYYY');
-
-  const doiTag: Maybe<JSX.Element> = paper.doi ? (
-    <a href={`http://dx.doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer">
-      ({paper.doi})
-    </a>
-  ) : null;
 
   const reviewBody = fields.map(field => {
-    let empty = true;
+    const nonEmpty = stringArrayHasNonEmpty(notes[field.notesKey]);
     const toRender = (
       <div key={field.heading}>
-        <strong>{field.heading}</strong>
+        <h6>{field.heading}</h6>
         <ul>
           {notes[field.notesKey].map((point: string) => {
-            if (point !== '') {
-              empty = false;
-            }
             return <li key={point}>{wrapMarkdownWithMath(point)}</li>;
           })}
         </ul>
       </div>
     );
 
-    return empty ? null : toRender;
+    return nonEmpty ? toRender : null;
   });
 
-  const titleDiv = (
-    <div>
-      <div>{paper.title}</div>
-      <div>{renderTags(notes.keywords)}</div>
-    </div>
-  );
+  const tldr = stringNotEmpty(notes.tldr) ? (
+    <Alert type="info" message="TLDR" description={notes.tldr} showIcon />
+  ) : null;
 
   return (
-    <div>
-      <Modal
-        title={titleDiv}
-        visible={props.visible}
-        onCancel={props.onClose}
-        footer={props.footer}
-        destroyOnClose
-        width="80%"
-      >
-        <div>
-          {renderCommaSepList(paper.authors)}
-          {paper.institutions ? renderCommaSepList(paper.institutions) : null}
-          Published in {paper.journal} in {paperDate} {doiTag}
-        </div>
+    <Modal
+      title={paper.title}
+      visible={props.visible}
+      onCancel={props.onClose}
+      footer={props.footer}
+      destroyOnClose
+      width="80%"
+    >
+      <div className="review-modal">
+        <PaperTable paper={paper} keywords={notes.keywords} />
         <br />
-        <strong>TLDR</strong>
-        <br />
-        {notes.tldr}
+        {tldr}
+        <hr />
         {reviewBody}
-      </Modal>
-    </div>
+      </div>
+    </Modal>
   );
 }
