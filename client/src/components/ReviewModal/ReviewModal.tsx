@@ -42,22 +42,19 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const { paper, notes } = props.review;
 
   const reviewBody = fields.map(field => {
-    let empty = true;
+    const nonEmpty = notes[field.notesKey].some(s => s !== '');
     const toRender = (
       <div key={field.heading}>
         <strong>{field.heading}</strong>
         <ul>
           {notes[field.notesKey].map((point: string) => {
-            if (point !== '') {
-              empty = false;
-            }
             return <li key={point}>{wrapMarkdownWithMath(point)}</li>;
           })}
         </ul>
       </div>
     );
 
-    return empty ? null : toRender;
+    return nonEmpty ? toRender : null;
   });
 
   return (
