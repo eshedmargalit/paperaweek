@@ -5,6 +5,7 @@ import { processEntities, processInterpretations } from '../services/interpretat
 import requireLogin from '../middlewares/requireLogin';
 import { InterpretationParams, InterpretationResponse } from '../types/interpretation';
 import { IPaper } from '../models/Paper';
+import { doiToPaper } from '../services/doi';
 
 const endpoint = 'https://api.labs.cognitive.microsoft.com/academic/v1.0';
 
@@ -50,7 +51,7 @@ module.exports = (app: Application) => {
 
     try {
       const responses: AxiosResponse<InterpretationResponse>[] = await Promise.all(
-        interpretConfigs.map((config) =>
+        interpretConfigs.map(config =>
           axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
             params: {
               ...baseInterpretParams,
@@ -61,13 +62,32 @@ module.exports = (app: Application) => {
       );
 
       const entities: Partial<IPaper>[] = _uniqBy(
-        _flatten(responses.map((resp) => processEntities(processInterpretations(resp.data.interpretations)))),
+        _flatten(responses.map(resp => processEntities(processInterpretations(resp.data.interpretations)))),
         'title'
       );
 
       res.send(JSON.stringify(entities));
     } catch (err) {
       res.status(500).send('Server error');
+    }
+  });
+
+  app.get('/api/doi/:query*', requireLogin, async (req, res) => {
+    // :query* matches everything up to the first slash as the slug (query) and puts
+    // everything else in a field with key '0'. So we reconstruct the full url
+    // from those two pieces.
+    const fullQuery = `${req.params.query}${req.params['0']}`;
+    try {
+      const resp = await axios.get<string>(`https://doi.org/${fullQuery}`, {
+        headers: { Accept: 'text/bibliography; style=bibtex' },
+      });
+      if (!resp.data) {
+        return res.status(404).send('DOI Not Found');
+      }
+      const parsedPaper = doiToPaper(resp.data);
+      res.send(JSON.stringify(parsedPaper));
+    } catch (err) {
+      res.status(404).send('DOI Not Found');
     }
   });
 };
