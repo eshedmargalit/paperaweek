@@ -64,12 +64,27 @@ const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
   );
 };
 
-export const convertFormValues = (values: Review): Review => ({
-  ...values,
-  notes: { ...values.notes, keywords: splitKeywordsIntoArray(values.notes.keywords) },
-});
-
+const objectArrayToStringArray = (arr: StringObj[]): string[] => arr.map(s => s.contents);
 const stringArrayToObjectArray = (arr: string[]): StringObj[] => arr.map(s => ({ contents: s }));
+
+export const convertFormValues = (review: FormReview): Review => ({
+  ...review,
+  paper: {
+    ...review.paper,
+    authors: objectArrayToStringArray(review.paper.authors),
+    institutions: objectArrayToStringArray(review.paper.institutions),
+  },
+  notes: {
+    ...review.notes,
+    overview: objectArrayToStringArray(review.notes.overview),
+    background: objectArrayToStringArray(review.notes.background),
+    methods: objectArrayToStringArray(review.notes.methods),
+    results: objectArrayToStringArray(review.notes.results),
+    conclusions: objectArrayToStringArray(review.notes.conclusions),
+    other: objectArrayToStringArray(review.notes.other),
+    keywords: splitKeywordsIntoArray(review.notes.keywords),
+  },
+});
 
 const convertToFormValues = (review: Review): FormReview => ({
   ...review,
@@ -96,9 +111,10 @@ interface FasterFormProps {
 }
 
 export default function FasterForm({ initialReview, onChange, onSubmit }: FasterFormProps): JSX.Element {
-  const { control, register, handleSubmit } = useForm({ defaultValues: convertToFormValues(initialReview) });
+  const { control, register, handleSubmit, getValues } = useForm({ defaultValues: convertToFormValues(initialReview) });
 
-  const convertAndSave = (draft: Review) => onChange(convertFormValues(draft));
+  const convertAndSave = () => onChange(convertFormValues(getValues()));
+  const convertAndSubmit = (formReview: FormReview) => onSubmit(convertFormValues(formReview));
 
   const reviewItemColSpan = {
     lg: 12,
@@ -114,35 +130,30 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
           </div>
           <Row className="form-group" gutter={16}>
             <Col {...reviewItemColSpan}>
-              <TextField
-                label="Paper Title"
-                name="paper.title"
-                register={register}
-                onBlurHandler={() => console.log('blurg')}
-              />
+              <TextField label="Paper Title" name="paper.title" register={register} onBlurHandler={convertAndSave} />
             </Col>
             <Col {...reviewItemColSpan}>
               <MonthPicker label="Publication Month" name="paper.date" control={control} />
             </Col>
             <Col {...reviewItemColSpan}>
-              <DynamicList label="Authors" name="paper.authors" control={control} />
+              <DynamicList label="Authors" name="paper.authors" control={control} onBlurHandler={convertAndSave} />
             </Col>
             <Col {...reviewItemColSpan}>
-              <DynamicList label="Institutions" name="paper.institutions" control={control} />
-            </Col>
-            <Col lg={8} sm={24}>
-              <TextField
-                label="Journal"
-                name="paper.journal"
-                register={register}
-                onBlurHandler={() => console.log('blurg')}
+              <DynamicList
+                label="Institutions"
+                name="paper.institutions"
+                control={control}
+                onBlurHandler={convertAndSave}
               />
             </Col>
             <Col lg={8} sm={24}>
-              <TextField label="URL" name="paper.url" register={register} onBlurHandler={() => console.log('blurg')} />
+              <TextField label="Journal" name="paper.journal" register={register} onBlurHandler={convertAndSave} />
             </Col>
             <Col lg={8} sm={24}>
-              <TextField label="DOI" name="paper.doi" register={register} onBlurHandler={() => console.log('blurg')} />
+              <TextField label="URL" name="paper.url" register={register} onBlurHandler={convertAndSave} />
+            </Col>
+            <Col lg={8} sm={24}>
+              <TextField label="DOI" name="paper.doi" register={register} onBlurHandler={convertAndSave} />
             </Col>
           </Row>
           <div className="section-title">
@@ -159,20 +170,16 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                     </Tooltip>
                   </Space>
                 </label>
-                <DynamicTextAreaList
-                  name={`notes.${fieldName}`}
-                  control={control}
-                  onBlurHandler={() => console.log('blarg')}
-                />
+                <DynamicTextAreaList name={`notes.${fieldName}`} control={control} onBlurHandler={convertAndSave} />
               </Col>
             ))}
           </Row>
           <Row gutter={16}>
             <Col {...reviewItemColSpan}>
               <TextField
-                label="One Sentence Summary"
+                label="TLDR (One Sentence Summary)"
                 name="notes.tldr"
-                onBlurHandler={() => console.log('blurg')}
+                onBlurHandler={convertAndSave}
                 register={register}
               />
             </Col>
@@ -182,12 +189,12 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                 name="notes.keywords"
                 register={register}
                 placeholder="human, fmri, statistics"
-                onBlurHandler={() => console.log('blurg')}
+                onBlurHandler={convertAndSave}
               />
             </Col>
           </Row>
           <br />
-          <Button shape="round" type="primary" onClick={handleSubmit(onSubmit)}>
+          <Button shape="round" type="primary" onClick={handleSubmit(convertAndSubmit)}>
             Continue to Preview
           </Button>
         </div>

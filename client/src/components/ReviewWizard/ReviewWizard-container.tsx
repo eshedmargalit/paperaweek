@@ -33,14 +33,13 @@ export default function ReviewWizardContainer({
 
   const previewModal = (newReview: Review) => {
     console.log(newReview);
-    // setReview(newReview);
-    // setShowModal(true);
+    setReview(newReview);
+    setShowModal(true);
   };
 
   const onChangeHandler = (newReview: Review) => {
-    console.log(newReview);
-    // setReview(newReview);
-    // saveDraft(newReview);
+    setReview(newReview);
+    saveDraft(newReview);
   };
 
   const form = (

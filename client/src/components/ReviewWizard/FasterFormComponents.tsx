@@ -10,9 +10,9 @@ import MarkdownTextArea from '../MarkdownTextArea';
 interface TextFieldProps {
   label: string;
   name: string;
-  register?: any;
+  register: any;
   placeholder?: string;
-  onBlurHandler?: (e: React.FocusEvent) => void;
+  onBlurHandler: (e: React.FocusEvent) => void;
 }
 
 export const TextField = ({ name, label, onBlurHandler, register, placeholder }: TextFieldProps): JSX.Element => {
@@ -62,9 +62,10 @@ interface ListProps {
   label: string;
   name: string;
   control: Control<FormReview>;
+  onBlurHandler: () => void;
 }
 
-export const DynamicList = ({ label, name, control }: ListProps): JSX.Element => {
+export const DynamicList = ({ label, name, control, onBlurHandler }: ListProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -76,12 +77,22 @@ export const DynamicList = ({ label, name, control }: ListProps): JSX.Element =>
       {fields.map((item, index: number) => (
         <div className="dynamic-field-container" key={item.id}>
           <Controller
-            as={<input />}
             name={`${name}[${index}].contents`}
             aria-label={`${name}[${index}].contents`}
             control={control}
             defaultValue={item.contents}
-            className="dynamic-field"
+            render={({ onChange, onBlur, value }) => (
+              <input
+                className="dynamic-field"
+                type="text"
+                onChange={onChange}
+                value={value}
+                onBlur={() => {
+                  onBlurHandler();
+                  onBlur();
+                }}
+              />
+            )}
           />
           <Button
             icon={<DeleteOutlined />}
