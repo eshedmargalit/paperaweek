@@ -4,16 +4,19 @@ import { Button } from 'antd';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Control, Controller, useFieldArray } from 'react-hook-form';
-import { FormReview } from './FasterForm';
+import { FormReview } from './types';
 import MarkdownTextArea from '../MarkdownTextArea';
 
-interface TextFieldProps {
-  label: string;
+interface FieldProps {
   name: string;
-  register: any;
-  placeholder?: string;
-  onBlurHandler: (e: React.FocusEvent) => void;
+  label: string;
+  onBlurHandler: () => void;
 }
+
+type TextFieldProps = FieldProps & {
+  register: () => void;
+  placeholder?: string;
+};
 
 export const TextField = ({ name, label, onBlurHandler, register, placeholder }: TextFieldProps): JSX.Element => {
   return (
@@ -31,13 +34,11 @@ export const TextField = ({ name, label, onBlurHandler, register, placeholder }:
   );
 };
 
-interface MonthFieldProps {
-  label: string;
-  name: string;
+type MonthPickerProps = Omit<FieldProps, 'onBlurHandler'> & {
   control: Control<FormReview>;
-}
+};
 
-export const MonthPicker = ({ name, label, control }: MonthFieldProps): JSX.Element => {
+export const MonthPicker = ({ name, label, control }: MonthPickerProps): JSX.Element => {
   return (
     <div className="form-item">
       <label htmlFor={name}>{label}</label>
@@ -58,14 +59,11 @@ export const MonthPicker = ({ name, label, control }: MonthFieldProps): JSX.Elem
   );
 };
 
-interface ListProps {
-  label: string;
-  name: string;
+type ListFieldProps = FieldProps & {
   control: Control<FormReview>;
-  onBlurHandler: () => void;
-}
+};
 
-export const DynamicList = ({ label, name, control, onBlurHandler }: ListProps): JSX.Element => {
+export const DynamicList = ({ label, name, control, onBlurHandler }: ListFieldProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -110,12 +108,8 @@ export const DynamicList = ({ label, name, control, onBlurHandler }: ListProps):
   );
 };
 
-interface TextAreaListProps {
-  onBlurHandler: () => void;
-  name: string;
-  control: Control<FormReview>;
-}
-export const DynamicTextAreaList = ({ name, control, onBlurHandler }: TextAreaListProps): JSX.Element => {
+type DynamicListProps = Omit<ListFieldProps, 'label'>;
+export const DynamicTextAreaList = ({ name, control, onBlurHandler }: DynamicListProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,

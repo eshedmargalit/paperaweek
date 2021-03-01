@@ -1,13 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
 import { isEqual as _isEqual } from 'lodash';
+import * as Yup from 'yup';
+import { Resolver } from 'react-hook-form';
 import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
 import { RootState } from '../../reducers';
 import { fetchUser } from '../../actions';
 import { blankReview } from '../../templates';
+import { FormReview } from './types';
 
 const statuses = {
   UNSAVED: 'unsaved',
@@ -87,3 +90,36 @@ export const useSaveDraft = (): returnProps => {
     deleteActiveDraft,
   };
 };
+
+// From https://react-hook-form.com/advanced-usage#CustomHookwithResolver
+export const useYupValidationResolver = (validationSchema: Yup.AnyObjectSchema): Resolver<FormReview> =>
+  useCallback(
+    async data => {
+      try {
+        const values = await validationSchema.validate(data, {
+          abortEarly: false,
+        });
+        console.log(values);
+
+        return {
+          values,
+          errors: {},
+        };
+      } catch (errors) {
+        return {
+          values: {},
+          errors: errors.inner.reduce(
+            (allErrors: any, currentError: any) => ({
+              ...allErrors,
+              [currentError.path]: {
+                type: currentError.type ?? 'validation',
+                message: currentError.message,
+              },
+            }),
+            {}
+          ),
+        };
+      }
+    },
+    [validationSchema]
+  );

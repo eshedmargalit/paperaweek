@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { ChangeEvent, useRef, useState } from 'react';
-import { InputState } from 'react-hook-form';
+import React, { useRef, useState } from 'react';
 import { wrapMarkdownWithMath } from '../utils';
 import { Maybe } from '../../types';
 
