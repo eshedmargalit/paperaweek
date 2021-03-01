@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import PAWForm from './PAWForm';
+import FasterForm from './FasterForm';
 import ReviewWizardView from './ReviewWizard-view';
 import { Review, Maybe } from '../../types';
 
@@ -32,17 +32,19 @@ export default function ReviewWizardContainer({
   const [redirectHome, setRedirectHome] = useState(false);
 
   const previewModal = (newReview: Review) => {
-    setReview(newReview);
-    setShowModal(true);
+    console.log(newReview);
+    // setReview(newReview);
+    // setShowModal(true);
   };
 
   const onChangeHandler = (newReview: Review) => {
-    setReview(newReview);
-    saveDraft(newReview);
+    console.log(newReview);
+    // setReview(newReview);
+    // saveDraft(newReview);
   };
 
   const form = (
-    <PAWForm
+    <FasterForm
       initialReview={initialReview}
       onSubmit={useCallback(previewModal, [])}
       onChange={useCallback(onChangeHandler, [])}

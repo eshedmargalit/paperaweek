@@ -1,21 +1,22 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import { useField } from 'formik';
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
+import { InputState } from 'react-hook-form';
 import { wrapMarkdownWithMath } from '../utils';
 import { Maybe } from '../../types';
 
 interface MarkdownTextAreaProps {
-  formFieldName: string;
+  value: string;
+  onChange: any;
   shouldRenderMarkdown?: boolean;
   onBlurHandler: Maybe<() => void>;
 }
 
 function MarkdownTextArea({
-  formFieldName,
+  value,
+  onChange,
   shouldRenderMarkdown = true,
   onBlurHandler,
 }: MarkdownTextAreaProps): JSX.Element {
-  const [field, { value }, { setValue }] = useField<string>(formFieldName);
   const [isFocused, setIsFocused] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -30,14 +31,10 @@ function MarkdownTextArea({
     </div>
   ) : (
     <textarea
-      {...field}
       autoFocus={!!value}
       ref={textAreaRef}
       onFocus={focus}
-      onBlur={e => {
-        // Call Formik's onBlur first, this might be to trigger autosave
-        field.onBlur(e);
-
+      onBlur={() => {
         // Call our custom onBlurHandler
         if (onBlurHandler) {
           onBlurHandler();
@@ -48,7 +45,7 @@ function MarkdownTextArea({
       }}
       className="dynamic-text-area"
       value={value}
-      onChange={e => setValue(e.target.value)}
+      onChange={onChange}
     />
   );
 }
