@@ -18,6 +18,10 @@ type TextFieldProps = FieldProps & {
   placeholder?: string;
 };
 
+type ControlledFieldProps = FieldProps & {
+  control: Control<FormReview>;
+};
+
 export const TextField = ({ name, label, onBlurHandler, register, placeholder }: TextFieldProps): JSX.Element => {
   return (
     <div className="form-item">
@@ -34,11 +38,7 @@ export const TextField = ({ name, label, onBlurHandler, register, placeholder }:
   );
 };
 
-type MonthPickerProps = Omit<FieldProps, 'onBlurHandler'> & {
-  control: Control<FormReview>;
-};
-
-export const MonthPicker = ({ name, label, control }: MonthPickerProps): JSX.Element => {
+export const MonthPicker = ({ name, label, control, onBlurHandler }: ControlledFieldProps): JSX.Element => {
   return (
     <div className="form-item">
       <label htmlFor={name}>{label}</label>
@@ -52,6 +52,7 @@ export const MonthPicker = ({ name, label, control }: MonthPickerProps): JSX.Ele
             showPopperArrow={false}
             selected={value}
             onChange={onChange}
+            onBlur={onBlurHandler}
           />
         )}
       />
@@ -59,11 +60,7 @@ export const MonthPicker = ({ name, label, control }: MonthPickerProps): JSX.Ele
   );
 };
 
-type ListFieldProps = FieldProps & {
-  control: Control<FormReview>;
-};
-
-export const DynamicList = ({ label, name, control, onBlurHandler }: ListFieldProps): JSX.Element => {
+export const DynamicList = ({ label, name, control, onBlurHandler }: ControlledFieldProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -108,7 +105,7 @@ export const DynamicList = ({ label, name, control, onBlurHandler }: ListFieldPr
   );
 };
 
-type DynamicListProps = Omit<ListFieldProps, 'label'>;
+type DynamicListProps = Omit<ControlledFieldProps, 'label'>;
 export const DynamicTextAreaList = ({ name, control, onBlurHandler }: DynamicListProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,

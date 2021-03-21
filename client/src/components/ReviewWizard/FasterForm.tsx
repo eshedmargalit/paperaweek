@@ -66,7 +66,12 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
               <TextField label="Paper Title" name="paper.title" register={register} onBlurHandler={convertAndSave} />
             </Col>
             <Col {...reviewItemColSpan}>
-              <MonthPicker label="Publication Month" name="paper.date" control={control} />
+              <MonthPicker
+                label="Publication Month"
+                name="paper.date"
+                control={control}
+                onBlurHandler={convertAndSave}
+              />
             </Col>
             <Col {...reviewItemColSpan}>
               <DynamicList label="Authors" name="paper.authors" control={control} onBlurHandler={convertAndSave} />

@@ -64,7 +64,7 @@ describe('<ReviewWizard />', () => {
     it('validates when there are no authors', async () => {
       renderWithRouterRedux(<ReviewWizard />);
 
-      const authorInput = screen.getByLabelText('paper.authors.0');
+      const authorInput = screen.getByLabelText('Authors');
 
       //  Start typing, but click away while it's still blank
       userEvent.type(authorInput, '');
