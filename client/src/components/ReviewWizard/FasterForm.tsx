@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Col, Row, Space, Tooltip } from 'antd';
 import * as Yup from 'yup';
 import { QuestionCircleFilled } from '@ant-design/icons';
-import { useYupValidationResolver } from './hooks';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Review } from '../../types';
 import { FormReview } from './types';
 import { bulletNoteFields, convertFormValuesToReview, convertReviewToFormValues } from './utils';
@@ -19,21 +19,22 @@ import './ReviewWizard.scss';
  * 1. At least one author, each other must have at least one character in their name
  * 2. A title with at least one character
  */
-// const PAWFormSchema = Yup.object().shape({
-//   paper: Yup.object().shape({
-//     authors: Yup.array()
-//       .of(
-//         Yup.string()
-//           .required('Paper author must have at least one character.')
-//           .min(1)
-//       )
-//       .min(1)
-//       .required('Paper must have at least one author.'),
-//     title: Yup.string()
-//       .required('Paper must have a title.')
-//       .min(1),
-//   }),
-// });
+const authorSchema = Yup.object().shape({
+  contents: Yup.string()
+    .required('Paper author must have at least one character.')
+    .min(1),
+});
+const PAWFormSchema = Yup.object().shape({
+  paper: Yup.object().shape({
+    authors: Yup.array()
+      .of(authorSchema)
+      .min(1)
+      .required('Paper must have at least one author.'),
+    title: Yup.string()
+      .required('Paper must have a title.')
+      .min(1),
+  }),
+});
 
 interface FasterFormProps {
   initialReview: Review;
@@ -42,8 +43,11 @@ interface FasterFormProps {
 }
 
 export default function FasterForm({ initialReview, onChange, onSubmit }: FasterFormProps): JSX.Element {
-  const { control, register, handleSubmit, getValues } = useForm({
+  const { control, register, handleSubmit, getValues, errors } = useForm({
     defaultValues: convertReviewToFormValues(initialReview),
+    resolver: yupResolver(PAWFormSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
   });
 
   const convertAndSave = () => onChange(convertFormValuesToReview(getValues()));
@@ -63,7 +67,13 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
           </div>
           <Row className="form-group" gutter={16}>
             <Col {...reviewItemColSpan}>
-              <TextField label="Paper Title" name="paper.title" register={register} onBlurHandler={convertAndSave} />
+              <TextField
+                label="Paper Title"
+                name="paper.title"
+                register={register}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
             </Col>
             <Col {...reviewItemColSpan}>
               <MonthPicker
@@ -71,10 +81,17 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                 name="paper.date"
                 control={control}
                 onBlurHandler={convertAndSave}
+                errors={errors}
               />
             </Col>
             <Col {...reviewItemColSpan}>
-              <DynamicList label="Authors" name="paper.authors" control={control} onBlurHandler={convertAndSave} />
+              <DynamicList
+                label="Authors"
+                name="paper.authors"
+                control={control}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
             </Col>
             <Col {...reviewItemColSpan}>
               <DynamicList
@@ -82,16 +99,35 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                 name="paper.institutions"
                 control={control}
                 onBlurHandler={convertAndSave}
+                errors={errors}
               />
             </Col>
             <Col lg={8} sm={24}>
-              <TextField label="Journal" name="paper.journal" register={register} onBlurHandler={convertAndSave} />
+              <TextField
+                label="Journal"
+                name="paper.journal"
+                register={register}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
             </Col>
             <Col lg={8} sm={24}>
-              <TextField label="URL" name="paper.url" register={register} onBlurHandler={convertAndSave} />
+              <TextField
+                label="URL"
+                name="paper.url"
+                register={register}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
             </Col>
             <Col lg={8} sm={24}>
-              <TextField label="DOI" name="paper.doi" register={register} onBlurHandler={convertAndSave} />
+              <TextField
+                label="DOI"
+                name="paper.doi"
+                register={register}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
             </Col>
           </Row>
           <div className="section-title">
@@ -108,7 +144,12 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                     </Tooltip>
                   </Space>
                 </label>
-                <DynamicTextAreaList name={`notes.${fieldName}`} control={control} onBlurHandler={convertAndSave} />
+                <DynamicTextAreaList
+                  name={`notes.${fieldName}`}
+                  control={control}
+                  onBlurHandler={convertAndSave}
+                  errors={errors}
+                />
               </Col>
             ))}
           </Row>
@@ -119,6 +160,7 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                 name="notes.tldr"
                 onBlurHandler={convertAndSave}
                 register={register}
+                errors={errors}
               />
             </Col>
             <Col {...reviewItemColSpan}>
@@ -128,6 +170,7 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
                 register={register}
                 placeholder="human, fmri, statistics"
                 onBlurHandler={convertAndSave}
+                errors={errors}
               />
             </Col>
           </Row>

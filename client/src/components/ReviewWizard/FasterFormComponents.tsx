@@ -3,7 +3,8 @@ import React from 'react';
 import { Button } from 'antd';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Control, Controller, useFieldArray } from 'react-hook-form';
+import { get as _get } from 'lodash';
+import { Control, Controller, DeepMap, FieldError, useFieldArray } from 'react-hook-form';
 import { FormReview } from './types';
 import MarkdownTextArea from '../MarkdownTextArea';
 
@@ -11,6 +12,7 @@ interface FieldProps {
   name: string;
   label: string;
   onBlurHandler: () => void;
+  errors: DeepMap<FormReview, FieldError>;
 }
 
 type TextFieldProps = FieldProps & {
@@ -22,7 +24,15 @@ type ControlledFieldProps = FieldProps & {
   control: Control<FormReview>;
 };
 
-export const TextField = ({ name, label, onBlurHandler, register, placeholder }: TextFieldProps): JSX.Element => {
+export const TextField = ({
+  name,
+  label,
+  onBlurHandler,
+  register,
+  placeholder,
+  errors,
+}: TextFieldProps): JSX.Element => {
+  const error = _get(errors, name);
   return (
     <div className="form-item">
       <label htmlFor={name}>{label}</label>
@@ -34,11 +44,12 @@ export const TextField = ({ name, label, onBlurHandler, register, placeholder }:
         onBlur={onBlurHandler}
         ref={register}
       />
+      {error && <div className="error">{error.message}</div>}
     </div>
   );
 };
 
-export const MonthPicker = ({ name, label, control, onBlurHandler }: ControlledFieldProps): JSX.Element => {
+export const MonthPicker = ({ name, label, control, onBlurHandler, errors }: ControlledFieldProps): JSX.Element => {
   return (
     <div className="form-item">
       <label htmlFor={name}>{label}</label>
@@ -60,42 +71,51 @@ export const MonthPicker = ({ name, label, control, onBlurHandler }: ControlledF
   );
 };
 
-export const DynamicList = ({ label, name, control, onBlurHandler }: ControlledFieldProps): JSX.Element => {
+export const DynamicList = ({ label, name, control, onBlurHandler, errors }: ControlledFieldProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
   });
+
+  const arrayErrors = _get(errors, name);
 
   return (
     <div>
       <label htmlFor={name}>{label}</label>
       {fields.map((item, index: number) => (
         <div className="dynamic-field-container" key={item.id}>
-          <Controller
-            name={`${name}[${index}].contents`}
-            aria-label={`${name}[${index}].contents`}
-            control={control}
-            defaultValue={item.contents}
-            render={({ onChange, onBlur, value }) => (
-              <input
-                className="dynamic-field"
-                type="text"
-                onChange={onChange}
-                value={value}
-                onBlur={() => {
-                  onBlurHandler();
-                  onBlur();
-                }}
-              />
-            )}
-          />
-          <Button
-            icon={<DeleteOutlined />}
-            tabIndex={-1}
-            shape="circle"
-            className="dynamic-delete-button"
-            onClick={() => remove(index)}
-          />
+          <div className="field-with-delete-button">
+            <Controller
+              name={`${name}[${index}].contents`}
+              aria-label={`${name}[${index}].contents`}
+              control={control}
+              defaultValue={item.contents}
+              render={({ onChange, onBlur, value }) => (
+                <input
+                  className="dynamic-field"
+                  type="text"
+                  onChange={onChange}
+                  value={value}
+                  onBlur={() => {
+                    onBlurHandler();
+                    onBlur();
+                  }}
+                />
+              )}
+            />
+
+            <Button
+              icon={<DeleteOutlined />}
+              tabIndex={-1}
+              shape="circle"
+              className="dynamic-delete-button"
+              disabled={fields.length < 2}
+              onClick={() => remove(index)}
+            />
+          </div>
+          {arrayErrors
+            ? arrayErrors[index] && <div className="error">{arrayErrors[index].contents.message}</div>
+            : null}
         </div>
       ))}
       <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => append({ contents: '' })}>
@@ -106,7 +126,7 @@ export const DynamicList = ({ label, name, control, onBlurHandler }: ControlledF
 };
 
 type DynamicListProps = Omit<ControlledFieldProps, 'label'>;
-export const DynamicTextAreaList = ({ name, control, onBlurHandler }: DynamicListProps): JSX.Element => {
+export const DynamicTextAreaList = ({ name, control, onBlurHandler, errors }: DynamicListProps): JSX.Element => {
   const { fields, append, remove } = useFieldArray({
     control,
     name,
