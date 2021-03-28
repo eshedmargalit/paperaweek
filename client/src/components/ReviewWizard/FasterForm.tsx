@@ -53,10 +53,7 @@ export default function FasterForm({ initialReview, onChange, onSubmit }: Faster
   const convertAndSave = () => onChange(convertFormValuesToReview(getValues()));
   const convertAndSubmit = (formReview: FormReview) => onSubmit(convertFormValuesToReview(formReview));
 
-  const reviewItemColSpan = {
-    lg: 12,
-    sm: 24,
-  };
+  const reviewItemColSpan = { lg: 12, sm: 24 };
 
   return (
     <form>

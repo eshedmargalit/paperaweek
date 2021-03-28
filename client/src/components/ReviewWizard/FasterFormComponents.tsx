@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { Button } from 'antd';
 import DatePicker from 'react-datepicker';
@@ -50,6 +49,7 @@ export const TextField = ({
 };
 
 export const MonthPicker = ({ name, label, control, onBlurHandler, errors }: ControlledFieldProps): JSX.Element => {
+  const error = _get(errors, name);
   return (
     <div className="form-item">
       <label htmlFor={name}>{label}</label>
@@ -67,6 +67,7 @@ export const MonthPicker = ({ name, label, control, onBlurHandler, errors }: Con
           />
         )}
       />
+      {error && <div className="error">{error.message}</div>}
     </div>
   );
 };
@@ -132,6 +133,8 @@ export const DynamicTextAreaList = ({ name, control, onBlurHandler, errors }: Dy
     name,
   });
 
+  const arrayErrors = _get(errors, name);
+
   return (
     <div>
       {fields.map((item, index: number) => (
@@ -152,6 +155,9 @@ export const DynamicTextAreaList = ({ name, control, onBlurHandler, errors }: Dy
             className="dynamic-delete-button"
             onClick={() => remove(index)}
           />
+          {arrayErrors
+            ? arrayErrors[index] && <div className="error">{arrayErrors[index].contents.message}</div>
+            : null}
         </div>
       ))}
       <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => append({ contents: '' })}>

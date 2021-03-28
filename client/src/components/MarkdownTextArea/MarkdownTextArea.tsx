@@ -5,7 +5,7 @@ import { Maybe } from '../../types';
 
 interface MarkdownTextAreaProps {
   value: string;
-  onChange: any;
+  onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
   shouldRenderMarkdown?: boolean;
   onBlurHandler: Maybe<() => void>;
 }
