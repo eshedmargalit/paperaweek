@@ -8,7 +8,7 @@ import { Review } from '../../types';
 import { FormReview } from './types';
 import { bulletNoteFields, convertFormValuesToReview, convertReviewToFormValues } from './utils';
 import { DraftsContext } from '../../contexts';
-import { TextField, MonthPicker, DynamicList, DynamicTextAreaList } from './FasterFormComponents';
+import { TextField, MonthPicker, DynamicList, DynamicTextAreaList } from './FormComponents';
 
 // CSS imports
 import 'react-datepicker/dist/react-datepicker.css';
@@ -36,13 +36,13 @@ const PAWFormSchema = Yup.object().shape({
   }),
 });
 
-interface FasterFormProps {
+interface FormProps {
   initialReview: Review;
   onChange: (formValues: Review) => void;
   onSubmit: (formValues: Review) => void;
 }
 
-export default function FasterForm({ initialReview, onChange, onSubmit }: FasterFormProps): JSX.Element {
+export default function Form({ initialReview, onChange, onSubmit }: FormProps): JSX.Element {
   const { control, register, handleSubmit, getValues, errors } = useForm({
     defaultValues: convertReviewToFormValues(initialReview),
     resolver: yupResolver(PAWFormSchema),
