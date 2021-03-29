@@ -111,7 +111,7 @@ export const DynamicList = ({ label, name, control, onBlurHandler, errors }: Con
               tabIndex={-1}
               shape="circle"
               className="dynamic-delete-button"
-              disabled={fields.length < 2}
+              disabled={fields.length === 1}
               onClick={() => remove(index)}
             />
           </div>
@@ -154,6 +154,7 @@ export const DynamicTextAreaList = ({ name, control, onBlurHandler, errors }: Dy
             tabIndex={-1}
             shape="circle"
             className="dynamic-delete-button"
+            disabled={fields.length === 1}
             onClick={() => remove(index)}
           />
           {arrayErrors
