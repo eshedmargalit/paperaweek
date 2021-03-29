@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { wrapMarkdownWithMath } from '../utils';
 import { Maybe } from '../../types';
 
-interface MarkdownTextAreaProps {
+export interface MarkdownTextAreaProps {
   value: string;
   onChange: React.ChangeEventHandler<HTMLTextAreaElement>;
   shouldRenderMarkdown?: boolean;

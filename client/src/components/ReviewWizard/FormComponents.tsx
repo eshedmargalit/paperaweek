@@ -37,6 +37,7 @@ export const TextField = ({
       <label htmlFor={name}>{label}</label>
       <input
         name={name}
+        id={name}
         className="text-input"
         type="text"
         placeholder={placeholder || ''}
@@ -88,7 +89,6 @@ export const DynamicList = ({ label, name, control, onBlurHandler, errors }: Con
           <div className="field-with-delete-button">
             <Controller
               name={`${name}[${index}].contents`}
-              aria-label={`${name}[${index}].contents`}
               control={control}
               defaultValue={item.contents}
               render={({ onChange, onBlur, value }) => (
@@ -97,6 +97,7 @@ export const DynamicList = ({ label, name, control, onBlurHandler, errors }: Con
                   type="text"
                   onChange={onChange}
                   value={value}
+                  aria-label={`${name}[${index}]`}
                   onBlur={() => {
                     onBlurHandler();
                     onBlur();

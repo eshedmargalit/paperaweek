@@ -46,7 +46,7 @@ describe('<ReviewWizard />', () => {
     it('gets angry when there is no title', async () => {
       renderWithRouterRedux(<ReviewWizard />);
 
-      const titleInput = screen.getByLabelText('Title');
+      const titleInput = screen.getByLabelText('Paper Title');
 
       //  Start typing, but click away while it's still blank
       userEvent.type(titleInput, '');
@@ -64,7 +64,7 @@ describe('<ReviewWizard />', () => {
     it('validates when there are no authors', async () => {
       renderWithRouterRedux(<ReviewWizard />);
 
-      const authorInput = screen.getByLabelText('Authors');
+      const authorInput = screen.getByLabelText('paper.authors[0]');
 
       //  Start typing, but click away while it's still blank
       userEvent.type(authorInput, '');
