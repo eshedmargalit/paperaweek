@@ -2,27 +2,23 @@ import React from 'react';
 import '@ant-design/compatible/assets/index.css';
 import { Switch } from 'antd';
 import './ProfileHeader.scss';
-import { Formik } from 'formik';
-import { ProfileHeaderValues } from './types';
 import { Profile } from '../../types';
 
 export interface ProfileHeaderProps {
-  initialValues: ProfileHeaderValues;
-  saveResults: (values: ProfileHeaderValues) => void;
+  isPublic: boolean;
+  onChange: (e: boolean) => void;
   isOwnPage: Profile['isOwnPage'];
   userDisplayName: Profile['userDisplayName'];
+  toggleLoading: boolean;
 }
 
 export default function ProfileHeader({
-  initialValues,
-  saveResults,
+  isPublic,
+  onChange,
   isOwnPage,
   userDisplayName,
+  toggleLoading,
 }: ProfileHeaderProps): JSX.Element {
-  const onSubmit = (values: ProfileHeaderValues) => {
-    saveResults(values);
-  };
-
   let headerText = 'Your Profile';
   if (!isOwnPage) {
     if (userDisplayName === '') {
@@ -33,27 +29,17 @@ export default function ProfileHeader({
   }
 
   return (
-    <Formik onSubmit={onSubmit} initialValues={initialValues}>
-      {({ submitForm, values, setFieldValue }) => (
-        <div className="profile-header">
-          <p>{isOwnPage}</p>
-          <div className="section-title flex">
-            <h2>{headerText}</h2>
-            {isOwnPage && (
-              <div className="flex toggle-public">
-                <p>Make Public?</p>
-                <Switch
-                  checked={values.publicProfile}
-                  onChange={() => {
-                    setFieldValue('publicProfile', !values.publicProfile);
-                    submitForm();
-                  }}
-                />
-              </div>
-            )}
+    <div className="profile-header">
+      <p>{isOwnPage}</p>
+      <div className="section-title flex">
+        <h2>{headerText}</h2>
+        {isOwnPage && (
+          <div className="flex toggle-public">
+            <p>Make Public?</p>
+            <Switch loading={toggleLoading} defaultChecked={isPublic} onChange={onChange} />
           </div>
-        </div>
-      )}
-    </Formik>
+        )}
+      </div>
+    </div>
   );
 }
