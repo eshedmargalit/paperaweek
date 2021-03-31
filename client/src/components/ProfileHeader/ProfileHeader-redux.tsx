@@ -17,13 +17,13 @@ export default function PreferencesRedux({
   isOwnPage,
   userDisplayName,
 }: ProfileHeaderReduxProps): Maybe<JSX.Element> {
-  const [toggleLoading, setToggleLoading] = useState(false);
+  const [switchLoading, setSwitchLoading] = useState(false);
 
   const updateIsPublic = async (isPublic: boolean) => {
-    setToggleLoading(true);
+    setSwitchLoading(true);
     await axios.put('/api/user', { publicProfile: isPublic });
     onChange();
-    setToggleLoading(false);
+    setSwitchLoading(false);
   };
 
   const {
@@ -41,7 +41,7 @@ export default function PreferencesRedux({
       onChange={updateIsPublic}
       isOwnPage={isOwnPage}
       userDisplayName={userDisplayName}
-      toggleLoading={toggleLoading}
+      switchLoading={switchLoading}
     />
   );
 }

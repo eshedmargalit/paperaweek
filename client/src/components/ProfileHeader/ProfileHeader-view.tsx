@@ -9,7 +9,7 @@ export interface ProfileHeaderProps {
   onChange: (e: boolean) => void;
   isOwnPage: Profile['isOwnPage'];
   userDisplayName: Profile['userDisplayName'];
-  toggleLoading: boolean;
+  switchLoading: boolean;
 }
 
 export default function ProfileHeader({
@@ -17,7 +17,7 @@ export default function ProfileHeader({
   onChange,
   isOwnPage,
   userDisplayName,
-  toggleLoading,
+  switchLoading,
 }: ProfileHeaderProps): JSX.Element {
   let headerText = 'Your Profile';
   if (!isOwnPage) {
@@ -36,7 +36,7 @@ export default function ProfileHeader({
         {isOwnPage && (
           <div className="flex toggle-public">
             <p>Make Public?</p>
-            <Switch loading={toggleLoading} defaultChecked={isPublic} onChange={onChange} />
+            <Switch loading={switchLoading} defaultChecked={isPublic} onChange={onChange} />
           </div>
         )}
       </div>
