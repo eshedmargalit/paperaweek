@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { RootState } from '../../reducers';
 import { Maybe, Profile } from '../../types';
-import { ProfileHeaderValues } from './types';
 import ProfileHeader from './ProfileHeader-view';
 import { AuthState } from '../../reducers/reducer_auth';
 
@@ -18,9 +17,13 @@ export default function PreferencesRedux({
   isOwnPage,
   userDisplayName,
 }: ProfileHeaderReduxProps): Maybe<JSX.Element> {
-  const saveResults = async (values: ProfileHeaderValues) => {
-    await axios.put('/api/user', values);
+  const [switchLoading, setSwitchLoading] = useState(false);
+
+  const updateIsPublic = async (isPublic: boolean) => {
+    setSwitchLoading(true);
+    await axios.put('/api/user', { publicProfile: isPublic });
     onChange();
+    setSwitchLoading(false);
   };
 
   const {
@@ -32,14 +35,13 @@ export default function PreferencesRedux({
     return null;
   }
 
-  const initialValues = { publicProfile };
-
   return (
     <ProfileHeader
-      initialValues={initialValues}
-      saveResults={saveResults}
+      isPublic={publicProfile}
+      onChange={updateIsPublic}
       isOwnPage={isOwnPage}
       userDisplayName={userDisplayName}
+      switchLoading={switchLoading}
     />
   );
 }

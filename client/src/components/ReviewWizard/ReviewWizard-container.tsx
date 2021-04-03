@@ -4,9 +4,9 @@ import { Button } from 'antd';
 import { Redirect } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
-import PAWForm from './PAWForm';
 import ReviewWizardView from './ReviewWizard-view';
 import { Review, Maybe } from '../../types';
+import Form from './Form';
 
 interface ReviewWizardContainerProps {
   initialReview: Review;
@@ -42,7 +42,7 @@ export default function ReviewWizardContainer({
   };
 
   const form = (
-    <PAWForm
+    <Form
       initialReview={initialReview}
       onSubmit={useCallback(previewModal, [])}
       onChange={useCallback(onChangeHandler, [])}

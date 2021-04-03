@@ -1,3 +1,7 @@
+import { uniq as _uniq } from 'lodash';
+import { Review } from '../../types';
+import { StringObj, FormReview } from './types';
+
 type BulletNoteField = 'overview' | 'background' | 'methods' | 'results' | 'conclusions' | 'other';
 
 interface BulletNoteFieldConfig {
@@ -43,3 +47,55 @@ export const bulletNoteFields: BulletNoteFieldConfig[] = [
       'Use this section to note other relevant points. Examples include flagging a personal connection to the work, mentioning points of confusion, or linking to related papers',
   },
 ];
+
+export const splitKeywordsIntoArray = (keywords: string | string[]): string[] => {
+  if (Array.isArray(keywords)) {
+    return keywords;
+  }
+
+  return _uniq(
+    keywords.split(',').map(item => {
+      return item.trim().toLowerCase();
+    })
+  );
+};
+
+const objectArrayToStringArray = (arr: StringObj[]): string[] => arr.map(s => s.contents);
+const stringArrayToObjectArray = (arr: string[]): StringObj[] => arr.map(s => ({ contents: s }));
+
+export const convertFormValuesToReview = (review: FormReview): Review => ({
+  ...review,
+  paper: {
+    ...review.paper,
+    authors: objectArrayToStringArray(review.paper.authors),
+    institutions: objectArrayToStringArray(review.paper.institutions),
+  },
+  notes: {
+    ...review.notes,
+    overview: objectArrayToStringArray(review.notes.overview),
+    background: objectArrayToStringArray(review.notes.background),
+    methods: objectArrayToStringArray(review.notes.methods),
+    results: objectArrayToStringArray(review.notes.results),
+    conclusions: objectArrayToStringArray(review.notes.conclusions),
+    other: objectArrayToStringArray(review.notes.other),
+    keywords: splitKeywordsIntoArray(review.notes.keywords),
+  },
+});
+
+export const convertReviewToFormValues = (review: Review): FormReview => ({
+  ...review,
+  notes: {
+    ...review.notes,
+    overview: stringArrayToObjectArray(review.notes.overview),
+    background: stringArrayToObjectArray(review.notes.background),
+    methods: stringArrayToObjectArray(review.notes.methods),
+    results: stringArrayToObjectArray(review.notes.results),
+    conclusions: stringArrayToObjectArray(review.notes.conclusions),
+    other: stringArrayToObjectArray(review.notes.other),
+  },
+  paper: {
+    ...review.paper,
+    authors: stringArrayToObjectArray(review.paper.authors),
+    institutions: stringArrayToObjectArray(review.paper.institutions),
+  },
+});
