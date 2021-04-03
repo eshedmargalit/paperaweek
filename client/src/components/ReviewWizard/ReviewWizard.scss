@@ -62,7 +62,15 @@ $dynamic-text-area-min-height: 80px;
     padding: 0;
 
     &:hover {
-      color: red;
+      color: red !important;
+    }
+
+    &[disabled] {
+      &:hover {
+        color: #999 !important;
+      }
+      background: none;
+      cursor: not-allowed;
     }
   }
 
@@ -135,12 +143,14 @@ $dynamic-text-area-min-height: 80px;
   }
 
   .dynamic-field-container {
-    width: 100%;
-    display: flex;
     margin-bottom: 5px;
-
     &:last-of-type {
       margin-bottom: 0;
+    }
+
+    .field-with-delete-button {
+      width: 100%;
+      display: flex;
     }
   }
 }

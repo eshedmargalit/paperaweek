@@ -1,39 +1,45 @@
 import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import MarkdownTextArea from './MarkdownTextArea';
-import { wrapWithFormik } from '../../testUtils/withFormik';
+import MarkdownTextArea, { MarkdownTextAreaProps } from './MarkdownTextArea';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
 
-function renderMDTextArea<T>(fieldName: string, fieldValue: T, shouldRenderMarkdown = true) {
-  render(
-    wrapWithFormik(
-      <div>
-        <MarkdownTextArea
-          formFieldName={fieldName}
-          shouldRenderMarkdown={shouldRenderMarkdown}
-          onBlurHandler={jest.fn()}
-        />
-        <p>Some Other Element</p>
-      </div>,
-      fieldName,
-      fieldValue
-    )
+export const RHFMarkdownTextArea = ({ shouldRenderMarkdown = true }: Partial<MarkdownTextAreaProps>): JSX.Element => {
+  const { control } = useForm();
+  return (
+    <div>
+      <Controller
+        control={control}
+        name="markdown-text-area-test"
+        aria-label="markdown-text-area-test"
+        defaultValue="initial value"
+        render={({ value, onChange }) => (
+          <MarkdownTextArea
+            value={value}
+            shouldRenderMarkdown={shouldRenderMarkdown}
+            onChange={onChange}
+            onBlurHandler={jest.fn()}
+          />
+        )}
+      />
+      <p>Some Other Element</p>
+    </div>
   );
-}
+};
 
 const clickAway = () => userEvent.click(screen.getByText(/Some Other Element/));
 
 describe('MarkdownTextArea', () => {
   it('renders without crashing', () => {
-    renderMDTextArea('testItem', 'testValue');
+    render(<RHFMarkdownTextArea />);
   });
 
   describe('when markdown should be rendered', () => {
     suppressWarnings();
 
     it('renders markdown', async () => {
-      renderMDTextArea('testItem', 'testValue');
+      render(<RHFMarkdownTextArea />);
       const input = screen.getByRole('textbox');
 
       userEvent.click(input);
@@ -49,7 +55,7 @@ describe('MarkdownTextArea', () => {
     suppressWarnings();
 
     it('does not render markdown', async () => {
-      renderMDTextArea('testItem', 'testValue', false);
+      render(<RHFMarkdownTextArea shouldRenderMarkdown={false} />);
       const input = screen.getByRole('textbox');
 
       userEvent.click(input);

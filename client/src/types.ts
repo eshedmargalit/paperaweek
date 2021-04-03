@@ -10,7 +10,7 @@ export interface Paper {
   createdAt?: Date;
   title: string;
   authors: string[];
-  institutions?: string[] | null;
+  institutions: string[];
   date: Date;
   journal?: string;
   doi?: string;
