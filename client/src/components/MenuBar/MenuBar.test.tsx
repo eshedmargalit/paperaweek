@@ -39,14 +39,11 @@ describe('<MenuBar />', () => {
       expect(screen.getByText(displayName)).toBeInTheDocument();
     });
 
-    // TODO EM: I think this should be a <Link /> so that it's easier to test.
-    xit('shows link to profile', async () => {
+    it('shows link to profile', async () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState, redirectTo: '/profiles/' });
       userEvent.click(screen.getByText('My Profile'));
 
       await waitFor(() => expect(screen.getByText(/Redirect/)).toBeInTheDocument());
     });
-
-    // TODO find a sane way to test the hidden menu by mocking `window.matchMedia`
   });
 });

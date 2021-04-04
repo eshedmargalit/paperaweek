@@ -30,9 +30,9 @@ const Menu = (
   const signedIn: boolean = displayName !== '';
   const profileButton: JSX.Element = (
     <li className="menu__item">
-      <a type="text" href={`/profiles/${googleId}`} className="right">
+      <Link to={`/profiles/${googleId}`} className="right">
         <UnorderedListOutlined /> My Profile
-      </a>
+      </Link>
     </li>
   );
 
