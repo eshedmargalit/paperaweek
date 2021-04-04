@@ -1,4 +1,4 @@
-# Paper-a-Week
+# Paper a Week
 
 A simple interface for finding papers, taking detailed notes, building a habit out of reading papers, and sharing your ideas with others.
 
