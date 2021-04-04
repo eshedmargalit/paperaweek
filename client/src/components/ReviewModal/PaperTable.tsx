@@ -56,7 +56,7 @@ export default function PaperTable({ paper, keywords }: PaperTableProps): JSX.El
 
   return (
     <div className="review-modal__table">
-      <Descriptions bordered column={2}>
+      <Descriptions bordered column={{ xxl: 3, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}>
         <Descriptions.Item label="Authors">{renderCommaSepList(authors)}</Descriptions.Item>
         <Descriptions.Item label="Publication Date">{moment(date, 'YYYY-MM').format('MMMM YYYY')}</Descriptions.Item>
         {items.map(({ label, render, guts }) =>
