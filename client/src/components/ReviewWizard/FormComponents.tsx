@@ -1,169 +1,170 @@
-/* eslint-disable react/no-array-index-key */
-import React, { useContext, FunctionComponent } from 'react';
+import React from 'react';
 import { Button } from 'antd';
-import { Field, useField, FieldInputProps, FieldArrayRenderProps, getIn } from 'formik';
 import DatePicker from 'react-datepicker';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Maybe } from '../../types';
+import { get as _get } from 'lodash';
+import { Control, Controller, DeepMap, FieldError, useFieldArray } from 'react-hook-form';
+import { FormReview } from './types';
 import MarkdownTextArea from '../MarkdownTextArea';
-import { DraftsContext } from '../../contexts';
 
-interface FieldInputPropsWithLabel {
-  label: string;
+interface FieldProps {
   name: string;
-  placeholder?: string;
-  type?: string;
-  id?: string;
+  label: string;
   onBlurHandler: () => void;
+  errors: DeepMap<FormReview, FieldError>;
 }
 
-const DatePickerField = ({ ...props }: FieldInputProps<string>) => {
-  const [, field, { setValue }] = useField(props);
-
-  return (
-    <DatePicker
-      {...props}
-      {...field}
-      selected={(field.value && new Date(field.value)) || null}
-      dateFormat="MM/yyyy"
-      showMonthYearPicker
-      showPopperArrow={false}
-      onChange={val => {
-        setValue(val);
-      }}
-    />
-  );
+type TextFieldProps = FieldProps & {
+  register: () => void;
+  placeholder?: string;
 };
 
-export const TextField = ({ label, onBlurHandler, ...props }: FieldInputPropsWithLabel): JSX.Element => {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input>. We can use field meta to show an error
-  // message if the field is invalid and it has been touched (i.e. visited)
-  const [field, meta] = useField(props);
-  const onBlur = (e: React.FocusEvent) => {
-    // call formik's onBlur
-    field.onBlur(e);
+type ControlledFieldProps = FieldProps & {
+  control: Control<FormReview>;
+};
 
-    // call our onBlur
-    onBlurHandler();
-  };
+export const TextField = ({
+  name,
+  label,
+  onBlurHandler,
+  register,
+  placeholder,
+  errors,
+}: TextFieldProps): JSX.Element => {
+  const error = _get(errors, name);
   return (
     <div className="form-item">
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} onBlur={onBlur} />
-      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
+      <label htmlFor={name}>{label}</label>
+      <input
+        name={name}
+        id={name}
+        className="text-input"
+        type="text"
+        placeholder={placeholder || ''}
+        onBlur={onBlurHandler}
+        ref={register}
+      />
+      {error && <div className="error">{error.message}</div>}
     </div>
   );
 };
 
-export const MonthPicker = ({ label, ...props }: FieldInputPropsWithLabel): JSX.Element => {
-  const [field, meta] = useField(props);
+export const MonthPicker = ({ name, label, control, onBlurHandler, errors }: ControlledFieldProps): JSX.Element => {
+  const error = _get(errors, name);
   return (
     <div className="form-item">
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <DatePickerField {...field} {...props} />
-      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
+      <label htmlFor={name}>{label}</label>
+      <Controller
+        name={name}
+        control={control}
+        render={({ onChange, value }) => (
+          <DatePicker
+            dateFormat="MM/yyyy"
+            showMonthYearPicker
+            showPopperArrow={false}
+            selected={value}
+            onChange={onChange}
+            onBlur={onBlurHandler}
+          />
+        )}
+      />
+      {error && <div className="error">{error.message}</div>}
     </div>
   );
 };
 
-// Formik's FieldArray.component prop expects a FunctionComponent with either no props or FieldArrayRenderProps
-// In practice, we don't think that the props could really ever be void: https://github.com/formium/formik/blob/master/packages/formik/src/FieldArray.tsx#L355
-// But in order to maximize type safety, we're checking here just in case.
-function isFARP(props: void | FieldArrayRenderProps): props is FieldArrayRenderProps {
-  // !! is a double-negation. The inner "!" checks if props is undefined or null, then the outer "!" flips it so it returns true if not falsey
-  return !!props;
-}
+export const DynamicList = ({ label, name, control, onBlurHandler, errors }: ControlledFieldProps): JSX.Element => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name,
+  });
 
-export const DynamicList: FunctionComponent<void | FieldArrayRenderProps> = props => {
-  if (!isFARP(props)) return null;
-
-  const { form, push, remove, name } = props;
-  const { values, errors, touched, handleBlur } = form;
-
-  const fieldArray = getIn(values, name);
-
-  // bail if the field array isn't actually an array. Helps TS figure out what's going on
-  if (!Array.isArray(fieldArray)) {
-    return null;
-  }
-  const convertAndSave = useContext(DraftsContext);
-  const onBlurHandler = () => convertAndSave && convertAndSave(form.values);
+  const arrayErrors = _get(errors, name);
 
   return (
     <div>
-      {fieldArray &&
-        fieldArray.length > 0 &&
-        fieldArray.map((_, index: number) => (
-          <div className="dynamic-field-container" key={index}>
-            <Field
-              className="dynamic-field"
-              name={`${name}.${index}`}
-              aria-label={`${name}.${index}`}
-              onBlur={(e: React.FocusEvent) => {
-                handleBlur(e);
-                onBlurHandler();
-              }}
+      <label htmlFor={name}>{label}</label>
+      {fields.map((item, index: number) => (
+        <div className="dynamic-field-container" key={item.id}>
+          <div className="field-with-delete-button">
+            <Controller
+              name={`${name}[${index}].contents`}
+              control={control}
+              defaultValue={item.contents}
+              render={({ onChange, onBlur, value }) => (
+                <input
+                  className="dynamic-field"
+                  type="text"
+                  onChange={onChange}
+                  value={value}
+                  aria-label={`${name}[${index}]`}
+                  onBlur={() => {
+                    onBlurHandler();
+                    onBlur();
+                  }}
+                />
+              )}
             />
-            {fieldArray.length > 1 && (
-              <Button
-                icon={<DeleteOutlined />}
-                tabIndex={-1}
-                shape="circle"
-                className="dynamic-delete-button"
-                onClick={() => remove(index)}
-              />
-            )}
+
+            <Button
+              icon={<DeleteOutlined />}
+              tabIndex={-1}
+              shape="circle"
+              className="dynamic-delete-button"
+              disabled={fields.length === 1}
+              onClick={() => remove(index)}
+            />
           </div>
-        ))}
-      <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => push('')}>
+          {arrayErrors
+            ? arrayErrors[index] && <div className="error">{arrayErrors[index].contents.message}</div>
+            : null}
+        </div>
+      ))}
+      <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => append({ contents: '' })}>
         Add
       </Button>
-      {getIn(touched, name) && getIn(errors, name) && <p className="error">{getIn(errors, name)}</p>}
     </div>
   );
 };
 
-export const DynamicTextAreaList: FunctionComponent<void | FieldArrayRenderProps> = (props): Maybe<JSX.Element> => {
-  if (!isFARP(props)) return null;
-  const { form, push, remove, name } = props;
-  const { values, errors, touched } = form;
-  const fieldArray = getIn(values, name);
+type DynamicListProps = Omit<ControlledFieldProps, 'label'>;
+export const DynamicTextAreaList = ({ name, control, onBlurHandler, errors }: DynamicListProps): JSX.Element => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name,
+  });
 
-  // bail if the field array isn't actually an array. Helps TS figure out what's going on
-  if (!Array.isArray(fieldArray)) {
-    return null;
-  }
-
-  const convertAndSave = useContext(DraftsContext);
-  const onBlurHandler = () => convertAndSave && convertAndSave(form.values);
+  const arrayErrors = _get(errors, name);
 
   return (
     <div>
-      {fieldArray &&
-        fieldArray.length > 0 &&
-        fieldArray.map((_, index: number) => (
-          <div key={index} className="bullet-text-area">
-            <MarkdownTextArea
-              formFieldName={`${name}.${index}`}
-              aria-label={`${name}.${index}`}
-              onBlurHandler={onBlurHandler}
-            />
-            {fieldArray.length > 1 && (
-              <Button
-                tabIndex={-1}
-                icon={<DeleteOutlined />}
-                className="dynamic-delete-button"
-                onClick={() => remove(index)}
-              />
+      {fields.map((item, index: number) => (
+        <div className="bullet-text-area" key={item.id}>
+          <Controller
+            control={control}
+            name={`${name}[${index}].contents`}
+            aria-label={`${name}[${index}].contents`}
+            defaultValue={item.contents}
+            render={({ value, onChange }) => (
+              <MarkdownTextArea value={value} onChange={onChange} onBlurHandler={onBlurHandler} />
             )}
-          </div>
-        ))}
-      <Button className="dynamic-add-button" shape="round" onClick={() => push('')}>
-        <PlusOutlined />
+          />
+          <Button
+            icon={<DeleteOutlined />}
+            tabIndex={-1}
+            shape="circle"
+            className="dynamic-delete-button"
+            disabled={fields.length === 1}
+            onClick={() => remove(index)}
+          />
+          {arrayErrors
+            ? arrayErrors[index] && <div className="error">{arrayErrors[index].contents.message}</div>
+            : null}
+        </div>
+      ))}
+      <Button className="plus-button" shape="round" icon={<PlusOutlined />} onClick={() => append({ contents: '' })}>
         Add
       </Button>
-      {getIn(touched, name) && getIn(errors, name) && <p className="error">{getIn(errors, name)}</p>}
     </div>
   );
 };
