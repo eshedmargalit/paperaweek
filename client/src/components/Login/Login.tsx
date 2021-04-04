@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
 import { LoginOutlined } from '@ant-design/icons';
-import { Redirect } from 'react-router-dom';
+
 import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
