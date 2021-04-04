@@ -1,8 +1,6 @@
 import argparse
-import copy
 import datetime
 import os
-import pprint
 from typing import List
 
 import pandas as pd
@@ -70,7 +68,6 @@ def main() -> None:
 
     # get user stats
     todays_date = datetime.datetime.now()
-    num_users = len(users)
 
     num_reviews_per_user = [len(user.reviews) for user in users]
     num_drafts_per_user = [len(user.drafts) for user in users]
