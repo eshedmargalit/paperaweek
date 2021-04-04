@@ -20,7 +20,7 @@ type SortableItemProps = Pick<ReadingListViewProps, 'handleDeleteClick' | 'handl
   sortIndex: number;
 };
 
-const SortableItem = SortableElement(({ value, sortIndex, handleEditClick, handleDeleteClick }: SortableItemProps) => (
+const SortableItem = SortableElement(({ value, handleEditClick, handleDeleteClick }: SortableItemProps) => (
   <List.Item>
     <div className="reading-list__item">
       <DragHandle />
@@ -35,7 +35,7 @@ const SortableItem = SortableElement(({ value, sortIndex, handleEditClick, handl
       >
         <div>
           <List.Item.Meta
-            title={`#${sortIndex + 1}: ${shortenString(value.title, TITLE_CUTOFF)}`}
+            title={shortenString(value.title, TITLE_CUTOFF)}
             description={`${shortenAuthors(value.authors)}, ${moment(value.date, 'YYYY-MM').format('YYYY')}`}
           />
         </div>
