@@ -56,7 +56,7 @@ const Menu = (
   const brandHeader: JSX.Element = (
     <li className="menu__item">
       <Link to="/dashboard">
-        <h5>{signedIn ? userNameDisplay : 'Paper-A-Week'}</h5>
+        <h5>{signedIn ? userNameDisplay : 'Paper a Week'}</h5>
       </Link>
     </li>
   );
@@ -154,10 +154,10 @@ export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps):
 
   const infoContent = (
     <div className="infoContent">
-      Paper-a-Week began as an experiment in accountability, hosted on{' '}
+      Paper a Week began as an experiment in accountability, hosted on{' '}
       <a href="https://www.eshedmargalit.com/#/PaperReviews">my personal website</a>
       . The goal is simple: build a literature-reading habit by writing a structured review of one paper per week.
-      Reviews can be searched, sorted, and shared with others. Thank you for using Paper-A-Week, I hope it helps you!
+      Reviews can be searched, sorted, and shared with others. Thank you for using Paper a Week, I hope it helps you!
       <hr /> If you have suggestions or run into problems, please send me an email at
       <code>eshed [dot] margalit [at] gmail [dot] com</code> <br />
       <br /> Happy reviewing!
@@ -166,7 +166,7 @@ export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps):
   );
 
   const infoPopover: JSX.Element = (
-    <Popover content={infoContent} title="About Paper-A-Week" placement="bottomRight">
+    <Popover content={infoContent} title="About Paper a Week" placement="bottomRight">
       <div>
         <InfoCircleOutlined /> About
       </div>

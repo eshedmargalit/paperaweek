@@ -105,6 +105,7 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
       columns={columns}
       dataSource={reviews}
       pagination={reviews.length > 10 && { position: ['bottomRight'] }}
+      scroll={{ x: '100%' }}
     />
   );
 };
