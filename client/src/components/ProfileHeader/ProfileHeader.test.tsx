@@ -43,6 +43,9 @@ describe('<ProfileHeader />', () => {
         const toggleSwitch = screen.getByRole('switch');
         userEvent.click(toggleSwitch);
 
+        // Wait for loading to end
+        await waitFor(() => expect(screen.queryByLabelText('loading')).not.toBeInTheDocument());
+
         await waitFor(() => expect(toggleSwitch).toHaveAttribute('aria-checked', 'true'));
       });
     });

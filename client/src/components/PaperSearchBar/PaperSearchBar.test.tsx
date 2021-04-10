@@ -30,7 +30,7 @@ describe('<PaperSearchBar />', () => {
         userEvent.type(searchInput, 'search query');
 
         // To account for debounce, wait for loading spinner
-        await waitFor(() => screen.getByTestId('paper-searchbar-spinner'));
+        await screen.findByTestId('paper-searchbar-spinner');
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
@@ -47,7 +47,7 @@ describe('<PaperSearchBar />', () => {
         userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
 
         // To account for debounce, wait for loading spinner
-        await waitFor(() => screen.getByTestId('paper-searchbar-spinner'));
+        await screen.findByTestId('paper-searchbar-spinner');
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
@@ -87,7 +87,7 @@ describe('<PaperSearchBar />', () => {
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
         userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
-        await waitFor(() => screen.getByText('Test DOI Title'));
+        await screen.findByText('Test DOI Title');
 
         // Click on the item
         userEvent.click(screen.getByText('Test DOI Title'));
@@ -104,7 +104,7 @@ describe('<PaperSearchBar />', () => {
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
         userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
-        await waitFor(() => screen.getByText('Test DOI Title'));
+        await screen.findByText('Test DOI Title');
 
         // Click on the item
         userEvent.click(screen.getByText('Test DOI Title'));
@@ -118,7 +118,7 @@ describe('<PaperSearchBar />', () => {
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
         userEvent.type(searchInput, 'test query');
-        await waitFor(() => screen.getByText('Test Interpret Title'));
+        await screen.findByText('Test Interpret Title');
 
         // Click on the item
         userEvent.click(screen.getByText('Test Interpret Title'));

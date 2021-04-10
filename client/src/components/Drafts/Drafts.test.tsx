@@ -63,7 +63,7 @@ describe('<Drafts />', () => {
       userEvent.click(screen.getByText(/Delete this Draft/));
 
       // Wait for antd to render the confirm modal, then click Yes
-      await waitFor(() => screen.getByText('Yes'));
+      await screen.findByText('Yes');
       userEvent.click(screen.getByText('Yes'));
 
       // Wait for the async logic to complete and for the draft to disappear
