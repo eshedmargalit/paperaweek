@@ -1,20 +1,34 @@
-# Paper-a-Week
+# Paper a Week
 
-## Tools
+A simple interface for finding papers, taking detailed notes, building a habit out of reading papers, and sharing your ideas with others.
 
-### Backend Stack
+## Features
 
-- Search Engine: [Microsoft Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/)
-- Object Document Mapping (ODM): [Mongoose](https://mongoosejs.com/)
-- Server: Node.js + [Express.js](https://expressjs.com/)
-- Deployment: Google Cloud Run + Docker
+- :mag_right: Search for papers online, powered by Microsoft Academic Knowledge
 
-### Frontend Stack
+- :pencil: Flexible form to take detailed notes including Markdown and LaTeX
 
-- Components and Style: [ant design](https://ant.design/)
-- JS Library: React + Redux
+- :eyeglasses: Sort and search through your database of notes
+
+- :outbox_tray: Make your profile public and share your notes with others
+
+- :bookmark_tabs: Plan future work with a reading list
+
+- :chart_with_upwards_trend: Track your reading frequency over time
 
 ## Development
+
+### Backend
+
+The server is written using [Node.js](https://nodejs.org/) and [Express.js](https://expressjs.com/). Data is stored using MongoDB with [Mongoose](https://mongoosejs.com/) as an object-document mapping (ODM) library.
+
+The website is deployed from a Docker container using Google Cloud Run.
+
+### Frontend
+
+The interface is primarily based on [ant design](https://ant.design/), with a number of custom components added. React and Redux are used to manage component and application state, respectively.
+
+## Guide for Developers
 
 ### Environment Variables
 
@@ -27,6 +41,8 @@ COOKIE_KEY=
 MONGO_URI=
 REACT_APP_MSCOG_KEY1=
 ```
+
+The first two keys are obtained by setting up a Google OAuth account, the cookie key can be any arbitrary string, the Mongo URI is obtained after setting up a MongoDB instance, and the MSCOG key refers to a Microsoft Academic Knowledge API key.
 
 #### Mongo Databases
 
@@ -92,21 +108,13 @@ To start the server and client together, just run `yarn run dev` from the `serve
 
 To run the tests for the application, run `yarn test` from the `server/`. No credentials or environment variables are required for running tests.
 
-### Docker
+### Deployment to Google Cloud Run
 
-Build the container from the top-level directory:
-`docker build -t paw:1.0.0 .`
-
-Run the container, exposing port 5000:5000 in "production" mode. Add environment variables by passing in an "env-file". Read more about this [here](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file). Duplicate my `server/.env`, remove double quotes from the values, and added it to the root directory.
-`docker run -p 5000:5000 --env NODE_ENV=production --env-file .env.list --name paw_container paw:1.0.0`
-
-Navigate to `localhost:5000` to see the app in production!
-
-Build and deploy to Cloud Run:
+Make sure Docker is running on your system before following these steps. You will need to follow the instructions in Google Cloud Run to set up the Google Cloud Project, add a payment method, etc.
 
 ```sh
 GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)
-docker build . --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app && docker push gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app`
+docker build . --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app && docker push gcr.io/${GOOGLE_CLOUD_PROJECT}/paw-app
 ```
 
-Then go to Cloud Run, select latest image, and re-deploy.
+Then go to Cloud Run, select latest image, and re-deploy. We set the number of minimum instances to 1 to avoid cold-starts.

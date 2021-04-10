@@ -13,7 +13,7 @@ describe('<MenuBar />', () => {
 
     it('shows the application name', () => {
       renderWithRouterRedux(<MenuBarRedux />);
-      expect(screen.getByText(/Paper-A-Week/)).toBeInTheDocument();
+      expect(screen.getByText(/Paper a Week/)).toBeInTheDocument();
     });
 
     it('shows the information icon with information on hover', async () => {
@@ -21,7 +21,7 @@ describe('<MenuBar />', () => {
 
       userEvent.hover(screen.getByLabelText('info-circle'));
       await waitFor(() =>
-        expect(screen.getByText(/Paper-a-Week began as an experiment in accountability/)).toBeInTheDocument()
+        expect(screen.getByText(/Paper a Week began as an experiment in accountability/)).toBeInTheDocument()
       );
     });
   });

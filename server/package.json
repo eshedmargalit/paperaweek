@@ -1,7 +1,7 @@
 {
   "name": "paper-a-week",
   "version": "1.0.0",
-  "description": "Paper-a-Week",
+  "description": "Paper a Week",
   "main": "index",
   "scripts": {
     "start": "ts-node src/index.ts",
