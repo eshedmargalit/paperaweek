@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import React from 'react';
@@ -23,7 +23,7 @@ describe('<FrequencyChart />', () => {
   describe('without any reviews', () => {
     it('politely refuses to render', () => {
       render(<FrequencyChart reviews={[]} />);
-      expect(screen.getByText(/Not Enough Reviews/)).toBeInTheDocument();
+      expect(screen.getByText(/Not Enough Reviews/));
     });
   });
 
@@ -65,7 +65,7 @@ describe('<FrequencyChart />', () => {
         render(<FrequencyChart reviews={reviews} />);
         const dropdown = screen.getByRole('button');
         userEvent.hover(dropdown);
-        await waitFor(() => screen.getByText('Past Year'));
+        await screen.findByText('Past Year');
         userEvent.click(screen.getByText('Past Year'));
         expect(screen.getByText(/written/)).toBeInTheDocument();
       });
@@ -103,7 +103,7 @@ describe('<FrequencyChart />', () => {
           render(<FrequencyChart reviews={reviews} />);
           const dropdown = screen.getByRole('button');
           userEvent.hover(dropdown);
-          await waitFor(() => screen.getByText(buttonText));
+          await screen.findByText(buttonText);
           userEvent.click(screen.getByText(buttonText));
           expect(screen.getByText(expectedText)).toBeInTheDocument();
         });
