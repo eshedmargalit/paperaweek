@@ -25,7 +25,7 @@ interface TableItem {
 export default function PaperTable({ paper, keywords }: PaperTableProps): JSX.Element {
   const { authors, institutions, journal, url, doi, date } = paper;
   const institutionsList = institutions ? <div>{renderCommaSepList(institutions)}</div> : <></>;
-  const keywordRender = keywords && keywords.length ? <TagList tags={keywords} /> : <></>;
+  const keywordRender = keywords && keywords.length ? <TagList tags={keywords} onClick={undefined} /> : <></>;
   const items: TableItem[] = [
     {
       label: 'Institutions',
