@@ -15,7 +15,7 @@ const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
     distance: 5000,
     maxPatternLength: 32,
     minMatchCharLength: 4,
-    keys: ['paper.title', 'paper.authors', 'paper.keywords', 'paper.date'],
+    keys: ['paper.title', 'paper.authors', 'paper.institutions', 'paper.date', 'notes.keywords', 'notes.tldr'],
   };
 
   const fuse = new Fuse(reviews, options);

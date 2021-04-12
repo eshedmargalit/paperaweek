@@ -183,7 +183,7 @@ export default function SearchableReviewDisplayView({
                 <Input
                   type="text"
                   onChange={e => handleSearch(`${e.target.value}`)}
-                  placeholder="Filter by title, author, or journal"
+                  placeholder="Filter by title, author, one sentence summary, tags, and more"
                   value={query}
                   allowClear
                 />
