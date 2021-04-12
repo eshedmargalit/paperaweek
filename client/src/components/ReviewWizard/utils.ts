@@ -54,14 +54,14 @@ export const splitKeywordsIntoArray = (keywords: string | string[]): string[] =>
   }
 
   return _uniq(
-    keywords.split(',').map(item => {
+    keywords.split(',').map((item) => {
       return item.trim().toLowerCase();
     })
   );
 };
 
-const objectArrayToStringArray = (arr: StringObj[]): string[] => arr.map(s => s.contents);
-const stringArrayToObjectArray = (arr: string[]): StringObj[] => arr.map(s => ({ contents: s }));
+const objectArrayToStringArray = (arr: StringObj[]): string[] => arr.map((s) => s.contents);
+const stringArrayToObjectArray = (arr: string[]): StringObj[] => arr.map((s) => ({ contents: s }));
 
 export const convertFormValuesToReview = (review: FormReview): Review => ({
   ...review,

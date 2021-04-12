@@ -30,7 +30,7 @@ export default function ReviewWizardRedux(): JSX.Element {
     let newReadingList = readingList;
 
     if (_id) {
-      newReadingList = readingList.filter(currPaper => currPaper._id !== _id);
+      newReadingList = readingList.filter((currPaper) => currPaper._id !== _id);
     }
 
     // update reading list in DB and re-update global state

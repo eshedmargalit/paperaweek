@@ -9,8 +9,8 @@ interface TagListProps {
 
 export default function TagList({ tags, onClick }: TagListProps): JSX.Element {
   const tagList = tags
-    .filter(t => t !== '')
-    .map(tag => (
+    .filter((t) => t !== '')
+    .map((tag) => (
       <Tag key={tag} onClick={onClick}>
         {tag}
       </Tag>

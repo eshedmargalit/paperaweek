@@ -10,7 +10,7 @@ export default function LatexDemo(): JSX.Element {
     <div className="latex-demo">
       <Row>
         <Col lg={12}>
-          <Input.TextArea defaultValue={mathString} onChange={e => setMathString(e.target.value)} />
+          <Input.TextArea defaultValue={mathString} onChange={(e) => setMathString(e.target.value)} />
         </Col>
         <Col lg={12} className="result-panel">
           {wrapMarkdownWithMath(mathString)}

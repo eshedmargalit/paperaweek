@@ -40,7 +40,9 @@ export default function PublicProfileView({
   );
 
   // map reviewId to review
-  const reviewToOpen: Review | undefined = reviews ? reviews.find(review => review._id === reviewIdToOpen) : undefined;
+  const reviewToOpen: Review | undefined = reviews
+    ? reviews.find((review) => review._id === reviewIdToOpen)
+    : undefined;
 
   const PrivacyExplainer = (): JSX.Element => (
     <Alert

@@ -35,7 +35,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   const [monthCutoff, setMonthCutoff] = useState<Maybe<MonthCutoff>>(6);
 
   const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
-  const filteredReviews = reviews.filter(review => moment(review.createdAt).diff(pastCutoff) > 0);
+  const filteredReviews = reviews.filter((review) => moment(review.createdAt).diff(pastCutoff) > 0);
 
   const dropdown = (
     <Menu>
@@ -87,7 +87,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
       </div>
     );
   }
-  const reviewDates = filteredReviews.map(review => moment(review.createdAt));
+  const reviewDates = filteredReviews.map((review) => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   const data: Gap[] = [];

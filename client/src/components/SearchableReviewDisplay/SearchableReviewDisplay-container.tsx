@@ -2,12 +2,25 @@ import React, { useState } from 'react';
 import Fuse from 'fuse.js';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
-import { Review } from '../../types';
+import { Notes, Paper, Review } from '../../types';
 
 const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
   if (query === '') {
     return reviews;
   }
+
+  type PaperKey = `paper.${keyof Paper}`;
+  type NotesKey = `notes.${keyof Notes}`;
+
+  const keys: (PaperKey | NotesKey)[] = [
+    'paper.title',
+    'paper.authors',
+    'paper.institutions',
+    'paper.date',
+    'notes.keywords',
+    'notes.tldr',
+  ];
+
   const options = {
     shouldSort: false,
     threshold: 0.2,
@@ -15,7 +28,7 @@ const fuzzyFilterReviews = (query: string, reviews: Review[]) => {
     distance: 5000,
     maxPatternLength: 32,
     minMatchCharLength: 4,
-    keys: ['paper.title', 'paper.authors', 'paper.institutions', 'paper.date', 'notes.keywords', 'notes.tldr'],
+    keys,
   };
 
   const fuse = new Fuse(reviews, options);

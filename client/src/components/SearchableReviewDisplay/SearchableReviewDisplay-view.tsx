@@ -22,7 +22,7 @@ const renderTags = (tags: string[], handleSearch: SearchHandler): JSX.Element =>
     return (
       <TagList
         tags={tags}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
           const input = e.target as HTMLElement;
           handleSearch(`${input.innerHTML}`);
@@ -94,14 +94,14 @@ const renderReviews = (reviews: Review[], handleSearch: SearchHandler, reviewCli
 
   return (
     <Table
-      onRow={review => ({
+      onRow={(review) => ({
         onClick: () => {
           reviewClicked(review);
         },
       })}
       // TODO: Create a type in which _id is required and use it here instead of Review
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      rowKey={review => review._id!}
+      rowKey={(review) => review._id!}
       columns={columns}
       dataSource={reviews}
       pagination={reviews.length > 10 && { position: ['bottomRight'] }}
@@ -182,7 +182,7 @@ export default function SearchableReviewDisplayView({
               >
                 <Input
                   type="text"
-                  onChange={e => handleSearch(`${e.target.value}`)}
+                  onChange={(e) => handleSearch(`${e.target.value}`)}
                   placeholder="Filter by title, author, one sentence summary, tags, and more"
                   value={query}
                   allowClear

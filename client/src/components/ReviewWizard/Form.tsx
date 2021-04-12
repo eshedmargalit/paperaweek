@@ -20,19 +20,12 @@ import './ReviewWizard.scss';
  * 2. A title with at least one character
  */
 const authorSchema = Yup.object().shape({
-  contents: Yup.string()
-    .required('Paper author must have at least one character.')
-    .min(1),
+  contents: Yup.string().required('Paper author must have at least one character.').min(1),
 });
 const PAWFormSchema = Yup.object().shape({
   paper: Yup.object().shape({
-    authors: Yup.array()
-      .of(authorSchema)
-      .min(1)
-      .required('Paper must have at least one author.'),
-    title: Yup.string()
-      .required('Paper must have a title.')
-      .min(1),
+    authors: Yup.array().of(authorSchema).min(1).required('Paper must have at least one author.'),
+    title: Yup.string().required('Paper must have a title.').min(1),
   }),
 });
 

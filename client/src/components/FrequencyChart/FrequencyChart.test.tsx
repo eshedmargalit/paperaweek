@@ -9,7 +9,7 @@ import { Review } from '../../types';
 
 const makeReviewArrayWeekly = (startWeekOffset: number, numReviews: number): Review[] => {
   const range = Array.from(Array(numReviews).keys());
-  return range.map(i => {
+  return range.map((i) => {
     return {
       ...blankReview,
       createdAt: moment()

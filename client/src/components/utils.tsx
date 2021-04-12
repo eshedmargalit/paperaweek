@@ -15,7 +15,7 @@ import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
 
 export const stringNotEmpty = (s: string): boolean => s !== '';
-export const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some(item => stringNotEmpty(item));
+export const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some((item) => stringNotEmpty(item));
 
 export const renderCommaSepList = (items: string[]): JSX.Element[] =>
   items.map((item, i) => {
@@ -107,7 +107,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
     return { numReviews: 0, ppwString: '0', ppwColor: darkGray };
   }
 
-  const reviewDates = reviews.map(review => moment(review.createdAt));
+  const reviewDates = reviews.map((review) => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   const totalWeeks = moment().diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0

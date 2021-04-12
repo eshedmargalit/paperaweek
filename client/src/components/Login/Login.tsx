@@ -61,7 +61,7 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
         <Row gutter={16}>
           <Col md={8} offset={3} sm={24}>
             <ul className="feature-list">
-              {featureList.map(feature => {
+              {featureList.map((feature) => {
                 return <li key={feature}>{feature}</li>;
               })}
             </ul>
