@@ -22,15 +22,11 @@ describe('<StatBox />', () => {
     const reviews: Review[] = [
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract('1', 'weeks')
-          .toDate(),
+        createdAt: moment().subtract('1', 'weeks').toDate(),
       },
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract('2', 'weeks')
-          .toDate(),
+        createdAt: moment().subtract('2', 'weeks').toDate(),
       },
     ];
     const initialState = { ...getBlankInitialState(), user: { ...blankUser, reviews } };
@@ -51,27 +47,19 @@ describe('<StatBox />', () => {
     const reviews: Review[] = [
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract(1, 'weeks')
-          .toDate(),
+        createdAt: moment().subtract(1, 'weeks').toDate(),
       },
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract(2, 'weeks')
-          .toDate(),
+        createdAt: moment().subtract(2, 'weeks').toDate(),
       },
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract(3, 'weeks')
-          .toDate(),
+        createdAt: moment().subtract(3, 'weeks').toDate(),
       },
       {
         ...blankReview,
-        createdAt: moment()
-          .subtract(4, 'weeks')
-          .toDate(),
+        createdAt: moment().subtract(4, 'weeks').toDate(),
       },
     ];
     const initialState = { ...getBlankInitialState(), user: { ...blankUser, reviews } };

@@ -103,7 +103,7 @@ const Menu = (
     },
   ];
 
-  const hiddenContent: Maybe<JSX.Element>[] = hiddenItems.map(item => {
+  const hiddenContent: Maybe<JSX.Element>[] = hiddenItems.map((item) => {
     if (collapsed) {
       return null;
     }

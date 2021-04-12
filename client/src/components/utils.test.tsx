@@ -3,7 +3,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
-  getTagColor,
   isDOI,
   removeMiddleAuthors,
   renderCommaSepList,
@@ -162,13 +161,6 @@ describe('utils', () => {
         render(shortenTableString(inString, cutoff));
         expect(screen.getByText(expectedText)).toBeInTheDocument();
       });
-    });
-  });
-
-  describe('getTagColor', () => {
-    it('returns the same color for the same tag', () => {
-      const tag = 'tag';
-      expect(getTagColor(tag)).toEqual(getTagColor(tag));
     });
   });
 

@@ -32,7 +32,7 @@ export default function ReadingListRedux(): JSX.Element {
   };
 
   const removeFromReadingList = (paper: Paper) => {
-    const newReadingList = readingList.filter(currPaper => currPaper !== paper);
+    const newReadingList = readingList.filter((currPaper) => currPaper !== paper);
     updateReadingListFunc(newReadingList);
   };
 

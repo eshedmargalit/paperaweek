@@ -15,7 +15,7 @@ import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
 
 export const stringNotEmpty = (s: string): boolean => s !== '';
-export const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some(item => stringNotEmpty(item));
+export const stringArrayHasNonEmpty = (arr: string[]): boolean => arr.some((item) => stringNotEmpty(item));
 
 export const renderCommaSepList = (items: string[]): JSX.Element[] =>
   items.map((item, i) => {
@@ -94,20 +94,7 @@ export const shortenTableString = (str: string, cutoff: number): JSX.Element => 
   return <span>{shortenString(str, cutoff)}</span>;
 };
 
-export type HSLString = string;
 export type HexString = string;
-
-export const getTagColor = (tag: string): HSLString => {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) {
-    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const shortened = hash % 360;
-  const saturation = '80%';
-  const lightness = '30%';
-  return `hsl(${shortened},${saturation},${lightness})`;
-};
 
 export interface ReviewStats {
   numReviews: number;
@@ -120,7 +107,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
     return { numReviews: 0, ppwString: '0', ppwColor: darkGray };
   }
 
-  const reviewDates = reviews.map(review => moment(review.createdAt));
+  const reviewDates = reviews.map((review) => moment(review.createdAt));
   const sortedDates = reviewDates.sort((a, b) => a.diff(b));
 
   const totalWeeks = moment().diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0

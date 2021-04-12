@@ -42,7 +42,7 @@ const fields = [
 export default function ReviewModal(props: ReviewModalProps): JSX.Element {
   const { paper, notes } = props.review;
 
-  const reviewBody = fields.map(field => {
+  const reviewBody = fields.map((field) => {
     const nonEmpty = stringArrayHasNonEmpty(notes[field.notesKey]);
     const toRender = (
       <div key={field.heading}>

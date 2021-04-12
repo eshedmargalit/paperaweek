@@ -65,7 +65,7 @@ export default function PaperSearchBarView({
           <Col lg={16} sm={24} xs={24}>
             <Input
               type="text"
-              onChange={e => handleSearch(`${e.target.value}`)}
+              onChange={(e) => handleSearch(`${e.target.value}`)}
               placeholder="search by DOI, title, author, or journal"
               value={query}
               allowClear
