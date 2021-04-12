@@ -1,0 +1,11 @@
+@import '../../styles/colors.scss';
+
+.ant-tag.ant-tag {
+  background-color: $primary-background;
+  border-color: $primary-darker;
+
+  &:hover {
+    background-color: $primary-lighter;
+    border-color: $primary-darker;
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag } from 'antd';
-import { getTagColor } from '../utils';
+import './TagList.scss';
 
 interface TagListProps {
   tags: string[];
@@ -11,7 +11,7 @@ export default function TagList({ tags, onClick }: TagListProps): JSX.Element {
   const tagList = tags
     .filter(t => t !== '')
     .map(tag => (
-      <Tag color={getTagColor(tag)} key={tag} onClick={onClick}>
+      <Tag key={tag} onClick={onClick}>
         {tag}
       </Tag>
     ));

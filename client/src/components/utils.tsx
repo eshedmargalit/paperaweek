@@ -94,20 +94,7 @@ export const shortenTableString = (str: string, cutoff: number): JSX.Element => 
   return <span>{shortenString(str, cutoff)}</span>;
 };
 
-export type HSLString = string;
 export type HexString = string;
-
-export const getTagColor = (tag: string): HSLString => {
-  let hash = 0;
-  for (let i = 0; i < tag.length; i++) {
-    hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const shortened = hash % 360;
-  const saturation = '80%';
-  const lightness = '30%';
-  return `hsl(${shortened},${saturation},${lightness})`;
-};
 
 export interface ReviewStats {
   numReviews: number;
