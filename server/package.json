@@ -21,7 +21,7 @@
     "@types/passport": "^1.0.4",
     "@types/passport-google-oauth20": "^2.0.4",
     "antd": "4.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cognito-express": "^2.0.16",
     "concurrently": "^4.1.2",
