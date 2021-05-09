@@ -126,7 +126,7 @@ $dynamic-text-area-min-height: 80px;
   }
 
   .dynamic-text-area {
-    height: $dynamic-text-area-min-height;
+    min-height: $dynamic-text-area-min-height;
     border-radius: 6px;
   }
 

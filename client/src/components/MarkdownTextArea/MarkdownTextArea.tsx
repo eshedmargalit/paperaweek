@@ -10,6 +10,8 @@ export interface MarkdownTextAreaProps {
   onBlurHandler: Maybe<() => void>;
 }
 
+const CHARS_PER_LINE = 150;
+
 function MarkdownTextArea({
   value,
   onChange,
@@ -23,6 +25,12 @@ function MarkdownTextArea({
   const unfocus = () => setIsFocused(false);
 
   const willRenderMarkdown = !isFocused && !!value && shouldRenderMarkdown;
+
+  // Easiest adapation of https://stackoverflow.com/a/7523, determine how tall the textarea should be
+  const desiredRowCount: number | undefined = value
+    ? // Add a row for each newline, plus one for every row of text, approx. by chars per line
+      value.split('\n').reduce((prev, curr) => prev + (1 + Math.ceil(curr.length / CHARS_PER_LINE)), 0)
+    : undefined;
 
   return willRenderMarkdown ? (
     <div className="preview-text-area" role="textbox" tabIndex={0} onClick={focus} onKeyDown={focus}>
@@ -44,6 +52,7 @@ function MarkdownTextArea({
       }}
       className="dynamic-text-area"
       value={value}
+      rows={desiredRowCount}
       onChange={onChange}
     />
   );
