@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { wrapMarkdownWithMath } from '../utils';
 import { Maybe } from '../../types';
 
@@ -27,14 +27,10 @@ function MarkdownTextArea({
   const willRenderMarkdown = !isFocused && !!value && shouldRenderMarkdown;
 
   // Easiest adapation of https://stackoverflow.com/a/7523, determine how tall the textarea should be
-  const desiredRowCount = useMemo(
-    () =>
-      !willRenderMarkdown && !!value
-        ? // Add a row for each newline, plus one for every row of text, approx. by chars per line
-          value.split('\n').reduce((prev, curr) => prev + (1 + Math.ceil(curr.length / CHARS_PER_LINE)), 0)
-        : undefined,
-    [willRenderMarkdown, value]
-  );
+  const desiredRowCount: number | undefined = value
+    ? // Add a row for each newline, plus one for every row of text, approx. by chars per line
+      value.split('\n').reduce((prev, curr) => prev + (1 + Math.ceil(curr.length / CHARS_PER_LINE)), 0)
+    : undefined;
 
   return willRenderMarkdown ? (
     <div className="preview-text-area" role="textbox" tabIndex={0} onClick={focus} onKeyDown={focus}>
