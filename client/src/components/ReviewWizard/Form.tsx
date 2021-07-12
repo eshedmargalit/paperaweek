@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Col, Row, Space, Tooltip } from 'antd';
 import * as Yup from 'yup';
 import { QuestionCircleFilled } from '@ant-design/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { isEqual as _isEqual } from 'lodash';
 import { Review } from '../../types';
 import { FormReview } from './types';
 import { bulletNoteFields, convertFormValuesToReview, convertReviewToFormValues } from './utils';
-import { DraftsContext } from '../../contexts';
 import { TextField, MonthPicker, DynamicList, DynamicTextAreaList } from './FormComponents';
 
 // CSS imports
@@ -43,133 +43,141 @@ export default function Form({ initialReview, onChange, onSubmit }: FormProps): 
     reValidateMode: 'onBlur',
   });
 
-  const convertAndSave = () => onChange(convertFormValuesToReview(getValues()));
+  const [lastSavedValues, setLastSavedValues] = useState(getValues());
+
+  const convertAndSave = () => {
+    // only save the draft if the new values are different from the old values
+    const currentValues = getValues();
+    if (!_isEqual(currentValues, lastSavedValues)) {
+      onChange(convertFormValuesToReview(currentValues));
+      setLastSavedValues(currentValues);
+    }
+  };
+
   const convertAndSubmit = (formReview: FormReview) => onSubmit(convertFormValuesToReview(formReview));
 
   const reviewItemColSpan = { lg: 12, sm: 24 };
 
   return (
     <form>
-      <DraftsContext.Provider value={convertAndSave}>
-        <div className="paw-form">
-          <div className="section-title">
-            <h2> Paper Information </h2>
-          </div>
-          <Row className="form-group" gutter={16}>
-            <Col {...reviewItemColSpan}>
-              <TextField
-                label="Paper Title"
-                name="paper.title"
-                register={register}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col {...reviewItemColSpan}>
-              <MonthPicker
-                label="Publication Month"
-                name="paper.date"
-                control={control}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col {...reviewItemColSpan}>
-              <DynamicList
-                label="Authors"
-                name="paper.authors"
-                control={control}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col {...reviewItemColSpan}>
-              <DynamicList
-                label="Institutions"
-                name="paper.institutions"
-                control={control}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col lg={8} sm={24}>
-              <TextField
-                label="Journal"
-                name="paper.journal"
-                register={register}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col lg={8} sm={24}>
-              <TextField
-                label="URL"
-                name="paper.url"
-                register={register}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-            <Col lg={8} sm={24}>
-              <TextField
-                label="DOI"
-                name="paper.doi"
-                register={register}
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-          </Row>
-          <div className="section-title">
-            <h2> Your Review </h2>
-          </div>
-          <Row className="form-group" gutter={16}>
-            {bulletNoteFields.map(({ fieldName, label, tooltip }) => (
-              <Col key={label} {...reviewItemColSpan}>
-                <label htmlFor={fieldName}>
-                  <Space>
-                    {label}
-                    <Tooltip title={tooltip}>
-                      <QuestionCircleFilled />
-                    </Tooltip>
-                  </Space>
-                </label>
-                <DynamicTextAreaList
-                  name={`notes.${fieldName}`}
-                  control={control}
-                  onBlurHandler={convertAndSave}
-                  errors={errors}
-                />
-              </Col>
-            ))}
-          </Row>
-          <Row gutter={16}>
-            <Col {...reviewItemColSpan}>
-              <TextField
-                label="TLDR (One Sentence Summary)"
-                name="notes.tldr"
-                onBlurHandler={convertAndSave}
-                register={register}
-                errors={errors}
-              />
-            </Col>
-            <Col {...reviewItemColSpan}>
-              <TextField
-                label="Keywords"
-                name="notes.keywords"
-                register={register}
-                placeholder="human, fmri, statistics"
-                onBlurHandler={convertAndSave}
-                errors={errors}
-              />
-            </Col>
-          </Row>
-          <br />
-          <Button shape="round" type="primary" onClick={handleSubmit(convertAndSubmit)}>
-            Continue to Preview
-          </Button>
+      <div className="paw-form">
+        <div className="section-title">
+          <h2> Paper Information </h2>
         </div>
-      </DraftsContext.Provider>
+        <Row className="form-group" gutter={16}>
+          <Col {...reviewItemColSpan}>
+            <TextField
+              label="Paper Title"
+              name="paper.title"
+              register={register}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col {...reviewItemColSpan}>
+            <MonthPicker
+              label="Publication Month"
+              name="paper.date"
+              control={control}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col {...reviewItemColSpan}>
+            <DynamicList
+              label="Authors"
+              name="paper.authors"
+              control={control}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col {...reviewItemColSpan}>
+            <DynamicList
+              label="Institutions"
+              name="paper.institutions"
+              control={control}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col lg={8} sm={24}>
+            <TextField
+              label="Journal"
+              name="paper.journal"
+              register={register}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col lg={8} sm={24}>
+            <TextField
+              label="URL"
+              name="paper.url"
+              register={register}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+          <Col lg={8} sm={24}>
+            <TextField
+              label="DOI"
+              name="paper.doi"
+              register={register}
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+        </Row>
+        <div className="section-title">
+          <h2> Your Review </h2>
+        </div>
+        <Row className="form-group" gutter={16}>
+          {bulletNoteFields.map(({ fieldName, label, tooltip }) => (
+            <Col key={label} {...reviewItemColSpan}>
+              <label htmlFor={fieldName}>
+                <Space>
+                  {label}
+                  <Tooltip title={tooltip}>
+                    <QuestionCircleFilled />
+                  </Tooltip>
+                </Space>
+              </label>
+              <DynamicTextAreaList
+                name={`notes.${fieldName}`}
+                control={control}
+                onBlurHandler={convertAndSave}
+                errors={errors}
+              />
+            </Col>
+          ))}
+        </Row>
+        <Row gutter={16}>
+          <Col {...reviewItemColSpan}>
+            <TextField
+              label="TLDR (One Sentence Summary)"
+              name="notes.tldr"
+              onBlurHandler={convertAndSave}
+              register={register}
+              errors={errors}
+            />
+          </Col>
+          <Col {...reviewItemColSpan}>
+            <TextField
+              label="Keywords"
+              name="notes.keywords"
+              register={register}
+              placeholder="human, fmri, statistics"
+              onBlurHandler={convertAndSave}
+              errors={errors}
+            />
+          </Col>
+        </Row>
+        <br />
+        <Button shape="round" type="primary" onClick={handleSubmit(convertAndSubmit)}>
+          Continue to Preview
+        </Button>
+      </div>
     </form>
   );
 }
