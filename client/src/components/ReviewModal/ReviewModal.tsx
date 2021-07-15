@@ -63,7 +63,7 @@ export default function ReviewModal({ review, visible, onClose, buttons }: Revie
   ) : null;
 
   const ModalTitle = () => (
-    <div className="flex">
+    <div className="flex modal-title">
       {paper.title}
       <span className="action-items">{buttons}</span>
     </div>
