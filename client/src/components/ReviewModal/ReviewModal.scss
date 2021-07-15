@@ -19,4 +19,20 @@
 
 .modal-title {
   flex-flow: wrap;
+
+  @media only screen and (max-width: 650px) {
+    .action-items {
+      flex-direction: column;
+
+      // When stacked, all children should fill available width and have a slight gap
+      > * {
+        width: 100%;
+        margin-top: 0.25em;
+      }
+    }
+  }
+
+  .action-items {
+    display: flex;
+  }
 }
