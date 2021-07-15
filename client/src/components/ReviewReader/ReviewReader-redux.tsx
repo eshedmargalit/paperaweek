@@ -44,7 +44,7 @@ export default function ReviewReaderRedux(): JSX.Element {
       handleModalEdit={populateFormWithReview}
       handleModalCopy={copyReviewURLToClipboard}
       pageHeaderProps={pageHeaderProps}
-      hideFooter={false}
+      hideButtons={false}
     />
   );
 }

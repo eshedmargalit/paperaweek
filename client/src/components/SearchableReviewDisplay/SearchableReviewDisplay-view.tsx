@@ -126,7 +126,7 @@ interface SearchableReviewDisplayViewProps {
   query: string;
   reviews: Review[];
   modalProps: ModalProps;
-  hideFooter: boolean;
+  hideButtons: boolean;
   pageHeaderProps: PageHeaderProps;
 }
 
@@ -136,7 +136,7 @@ export default function SearchableReviewDisplayView({
   query,
   reviews,
   modalProps,
-  hideFooter,
+  hideButtons,
   pageHeaderProps,
 }: SearchableReviewDisplayViewProps): JSX.Element {
   const {
@@ -195,7 +195,7 @@ export default function SearchableReviewDisplayView({
     </Row>
   );
 
-  const modalFooter = [
+  const buttons = [
     <Link to="/form" key="edit">
       <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
         Edit this {itemName}
@@ -219,10 +219,10 @@ export default function SearchableReviewDisplayView({
         Copy Link
       </Button>
     );
-    modalFooter.splice(0, 0, copyButton);
+    buttons.splice(0, 0, copyButton);
   }
 
-  const footer = hideFooter ? null : modalFooter;
+  const modalButtons = hideButtons ? null : buttons;
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 
@@ -231,7 +231,7 @@ export default function SearchableReviewDisplayView({
       {searchRow}
       {reviewsTable}
       {modalReview && (
-        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />
+        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} buttons={modalButtons} />
       )}
     </>
   );

@@ -6,6 +6,7 @@
       font-weight: bold;
     }
   }
+
   .ant-alert-info {
     background-color: $primary-background;
     border: 1px solid $primary-lighter;
@@ -14,4 +15,9 @@
       color: $primary-color;
     }
   }
+}
+
+.action-items {
+  // make space for absolutely positioned x icon
+  margin-right: 3%;
 }

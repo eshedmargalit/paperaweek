@@ -12,9 +12,10 @@ describe('<ReviewReader />', () => {
     reviewList: [
       {
         ...blankReview,
+        _id: '1',
         paper: { ...blankPaper, title: 'Everything About Potatoes', authors: ['Eshed Margalit', 'Arad Margalit'] },
       },
-      { ...blankReview, paper: { ...blankPaper, title: 'I Scream for Ice Cream' } },
+      { ...blankReview, _id: '2', paper: { ...blankPaper, title: 'I Scream for Ice Cream' } },
     ],
   };
   const initialState = { ...getBlankInitialState(), reviews };

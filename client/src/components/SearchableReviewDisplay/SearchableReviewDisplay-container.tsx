@@ -41,7 +41,7 @@ interface SearchableReviewDisplayContainerProps {
   reviewToOpen?: Review;
   itemName?: string;
   pageHeaderProps: PageHeaderProps;
-  hideFooter: boolean;
+  hideButtons: boolean;
   deleteItemFunc?: (selectedReview: Review) => Promise<void>;
   handleModalEdit?: (selectedReview: Review) => void;
   handleModalCopy?: (selectedReview: Review) => void;
@@ -52,7 +52,7 @@ export default function SearchableReviewDisplayContainer({
   reviewToOpen,
   itemName,
   pageHeaderProps,
-  hideFooter,
+  hideButtons,
   deleteItemFunc,
   handleModalEdit,
   handleModalCopy,
@@ -111,7 +111,7 @@ export default function SearchableReviewDisplayContainer({
       reviews={filteredReviews}
       modalProps={modalProps}
       pageHeaderProps={pageHeaderProps}
-      hideFooter={hideFooter}
+      hideButtons={hideButtons}
     />
   );
 }

@@ -9,7 +9,7 @@ export interface ReviewModalProps {
   review: Review;
   visible: boolean;
   onClose: VoidFunction;
-  footer: Maybe<JSX.Element[]>;
+  buttons: Maybe<JSX.Element[]>;
 }
 
 const fields = [
@@ -39,8 +39,8 @@ const fields = [
   },
 ] as const;
 
-export default function ReviewModal(props: ReviewModalProps): JSX.Element {
-  const { paper, notes } = props.review;
+export default function ReviewModal({ review, visible, onClose, buttons }: ReviewModalProps): JSX.Element {
+  const { paper, notes } = review;
 
   const reviewBody = fields.map((field) => {
     const nonEmpty = stringArrayHasNonEmpty(notes[field.notesKey]);
@@ -62,15 +62,15 @@ export default function ReviewModal(props: ReviewModalProps): JSX.Element {
     <Alert type="info" message="TLDR" description={notes.tldr} showIcon />
   ) : null;
 
+  const ModalTitle = () => (
+    <div className="flex">
+      {paper.title}
+      <span className="action-items">{buttons}</span>
+    </div>
+  );
+
   return (
-    <Modal
-      title={paper.title}
-      visible={props.visible}
-      onCancel={props.onClose}
-      footer={props.footer}
-      destroyOnClose
-      width="80%"
-    >
+    <Modal title={<ModalTitle />} visible={visible} onCancel={onClose} footer={null} destroyOnClose width="80%">
       <div className="review-modal">
         <PaperTable paper={paper} keywords={notes.keywords} />
         <br />
