@@ -6,6 +6,7 @@
       font-weight: bold;
     }
   }
+
   .ant-alert-info {
     background-color: $primary-background;
     border: 1px solid $primary-lighter;
@@ -13,5 +14,25 @@
     .ant-alert-icon {
       color: $primary-color;
     }
+  }
+}
+
+.modal-title {
+  flex-flow: wrap;
+
+  @media only screen and (max-width: 650px) {
+    .action-items {
+      flex-direction: column;
+
+      // When stacked, all children should fill available width and have a slight gap
+      > * {
+        width: 100%;
+        margin-top: 0.25em;
+      }
+    }
+  }
+
+  .action-items {
+    display: flex;
   }
 }

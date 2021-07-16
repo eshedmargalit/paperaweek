@@ -60,7 +60,7 @@ export default function ReviewWizardContainer({
     setRedirectHome(true);
   };
 
-  const modalFooter = [
+  const buttons = [
     <Button key="submit" type="primary" icon={<CheckOutlined />} onClick={handleSubmission} loading={submitLoading}>
       Looks good, submit!
     </Button>,
@@ -71,7 +71,7 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={review} visible={showModal} onClose={onModalCancel} footer={modalFooter} />
+      <ReviewModal review={review} visible={showModal} onClose={onModalCancel} buttons={buttons} />
     </div>
   );
 

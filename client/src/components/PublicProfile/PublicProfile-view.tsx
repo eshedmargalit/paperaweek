@@ -70,7 +70,7 @@ export default function PublicProfileView({
             reviews={reviews}
             reviewToOpen={reviewToOpen}
             pageHeaderProps={pageHeaderProps}
-            hideFooter
+            hideButtons
           />
         </Col>
       </Row>

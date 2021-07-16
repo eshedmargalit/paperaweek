@@ -126,7 +126,7 @@ interface SearchableReviewDisplayViewProps {
   query: string;
   reviews: Review[];
   modalProps: ModalProps;
-  hideFooter: boolean;
+  hideButtons: boolean;
   pageHeaderProps: PageHeaderProps;
 }
 
@@ -136,7 +136,7 @@ export default function SearchableReviewDisplayView({
   query,
   reviews,
   modalProps,
-  hideFooter,
+  hideButtons,
   pageHeaderProps,
 }: SearchableReviewDisplayViewProps): JSX.Element {
   const {
@@ -195,16 +195,16 @@ export default function SearchableReviewDisplayView({
     </Row>
   );
 
-  const modalFooter = [
-    <Link to="/form" key="edit">
-      <Button className="footer-btn" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
+  const buttons = [
+    <Link to="/form" key="edit" className="modal-btn">
+      <Button className="nested" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
         Edit this {itemName}
       </Button>
     </Link>,
     <Button
       key="delete"
       type="dashed"
-      className="footer-btn"
+      className="modal-btn"
       icon={<DeleteOutlined />}
       onClick={() => handleModalDelete(deleteConfirmHandler)}
     >
@@ -214,15 +214,15 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="footer-btn" icon={<LinkOutlined />} onClick={handleModalCopy}>
+      <Button key="copy" type="dashed" className="modal-btn" icon={<LinkOutlined />} onClick={handleModalCopy}>
         {' '}
         Copy Link
       </Button>
     );
-    modalFooter.splice(0, 0, copyButton);
+    buttons.splice(0, 0, copyButton);
   }
 
-  const footer = hideFooter ? null : modalFooter;
+  const modalButtons = hideButtons ? null : buttons;
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 
@@ -231,7 +231,7 @@ export default function SearchableReviewDisplayView({
       {searchRow}
       {reviewsTable}
       {modalReview && (
-        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} footer={footer} />
+        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} buttons={modalButtons} />
       )}
     </>
   );
