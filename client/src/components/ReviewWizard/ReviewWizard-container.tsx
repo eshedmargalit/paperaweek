@@ -60,14 +60,16 @@ export default function ReviewWizardContainer({
     setRedirectHome(true);
   };
 
-  const buttons = [
-    <Button key="submit" type="primary" icon={<CheckOutlined />} onClick={handleSubmission} loading={submitLoading}>
-      Looks good, submit!
-    </Button>,
-    <Button key="cancel" icon={<CloseOutlined />} onClick={onModalCancel} style={{ borderColor: 'red' }}>
-      Cancel
-    </Button>,
-  ];
+  const buttons = (
+    <div className="modal-buttons">
+      <Button key="submit" type="primary" icon={<CheckOutlined />} onClick={handleSubmission} loading={submitLoading}>
+        Looks good, submit!
+      </Button>
+      <Button key="cancel" icon={<CloseOutlined />} onClick={onModalCancel} className="outline-red">
+        Cancel
+      </Button>
+    </div>
+  );
 
   const modal = (
     <div>

@@ -196,7 +196,7 @@ export default function SearchableReviewDisplayView({
   );
 
   const buttons = [
-    <Link to="/form" key="edit" className="modal-btn">
+    <Link to="/form" key="edit">
       <Button className="nested" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
         Edit this {itemName}
       </Button>
@@ -204,7 +204,6 @@ export default function SearchableReviewDisplayView({
     <Button
       key="delete"
       type="dashed"
-      className="modal-btn"
       icon={<DeleteOutlined />}
       onClick={() => handleModalDelete(deleteConfirmHandler)}
     >
@@ -214,7 +213,7 @@ export default function SearchableReviewDisplayView({
 
   if (handleModalCopy) {
     const copyButton = (
-      <Button key="copy" type="dashed" className="modal-btn" icon={<LinkOutlined />} onClick={handleModalCopy}>
+      <Button key="copy" type="dashed" icon={<LinkOutlined />} onClick={handleModalCopy}>
         {' '}
         Copy Link
       </Button>
@@ -222,7 +221,7 @@ export default function SearchableReviewDisplayView({
     buttons.splice(0, 0, copyButton);
   }
 
-  const modalButtons = hideButtons ? null : buttons;
+  const modalButtons = hideButtons ? null : <div className="modal-buttons">{buttons}</div>;
 
   const reviewsTable = renderReviews(reviews, handleSearch, reviewClicked);
 
