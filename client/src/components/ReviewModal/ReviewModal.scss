@@ -17,11 +17,35 @@
   }
 }
 
+// The provided modal header has 56px wide close icon which we want to avoid
+.ant-modal-header {
+  padding-right: 56px !important;
+}
+
 .modal-title {
   flex-flow: wrap;
 
-  @media only screen and (max-width: 650px) {
-    .action-items {
+  .modal-buttons {
+    display: flex;
+
+    & > * {
+      // Don't add right-spacing to the rightmost element
+      &:not(:last-child) {
+        margin-right: 1em;
+      }
+
+      // Handles buttons within other elements (like <Links>)
+      > .nested {
+        width: 100%;
+        margin-right: 0;
+      }
+
+      &.outline-red {
+        border-color: red;
+      }
+    }
+
+    @media only screen and (max-width: 650px) {
       flex-direction: column;
 
       // When stacked, all children should fill available width and have a slight gap
@@ -30,9 +54,5 @@
         margin-top: 0.25em;
       }
     }
-  }
-
-  .action-items {
-    display: flex;
   }
 }

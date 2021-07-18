@@ -9,7 +9,7 @@ export interface ReviewModalProps {
   review: Review;
   visible: boolean;
   onClose: VoidFunction;
-  buttons: Maybe<JSX.Element[]>;
+  buttons: Maybe<JSX.Element>;
 }
 
 const fields = [
@@ -65,7 +65,7 @@ export default function ReviewModal({ review, visible, onClose, buttons }: Revie
   const ModalTitle = () => (
     <div className="flex modal-title">
       {paper.title}
-      <span className="action-items">{buttons}</span>
+      {buttons}
     </div>
   );
 
