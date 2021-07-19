@@ -65,6 +65,9 @@ export const MonthPicker = ({ name, label, control, onBlurHandler, errors }: Con
             selected={value}
             onChange={onChange}
             onBlur={onBlurHandler}
+            // Prevent any input by typing, deleting, or otherwise not using the date picker
+            // This prevents invalid dates (e.g. empty strings) from being submitted from the UI
+            onChangeRaw={(e) => e.preventDefault()}
           />
         )}
       />
