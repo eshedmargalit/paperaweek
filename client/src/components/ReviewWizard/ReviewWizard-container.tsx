@@ -16,6 +16,7 @@ interface ReviewWizardContainerProps {
   autosaveStatus: string;
   lastSave: Maybe<Moment>;
   shouldShowHelp: boolean;
+  isPreview: boolean;
 }
 
 export default function ReviewWizardContainer({
@@ -26,6 +27,7 @@ export default function ReviewWizardContainer({
   autosaveStatus,
   lastSave,
   shouldShowHelp,
+  isPreview,
 }: ReviewWizardContainerProps): JSX.Element {
   const [review, setReview] = useState<Review>(initialReview);
   const [showModal, setShowModal] = useState(false);
@@ -87,6 +89,7 @@ export default function ReviewWizardContainer({
       lastSave={lastSave}
       onPageBack={() => setRedirectHome(true)}
       shouldShowHelp={shouldShowHelp}
+      isPreview={isPreview}
     />
   );
 }

@@ -17,6 +17,7 @@
     "array-move": "^2.1.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.3.1",
+    "classnames": "^2.3.1",
     "cognitive-services": "^1.2.3",
     "fuse.js": "^3.4.5",
     "history": "^4.0.0",

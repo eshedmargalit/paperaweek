@@ -25,7 +25,7 @@ export default function ReviewWizardRedux(): JSX.Element {
 
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 
-  const shouldShowHelp = demoMode || (!loading && user.reviews.length + user.drafts.length === 0);
+  const shouldShowHelp = !demoMode && !loading && user.reviews.length + user.drafts.length === 0;
 
   const deleteReadingListEntry = async () => {
     if (demoMode) return;
@@ -91,6 +91,7 @@ export default function ReviewWizardRedux(): JSX.Element {
       autosaveStatus={autosaveStatus}
       initialReview={initialReview}
       shouldShowHelp={shouldShowHelp}
+      isPreview={demoMode}
     />
   );
 }
