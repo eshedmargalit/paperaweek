@@ -9,6 +9,19 @@ export const blankUser: User = {
   publicProfile: false,
 };
 
+/**
+ * The demoUser is a fake user that's used to demonstrate how PAW might work
+ * for users that aren't yet ready to sign up
+ */
+export const demoUser: User = {
+  googleId: 'demo',
+  displayName: 'Demo User',
+  reviews: [],
+  readingList: [],
+  drafts: [],
+  publicProfile: false,
+};
+
 export const blankPaper: Paper = {
   title: '',
   authors: [''],

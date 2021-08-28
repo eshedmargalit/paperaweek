@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Redirect, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
 import { LoginOutlined } from '@ant-design/icons';
 
@@ -16,6 +16,7 @@ import background from './textured-background.png';
 import logo from './logo.png';
 import demo from './demo.png';
 import { AuthState } from '../../reducers/reducer_auth';
+import { enterDemoMode } from '../../actions';
 
 interface LoginProps {
   location: Location;
@@ -30,7 +31,9 @@ const featureList = [
 
 export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
   const { loading, user }: AuthState = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { push } = useHistory();
 
   // Instead of flashing a loading spinner for 1/4 second this is loading, just don't render anything
   if (loading) return null;
@@ -45,6 +48,11 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
       />
     );
   }
+
+  const handleDemo = () => {
+    dispatch(enterDemoMode());
+    push('/dashboard');
+  };
 
   const LoginButton = (
     <div className="modal-body">
@@ -70,17 +78,24 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
             <div className="product-title">
               <img src={demo} className="demo" alt="demo" />
               <h5>Read a paper a week. That's it.</h5>
-              <Popover
-                content={LoginButton}
-                trigger="click"
-                visible={isModalOpen}
-                placement="top"
-                onVisibleChange={() => setIsModalOpen(!isModalOpen)}
-              >
-                <Button shape="round" size="large" icon={<LoginOutlined />}>
-                  Sign In
-                </Button>
-              </Popover>
+              <div className="login-page--actions">
+                <Popover
+                  content={LoginButton}
+                  trigger="click"
+                  visible={isModalOpen}
+                  placement="top"
+                  onVisibleChange={() => setIsModalOpen(!isModalOpen)}
+                >
+                  <Button shape="round" size="large" icon={<LoginOutlined />}>
+                    Sign In
+                  </Button>
+                </Popover>
+                <p>
+                  Not ready to make an account yet?
+                  <br />
+                  <Button onClick={handleDemo}>Try it out instead!</Button>
+                </p>
+              </div>
             </div>
           </Col>
         </Row>

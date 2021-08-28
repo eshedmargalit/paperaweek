@@ -39,6 +39,8 @@ export const useSaveDraft = (): returnProps => {
   const dispatch = useDispatch();
 
   const activeDraft = useSelector((state: RootState) => state.activeDraft);
+  const { demoMode } = useSelector((state: RootState) => state.auth);
+
   const [draftId, setDraftId] = useState(activeDraft);
   const [lastSave, setLastSave] = useState<Maybe<Moment>>(null);
   const [autosaveStatus, setAutosaveStatus] = useState(statuses.UNSAVED);
@@ -51,6 +53,16 @@ export const useSaveDraft = (): returnProps => {
   useEffect(() => {
     draftIdRef.current = draftId;
   }, [draftId]);
+
+  // When in demo mode, everything is a no-op
+  if (demoMode) {
+    return {
+      autosaveStatus,
+      lastSave,
+      deleteActiveDraft: () => Promise.resolve(),
+      saveDraft: () => Promise.resolve(),
+    };
+  }
 
   // saveDraft function
   const saveDraft = async (draft: Review) => {
