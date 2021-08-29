@@ -1,4 +1,5 @@
 import { Paper, Notes, Review, User, Profile } from './types';
+import { demoReadingListItems, demoReviews } from './demoContent';
 
 export const blankUser: User = {
   googleId: '',
@@ -16,8 +17,8 @@ export const blankUser: User = {
 export const demoUser: User = {
   googleId: 'demo',
   displayName: 'Demo User',
-  reviews: [],
-  readingList: [],
+  reviews: demoReviews,
+  readingList: demoReadingListItems,
   drafts: [],
   publicProfile: false,
 };
