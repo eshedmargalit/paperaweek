@@ -19,6 +19,7 @@ export default function ReviewReaderRedux(): JSX.Element {
   const user: User = useSelector((state: RootState) => state.user);
 
   const reviewList: Review[] = useSelector((state: RootState) => state.reviews.reviewList);
+  const { demoMode } = useSelector((state: RootState) => state.auth);
 
   const deleteReview = async (reviewToDelete: Review) => {
     // remove the review from the Users list
@@ -44,7 +45,7 @@ export default function ReviewReaderRedux(): JSX.Element {
       handleModalEdit={populateFormWithReview}
       handleModalCopy={copyReviewURLToClipboard}
       pageHeaderProps={pageHeaderProps}
-      hideButtons={false}
+      hideButtons={demoMode}
     />
   );
 }
