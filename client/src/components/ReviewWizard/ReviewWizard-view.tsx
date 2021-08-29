@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Button } from 'antd';
+import { Alert, PageHeader, Button } from 'antd';
 import { QuestionCircleOutlined, SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
@@ -96,14 +96,21 @@ function ReviewWizardView({
       Help
     </Button>
   );
-  const modalContent = (
-    <div>
-      This page is preview only. Please{' '}
+
+  const loginMessageContent = (
+    <>
+      This page is preview only. Please{` `}
       <a type="text" href="/api/logout">
         Login
-      </a>{' '}
+      </a>
+      {` `}
       to write your first review!
-      <br />
+    </>
+  );
+
+  const modalContent = (
+    <div>
+      <Alert message="Login to Continue" description={loginMessageContent} type="info" showIcon />
       <hr />
       <FormHelpInfo />
     </div>
