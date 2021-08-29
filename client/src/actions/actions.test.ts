@@ -31,7 +31,10 @@ describe('redux actions', () => {
       const dispatchMock = jest.fn();
 
       await fetchUserFn(dispatchMock);
-      expect(dispatchMock).toHaveBeenCalledWith({ payload: blankUser, type: FETCH_USER });
+      expect(dispatchMock).toHaveBeenLastCalledWith({
+        payload: { ...blankUser, createdAt: blankUser.createdAt.toISOString() },
+        type: FETCH_USER,
+      });
     });
   });
 

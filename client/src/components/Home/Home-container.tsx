@@ -1,6 +1,8 @@
 import React from 'react';
-import HomeView from './Home-view';
+import HomeView, { HomeViewProps } from './Home-view';
 
-export default function HomeContainer(): JSX.Element {
-  return <HomeView />;
+type HomeContainerProps = HomeViewProps;
+
+export default function HomeContainer({ showTour }: HomeContainerProps): JSX.Element {
+  return <HomeView showTour={showTour} />;
 }

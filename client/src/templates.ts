@@ -8,6 +8,8 @@ export const blankUser: User = {
   readingList: [],
   drafts: [],
   publicProfile: false,
+  showTour: false,
+  createdAt: new Date(),
 };
 
 /**
