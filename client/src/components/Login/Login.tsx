@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
-import { LoginOutlined } from '@ant-design/icons';
+import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 
 import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
@@ -26,7 +26,7 @@ const featureList = [
   'Find papers online, automatically import metadata, and write one review per week',
   'Search through reviews you’ve written',
   'Share your reviews with colleagues',
-  'Our Review Form makes it easy to write thorough, structured reviews including Markdown and LaTeX',
+  'Write thorough, structured reviews with Markdown and LaTeX',
 ];
 
 export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
@@ -91,9 +91,12 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
                   </Button>
                 </Popover>
                 <p>
-                  Not ready to make an account yet?
+                  <hr />
+                  Not ready to make an account yet? No problem!
                   <br />
-                  <Button onClick={handleDemo}>Try it out instead!</Button>
+                  <Button shape="round" size="middle" icon={<ExperimentOutlined />} onClick={handleDemo}>
+                    Try the Demo
+                  </Button>
                 </p>
               </div>
             </div>

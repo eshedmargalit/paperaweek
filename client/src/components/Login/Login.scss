@@ -35,6 +35,7 @@ $default-padding: 30px;
   &--actions {
     width: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
 
