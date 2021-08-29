@@ -17,6 +17,7 @@ import { Maybe, User } from '../../types';
 export interface MenuBarViewProps {
   user: User;
   numberOfDrafts: number;
+  isDemo: boolean;
 }
 
 const Menu = (
@@ -24,7 +25,8 @@ const Menu = (
   googleId: User['googleId'],
   draftMenuItem: Maybe<JSX.Element>,
   infoPopover: JSX.Element,
-  isSmallScreen: boolean
+  isSmallScreen: boolean,
+  isDemo: boolean
 ) => {
   const [collapsed, setCollapsed] = useState(true);
   const signedIn: boolean = displayName !== '';
@@ -39,7 +41,7 @@ const Menu = (
   const signoutButton: JSX.Element = (
     <li className="menu__item">
       <a type="text" href="/api/logout" className="signout right">
-        <LogoutOutlined /> Sign Out
+        <LogoutOutlined /> {isDemo ? 'Make an Account' : 'Sign Out'}
       </a>
     </li>
   );
@@ -140,7 +142,7 @@ const Menu = (
   return isSmallScreen ? collapsedMenu : expandedMenu;
 };
 
-export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps): JSX.Element {
+export default function MenuBarView({ user, numberOfDrafts, isDemo }: MenuBarViewProps): JSX.Element {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
   const draftMenuItem: Maybe<JSX.Element> =
@@ -173,5 +175,5 @@ export default function MenuBarView({ user, numberOfDrafts }: MenuBarViewProps):
     </Popover>
   );
 
-  return Menu(user.displayName, user.googleId, draftMenuItem, infoPopover, isSmallScreen);
+  return Menu(user.displayName, user.googleId, draftMenuItem, infoPopover, isSmallScreen, isDemo);
 }
