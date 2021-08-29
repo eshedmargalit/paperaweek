@@ -9,17 +9,23 @@
     padding-bottom: 4px;
   }
 
-  .ant-list-item-meta-content {
-    width: 100% !important;
-  }
-
-  .ant-list-item-meta-title {
-    margin-right: 10px !important;
-  }
-
   .empty-list {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
+}
+
+// When dragging, these are outside the .reading-list parent class,
+// so declare these styles here
+.ant-list-item-meta-content {
+  width: 100% !important;
+}
+
+.ant-list-item-meta-title {
+  margin-right: 10px !important;
+}
+
+.ant-list-item {
+  padding: 12px 24px !important;
 }
