@@ -91,11 +91,10 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
                 <p>
                   <hr />
                   Not ready to make an account yet? No problem!
-                  <br />
-                  <Button shape="round" size="middle" icon={<ExperimentOutlined />} onClick={handleDemo}>
-                    Try the Demo
-                  </Button>
                 </p>
+                <Button shape="round" size="middle" icon={<ExperimentOutlined />} onClick={handleDemo}>
+                  Try the Demo
+                </Button>
               </div>
             </div>
           </Col>
