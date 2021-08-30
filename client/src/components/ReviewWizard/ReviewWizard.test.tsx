@@ -99,4 +99,15 @@ describe('<ReviewWizard />', () => {
       await waitFor(() => expect(screen.getByText(/linking to related papers/)).toBeInTheDocument());
     });
   });
+
+  describe('in demo mode', () => {
+    const initialState = {
+      ...getBlankInitialState(),
+      auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false, demoMode: true },
+    };
+    it('shows the preview modal', () => {
+      renderWithRouterRedux(<ReviewWizard />, { initialState });
+      expect(screen.queryByText(/Login to Continue/)).toBeInTheDocument();
+    });
+  });
 });
