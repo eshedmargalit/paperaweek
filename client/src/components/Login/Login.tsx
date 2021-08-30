@@ -5,14 +5,12 @@ import { useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
 import { LoginOutlined } from '@ant-design/icons';
 
-import LazyHero from 'react-lazy-hero';
 import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
 import { RootState } from '../../reducers';
 import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
-import background from './textured-background.png';
 import logo from './logo.png';
 import demo from './demo.png';
 import { AuthState } from '../../reducers/reducer_auth';
@@ -56,7 +54,7 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
 
   return (
     <div className="login-page">
-      <LazyHero className="login__lazy-hero" minHeight="95vh" opacity={0.6} parallaxOffset={100} imageSrc={background}>
+      <div>
         <img className="logo" src={logo} alt="logo" />
         <Row gutter={16}>
           <Col md={8} offset={3} sm={24}>
@@ -84,7 +82,7 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
             </div>
           </Col>
         </Row>
-      </LazyHero>
+      </div>
     </div>
   );
 }
