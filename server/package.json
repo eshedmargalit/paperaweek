@@ -38,6 +38,7 @@
     "ts-node": "^9.0.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.1",
     "@types/jest": "^26.0.16",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.8.2",

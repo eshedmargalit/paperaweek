@@ -8,7 +8,6 @@ import { RootState } from '../../reducers';
 import { initialState as initialBlankUser } from '../../reducers/reducer_auth';
 
 interface UseProtectedOptions {
-  demoMode?: boolean;
   redirectTo?: string;
 }
 
