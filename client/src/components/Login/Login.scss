@@ -3,6 +3,12 @@
 $default-padding: 30px;
 
 .login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+
   .logo {
     @include green-filter;
     width: 30%;

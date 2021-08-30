@@ -62,44 +62,42 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
 
   return (
     <div className="login-page">
-      <div>
-        <img className="logo" src={logo} alt="logo" />
-        <Row gutter={16}>
-          <Col md={8} offset={3} sm={24}>
-            <ul className="feature-list">
-              {featureList.map((feature) => {
-                return <li key={feature}>{feature}</li>;
-              })}
-            </ul>
-          </Col>
-          <Col md={12} sm={24}>
-            <div className="product-title">
-              <img src={demo} className="demo" alt="demo" />
-              <h5>Read a paper a week. That's it.</h5>
-              <div className="login-page--actions">
-                <Popover
-                  content={LoginButton}
-                  trigger="click"
-                  visible={isModalOpen}
-                  placement="top"
-                  onVisibleChange={() => setIsModalOpen(!isModalOpen)}
-                >
-                  <Button shape="round" size="large" icon={<LoginOutlined />}>
-                    Sign In
-                  </Button>
-                </Popover>
-                <p>
-                  <hr />
-                  Not ready to make an account yet? No problem!
-                </p>
-                <Button shape="round" size="middle" icon={<ExperimentOutlined />} onClick={handleDemo}>
-                  Try the Demo
+      <img className="logo" src={logo} alt="logo" />
+      <Row gutter={16}>
+        <Col md={8} offset={3} sm={24}>
+          <ul className="feature-list">
+            {featureList.map((feature) => {
+              return <li key={feature}>{feature}</li>;
+            })}
+          </ul>
+        </Col>
+        <Col md={12} sm={24}>
+          <div className="product-title">
+            <img src={demo} className="demo" alt="demo" />
+            <h5>Read a paper a week. That's it.</h5>
+            <div className="login-page--actions">
+              <Popover
+                content={LoginButton}
+                trigger="click"
+                visible={isModalOpen}
+                placement="top"
+                onVisibleChange={() => setIsModalOpen(!isModalOpen)}
+              >
+                <Button shape="round" size="large" icon={<LoginOutlined />}>
+                  Sign In
                 </Button>
-              </div>
+              </Popover>
+              <p>
+                <hr />
+                Not ready to make an account yet? No problem!
+              </p>
+              <Button shape="round" size="middle" icon={<ExperimentOutlined />} onClick={handleDemo}>
+                Try the Demo
+              </Button>
             </div>
-          </Col>
-        </Row>
-      </div>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 }
