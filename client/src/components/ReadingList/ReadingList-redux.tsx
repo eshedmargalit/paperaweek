@@ -12,10 +12,15 @@ import { blankNotes } from '../../templates';
 export default function ReadingListRedux(): JSX.Element {
   const dispatch = useDispatch();
   const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
+  const { demoMode } = useSelector((state: RootState) => state.auth);
 
   const updateReadingListFunc = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));
 
+    // If we're in demoMode, don't attempt to update the server...
+    if (demoMode) {
+      return;
+    }
     const { data } = await axios.put<Paper[]>('api/readingList', newReadingList);
     dispatch(updateReadingList(data));
   };

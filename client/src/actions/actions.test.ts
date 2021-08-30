@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { rest } from 'msw';
-import { fetchUser, setReview, updateDraftId, updateDrafts, updateReadingList, updateReviews } from '.';
+import { enterDemoMode, fetchUser, setReview, updateDraftId, updateDrafts, updateReadingList, updateReviews } from '.';
 
 import { server } from '../mocks/server';
 import { blankPaper, blankReview, blankUser } from '../templates';
@@ -11,6 +11,7 @@ import {
   UPDATE_DRAFT_ID,
   UPDATE_READING_LIST,
   UPDATE_REVIEWS,
+  ENTER_DEMO_MODE,
 } from './actionTypes';
 
 describe('redux actions', () => {
@@ -38,7 +39,7 @@ describe('redux actions', () => {
   describe('other action creators', () => {
     const scenarios: {
       creator: any;
-      arg: any;
+      arg?: any;
       expectedType: any;
     }[] = [
       { creator: setReview, arg: blankReview, expectedType: SET_REVIEW },
@@ -46,6 +47,7 @@ describe('redux actions', () => {
       { creator: updateDrafts, arg: [blankReview], expectedType: UPDATE_DRAFTS },
       { creator: updateReadingList, arg: [blankPaper], expectedType: UPDATE_READING_LIST },
       { creator: updateReviews, arg: [blankReview], expectedType: UPDATE_REVIEWS },
+      { creator: enterDemoMode, expectedType: ENTER_DEMO_MODE },
     ];
 
     scenarios.forEach(({ creator, arg, expectedType }) => {

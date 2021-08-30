@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Button } from 'antd';
+import { Alert, PageHeader, Button } from 'antd';
 import { QuestionCircleOutlined, SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import { Maybe } from '../../types';
-import HelpModal from './HelpModal';
+import HelpModal, { FormHelpInfo } from './HelpModal';
+import FrostedPreview from '../FrostedPreview/FrostedPreview';
 
 interface ReviewWizardViewProps {
   autosaveStatus: string;
@@ -14,6 +15,7 @@ interface ReviewWizardViewProps {
   modal: JSX.Element;
   onPageBack: PageHeaderProps['onBack'];
   shouldShowHelp: boolean;
+  isPreview: boolean;
 }
 function ReviewWizardView({
   autosaveStatus,
@@ -22,6 +24,7 @@ function ReviewWizardView({
   modal,
   onPageBack,
   shouldShowHelp,
+  isPreview,
 }: ReviewWizardViewProps): JSX.Element {
   const [currentMoment, setMoment] = useState(lastSave);
   const [showHelp, setShowHelp] = useState(shouldShowHelp);
@@ -94,15 +97,35 @@ function ReviewWizardView({
     </Button>
   );
 
-  const wizardRender = (
-    <div className="width80">
-      <div style={{ display: 'flex' }}>
-        <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon, helpButton]} />
-      </div>
-      {form}
-      {modal}
-      <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
+  const loginMessageContent = (
+    <>
+      This page is preview only. Please{` `}
+      <a type="text" href="/api/logout">
+        Login
+      </a>
+      {` `}
+      to write your first review!
+    </>
+  );
+
+  const modalContent = (
+    <div>
+      <Alert message="Login to Continue" description={loginMessageContent} type="info" showIcon />
+      <hr />
+      <FormHelpInfo />
     </div>
+  );
+  const wizardRender = (
+    <FrostedPreview isPreview={isPreview} modalContent={modalContent}>
+      <div className="width80">
+        <div style={{ display: 'flex' }}>
+          <PageHeader title="Write a Review" onBack={onPageBack} extra={[autosaveIcon, helpButton]} />
+        </div>
+        {form}
+        {modal}
+        <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
+      </div>
+    </FrostedPreview>
   );
   return wizardRender;
 }

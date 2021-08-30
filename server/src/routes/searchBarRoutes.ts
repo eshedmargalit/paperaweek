@@ -25,7 +25,7 @@ const attributes = 'DN,D,DOI,AA.DAfN,AA.DAuN,S,Y,Id,VFN';
 // See https://docs.microsoft.com/en-us/academic-services/knowledge-exploration-service/reference-entity-api for other fields
 
 module.exports = (app: Application) => {
-  app.get('/api/searchBar/interpret/:query', requireLogin, async (req, res) => {
+  app.get('/api/searchBar/interpret/:query', async (req, res) => {
     const { query } = req.params;
     const baseInterpretParams: Partial<InterpretationParams> = {
       query,
@@ -51,7 +51,7 @@ module.exports = (app: Application) => {
 
     try {
       const responses: AxiosResponse<InterpretationResponse>[] = await Promise.all(
-        interpretConfigs.map(config =>
+        interpretConfigs.map((config) =>
           axios.get<InterpretationResponse>(`${endpoint}/interpret`, {
             params: {
               ...baseInterpretParams,
@@ -62,7 +62,7 @@ module.exports = (app: Application) => {
       );
 
       const entities: Partial<IPaper>[] = _uniqBy(
-        _flatten(responses.map(resp => processEntities(processInterpretations(resp.data.interpretations)))),
+        _flatten(responses.map((resp) => processEntities(processInterpretations(resp.data.interpretations)))),
         'title'
       );
 
@@ -72,7 +72,7 @@ module.exports = (app: Application) => {
     }
   });
 
-  app.get('/api/doi/:query*', requireLogin, async (req, res) => {
+  app.get('/api/doi/:query*', async (req, res) => {
     // :query* matches everything up to the first slash as the slug (query) and puts
     // everything else in a field with key '0'. So we reconstruct the full url
     // from those two pieces.

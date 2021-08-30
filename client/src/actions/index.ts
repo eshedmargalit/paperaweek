@@ -10,10 +10,12 @@ import {
   SET_REVIEW,
   FETCH_USER_LOADING,
   FETCH_USER_FAILED,
+  ENTER_DEMO_MODE,
 } from './actionTypes';
 
 import {
   AuthReducerAction,
+  EnterDemoModeAction,
   SetReviewAction,
   UpdateDraftIdAction,
   UpdateDraftsAction,
@@ -36,6 +38,10 @@ export const fetchUser = () => async (dispatch: Dispatch<AuthReducerAction>): Pr
 
   dispatch({ type: FETCH_USER, payload: user });
 };
+
+export const enterDemoMode = (): EnterDemoModeAction => ({
+  type: ENTER_DEMO_MODE,
+});
 
 export const setReview = (review: Review): SetReviewAction => ({
   type: SET_REVIEW,

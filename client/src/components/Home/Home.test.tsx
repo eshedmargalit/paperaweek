@@ -7,31 +7,32 @@ import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/red
 import { RootState } from '../../reducers';
 
 // Helper to quickly render the component with the right Redux initialState
-const renderHome = (initialState?: RootState) => renderWithRouterRedux(<Home />, { initialState });
+const renderHome = (initialAuthState?: RootState) =>
+  renderWithRouterRedux(<Home />, { initialState: initialAuthState });
 
 describe('<Home />', () => {
   describe('with a user logged in', () => {
-    const initialState: RootState = {
+    const initialAuthState: RootState = {
       ...getBlankInitialState(),
-      auth: { user: { ...blankUser, displayName: 'Jim Henderson' }, loading: false },
+      auth: { user: { ...blankUser, displayName: 'Jim Henderson' }, loading: false, demoMode: false },
     };
 
     it('renders without crashing', () => {
-      renderHome(initialState);
+      renderHome(initialAuthState);
     });
 
     it('has a search bar', () => {
-      renderHome(initialState);
+      renderHome(initialAuthState);
       expect(screen.getAllByPlaceholderText(/search by DOI/)).toBeDefined();
     });
 
     it('has a reading list', () => {
-      renderHome(initialState);
+      renderHome(initialAuthState);
       expect(screen.getByText(/Reading List/)).toBeInTheDocument();
     });
 
     it('has review list', () => {
-      renderHome(initialState);
+      renderHome(initialAuthState);
       expect(screen.getByText(/Read Your Reviews/)).toBeInTheDocument();
     });
   });

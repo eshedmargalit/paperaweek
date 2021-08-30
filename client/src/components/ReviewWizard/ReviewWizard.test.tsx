@@ -15,7 +15,7 @@ describe('<ReviewWizard />', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
       const initialState = {
         ...getBlankInitialState(),
-        auth: { user: { ...blankUser, reviews: [] }, loading: false },
+        auth: { user: { ...blankUser, reviews: [] }, loading: false, demoMode: false },
       };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
@@ -24,7 +24,7 @@ describe('<ReviewWizard />', () => {
     it('does not open automatically if at least 1 review is present', async () => {
       const initialState = {
         ...getBlankInitialState(),
-        auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false },
+        auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false, demoMode: false },
       };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
       await waitFor(() => expect(screen.queryByText(/Try it yourself/)).toBeNull());
@@ -97,6 +97,17 @@ describe('<ReviewWizard />', () => {
       const tooltips = screen.getAllByLabelText('question-circle');
       userEvent.hover(tooltips[tooltips.length - 1]);
       await waitFor(() => expect(screen.getByText(/linking to related papers/)).toBeInTheDocument());
+    });
+  });
+
+  describe('in demo mode', () => {
+    const initialState = {
+      ...getBlankInitialState(),
+      auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false, demoMode: true },
+    };
+    it('shows the preview modal', () => {
+      renderWithRouterRedux(<ReviewWizard />, { initialState });
+      expect(screen.queryByText(/Login to Continue/)).toBeInTheDocument();
     });
   });
 });

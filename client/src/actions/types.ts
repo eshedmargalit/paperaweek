@@ -1,5 +1,6 @@
 import { Maybe, MongoID, Paper, Review, User } from '../types';
 import {
+  ENTER_DEMO_MODE,
   FETCH_USER,
   FETCH_USER_FAILED,
   FETCH_USER_LOADING,
@@ -23,7 +24,11 @@ export interface FetchUserFailedAction {
   type: typeof FETCH_USER_FAILED;
 }
 
-export type AuthReducerAction = FetchUserAction | FetchUserLoadingAction | FetchUserFailedAction;
+export interface EnterDemoModeAction {
+  type: typeof ENTER_DEMO_MODE;
+}
+
+export type AuthReducerAction = FetchUserAction | FetchUserLoadingAction | FetchUserFailedAction | EnterDemoModeAction;
 
 export interface SetReviewAction {
   type: typeof SET_REVIEW;

@@ -5,7 +5,7 @@ $default-padding: 30px;
 .login-page {
   .logo {
     @include green-filter;
-    width: 40%;
+    width: 30%;
     margin-bottom: 5%;
   }
 
@@ -29,6 +29,18 @@ $default-padding: 30px;
 
     li {
       margin-bottom: $default-padding;
+    }
+  }
+
+  &--actions {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    > p {
+      margin: 0;
     }
   }
 }

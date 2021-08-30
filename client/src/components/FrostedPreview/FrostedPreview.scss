@@ -1,0 +1,6 @@
+.frosted-preview {
+  &.isPreview {
+    pointer-events: none;
+    filter: blur(2px);
+  }
+}

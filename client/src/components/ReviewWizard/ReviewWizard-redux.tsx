@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import { notification } from 'antd';
 import ReviewWizardContainer from './ReviewWizard-container';
 import { fetchUser } from '../../actions/index';
 import { blankNotes, blankPaper } from '../../templates';
@@ -19,13 +20,16 @@ export default function ReviewWizardRedux(): JSX.Element {
   const activeReview: Review = useSelector((state: RootState) => state.activeReview);
   const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
 
+  // determine if the user has no reviews or drafts and help should be shown on the form
+  const { user, loading, demoMode }: AuthState = useSelector((state: RootState) => state.auth);
+
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 
-  // determine if the user has no reviews or drafts and help should be shown on the form
-  const { user, loading }: AuthState = useSelector((state: RootState) => state.auth);
-  const shouldShowHelp = !loading && user.reviews.length + user.drafts.length === 0;
+  const shouldShowHelp = !demoMode && !loading && user.reviews.length + user.drafts.length === 0;
 
   const deleteReadingListEntry = async () => {
+    if (demoMode) return;
+
     const { _id } = activeReview.paper;
     let newReadingList = readingList;
 
@@ -38,6 +42,15 @@ export default function ReviewWizardRedux(): JSX.Element {
   };
 
   const submitReview = async (review: Review) => {
+    if (demoMode) {
+      notification.success({
+        message: 'Nice Work!',
+        description: "You can't save any reviews while trying out Paper a Week! Please create an account. :)",
+      });
+
+      return;
+    }
+
     // start the submission spinner
     setSubmitLoading(true);
 
@@ -78,6 +91,7 @@ export default function ReviewWizardRedux(): JSX.Element {
       autosaveStatus={autosaveStatus}
       initialReview={initialReview}
       shouldShowHelp={shouldShowHelp}
+      isPreview={demoMode}
     />
   );
 }

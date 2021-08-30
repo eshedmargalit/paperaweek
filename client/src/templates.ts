@@ -1,10 +1,24 @@
 import { Paper, Notes, Review, User, Profile } from './types';
+import { demoReadingListItems, demoReviews } from './demoContent';
 
 export const blankUser: User = {
   googleId: '',
   displayName: '',
   reviews: [],
   readingList: [],
+  drafts: [],
+  publicProfile: false,
+};
+
+/**
+ * The demoUser is a fake user that's used to demonstrate how PAW might work
+ * for users that aren't yet ready to sign up
+ */
+export const demoUser: User = {
+  googleId: 'demo',
+  displayName: 'Demo User',
+  reviews: demoReviews,
+  readingList: demoReadingListItems,
   drafts: [],
   publicProfile: false,
 };
