@@ -1,22 +1,14 @@
 import React from 'react';
 
 import Joyride, { Step, Locale, Styles } from 'react-joyride';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../reducers';
 
 const defaultStep: Partial<Step> = {
   placement: 'left',
 };
 
 const steps: Step[] = [
-  {
-    content: (
-      <div>
-        <h3>Welcome to Paper a Week!</h3>
-        <p>Allow us to take you on a quick tour of the app!</p>
-      </div>
-    ),
-    placement: 'center',
-    target: 'body',
-  },
   {
     ...defaultStep,
     target: '.paper-searchbar',
@@ -45,5 +37,26 @@ const options: Styles['options'] = {
 };
 
 export default function ProductTour(): JSX.Element {
-  return <Joyride continuous disableScrolling showProgress styles={{ options }} locale={locale} steps={steps} />;
+  const { demoMode } = useSelector((state: RootState) => state.auth);
+
+  const introductoryStep: Step = {
+    content: (
+      <div>
+        <h3>Welcome to Paper a Week!</h3>
+        <p>Allow us to take you on a quick tour of the app!</p>
+        {demoMode && (
+          <p>
+            This is <strong>demo mode</strong>, so all the data you will see on this tour is <strong>fake</strong>.
+          </p>
+        )}
+      </div>
+    ),
+    placement: 'center',
+    target: 'body',
+  };
+
+  const stepsWithIntro = [introductoryStep, ...steps];
+  return (
+    <Joyride continuous disableScrolling showProgress styles={{ options }} locale={locale} steps={stepsWithIntro} />
+  );
 }

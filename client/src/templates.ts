@@ -23,6 +23,8 @@ export const demoUser: User = {
   readingList: demoReadingListItems,
   drafts: [],
   publicProfile: false,
+  showTour: true,
+  createdAt: new Date(),
 };
 
 export const blankPaper: Paper = {
