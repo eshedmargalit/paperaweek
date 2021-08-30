@@ -121,7 +121,8 @@ export const demoReviews: Review[] = [
     },
     createdAt: new Date(moment().subtract(4.0, 'weeks').format()),
   },
-];
+  // give each review a unique id
+].map((review, idx) => ({ ...review, _id: idx.toString() }));
 
 export const demoReadingListItems: Paper[] = [
   {
