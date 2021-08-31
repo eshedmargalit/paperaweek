@@ -33,10 +33,10 @@ interface FormProps {
   initialReview: Review;
   onChange: (formValues: Review) => void;
   onSubmit: (formValues: Review) => void;
-  isDemo: boolean;
+  isPreview: boolean;
 }
 
-export default function Form({ initialReview, onChange, onSubmit, isDemo }: FormProps): JSX.Element {
+export default function Form({ initialReview, onChange, onSubmit, isPreview }: FormProps): JSX.Element {
   const { control, register, handleSubmit, getValues, errors } = useForm({
     defaultValues: convertReviewToFormValues(initialReview),
     resolver: yupResolver(PAWFormSchema),
@@ -47,7 +47,7 @@ export default function Form({ initialReview, onChange, onSubmit, isDemo }: Form
   const [lastSavedValues, setLastSavedValues] = useState(getValues());
 
   const convertAndSave = () => {
-    if (isDemo) {
+    if (isPreview) {
       return;
     }
     // only save the draft if the new values are different from the old values
