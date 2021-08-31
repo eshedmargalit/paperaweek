@@ -1,8 +1,9 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import Home from '.';
-import { blankUser } from '../../templates';
+import { blankUser, demoUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import { RootState } from '../../reducers';
 
@@ -34,6 +35,34 @@ describe('<Home />', () => {
     it('has review list', () => {
       renderHome(initialAuthState);
       expect(screen.getByText(/Read Your Reviews/)).toBeInTheDocument();
+    });
+  });
+
+  describe('in demo mode', () => {
+    const initialAuthState: RootState = {
+      ...getBlankInitialState(),
+      auth: { user: demoUser, loading: false, demoMode: true },
+      reviews: { loading: false, reviewList: demoUser.reviews },
+      user: { ...demoUser, showTour: true },
+    };
+
+    it('shows the tour', () => {
+      renderHome(initialAuthState);
+
+      expect(screen.getByText(/all the data you will see on this tour/)).toBeInTheDocument();
+    });
+
+    describe('when the user clicks next', () => {
+      it('goes to the next step', () => {
+        renderHome(initialAuthState);
+
+        expect(screen.getByText(/all the data you will see on this tour/)).toBeInTheDocument();
+
+        const nextButton = screen.getByLabelText('Next');
+        userEvent.click(nextButton);
+
+        expect(screen.getByText(/start a review immediately/)).toBeInTheDocument();
+      });
     });
   });
 });

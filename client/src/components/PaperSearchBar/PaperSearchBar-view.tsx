@@ -83,7 +83,7 @@ export default function PaperSearchBarView({
   const resultsToDisplay = query === '' ? null : renderedSearchResults;
 
   return (
-    <div>
+    <div className="paper-searchbar">
       <br />
       {searchArea}
       {loading ? (

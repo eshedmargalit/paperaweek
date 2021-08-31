@@ -9,10 +9,11 @@ import { AuthState } from '../../reducers/reducer_auth';
 export default function HomeRedux(): JSX.Element {
   useProtected();
   const { loading }: AuthState = useSelector((state: RootState) => state.auth);
+  const { showTour } = useSelector((state: RootState) => state.user);
 
   return (
     <Spin spinning={loading}>
-      <HomeContainer />
+      <HomeContainer showTour={showTour} />
     </Spin>
   );
 }

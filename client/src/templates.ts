@@ -8,6 +8,8 @@ export const blankUser: User = {
   readingList: [],
   drafts: [],
   publicProfile: false,
+  showTour: false,
+  createdAt: new Date(),
 };
 
 /**
@@ -21,6 +23,8 @@ export const demoUser: User = {
   readingList: demoReadingListItems,
   drafts: [],
   publicProfile: false,
+  showTour: true,
+  createdAt: new Date(),
 };
 
 export const blankPaper: Paper = {

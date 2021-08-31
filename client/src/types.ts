@@ -42,6 +42,8 @@ export interface User {
   readingList: Paper[];
   drafts: Review[];
   publicProfile: boolean;
+  showTour: boolean;
+  createdAt: Date;
 }
 
 export interface Profile {
