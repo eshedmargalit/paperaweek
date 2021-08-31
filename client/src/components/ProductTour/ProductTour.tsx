@@ -13,13 +13,13 @@ const steps: Step[] = [
     ...defaultStep,
     target: '.paper-searchbar',
     content:
-      'Search for papers by DOI, author, or journal. Add papers to your reading list, or start a review immediately.',
+      'Search for papers by topic, author, journal, or DOI. Add papers to your reading list, or start a review immediately.',
   },
   {
     ...defaultStep,
     target: '.reading-list',
     content:
-      'Save papers for later, and reorder them to keep a reading list. You can start a review or remove a reading list item using the icons on the right.',
+      'Save papers for later and reorder them to keep a reading list. You can start a review or remove a reading list item using the icons on the right.',
   },
   {
     ...defaultStep,
@@ -46,7 +46,7 @@ export default function ProductTour(): JSX.Element {
         <p>Allow us to take you on a quick tour of the app!</p>
         {demoMode && (
           <p>
-            This is <strong>demo mode</strong>, so all the data you will see on this tour is <strong>fake</strong>.
+            This is <strong>demo mode</strong>, so all the data you will see on this tour is <strong>made up</strong>.
           </p>
         )}
       </div>
@@ -55,7 +55,16 @@ export default function ProductTour(): JSX.Element {
     target: 'body',
   };
 
+  const signUpPromptStep: Step = {
+    content: "When you're ready to make your own account, return to the login page and click 'Sign In'!",
+    target: '.signout',
+  };
+
   const stepsWithIntro = [introductoryStep, ...steps];
+  if (demoMode) {
+    stepsWithIntro.push(signUpPromptStep);
+  }
+
   return (
     <Joyride continuous disableScrolling showProgress styles={{ options }} locale={locale} steps={stepsWithIntro} />
   );
