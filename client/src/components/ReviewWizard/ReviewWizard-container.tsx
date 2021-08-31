@@ -48,6 +48,7 @@ export default function ReviewWizardContainer({
       initialReview={initialReview}
       onSubmit={useCallback(previewModal, [])}
       onChange={useCallback(onChangeHandler, [])}
+      isPreview={isPreview}
     />
   );
 
