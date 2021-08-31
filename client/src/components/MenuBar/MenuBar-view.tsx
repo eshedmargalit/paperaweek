@@ -67,7 +67,7 @@ const Menu = (
     <ul className="menu">
       <span className="flex">{brandHeader}</span>
 
-      <span className="flex">
+      <span className="flex menu-item-container">
         {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
         {signedIn ? profileButton : null}
         {signedIn ? signoutButton : null}
@@ -122,7 +122,7 @@ const Menu = (
 
   const collapsedMenu: JSX.Element = (
     <ul className="menu collapsed">
-      <span className="flex">
+      <span className="flex ">
         {brandHeader}
         <Button
           type="text"
@@ -131,6 +131,7 @@ const Menu = (
           onClick={() => {
             setCollapsed(!collapsed);
           }}
+          className="menu-item-container"
         />
       </span>
       <div className={menuHiddenClass} style={{ height: menuHeight }}>

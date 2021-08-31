@@ -57,7 +57,7 @@ export default function ProductTour(): JSX.Element {
 
   const signUpPromptStep: Step = {
     content: "When you're ready to make your own account, return to the login page and click 'Sign In'!",
-    target: '.signout',
+    target: '.menu-item-container',
   };
 
   const stepsWithIntro = [introductoryStep, ...steps];
