@@ -11,7 +11,6 @@ describe('<PaperSearchBar />', () => {
     it('provides usage instructions', () => {
       renderWithRouterRedux(<PaperSearchBar />);
       expect(screen.getByText(/Write a Review/)).toBeInTheDocument();
-      expect(screen.getByText(/Search online for papers/)).toBeInTheDocument();
     });
   });
 
