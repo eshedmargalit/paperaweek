@@ -160,7 +160,7 @@ export default function MenuBarView({ user, numberOfDrafts, isDemo }: MenuBarVie
       <a href="https://www.eshedmargalit.com/#/PaperReviews">my personal website</a>
       . The goal is simple: build a literature-reading habit by writing a structured review of one paper per week.
       Reviews can be searched, sorted, and shared with others. Thank you for using Paper a Week, I hope it helps you!
-      <hr /> If you have suggestions or run into problems, please send me an email at
+      <hr /> If you have suggestions or run into problems, please send me an email at{` `}
       <code>eshed [dot] margalit [at] gmail [dot] com</code> <br />
       <br /> Happy reviewing!
       <br /> -Eshed
