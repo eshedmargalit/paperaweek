@@ -57,7 +57,7 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
 
   const cardTitle = (
     <div className="card-title">
-      <span>Your Stats</span>
+      <h5>Your Stats</h5>
       <div>
         Showing{` `}
         <Dropdown overlay={dropdown}>
