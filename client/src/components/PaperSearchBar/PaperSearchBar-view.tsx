@@ -54,11 +54,7 @@ export default function PaperSearchBarView({
   const searchArea = (
     <div>
       <div>
-        <PageHeader
-          title="Write a Review"
-          subTitle="Search online for papers"
-          avatar={{ icon: <FileSearchOutlined /> }}
-        />
+        <PageHeader title="Write a Review" avatar={{ icon: <FileSearchOutlined /> }} />
       </div>
       <div>
         <Row gutter={[16, 16]}>
