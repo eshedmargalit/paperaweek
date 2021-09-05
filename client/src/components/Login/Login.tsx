@@ -8,13 +8,12 @@ import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
-import { RootState } from '../../slices';
 import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
 import logo from './logo.png';
 import demo from './demo.png';
-import { AuthState } from '../../slices/reducer_auth';
-import { enterDemoMode } from '../../actions';
+import { useAppSelector } from '../../hooks/reduxHooks';
+import { AuthState } from '../../slices/authSlice';
 
 interface LoginProps {
   location: Location;
@@ -28,7 +27,7 @@ const featureList = [
 ];
 
 export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
-  const { loading, user }: AuthState = useSelector((state: RootState) => state.auth);
+  const { loading, user }: AuthState = useAppSelector(({ auth }) => auth);
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { push } = useHistory();

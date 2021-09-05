@@ -1,20 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import arrayMove from 'array-move';
 import { SortEndHandler } from 'react-sortable-hoc';
 import { updateReadingList } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
-import { RootState } from '../../slices';
 import { Paper, Review } from '../../types';
 import { blankNotes } from '../../templates';
 import { updateDraftId } from '../../slices/activeDraftSlice';
 import { setActiveReview } from '../../slices/activeReviewSlice';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 export default function ReadingListRedux(): JSX.Element {
   const dispatch = useDispatch();
-  const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
-  const { demoMode } = useSelector((state: RootState) => state.auth);
+  const readingList: Paper[] = useAppSelector(({ readingList }) => readingList);
+  const { demoMode } = useAppSelector(({ auth }) => auth);
 
   const updateReadingListFunc = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));

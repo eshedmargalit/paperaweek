@@ -13,7 +13,6 @@ export const activeDraftSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { updateDraftId } = activeDraftSlice.actions;
 
 export default activeDraftSlice.reducer;

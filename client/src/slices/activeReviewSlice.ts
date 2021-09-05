@@ -14,7 +14,6 @@ export const activeReviewSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setActiveReview } = activeReviewSlice.actions;
 
 export default activeReviewSlice.reducer;
