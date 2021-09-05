@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer, { RootState } from '../reducers';
+import rootReducer, { RootState } from '../slices';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;

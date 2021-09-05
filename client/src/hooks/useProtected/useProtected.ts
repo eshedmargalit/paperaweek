@@ -4,8 +4,8 @@
 
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { RootState } from '../../reducers';
-import { initialState as initialBlankUser } from '../../reducers/reducer_auth';
+import { RootState } from '../../slices';
+import { initialState as initialBlankUser } from '../../slices/reducer_auth';
 
 interface UseProtectedOptions {
   redirectTo?: string;

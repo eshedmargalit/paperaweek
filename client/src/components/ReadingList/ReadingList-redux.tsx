@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import arrayMove from 'array-move';
 import { SortEndHandler } from 'react-sortable-hoc';
-import { setReview, updateReadingList, updateDraftId } from '../../actions';
+import { updateReadingList } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { Paper, Review } from '../../types';
 import { blankNotes } from '../../templates';
+import { updateDraftId } from '../../slices/activeDraftSlice';
+import { setActiveReview } from '../../slices/activeReviewSlice';
 
 export default function ReadingListRedux(): JSX.Element {
   const dispatch = useDispatch();
@@ -28,7 +30,7 @@ export default function ReadingListRedux(): JSX.Element {
   const handleEditClick = (paper: Paper) => {
     dispatch(updateDraftId(null));
     const newReview: Review = { paper, notes: blankNotes };
-    dispatch(setReview(newReview));
+    dispatch(setActiveReview(newReview));
   };
 
   const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {

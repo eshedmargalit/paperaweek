@@ -8,12 +8,12 @@ import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
 import logo from './logo.png';
 import demo from './demo.png';
-import { AuthState } from '../../reducers/reducer_auth';
+import { AuthState } from '../../slices/reducer_auth';
 import { enterDemoMode } from '../../actions';
 
 interface LoginProps {

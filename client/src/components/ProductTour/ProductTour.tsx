@@ -2,7 +2,7 @@ import React from 'react';
 
 import Joyride, { Step, Locale, Styles } from 'react-joyride';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 
 const defaultStep: Partial<Step> = {
   placement: 'left',

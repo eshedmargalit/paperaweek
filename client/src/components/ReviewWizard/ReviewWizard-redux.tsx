@@ -6,10 +6,10 @@ import ReviewWizardContainer from './ReviewWizard-container';
 import { fetchUser } from '../../actions/index';
 import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { Paper, Review } from '../../types';
 import { useProtected } from '../../hooks/useProtected';
-import { AuthState } from '../../reducers/reducer_auth';
+import { AuthState } from '../../slices/reducer_auth';
 
 export default function ReviewWizardRedux(): JSX.Element {
   useProtected();

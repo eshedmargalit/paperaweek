@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setReview, updateReadingList } from '../../actions';
-import { RootState } from '../../reducers';
+import { updateReadingList } from '../../actions';
+import { RootState } from '../../slices';
+import { setActiveReview } from '../../slices/activeReviewSlice';
 import { blankNotes, blankReview } from '../../templates';
 import { Paper, Review } from '../../types';
 import PaperSearchBarContainer from './PaperSearchBar-container';
@@ -15,7 +16,7 @@ export default function PaperSearchBarRedux(): JSX.Element {
    * Sets the review in the redux store to be the default "blank" review, overwriting any existing review
    */
   const setBlankReview = (): void => {
-    dispatch(setReview(blankReview));
+    dispatch(setActiveReview(blankReview));
   };
 
   /**
@@ -46,7 +47,7 @@ export default function PaperSearchBarRedux(): JSX.Element {
       paper,
       notes: blankNotes,
     };
-    dispatch(setReview(review));
+    dispatch(setActiveReview(review));
   };
 
   return (

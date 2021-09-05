@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { Maybe, Profile } from '../../types';
 import ProfileHeader from './ProfileHeader-view';
-import { AuthState } from '../../reducers/reducer_auth';
+import { AuthState } from '../../slices/reducer_auth';
 
 export interface ProfileHeaderReduxProps {
   onChange: () => void;

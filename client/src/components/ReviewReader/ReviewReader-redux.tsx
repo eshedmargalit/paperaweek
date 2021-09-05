@@ -3,10 +3,11 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import { setReview, fetchUser } from '../../actions';
+import { fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { Review, User } from '../../types';
+import { setActiveReview } from '../../slices/activeReviewSlice';
 
 const openSuccessfulCopyNotification = () => {
   notification.success({
@@ -28,7 +29,7 @@ export default function ReviewReaderRedux(): JSX.Element {
   };
 
   const populateFormWithReview = (review: Review) => {
-    dispatch(setReview(review));
+    dispatch(setActiveReview(review));
   };
 
   const copyReviewURLToClipboard = (review: Review) => {

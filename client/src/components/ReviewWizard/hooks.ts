@@ -5,7 +5,7 @@ import moment, { Moment } from 'moment';
 import { isEqual as _isEqual } from 'lodash';
 import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { fetchUser } from '../../actions';
 import { blankReview } from '../../templates';
 

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import ReviewReader from '.';
 import { renderWithRouterRedux, getBlankInitialState } from '../../testUtils/reduxRender';
 import { blankPaper, blankReview } from '../../templates';
-import { LoadingReviewList } from '../../reducers/reducer_reviews';
+import { LoadingReviewList } from '../../slices/reducer_reviews';
 
 describe('<ReviewReader />', () => {
   const reviews: LoadingReviewList = {

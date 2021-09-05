@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
-import { UPDATE_REVIEWS, FETCH_USER, ENTER_DEMO_MODE } from '../actions/actionTypes';
-import { EnterDemoModeAction, FetchUserAction, UpdateReviewsAction } from '../actions/types';
+import { FETCH_USER, ENTER_DEMO_MODE } from '../actions/actionTypes';
+import { EnterDemoModeAction, FetchUserAction } from '../actions/types';
 import { demoUser } from '../templates';
 import { Review } from '../types';
 
@@ -14,10 +14,7 @@ const initialState: LoadingReviewList = {
   loading: true,
 };
 
-const reducer: Reducer<LoadingReviewList, FetchUserAction | UpdateReviewsAction | EnterDemoModeAction> = (
-  state = initialState,
-  action
-) => {
+const reducer: Reducer<LoadingReviewList, FetchUserAction | EnterDemoModeAction> = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_REVIEWS:
       return { loading: false, reviewList: action.payload };

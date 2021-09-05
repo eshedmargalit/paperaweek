@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import Home from '.';
 import { blankUser, demoUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 
 // Helper to quickly render the component with the right Redux initialState
 const renderHome = (initialAuthState?: RootState) =>

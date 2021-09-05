@@ -3,10 +3,12 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { cloneDeep as _cloneDeep } from 'lodash';
-import { fetchUser, setReview, updateDraftId } from '../../actions';
-import { RootState } from '../../reducers';
+import { fetchUser } from '../../actions';
+import { RootState } from '../../slices';
 import { Review } from '../../types';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
+import { updateDraftId } from '../../slices/activeDraftSlice';
+import { setActiveReview } from '../../slices/activeReviewSlice';
 
 export default function DraftsRedux(): JSX.Element {
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ export default function DraftsRedux(): JSX.Element {
     dispatch(updateDraftId(draft._id!));
     const clone = _cloneDeep(draft);
     delete clone._id;
-    dispatch(setReview(clone));
+    dispatch(setActiveReview(clone));
   };
 
   const pageHeaderProps = {

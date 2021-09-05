@@ -1,18 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { rest } from 'msw';
-import { enterDemoMode, fetchUser, setReview, updateDraftId, updateDrafts, updateReadingList, updateReviews } from '.';
 
 import { server } from '../mocks/server';
 import { blankPaper, blankReview, blankUser } from '../templates';
-import {
-  FETCH_USER,
-  SET_REVIEW,
-  UPDATE_DRAFTS,
-  UPDATE_DRAFT_ID,
-  UPDATE_READING_LIST,
-  UPDATE_REVIEWS,
-  ENTER_DEMO_MODE,
-} from './actionTypes';
+import { FETCH_USER, UPDATE_DRAFTS, UPDATE_READING_LIST, ENTER_DEMO_MODE } from './actionTypes';
 
 describe('redux actions', () => {
   describe('fetchUser', () => {
@@ -45,11 +36,8 @@ describe('redux actions', () => {
       arg?: any;
       expectedType: any;
     }[] = [
-      { creator: setReview, arg: blankReview, expectedType: SET_REVIEW },
-      { creator: updateDraftId, arg: 'Mongo ID', expectedType: UPDATE_DRAFT_ID },
       { creator: updateDrafts, arg: [blankReview], expectedType: UPDATE_DRAFTS },
       { creator: updateReadingList, arg: [blankPaper], expectedType: UPDATE_READING_LIST },
-      { creator: updateReviews, arg: [blankReview], expectedType: UPDATE_REVIEWS },
       { creator: enterDemoMode, expectedType: ENTER_DEMO_MODE },
     ];
 

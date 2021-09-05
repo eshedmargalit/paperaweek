@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProtected } from '.';
-import { RootState } from '../../reducers';
+import { RootState } from '../../slices';
 import { blankUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 
