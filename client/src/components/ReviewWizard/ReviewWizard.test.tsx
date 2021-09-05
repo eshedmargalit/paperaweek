@@ -7,13 +7,14 @@ import ReviewWizard from '.';
 import { renderWithRouterRedux, getBlankInitialState } from '../../testUtils/reduxRender';
 import { blankReview, blankUser } from '../../templates';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
+import { RootState } from '../../store';
 
 describe('<ReviewWizard />', () => {
   suppressWarnings();
 
   describe('help modal', () => {
     it('opens automatically when no reviews or drafts are present', async () => {
-      const initialState = {
+      const initialState: RootState = {
         ...getBlankInitialState(),
         auth: { user: { ...blankUser, reviews: [] }, loading: false, demoMode: false },
       };
@@ -22,7 +23,7 @@ describe('<ReviewWizard />', () => {
     });
 
     it('does not open automatically if at least 1 review is present', async () => {
-      const initialState = {
+      const initialState: RootState = {
         ...getBlankInitialState(),
         auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false, demoMode: false },
       };
@@ -101,7 +102,7 @@ describe('<ReviewWizard />', () => {
   });
 
   describe('in demo mode', () => {
-    const initialState = {
+    const initialState: RootState = {
       ...getBlankInitialState(),
       auth: { user: { ...blankUser, reviews: [blankReview] }, loading: false, demoMode: true },
     };

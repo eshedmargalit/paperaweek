@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import MenuBarRedux from './MenuBar-redux';
 import { blankUser } from '../../templates';
+import { RootState } from '../../store';
 
 describe('<MenuBar />', () => {
   describe('when logged out', () => {
@@ -28,7 +29,7 @@ describe('<MenuBar />', () => {
 
   describe('when logged in', () => {
     const displayName = 'Piranesi';
-    const initialState = { ...getBlankInitialState(), user: { ...blankUser, displayName } };
+    const initialState: RootState = { ...getBlankInitialState(), user: { ...blankUser, displayName } };
 
     it('renders without crashing', () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState });

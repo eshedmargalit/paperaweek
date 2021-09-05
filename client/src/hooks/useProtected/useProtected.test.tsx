@@ -1,5 +1,6 @@
 import React from 'react';
 import { useProtected } from '.';
+import { RootState } from '../../store';
 import { blankUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 
@@ -21,7 +22,7 @@ function TestComponent({ redirect }: { redirect?: string }): JSX.Element {
 
 describe('useProtected', () => {
   describe('redirect behavior', () => {
-    const initialState = {
+    const initialState: RootState = {
       ...getBlankInitialState(),
       auth: { loading: false, user: blankUser, demoMode: false },
     };
