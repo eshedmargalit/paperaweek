@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
 import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 
@@ -12,8 +11,9 @@ import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
 import logo from './logo.png';
 import demo from './demo.png';
-import { useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { AuthState } from '../../slices/authSlice';
+import { enterDemoMode } from '../../actions';
 
 interface LoginProps {
   location: Location;
@@ -28,7 +28,7 @@ const featureList = [
 
 export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
   const { loading, user }: AuthState = useAppSelector(({ auth }) => auth);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { push } = useHistory();
 

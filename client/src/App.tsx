@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
@@ -12,13 +11,16 @@ import NotFound from './components/NotFound/NotFound';
 import { fetchUser } from './actions';
 
 import './App.scss';
+import { useAppDispatch } from './hooks/reduxHooks';
 
 export default function App(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // by passing [dispatch] as the second argument of useEffect, we replicate the behavior
   // of componentDidMount + componentDidUnmount, but not componentDidUpdate
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     dispatch(fetchUser());
   }, [dispatch]);
 

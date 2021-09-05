@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment, { Moment } from 'moment';
 import { isEqual as _isEqual } from 'lodash';
 import { useIsMounted } from '../../hooks';
 import { Maybe, MongoID, Review } from '../../types';
-import { RootState } from '../../slices';
 import { fetchUser } from '../../actions';
 import { blankReview } from '../../templates';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 const statuses = {
   UNSAVED: 'unsaved',
@@ -36,10 +35,10 @@ interface returnProps {
 }
 export const useSaveDraft = (): returnProps => {
   const isMounted = useIsMounted();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const activeDraft = useSelector((state: RootState) => state.activeDraft);
-  const { demoMode } = useSelector((state: RootState) => state.auth);
+  const activeDraft = useAppSelector((state) => state.activeDraft);
+  const { demoMode } = useAppSelector((state) => state.auth);
 
   const [draftId, setDraftId] = useState(activeDraft);
   const [lastSave, setLastSave] = useState<Maybe<Moment>>(null);
@@ -77,6 +76,8 @@ export const useSaveDraft = (): returnProps => {
         setAutosaveStatus(statuses.SAVED);
         setLastSave(moment());
         setDraftId(res.data._id);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         dispatch(fetchUser());
       } else {
         setAutosaveStatus(statuses.SAVE_FAILED);

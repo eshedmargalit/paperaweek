@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer, { RootState } from '../slices';
+import { RootState } from '../store';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;
@@ -24,6 +24,8 @@ export function renderWithRouterRedux(
   {
     redirectTo,
     initialState,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     store = createStore(rootReducer, initialState, applyMiddleware(thunk)),
   }: RenderWithRouterReduxOptions = {}
 ): RenderWithRouterReduxResult {
@@ -46,6 +48,10 @@ export function renderWithRouterRedux(
 
 // Exported to help tests quickly get a blank initialState to work with
 export function getBlankInitialState(): RootState {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const store = createStore(rootReducer, applyMiddleware(thunk));
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   return store.getState();
 }

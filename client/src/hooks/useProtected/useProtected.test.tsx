@@ -22,7 +22,7 @@ function TestComponent({ redirect }: { redirect?: string }): JSX.Element {
 
 describe('useProtected', () => {
   describe('redirect behavior', () => {
-    const initialState: RootState = {
+    const initialstate = {
       ...getBlankInitialState(),
       auth: { loading: false, user: blankUser },
     };

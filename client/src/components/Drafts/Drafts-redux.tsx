@@ -1,23 +1,24 @@
 import axios from 'axios';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { cloneDeep as _cloneDeep } from 'lodash';
 import { fetchUser } from '../../actions';
-import { RootState } from '../../slices';
 import { Review } from '../../types';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { updateDraftId } from '../../slices/activeDraftSlice';
 import { setActiveReview } from '../../slices/activeReviewSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 export default function DraftsRedux(): JSX.Element {
-  const dispatch = useDispatch();
-  const drafts: Review[] = useSelector((state: RootState) => state.drafts);
+  const dispatch = useAppDispatch();
+  const drafts: Review[] = useAppSelector((state) => state.drafts);
   const { goBack } = useHistory();
 
   // function to delete the specified draft
   const deleteDraft = async (draftToDelete: Review) => {
     await axios.delete(`/api/drafts/${draftToDelete._id}`);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     dispatch(fetchUser());
   };
 

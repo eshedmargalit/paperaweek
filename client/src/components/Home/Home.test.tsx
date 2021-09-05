@@ -13,7 +13,7 @@ const renderHome = (initialAuthState?: RootState) =>
 
 describe('<Home />', () => {
   describe('with a user logged in', () => {
-    const initialAuthState: RootState = {
+    const initialAuthstate = {
       ...getBlankInitialState(),
       auth: { user: { ...blankUser, displayName: 'Jim Henderson' }, loading: false, demoMode: false },
     };
@@ -39,7 +39,7 @@ describe('<Home />', () => {
   });
 
   describe('in demo mode', () => {
-    const initialAuthState: RootState = {
+    const initialAuthstate = {
       ...getBlankInitialState(),
       auth: { user: demoUser, loading: false, demoMode: true },
       reviews: { loading: false, reviewList: demoUser.reviews },

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { RootState } from '../../slices';
 import { Maybe, Profile } from '../../types';
 import ProfileHeader from './ProfileHeader-view';
-import { AuthState } from '../../slices/reducer_auth';
+import { AuthState } from '../../slices/authSlice';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 export interface ProfileHeaderReduxProps {
   onChange: () => void;
@@ -29,7 +28,7 @@ export default function PreferencesRedux({
   const {
     user: { publicProfile },
     loading,
-  }: AuthState = useSelector((state: RootState) => state.auth);
+  }: AuthState = useAppSelector((state) => state.auth);
 
   if (loading) {
     return null;
