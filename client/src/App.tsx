@@ -19,8 +19,6 @@ export default function App(): JSX.Element {
   // by passing [dispatch] as the second argument of useEffect, we replicate the behavior
   // of componentDidMount + componentDidUnmount, but not componentDidUpdate
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     dispatch(fetchUser());
   }, [dispatch]);
 

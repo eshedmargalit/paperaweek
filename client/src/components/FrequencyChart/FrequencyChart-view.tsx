@@ -118,9 +118,6 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
               bottom: 15,
             }}
           >
-            {/* For some reason, the type for XAxis doesn't allow for children, but if it works, it works */}
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
             <XAxis dataKey="reviewIdx">
               <Label value="Review Number" offset={-15} position="insideBottom" />
             </XAxis>

@@ -68,8 +68,6 @@ export default function ReviewWizardRedux(): JSX.Element {
     if (status === 200) {
       await deleteActiveDraft();
       await deleteReadingListEntry();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       dispatch(fetchUser());
     }
 

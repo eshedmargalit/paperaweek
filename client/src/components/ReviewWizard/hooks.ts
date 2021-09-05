@@ -76,8 +76,6 @@ export const useSaveDraft = (): returnProps => {
         setAutosaveStatus(statuses.SAVED);
         setLastSave(moment());
         setDraftId(res.data._id);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         dispatch(fetchUser());
       } else {
         setAutosaveStatus(statuses.SAVE_FAILED);

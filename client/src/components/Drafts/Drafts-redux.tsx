@@ -17,8 +17,6 @@ export default function DraftsRedux(): JSX.Element {
   // function to delete the specified draft
   const deleteDraft = async (draftToDelete: Review) => {
     await axios.delete(`/api/drafts/${draftToDelete._id}`);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     dispatch(fetchUser());
   };
 

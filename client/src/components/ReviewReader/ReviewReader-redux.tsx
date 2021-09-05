@@ -24,8 +24,6 @@ export default function ReviewReaderRedux(): JSX.Element {
   const deleteReview = async (reviewToDelete: Review) => {
     // remove the review from the Users list
     await axios.delete(`/api/reviews/${reviewToDelete._id}`);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     dispatch(fetchUser());
   };
 
