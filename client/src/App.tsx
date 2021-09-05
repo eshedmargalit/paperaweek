@@ -8,10 +8,10 @@ import DraftPage from './components/DraftPage';
 import MenuBar from './components/MenuBar';
 import PublicProfile from './components/PublicProfile';
 import NotFound from './components/NotFound/NotFound';
-import { fetchUser } from './actions';
 
 import './App.scss';
 import { useAppDispatch } from './hooks/reduxHooks';
+import { fetchUser } from './actions';
 
 export default function App(): JSX.Element {
   const dispatch = useAppDispatch();

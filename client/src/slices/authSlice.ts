@@ -27,7 +27,7 @@ export const authSlice = createSlice({
         demoMode: false,
       }))
       .addCase(fetchUser.pending, (state) => {
-        state.loading = false;
+        state.loading = true;
       })
       .addCase(fetchUser.rejected, (state) => {
         state.loading = false;
