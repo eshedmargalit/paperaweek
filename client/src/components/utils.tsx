@@ -131,6 +131,9 @@ export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
     inlineMath: ({ value }) => <InlineMath math={value} />,
 
     math: ({ value }) => <BlockMath math={value} />,
+
+    // Prevent images from taking more than 90% of the preview box
+    image: ({ alt, src, title }) => <img alt={alt} src={src} title={title} style={{ maxWidth: '90%' }} />,
   };
 
   return (
