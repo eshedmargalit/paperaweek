@@ -4,8 +4,8 @@
   "description": "A simple interface for finding papers, taking detailed notes, building a habit out of reading papers, and sharing your ideas with others.",
   "scripts": {
     "client": "cd client && yarn start",
-    "server": "cd server && yarn start",
-    "start": "concurrently \"yarn run client\" \"yarn run server\" "
+    "server": "cd server && yarn server",
+    "start": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"[{name}]\" -n \"CLIENT,SERVER\" \"yarn run client\" \"yarn run server\" "
   },
   "repository": {
     "type": "git",
