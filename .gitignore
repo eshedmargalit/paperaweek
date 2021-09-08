@@ -3,3 +3,4 @@
 # python stuff
 .python-version
 *.ipynb*
+node_modules

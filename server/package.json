@@ -6,8 +6,6 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "server": "nodemon src/index.ts",
-    "client": "npm run start --prefix ../client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest",
     "test:watch": "npm run test -- --watch"
   },
