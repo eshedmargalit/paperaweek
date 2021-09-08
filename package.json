@@ -1,0 +1,21 @@
+{
+  "name": "paper-a-week",
+  "version": "0.1.0",
+  "description": "A simple interface for finding papers, taking detailed notes, building a habit out of reading papers, and sharing your ideas with others.",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "cd server && yarn server",
+    "start": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"[{name}]\" -n \"CLIENT,SERVER\" \"yarn run client\" \"yarn run server\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eshedmargalit/paperaweek.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eshedmargalit/paperaweek/issues"
+  },
+  "homepage": "https://github.com/eshedmargalit/paperaweek#readme",
+  "devDependencies": {
+    "concurrently": "^6.2.1"
+  }
+}

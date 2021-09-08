@@ -102,11 +102,13 @@ You'll need the following installed (maybe globally) if you want hot-reloading a
   npm install -g concurrently
   ```
 
-To start the server and client together, just run `yarn run dev` from the `server/` directory
+To start the server and client together, just run `yarn start`.
 
 ### Run Tests
 
-To run the tests for the application, run `yarn test` from the `server/`. No credentials or environment variables are required for running tests.
+To run the tests for the application, run `yarn test` from the `server/` or `/client` directory, depending on whether you want to run backend or frontend tests.
+
+No credentials or environment variables are required for running tests.
 
 ### Deployment to Google Cloud Run
 
