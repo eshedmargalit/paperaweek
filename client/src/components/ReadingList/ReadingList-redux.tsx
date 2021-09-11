@@ -1,18 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import arrayMove from 'array-move';
 import { SortEndHandler } from 'react-sortable-hoc';
-import { setReview, updateReadingList, updateDraftId } from '../../actions';
 import ReadingListContainer from './ReadingList-container';
-import { RootState } from '../../reducers';
 import { Paper, Review } from '../../types';
 import { blankNotes } from '../../templates';
+import { updateDraftId } from '../../slices/activeDraftSlice';
+import { setActiveReview } from '../../slices/activeReviewSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { updateReadingList } from '../../slices/readingListSlice';
 
 export default function ReadingListRedux(): JSX.Element {
-  const dispatch = useDispatch();
-  const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
-  const { demoMode } = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const readingList: Paper[] = useAppSelector((state) => state.readingList);
+  const { demoMode } = useAppSelector((state) => state.auth);
 
   const updateReadingListFunc = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));
@@ -28,7 +29,7 @@ export default function ReadingListRedux(): JSX.Element {
   const handleEditClick = (paper: Paper) => {
     dispatch(updateDraftId(null));
     const newReview: Review = { paper, notes: blankNotes };
-    dispatch(setReview(newReview));
+    dispatch(setActiveReview(newReview));
   };
 
   const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {

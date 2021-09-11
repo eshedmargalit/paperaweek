@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import Home from '.';
 import { blankUser, demoUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
-import { RootState } from '../../reducers';
+import { RootState } from '../../store';
 
 // Helper to quickly render the component with the right Redux initialState
 const renderHome = (initialAuthState?: RootState) =>
@@ -13,7 +13,7 @@ const renderHome = (initialAuthState?: RootState) =>
 
 describe('<Home />', () => {
   describe('with a user logged in', () => {
-    const initialAuthState: RootState = {
+    const initialAuthState = {
       ...getBlankInitialState(),
       auth: { user: { ...blankUser, displayName: 'Jim Henderson' }, loading: false, demoMode: false },
     };
@@ -39,7 +39,7 @@ describe('<Home />', () => {
   });
 
   describe('in demo mode', () => {
-    const initialAuthState: RootState = {
+    const initialAuthState = {
       ...getBlankInitialState(),
       auth: { user: demoUser, loading: false, demoMode: true },
       reviews: { loading: false, reviewList: demoUser.reviews },

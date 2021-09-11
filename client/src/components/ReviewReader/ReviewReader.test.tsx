@@ -4,10 +4,11 @@ import userEvent from '@testing-library/user-event';
 import ReviewReader from '.';
 import { renderWithRouterRedux, getBlankInitialState } from '../../testUtils/reduxRender';
 import { blankPaper, blankReview } from '../../templates';
-import { LoadingReviewList } from '../../reducers/reducer_reviews';
+import { RootState } from '../../store';
+import { ReviewListState } from '../../slices/reviewsSlice';
 
 describe('<ReviewReader />', () => {
-  const reviews: LoadingReviewList = {
+  const reviews: ReviewListState = {
     loading: false,
     reviewList: [
       {
@@ -18,7 +19,7 @@ describe('<ReviewReader />', () => {
       { ...blankReview, _id: '2', paper: { ...blankPaper, title: 'I Scream for Ice Cream' } },
     ],
   };
-  const initialState = { ...getBlankInitialState(), reviews };
+  const initialState: RootState = { ...getBlankInitialState(), reviews };
 
   describe('header', () => {
     it('renders without crashing', () => {

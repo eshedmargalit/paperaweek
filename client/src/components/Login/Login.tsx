@@ -1,19 +1,18 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Button, Col, Popover, Row } from 'antd';
 import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 
 import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
-import { RootState } from '../../reducers';
 import { Maybe } from '../../types';
 import { blankUser } from '../../templates';
 import logo from './logo.png';
 import demo from './demo.png';
-import { AuthState } from '../../reducers/reducer_auth';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { AuthState } from '../../slices/authSlice';
 import { enterDemoMode } from '../../actions';
 
 interface LoginProps {
@@ -28,8 +27,8 @@ const featureList = [
 ];
 
 export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
-  const { loading, user }: AuthState = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
+  const { loading, user }: AuthState = useAppSelector(({ auth }) => auth);
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { push } = useHistory();
 

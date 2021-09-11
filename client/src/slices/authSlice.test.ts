@@ -1,7 +1,7 @@
 import { demoUser } from '../templates';
-import reducer from './reducer_auth';
+import reducer from './authSlice';
 
-describe('reducer_auth', () => {
+describe('authSlice', () => {
   describe('enter demo mode', () => {
     const reducerFn = () => reducer(undefined, { type: 'ENTER_DEMO_MODE' });
 

@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Joyride, { Step, Locale, Styles } from 'react-joyride';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../reducers';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 const defaultStep: Partial<Step> = {
   placement: 'left',
@@ -37,7 +36,7 @@ const options: Styles['options'] = {
 };
 
 export default function ProductTour(): JSX.Element {
-  const { demoMode } = useSelector((state: RootState) => state.auth);
+  const { demoMode } = useAppSelector((state) => state.auth);
 
   const introductoryStep: Step = {
     content: (

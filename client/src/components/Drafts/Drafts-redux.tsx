@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { cloneDeep as _cloneDeep } from 'lodash';
-import { fetchUser, setReview, updateDraftId } from '../../actions';
-import { RootState } from '../../reducers';
+import { fetchUser } from '../../actions';
 import { Review } from '../../types';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
+import { updateDraftId } from '../../slices/activeDraftSlice';
+import { setActiveReview } from '../../slices/activeReviewSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 export default function DraftsRedux(): JSX.Element {
-  const dispatch = useDispatch();
-  const drafts: Review[] = useSelector((state: RootState) => state.drafts);
+  const dispatch = useAppDispatch();
+  const drafts: Review[] = useAppSelector((state) => state.drafts);
   const { goBack } = useHistory();
 
   // function to delete the specified draft
@@ -26,7 +27,7 @@ export default function DraftsRedux(): JSX.Element {
     dispatch(updateDraftId(draft._id!));
     const clone = _cloneDeep(draft);
     delete clone._id;
-    dispatch(setReview(clone));
+    dispatch(setActiveReview(clone));
   };
 
   const pageHeaderProps = {

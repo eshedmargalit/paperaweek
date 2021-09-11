@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
-import { setReview, fetchUser } from '../../actions';
+import { fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
-import { RootState } from '../../reducers';
 import { Review, User } from '../../types';
+import { setActiveReview } from '../../slices/activeReviewSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 const openSuccessfulCopyNotification = () => {
   notification.success({
@@ -15,11 +15,11 @@ const openSuccessfulCopyNotification = () => {
 };
 
 export default function ReviewReaderRedux(): JSX.Element {
-  const dispatch = useDispatch();
-  const user: User = useSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
+  const user: User = useAppSelector((state) => state.user);
 
-  const reviewList: Review[] = useSelector((state: RootState) => state.reviews.reviewList);
-  const { demoMode } = useSelector((state: RootState) => state.auth);
+  const reviewList: Review[] = useAppSelector((state) => state.reviews.reviewList);
+  const { demoMode } = useAppSelector((state) => state.auth);
 
   const deleteReview = async (reviewToDelete: Review) => {
     // remove the review from the Users list
@@ -28,7 +28,7 @@ export default function ReviewReaderRedux(): JSX.Element {
   };
 
   const populateFormWithReview = (review: Review) => {
-    dispatch(setReview(review));
+    dispatch(setActiveReview(review));
   };
 
   const copyReviewURLToClipboard = (review: Review) => {

@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 import { notification } from 'antd';
 import ReviewWizardContainer from './ReviewWizard-container';
 import { fetchUser } from '../../actions/index';
 import { blankNotes, blankPaper } from '../../templates';
 import { useSaveDraft } from './hooks';
-import { RootState } from '../../reducers';
 import { Paper, Review } from '../../types';
 import { useProtected } from '../../hooks/useProtected';
-import { AuthState } from '../../reducers/reducer_auth';
+import { AuthState } from '../../slices/authSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 export default function ReviewWizardRedux(): JSX.Element {
   useProtected();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const activeReview: Review = useSelector((state: RootState) => state.activeReview);
-  const readingList: Paper[] = useSelector((state: RootState) => state.readingList);
+  const activeReview: Review = useAppSelector((state) => state.activeReview);
+  const readingList: Paper[] = useAppSelector((state) => state.readingList);
 
   // determine if the user has no reviews or drafts and help should be shown on the form
-  const { user, loading, demoMode }: AuthState = useSelector((state: RootState) => state.auth);
+  const { user, loading, demoMode }: AuthState = useAppSelector((state) => state.auth);
 
   const { deleteActiveDraft, saveDraft, autosaveStatus, lastSave } = useSaveDraft();
 

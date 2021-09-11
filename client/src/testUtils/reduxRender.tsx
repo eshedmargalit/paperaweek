@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
 import { applyMiddleware, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
-import rootReducer, { RootState } from '../reducers';
+import { RootState } from '../store';
+import rootReducer from '../slices';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;
@@ -47,5 +48,6 @@ export function renderWithRouterRedux(
 // Exported to help tests quickly get a blank initialState to work with
 export function getBlankInitialState(): RootState {
   const store = createStore(rootReducer, applyMiddleware(thunk));
+
   return store.getState();
 }

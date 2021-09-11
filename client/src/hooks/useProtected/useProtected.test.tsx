@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProtected } from '.';
-import { RootState } from '../../reducers';
+import { RootState } from '../../store';
 import { blankUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 
@@ -24,7 +24,7 @@ describe('useProtected', () => {
   describe('redirect behavior', () => {
     const initialState: RootState = {
       ...getBlankInitialState(),
-      auth: { loading: false, user: blankUser },
+      auth: { loading: false, user: blankUser, demoMode: false },
     };
 
     it('redirects to the default path if no user is present', () => {
@@ -39,7 +39,10 @@ describe('useProtected', () => {
 
     it('does not redirect if a user is present', () => {
       renderWithRouterRedux(<TestComponent />, {
-        initialState: { ...initialState, auth: { user: { ...blankUser, displayName: 'John' }, loading: false } },
+        initialState: {
+          ...initialState,
+          auth: { user: { ...blankUser, displayName: 'John' }, loading: false, demoMode: false },
+        },
       });
       expect(mockHistoryPush).not.toHaveBeenCalled();
     });
