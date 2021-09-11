@@ -15,6 +15,7 @@ export interface PublicProfileViewProps extends Partial<Profile> {
   onChange: VoidFunction;
   isOwnPage: Profile['isOwnPage'];
   userDisplayName: Profile['userDisplayName'];
+  handleModalCopy: (review: Review) => void;
 }
 
 export default function PublicProfileView({
@@ -24,6 +25,7 @@ export default function PublicProfileView({
   reviewIdToOpen,
   isOwnPage,
   onChange,
+  handleModalCopy,
 }: PublicProfileViewProps): JSX.Element {
   const pageHeaderProps: PageHeaderProps = {
     title: `${userDisplayName}'s Reviews`,
@@ -70,7 +72,8 @@ export default function PublicProfileView({
             reviews={reviews}
             reviewToOpen={reviewToOpen}
             pageHeaderProps={pageHeaderProps}
-            hideButtons
+            allowMutate={false} // don't let users edit/delete public profile's reviews
+            handleModalCopy={handleModalCopy}
           />
         </Col>
       </Row>

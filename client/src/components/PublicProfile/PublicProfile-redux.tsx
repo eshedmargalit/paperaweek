@@ -32,16 +32,15 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
   const [loading, setLoading] = useState(false);
   const [isOwnPage, setIsOwnPage] = useState(false);
 
-  const refreshData = async () => {
-    // eslint-disable-next-line no-shadow
-    const { userId, reviewIdToOpen } = match.params;
+  const { userId, reviewIdToOpen: matchedReviewId } = match.params;
 
+  const refreshData = async () => {
     setLoading(true);
     const profileData = await getProfileData(userId);
     setLoading(false);
 
     if (profileData) {
-      setReviewIdToOpen(reviewIdToOpen);
+      setReviewIdToOpen(matchedReviewId);
       setIsOwnPage(profileData.isOwnPage);
       setReviews(profileData.reviews);
       setUserDisplayName(profileData.userDisplayName || '');
@@ -60,6 +59,7 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
       reviews={reviews}
       reviewIdToOpen={reviewIdToOpen}
       userDisplayName={userDisplayName}
+      userId={userId}
       loading={loading}
       isOwnPage={isOwnPage}
       onChange={wrappedRefreshData}

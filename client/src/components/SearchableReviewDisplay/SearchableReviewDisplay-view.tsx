@@ -31,6 +31,8 @@ interface ModalProps {
   showModal: boolean;
   modalReview?: Review;
   itemName: string;
+  allowCopy?: boolean;
+  allowMutate?: boolean;
 }
 
 interface SearchableReviewDisplayViewProps {
@@ -39,7 +41,6 @@ interface SearchableReviewDisplayViewProps {
   query: string;
   reviews: Review[];
   modalProps: ModalProps;
-  hideButtons: boolean;
   pageHeaderProps: PageHeaderProps;
 }
 
@@ -49,7 +50,6 @@ export default function SearchableReviewDisplayView({
   query,
   reviews,
   modalProps,
-  hideButtons,
   pageHeaderProps,
 }: SearchableReviewDisplayViewProps): JSX.Element {
   const {
@@ -60,25 +60,31 @@ export default function SearchableReviewDisplayView({
     showModal,
     modalReview,
     itemName,
+    allowCopy = true,
+    allowMutate = true,
   } = modalProps;
 
-  const buttons = [
-    <Link to="/form" key="edit">
-      <Button className="nested" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
-        Edit this {itemName}
-      </Button>
-    </Link>,
-    <Button
-      key="delete"
-      type="dashed"
-      icon={<DeleteOutlined />}
-      onClick={() => handleModalDelete(deleteConfirmHandler)}
-    >
-      Delete this {itemName}
-    </Button>,
-  ];
+  const buttons = [];
 
-  if (handleModalCopy) {
+  if (allowMutate) {
+    buttons.push(
+      <Link to="/form" key="edit">
+        <Button className="nested" type="dashed" icon={<EditOutlined />} onClick={handleModalEdit}>
+          Edit this {itemName}
+        </Button>
+      </Link>,
+      <Button
+        key="delete"
+        type="dashed"
+        icon={<DeleteOutlined />}
+        onClick={() => handleModalDelete(deleteConfirmHandler)}
+      >
+        Delete this {itemName}
+      </Button>
+    );
+  }
+
+  if (allowCopy && handleModalCopy) {
     const copyButton = (
       <Button key="copy" type="dashed" icon={<LinkOutlined />} onClick={handleModalCopy}>
         {' '}
@@ -88,7 +94,7 @@ export default function SearchableReviewDisplayView({
     buttons.splice(0, 0, copyButton);
   }
 
-  const modalButtons = hideButtons ? null : <div className="modal-buttons">{buttons}</div>;
+  const modalButtons = <div className="modal-buttons">{buttons}</div>;
 
   return (
     <div>
