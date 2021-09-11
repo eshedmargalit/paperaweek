@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { RouteComponentProps } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
 import { Maybe, Profile, Review, User } from '../../types';
@@ -20,7 +20,7 @@ const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>>
     return data;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(err.response.status);
+    console.error((err as AxiosError)?.response?.status);
     return null;
   }
 };
