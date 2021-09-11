@@ -3,11 +3,12 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { match as matchType } from 'react-router-dom';
 import { rest } from 'msw';
+import userEvent from '@testing-library/user-event';
 import PublicProfile from '.';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import { Review, User } from '../../types';
 import { PublicProfileMatchParams, PublicProfileReduxProps } from './PublicProfile-redux';
-import { blankReview, blankUser } from '../../templates';
+import { blankPaper, blankReview, blankUser } from '../../templates';
 import { server } from '../../mocks/server';
 
 // Helper to render the profile with any userId and reviewId
@@ -31,7 +32,10 @@ function renderWithMatchOptions(
   const props: PublicProfileReduxProps = { match, history, location };
 
   return renderWithRouterRedux(<PublicProfile {...props} />, {
-    initialState: { ...getBlankInitialState(), auth: { user: { ...loggedInUser, publicProfile }, loading: false } },
+    initialState: {
+      ...getBlankInitialState(),
+      auth: { user: { ...loggedInUser, publicProfile }, loading: false, demoMode: false },
+    },
   });
 }
 
@@ -59,7 +63,11 @@ describe('<PublicProfile />', () => {
           rest.get(`/api/profiles/${googleId}`, (_req, res, ctx) => {
             return res(
               ctx.status(200),
-              ctx.json({ isOwnPage: true, reviews: [{ ...blankReview, _id: googleId }], userDisplayName })
+              ctx.json({
+                isOwnPage: true,
+                reviews: [{ ...blankReview, _id: googleId, paper: { ...blankPaper, title: 'Paper Title' } }],
+                userDisplayName,
+              })
             );
           })
         );
@@ -68,6 +76,15 @@ describe('<PublicProfile />', () => {
       it("shows the user's review", async () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, true);
         await waitFor(() => expect(screen.getByText(`${userDisplayName}'s Reviews`)).toBeInTheDocument());
+      });
+
+      it('allows copying the link to the reviews', async () => {
+        renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, true);
+        await screen.findByText(`${userDisplayName}'s Reviews`);
+
+        userEvent.click(screen.getByText('Paper Title'));
+
+        expect(screen.getByText('Copy Link')).toBeInTheDocument();
       });
     });
   });
