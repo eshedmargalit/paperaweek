@@ -5,6 +5,7 @@ import { ClockCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { Review } from '../../types';
 import ReviewDisplay from '../ReviewDisplay/ReviewDisplay';
+import FadePreview from '../FadePreview/FadePreview';
 
 export interface ReviewOfTheDayViewProps {
   rotd: Review;
@@ -20,7 +21,9 @@ export default function ReviewOfTheDayView({ rotd }: ReviewOfTheDayViewProps): J
   return (
     <div>
       <PageHeader title={title} subTitle={subTitle} avatar={{ icon: <ClockCircleOutlined /> }} />
-      <ReviewDisplay review={rotd} showTitle />
+      <FadePreview>
+        <ReviewDisplay review={rotd} showTitle />
+      </FadePreview>
     </div>
   );
 }
