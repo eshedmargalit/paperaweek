@@ -5,11 +5,12 @@ import { Review } from '../../types';
 
 import ReviewOfTheDayContainer from './ReviewOfTheDay-container';
 import { useAppSelector } from '../../hooks/reduxHooks';
+import { hashString } from '../utils';
 
 const MIN_REVIEWS_FOR_ROTD = 5;
 
 const pickROTD = (reviews: Review[]): Review => {
-  const dateInt = parseInt(moment().format('YYYYMMDD'), 10);
+  const dateInt = hashString(moment().format('YYYYMMDD'));
   return reviews[dateInt % reviews.length];
 };
 
