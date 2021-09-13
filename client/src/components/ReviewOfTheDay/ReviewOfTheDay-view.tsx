@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Review } from '../../types';
 import ReviewDisplay from '../ReviewDisplay/ReviewDisplay';
 
-interface ReviewOfTheDayViewProps {
+export interface ReviewOfTheDayViewProps {
   rotd: Review;
 }
 
