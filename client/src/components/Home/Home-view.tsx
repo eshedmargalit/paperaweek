@@ -27,11 +27,13 @@ export default function HomeView({ showTour }: HomeViewProps): JSX.Element {
             <ReadingList />
           </Col>
         </Row>
+        <hr />
         <Row>
           <Col span={24}>
             <ReviewOfTheDay />
           </Col>
         </Row>
+        <hr />
         <Row>
           <Col span={24}>
             <ReviewReader />

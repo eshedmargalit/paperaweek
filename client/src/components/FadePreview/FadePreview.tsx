@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import cx from 'classnames';
 
 import './FadePreview.scss';
@@ -11,12 +11,18 @@ interface FadePreviewProps {
 
 export default function FadePreview({ children }: FadePreviewProps): JSX.Element {
   const [expanded, setExpanded] = useState(false);
+  const myRef = useRef<null | HTMLDivElement>(null);
+  const scrollTo = () => myRef.current && myRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   const toggle = () => {
     setExpanded(!expanded);
+
+    if (expanded) {
+      scrollTo();
+    }
   };
 
   return (
-    <div>
+    <div ref={myRef}>
       <div className={cx('preview', { expanded })}>{children}</div>
       <div className="button-container">
         <Button shape="circle" onClick={toggle}>
