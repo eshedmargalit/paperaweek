@@ -18,12 +18,12 @@ export default function HomeView({ showTour }: HomeViewProps): JSX.Element {
     <>
       {showTour && <ProductTour />}
       <div className="width80">
-        <Row justify="space-between">
+        <Row>
           <Col lg={{ span: '15' }} sm={{ span: '24' }} className="home-section">
             <PaperSearchBar />
             <StatBox />
           </Col>
-          <Col lg={{ span: '7' }} sm={{ span: '24' }} className="home-section">
+          <Col lg={{ span: '8', offset: 1 }} sm={{ span: '24' }} className="home-section">
             <ReadingList />
           </Col>
         </Row>
