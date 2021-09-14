@@ -103,7 +103,6 @@ export default function ReadingListView({
   );
   return (
     <div className="reading-list">
-      <br />
       <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
       {items.length > 0 ? sortableList : noList}
     </div>

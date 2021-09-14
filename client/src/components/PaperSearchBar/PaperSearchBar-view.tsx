@@ -84,7 +84,6 @@ export default function PaperSearchBarView({
 
   return (
     <div className="paper-searchbar">
-      <br />
       {searchArea}
       {loading ? (
         <Spin data-testid="paper-searchbar-spinner" className="searchResult loading-spinner" />

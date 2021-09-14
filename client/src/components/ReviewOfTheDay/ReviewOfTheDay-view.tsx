@@ -13,7 +13,7 @@ export interface ReviewOfTheDayViewProps {
 
 export default function ReviewOfTheDayView({ rotd, pageHeaderProps }: ReviewOfTheDayViewProps): JSX.Element {
   return (
-    <div>
+    <div className="review-of-the-day">
       <PageHeader {...pageHeaderProps} />
       <FadePreview>
         <ReviewDisplay review={rotd} showTitle />
