@@ -88,7 +88,8 @@
     "husky": "^3.0.5",
     "msw": "^0.24.2",
     "prettier": "^2.2.1",
-    "pretty-quick": "^1.11.1"
+    "pretty-quick": "^1.11.1",
+    "ts-jest": "^27.0.5"
   },
   "husky": {
     "hooks": {
