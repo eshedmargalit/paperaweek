@@ -14,10 +14,10 @@ const pickROTD = (reviews: Review[]): Review => {
   return reviews[dateInt % reviews.length];
 };
 
-export default function ReviewOfTheDayRedux(): JSX.Element {
+export default function ReviewOfTheDayRedux(): JSX.Element | null {
   const reviewList: Review[] = useAppSelector((state) => state.reviews.reviewList);
   if (reviewList.length < MIN_REVIEWS_FOR_ROTD) {
-    return <></>;
+    return null;
   }
 
   const rotd = pickROTD(reviewList);

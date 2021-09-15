@@ -3,6 +3,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import {
+  hashString,
   isDOI,
   removeMiddleAuthors,
   renderCommaSepList,
@@ -196,6 +197,19 @@ describe('utils', () => {
       render(wrapMarkdownWithMath('$\\sum_0^\\infty$'));
       expect(screen.getAllByText(/∑/)).toBeDefined();
       expect(screen.getAllByText(/∞/)).toBeDefined();
+    });
+  });
+
+  describe(hashString.name, () => {
+    it('returns different numbers for different strings', () => {
+      const inputs = ['20210914', '20200914', '202', '', ' ', 'test', 'longtest'];
+
+      const outputs = inputs.map(hashString);
+      const uniqueOutputs = new Set(outputs);
+
+      console.log(outputs);
+
+      expect(outputs.length).toEqual(uniqueOutputs.size);
     });
   });
 });
