@@ -19,7 +19,7 @@
     "@types/passport": "^1.0.4",
     "@types/passport-google-oauth20": "^2.0.4",
     "antd": "4.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "body-parser": "^1.19.0",
     "cognito-express": "^2.0.16",
     "cookie-session": "^1.4.0",
