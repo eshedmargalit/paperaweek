@@ -3,10 +3,9 @@ import React from 'react';
 import { render, RenderResult } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
-import { applyMiddleware, createStore, Store } from 'redux';
-import thunk from 'redux-thunk';
-import { RootState } from '../store';
-import rootReducer from '../slices';
+import { Store } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { RootState, storeOptions } from '../store';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;
@@ -25,7 +24,10 @@ export function renderWithRouterRedux(
   {
     redirectTo,
     initialState,
-    store = createStore(rootReducer, initialState, applyMiddleware(thunk)),
+    store = configureStore({
+      ...storeOptions,
+      preloadedState: initialState,
+    }),
   }: RenderWithRouterReduxOptions = {}
 ): RenderWithRouterReduxResult {
   return {
@@ -47,7 +49,5 @@ export function renderWithRouterRedux(
 
 // Exported to help tests quickly get a blank initialState to work with
 export function getBlankInitialState(): RootState {
-  const store = createStore(rootReducer, applyMiddleware(thunk));
-
-  return store.getState();
+  return configureStore(storeOptions).getState();
 }

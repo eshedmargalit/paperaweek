@@ -3,11 +3,11 @@
 import { screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { RootState } from '../../slices';
 import { blankNotes, blankReview } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import DraftsRedux from './Drafts-redux';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
+import { RootState } from '../../store';
 
 const mockGoBack = jest.fn();
 
