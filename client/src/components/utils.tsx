@@ -12,7 +12,7 @@ import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { notification } from 'antd';
 import { Review } from '../types';
-import { darkGray, pawGreen, pawRed } from '../colors';
+import { darkGray, pawGreen } from '../colors';
 import NAText from './NAText';
 
 export const stringNotEmpty = (s: string): boolean => s !== '';
@@ -114,7 +114,7 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
   const totalWeeks = moment().diff(sortedDates[0], 'days') / 7.0 || 1; // round up to 1 if totalWeeks === 0
   const ppw = sortedDates.length / totalWeeks;
   const ppwString = ppw.toFixed(2);
-  const ppwColor = ppw >= 0.99 ? pawGreen : pawRed;
+  const ppwColor = ppw >= 0.99 ? pawGreen : darkGray;
   const numReviews = reviews.length;
 
   return { numReviews, ppwString, ppwColor };
