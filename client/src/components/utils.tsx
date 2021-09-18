@@ -10,6 +10,7 @@ import gfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
 
 import 'katex/dist/katex.min.css';
+import { notification } from 'antd';
 import { Review } from '../types';
 import { darkGray, pawGreen, pawRed } from '../colors';
 import NAText from './NAText';
@@ -141,4 +142,12 @@ export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
       {markdownString}
     </ReactMarkdown>
   );
+};
+
+export const makeHandleModalCopy = (userId: string) => (review: Review): void => {
+  const link = `${window.location.origin}/profiles/${userId}/${review._id}`;
+  navigator.clipboard.writeText(link);
+  notification.success({
+    message: 'Link Copied!',
+  });
 };

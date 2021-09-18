@@ -42,7 +42,6 @@ export default function DraftsRedux(): JSX.Element {
       handleModalEdit={handleModalEdit}
       pageHeaderProps={pageHeaderProps}
       itemName="Draft"
-      hideButtons={false}
     />
   );
 }

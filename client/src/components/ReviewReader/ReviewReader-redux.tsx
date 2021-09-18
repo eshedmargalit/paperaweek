@@ -1,18 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import { notification } from 'antd';
 import { PageHeaderProps } from 'antd/lib/page-header';
 import { fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { Review, User } from '../../types';
-import { setActiveReview } from '../../slices/activeReviewSlice';
+import { makeHandleModalCopy } from '../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-
-const openSuccessfulCopyNotification = () => {
-  notification.success({
-    message: 'Link Copied!',
-  });
-};
+import { setActiveReview } from '../../slices/activeReviewSlice';
 
 export default function ReviewReaderRedux(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -31,11 +25,7 @@ export default function ReviewReaderRedux(): JSX.Element {
     dispatch(setActiveReview(review));
   };
 
-  const copyReviewURLToClipboard = (review: Review) => {
-    const link = `${window.location.origin}/profiles/${user.googleId}/${review._id}`;
-    navigator.clipboard.writeText(link);
-    openSuccessfulCopyNotification();
-  };
+  const copyReviewURLToClipboard = makeHandleModalCopy(user.googleId);
 
   const pageHeaderProps: PageHeaderProps = { title: 'Read Your Reviews' };
   return (
@@ -45,7 +35,8 @@ export default function ReviewReaderRedux(): JSX.Element {
       handleModalEdit={populateFormWithReview}
       handleModalCopy={copyReviewURLToClipboard}
       pageHeaderProps={pageHeaderProps}
-      hideButtons={demoMode}
+      allowCopy={!demoMode}
+      allowMutate={!demoMode}
     />
   );
 }
