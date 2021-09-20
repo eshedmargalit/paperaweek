@@ -4,8 +4,9 @@ import { render, RenderResult } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
 import { Store } from 'redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { RootState, storeOptions } from '../store';
+import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import rootReducer from '../slices';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;
@@ -16,6 +17,17 @@ interface RenderWithRouterReduxOptions {
 interface RenderWithRouterReduxResult extends RenderResult {
   store: Store;
 }
+
+/**
+ * Try to keep this in-line with store.ts when possible
+ * Direct reuse results in false-alarm type errors which are painful and confusing to silence
+ */
+
+const storeOptions: ConfigureStoreOptions = {
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+};
+
 /**
  * Render the component wrapped in a mock router and a Redux provider
  */
