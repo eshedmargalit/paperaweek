@@ -47,11 +47,11 @@ const Menu = (
   );
 
   const userNameDisplay: JSX.Element = (
-    <span>
+    <span className="menu__username">
       <span className="userIcon">
         <UserOutlined />
       </span>{' '}
-      {displayName}
+      <span>{displayName}</span>
     </span>
   );
 

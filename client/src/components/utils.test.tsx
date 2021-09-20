@@ -207,8 +207,6 @@ describe('utils', () => {
       const outputs = inputs.map(hashString);
       const uniqueOutputs = new Set(outputs);
 
-      console.log(outputs);
-
       expect(outputs.length).toEqual(uniqueOutputs.size);
     });
   });
