@@ -37,7 +37,7 @@ export default function ReviewReaderRedux(): JSX.Element {
     openSuccessfulCopyNotification();
   };
 
-  const pageHeaderProps: PageHeaderProps = { title: 'Read Your Reviews' };
+  const pageHeaderProps: PageHeaderProps = { title: 'Your Reviews' };
   return (
     <SearchableReviewDisplay
       reviews={reviewList}

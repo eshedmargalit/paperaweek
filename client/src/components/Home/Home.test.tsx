@@ -34,7 +34,7 @@ describe('<Home />', () => {
 
     it('has review list', () => {
       renderHome(initialAuthState);
-      expect(screen.getByText(/Read Your Reviews/)).toBeInTheDocument();
+      expect(screen.getByText(/Your Reviews/)).toBeInTheDocument();
     });
   });
 

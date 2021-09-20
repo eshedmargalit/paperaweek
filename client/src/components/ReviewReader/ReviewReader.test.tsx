@@ -24,7 +24,7 @@ describe('<ReviewReader />', () => {
   describe('header', () => {
     it('renders without crashing', () => {
       renderWithRouterRedux(<ReviewReader />, { initialState });
-      expect(screen.getByText(/Read Your Reviews/)).toBeInTheDocument();
+      expect(screen.getByText(/Your Reviews/)).toBeInTheDocument();
     });
   });
 
