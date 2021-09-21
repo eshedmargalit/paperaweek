@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { RouteComponentProps } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
 import { Maybe, Profile, Review, User } from '../../types';
@@ -20,7 +20,7 @@ const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>>
     return data;
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.error(err.response.status);
+    console.error((err as AxiosError)?.response?.status);
     return null;
   }
 };
@@ -32,16 +32,15 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
   const [loading, setLoading] = useState(false);
   const [isOwnPage, setIsOwnPage] = useState(false);
 
-  const refreshData = async () => {
-    // eslint-disable-next-line no-shadow
-    const { userId, reviewIdToOpen } = match.params;
+  const { userId, reviewIdToOpen: matchedReviewId } = match.params;
 
+  const refreshData = async () => {
     setLoading(true);
     const profileData = await getProfileData(userId);
     setLoading(false);
 
     if (profileData) {
-      setReviewIdToOpen(reviewIdToOpen);
+      setReviewIdToOpen(matchedReviewId);
       setIsOwnPage(profileData.isOwnPage);
       setReviews(profileData.reviews);
       setUserDisplayName(profileData.userDisplayName || '');
@@ -60,6 +59,7 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
       reviews={reviews}
       reviewIdToOpen={reviewIdToOpen}
       userDisplayName={userDisplayName}
+      userId={userId}
       loading={loading}
       isOwnPage={isOwnPage}
       onChange={wrappedRefreshData}

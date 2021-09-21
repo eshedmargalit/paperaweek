@@ -3,8 +3,8 @@ import React from 'react';
 import { render, RenderResult } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
-import { applyMiddleware, createStore, Store } from 'redux';
-import thunk from 'redux-thunk';
+import { Store } from 'redux';
+import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import rootReducer from '../slices';
 
@@ -17,6 +17,17 @@ interface RenderWithRouterReduxOptions {
 interface RenderWithRouterReduxResult extends RenderResult {
   store: Store;
 }
+
+/**
+ * Try to keep this in-line with store.ts when possible
+ * Direct reuse results in false-alarm type errors which are painful and confusing to silence
+ */
+
+const storeOptions: ConfigureStoreOptions = {
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+};
+
 /**
  * Render the component wrapped in a mock router and a Redux provider
  */
@@ -25,7 +36,10 @@ export function renderWithRouterRedux(
   {
     redirectTo,
     initialState,
-    store = createStore(rootReducer, initialState, applyMiddleware(thunk)),
+    store = configureStore({
+      ...storeOptions,
+      preloadedState: initialState,
+    }),
   }: RenderWithRouterReduxOptions = {}
 ): RenderWithRouterReduxResult {
   return {
@@ -47,7 +61,5 @@ export function renderWithRouterRedux(
 
 // Exported to help tests quickly get a blank initialState to work with
 export function getBlankInitialState(): RootState {
-  const store = createStore(rootReducer, applyMiddleware(thunk));
-
-  return store.getState();
+  return configureStore(storeOptions).getState();
 }

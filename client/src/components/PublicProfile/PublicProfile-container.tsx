@@ -1,8 +1,13 @@
 import React from 'react';
+import { makeHandleModalCopy } from '../utils';
 import PublicProfileView, { PublicProfileViewProps } from './PublicProfile-view';
 
-type PublicProfileContainerProps = PublicProfileViewProps;
+interface PublicProfileContainerProps extends Omit<PublicProfileViewProps, 'handleModalCopy'> {
+  userId: string;
+}
 
 export default function PublicProfileContainer(props: PublicProfileContainerProps): JSX.Element {
-  return <PublicProfileView {...props} />;
+  const handleModalCopy = makeHandleModalCopy(props.userId);
+
+  return <PublicProfileView {...props} handleModalCopy={handleModalCopy} />;
 }

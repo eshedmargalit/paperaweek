@@ -5,6 +5,7 @@ import { render, screen } from '@testing-library/react';
 import {
   hashString,
   isDOI,
+  makeHandleModalCopy,
   removeMiddleAuthors,
   renderCommaSepList,
   shortenAuthors,
@@ -12,6 +13,7 @@ import {
   wrapMarkdownWithMath,
 } from './utils';
 import { suppressWarnings } from '../testUtils/suppressWarnings';
+import { blankReview } from '../templates';
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -208,6 +210,23 @@ describe('utils', () => {
       const uniqueOutputs = new Set(outputs);
 
       expect(outputs.length).toEqual(uniqueOutputs.size);
+    });
+  });
+
+  describe(makeHandleModalCopy.name, () => {
+    const writeToClipboardMock = jest.fn();
+
+    beforeAll(() => {
+      Object.assign(navigator, {
+        clipboard: {
+          writeText: writeToClipboardMock,
+        },
+      });
+    });
+
+    it('copies the right URL to the clipboard', () => {
+      makeHandleModalCopy('userId')({ ...blankReview, _id: 'reviewId' });
+      expect(writeToClipboardMock).toHaveBeenCalledWith('http://localhost/profiles/userId/reviewId');
     });
   });
 });
