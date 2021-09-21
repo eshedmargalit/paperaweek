@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Popover } from 'antd';
@@ -21,11 +21,14 @@ export default function SearchResult({
   const year: Maybe<number> = date ? new Date(date).getFullYear() : null;
   const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4));
 
+  const [visible, setVisible] = useState(false);
+  const toggleVisible = () => setVisible(!visible);
   const popOverContent = (
     <div>
       <Button
         onClick={() => {
           handleReadingListAdd(result);
+          setVisible(false);
         }}
       >
         Add to Reading List <PlusOutlined />
@@ -43,7 +46,14 @@ export default function SearchResult({
   );
 
   return (
-    <Popover content={popOverContent} trigger="click" key={title} placement="right">
+    <Popover
+      content={popOverContent}
+      trigger="click"
+      key={title}
+      placement="right"
+      visible={visible}
+      onVisibleChange={toggleVisible}
+    >
       <div className="searchResult">
         <div className="paperSearch__result">
           <div>
