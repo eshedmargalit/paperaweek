@@ -27,7 +27,7 @@ export default function ReviewReaderRedux(): JSX.Element {
 
   const copyReviewURLToClipboard = makeHandleModalCopy(user.googleId);
 
-  const pageHeaderProps: PageHeaderProps = { title: 'Read Your Reviews' };
+  const pageHeaderProps: PageHeaderProps = { title: 'Your Reviews' };
   return (
     <SearchableReviewDisplay
       reviews={reviewList}

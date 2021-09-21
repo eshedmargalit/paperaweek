@@ -144,6 +144,21 @@ export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
   );
 };
 
+export const hashString = (str: string): number => {
+  // ripped from https://stackoverflow.com/questions/26057572/string-to-unique-hash-in-javascript-jquery
+  let hash = 0;
+  let char;
+  if (str.length === 0) return hash;
+
+  for (let i = 0; i < str.length; i++) {
+    char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash &= hash; // Convert to 32bit integer
+  }
+
+  return Math.abs(hash);
+};
+
 export const makeHandleModalCopy = (userId: string) => (review: Review): void => {
   const link = `${window.location.origin}/profiles/${userId}/${review._id}`;
   navigator.clipboard.writeText(link);

@@ -11,3 +11,15 @@
 .signout {
   color: red;
 }
+
+.home-section {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+  border-radius: 1em;
+  padding: 1em;
+  margin: 1em 0;
+
+  &:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.35);
+  }
+}
