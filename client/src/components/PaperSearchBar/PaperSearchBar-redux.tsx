@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React from 'react';
+import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setActiveReview } from '../../slices/activeReviewSlice';
 import { updateReadingList } from '../../slices/readingListSlice';
@@ -24,7 +25,10 @@ export default function PaperSearchBarRedux(): JSX.Element {
   const updateReadingListFunc = async (newReadingList: Paper[]): Promise<void> => {
     dispatch(updateReadingList(newReadingList));
 
-    await axios.put<Paper[]>('api/readingList', newReadingList);
+    const { data } = await axios.put<PaperResponse[]>('api/readingList', newReadingList);
+    if (data) {
+      dispatch(updateReadingList(data.map(constructPaperFromResponse)));
+    }
   };
 
   /**
