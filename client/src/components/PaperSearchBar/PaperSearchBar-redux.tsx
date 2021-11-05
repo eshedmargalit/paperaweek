@@ -1,34 +1,20 @@
-import axios from 'axios';
 import React from 'react';
-import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setActiveReview } from '../../slices/activeReviewSlice';
-import { updateReadingList } from '../../slices/readingListSlice';
 import { blankNotes, blankReview } from '../../templates';
 import { Paper, Review } from '../../types';
+import { useUpdateReadingListFunc } from '../ReadingList/hooks';
 import PaperSearchBarContainer from './PaperSearchBar-container';
 
 export default function PaperSearchBarRedux(): JSX.Element {
   const dispatch = useAppDispatch();
   const readingList = useAppSelector((state) => state.readingList);
-
+  const { updateReadingListFunc } = useUpdateReadingListFunc();
   /**
    * Sets the review in the redux store to be the default "blank" review, overwriting any existing review
    */
   const setBlankReview = (): void => {
     dispatch(setActiveReview(blankReview));
-  };
-
-  /**
-   * Updates reading list in redux store, PUTs it in the DB, then updates again using the response from the server (to correct any inconsistencies)
-   */
-  const updateReadingListFunc = async (newReadingList: Paper[]): Promise<void> => {
-    dispatch(updateReadingList(newReadingList));
-
-    const { data } = await axios.put<PaperResponse[]>('api/readingList', newReadingList);
-    if (data) {
-      dispatch(updateReadingList(data.map(constructPaperFromResponse)));
-    }
   };
 
   /**

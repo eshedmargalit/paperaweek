@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Empty, List, PageHeader } from 'antd';
-import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import { SortableContainer, SortableElement, SortableHandle, SortEndHandler } from 'react-sortable-hoc';
 import moment from 'moment';
-import { shortenAuthors, shortenString } from '../utils';
+import { shortenAuthors, shortenString, stringArrayHasNonEmpty } from '../utils';
 import './ReadingList.scss';
 import { Paper } from '../../types';
 import ManualReadingListAdder from './ManualReadingListAdder';
+import NAText from '../NAText';
 
 const LIST_HEIGHT = 340;
 const TITLE_CUTOFF = 100;
@@ -27,7 +28,13 @@ const SortableItem = SortableElement(({ value, handleEditClick, handleDeleteClic
         <div>
           <List.Item.Meta
             title={shortenString(value.title, TITLE_CUTOFF)}
-            description={`${shortenAuthors(value.authors)}, ${moment(value.date, 'YYYY-MM').format('YYYY')}`}
+            description={
+              stringArrayHasNonEmpty(value.authors) ? (
+                `${shortenAuthors(value.authors)}, ${moment(value.date, 'YYYY-MM').format('YYYY')}`
+              ) : (
+                <NAText />
+              )
+            }
           />
         </div>
         <div>
