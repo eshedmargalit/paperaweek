@@ -30,6 +30,19 @@
   }
 }
 
+.reading-list-adder {
+  &__startButton {
+    float: right;
+  }
+  &__form {
+    display: flex;
+    justify-content: right;
+    button {
+      margin-left: 5px;
+    }
+  }
+}
+
 // When dragging, these are outside the .reading-list parent class,
 // so declare these styles here
 .ant-list-item-meta-content {

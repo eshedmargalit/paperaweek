@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Empty, List, PageHeader } from 'antd';
-import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
+import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { SortableContainer, SortableElement, SortableHandle, SortEndHandler } from 'react-sortable-hoc';
 import moment from 'moment';
 import { shortenAuthors, shortenString } from '../utils';
 import './ReadingList.scss';
 import { Paper } from '../../types';
+import ManualReadingListAdder from './ManualReadingListAdder';
 
 const LIST_HEIGHT = 340;
 const TITLE_CUTOFF = 100;
@@ -95,6 +96,8 @@ export default function ReadingListView({
     <div className="reading-list">
       <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
       {items.length > 0 ? sortableList : noList}
+      <hr />
+      <ManualReadingListAdder />
     </div>
   );
 }
