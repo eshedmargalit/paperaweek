@@ -11,9 +11,7 @@ import { Paper } from '../../types';
 const LIST_HEIGHT = 340;
 const TITLE_CUTOFF = 100;
 
-const DragHandle = SortableHandle(() => (
-  <MenuOutlined style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} />
-));
+const DragHandle = SortableHandle(() => <MenuOutlined className="reading-list__item-handle" />);
 
 type SortableItemProps = Pick<ReadingListViewProps, 'handleDeleteClick' | 'handleEditClick'> & {
   value: Paper;
@@ -24,15 +22,7 @@ const SortableItem = SortableElement(({ value, handleEditClick, handleDeleteClic
   <List.Item>
     <div className="reading-list__item">
       <DragHandle />
-      <div
-        style={{
-          display: 'flex',
-          height: '100%',
-          width: '100%',
-          justifyContent: 'space-between',
-          overflow: 'auto',
-        }}
-      >
+      <div className="reading-list__item-container">
         <div>
           <List.Item.Meta
             title={shortenString(value.title, TITLE_CUTOFF)}
@@ -40,7 +30,7 @@ const SortableItem = SortableElement(({ value, handleEditClick, handleDeleteClic
           />
         </div>
         <div>
-          <div className="reading-list__form-button">
+          <div className="reading-list__item-button">
             <Link to="/form">
               <Button onClick={() => handleEditClick(value)} icon={<FormOutlined />} />
             </Link>
