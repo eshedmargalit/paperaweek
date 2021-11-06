@@ -37,8 +37,19 @@
   &__form {
     display: flex;
     justify-content: right;
-    button {
+
+    .ant-btn {
       margin-left: 5px;
+      &[disabled] {
+        &:hover {
+          color: #999 !important;
+          border: 1px solid #d9d9d9 !important;
+          background: none;
+          color: rgba(0, 0, 0, 0.25) !important;
+        }
+        background: none;
+        cursor: not-allowed;
+      }
     }
   }
 }
