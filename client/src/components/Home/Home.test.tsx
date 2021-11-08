@@ -29,7 +29,7 @@ describe('<Home />', () => {
 
     it('has a reading list', () => {
       renderHome(initialAuthState);
-      expect(screen.getAllByText(/Reading List/)).toBeDefined();
+      expect(screen.getAllByText(/Reading List/)).toHaveLength(2);
     });
 
     it('has review list', () => {
