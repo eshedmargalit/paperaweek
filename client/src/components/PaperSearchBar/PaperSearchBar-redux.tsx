@@ -1,17 +1,15 @@
-import axios from 'axios';
 import React from 'react';
-import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setActiveReview } from '../../slices/activeReviewSlice';
-import { updateReadingList } from '../../slices/readingListSlice';
 import { blankNotes, blankReview } from '../../templates';
 import { Paper, Review } from '../../types';
+import { useSetReadingList } from '../ReadingList/hooks';
 import PaperSearchBarContainer from './PaperSearchBar-container';
 
 export default function PaperSearchBarRedux(): JSX.Element {
   const dispatch = useAppDispatch();
   const readingList = useAppSelector((state) => state.readingList);
-
+  const { setReadingList } = useSetReadingList();
   /**
    * Sets the review in the redux store to be the default "blank" review, overwriting any existing review
    */
@@ -20,23 +18,11 @@ export default function PaperSearchBarRedux(): JSX.Element {
   };
 
   /**
-   * Updates reading list in redux store, PUTs it in the DB, then updates again using the response from the server (to correct any inconsistencies)
-   */
-  const updateReadingListFunc = async (newReadingList: Paper[]): Promise<void> => {
-    dispatch(updateReadingList(newReadingList));
-
-    const { data } = await axios.put<PaperResponse[]>('api/readingList', newReadingList);
-    if (data) {
-      dispatch(updateReadingList(data.map(constructPaperFromResponse)));
-    }
-  };
-
-  /**
    * When Add to Reading List is clicked, add the Paper to the reading list, then update in DB and redux store
    */
   const handleReadingListAdd = (paper: Paper): void => {
     const newReadingList = readingList.concat(paper);
-    updateReadingListFunc(newReadingList);
+    setReadingList(newReadingList);
   };
 
   /**

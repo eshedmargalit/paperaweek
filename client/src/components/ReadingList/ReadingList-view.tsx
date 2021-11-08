@@ -4,16 +4,16 @@ import { Button, Empty, List, PageHeader } from 'antd';
 import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import { SortableContainer, SortableElement, SortableHandle, SortEndHandler } from 'react-sortable-hoc';
 import moment from 'moment';
-import { shortenAuthors, shortenString } from '../utils';
+import { shortenAuthors, shortenString, stringArrayHasNonEmpty } from '../utils';
 import './ReadingList.scss';
 import { Paper } from '../../types';
+import ManualReadingListAdder from './ManualReadingListAdder';
+import NAText from '../NAText';
 
 const LIST_HEIGHT = 340;
 const TITLE_CUTOFF = 100;
 
-const DragHandle = SortableHandle(() => (
-  <MenuOutlined style={{ fontSize: '14pt', marginBottom: '5px', marginRight: '15px' }} />
-));
+const DragHandle = SortableHandle(() => <MenuOutlined className="reading-list__item-handle" />);
 
 type SortableItemProps = Pick<ReadingListViewProps, 'handleDeleteClick' | 'handleEditClick'> & {
   value: Paper;
@@ -24,23 +24,21 @@ const SortableItem = SortableElement(({ value, handleEditClick, handleDeleteClic
   <List.Item>
     <div className="reading-list__item">
       <DragHandle />
-      <div
-        style={{
-          display: 'flex',
-          height: '100%',
-          width: '100%',
-          justifyContent: 'space-between',
-          overflow: 'auto',
-        }}
-      >
+      <div className="reading-list__item-container">
         <div>
           <List.Item.Meta
             title={shortenString(value.title, TITLE_CUTOFF)}
-            description={`${shortenAuthors(value.authors)}, ${moment(value.date, 'YYYY-MM').format('YYYY')}`}
+            description={
+              stringArrayHasNonEmpty(value.authors) ? (
+                `${shortenAuthors(value.authors)}, ${moment(value.date, 'YYYY-MM').format('YYYY')}`
+              ) : (
+                <NAText />
+              )
+            }
           />
         </div>
         <div>
-          <div className="reading-list__form-button">
+          <div className="reading-list__item-button">
             <Link to="/form">
               <Button onClick={() => handleEditClick(value)} icon={<FormOutlined />} />
             </Link>
@@ -105,6 +103,7 @@ export default function ReadingListView({
     <div className="reading-list">
       <PageHeader title="Reading List" avatar={{ icon: <OrderedListOutlined /> }} />
       {items.length > 0 ? sortableList : noList}
+      <ManualReadingListAdder />
     </div>
   );
 }
