@@ -5,14 +5,14 @@ import { updateReadingList } from '../../slices/readingListSlice';
 import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 
 interface returnProps {
-  updateReadingListFunc: (newReadingList: Paper[]) => Promise<void>;
+  setReadingList: (newReadingList: Paper[]) => Promise<void>;
 }
 
-export const useUpdateReadingListFunc = (): returnProps => {
+export const useSetReadingList = (): returnProps => {
   const dispatch = useAppDispatch();
   const { demoMode } = useAppSelector((state) => state.auth);
 
-  const updateReadingListFunc = async (newReadingList: Paper[]) => {
+  const setReadingList = async (newReadingList: Paper[]) => {
     dispatch(updateReadingList(newReadingList));
 
     // If we're in demoMode, don't attempt to update the server...
@@ -24,5 +24,5 @@ export const useUpdateReadingListFunc = (): returnProps => {
       dispatch(updateReadingList(data.map(constructPaperFromResponse)));
     }
   };
-  return { updateReadingListFunc };
+  return { setReadingList };
 };

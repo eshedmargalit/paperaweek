@@ -3,13 +3,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setActiveReview } from '../../slices/activeReviewSlice';
 import { blankNotes, blankReview } from '../../templates';
 import { Paper, Review } from '../../types';
-import { useUpdateReadingListFunc } from '../ReadingList/hooks';
+import { useSetReadingList } from '../ReadingList/hooks';
 import PaperSearchBarContainer from './PaperSearchBar-container';
 
 export default function PaperSearchBarRedux(): JSX.Element {
   const dispatch = useAppDispatch();
   const readingList = useAppSelector((state) => state.readingList);
-  const { updateReadingListFunc } = useUpdateReadingListFunc();
+  const { setReadingList } = useSetReadingList();
   /**
    * Sets the review in the redux store to be the default "blank" review, overwriting any existing review
    */
@@ -22,7 +22,7 @@ export default function PaperSearchBarRedux(): JSX.Element {
    */
   const handleReadingListAdd = (paper: Paper): void => {
     const newReadingList = readingList.concat(paper);
-    updateReadingListFunc(newReadingList);
+    setReadingList(newReadingList);
   };
 
   /**

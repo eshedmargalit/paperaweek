@@ -18,7 +18,7 @@ describe('<ReadingList />', () => {
   });
 
   describe('when the user clicks the manual add button', () => {
-    it('allows papers to be added', async () => {
+    beforeEach(async () => {
       renderWithRouterRedux(<ReadingList />, { initialState });
       const startButton = screen.getByRole('button');
       userEvent.click(startButton);
@@ -28,7 +28,9 @@ describe('<ReadingList />', () => {
 
       // type in a title
       userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
+    });
 
+    it('allows papers to be added', async () => {
       // click the accept button
       const acceptButton = screen.getByRole('button', { name: 'submit' });
       userEvent.click(acceptButton);
@@ -38,16 +40,6 @@ describe('<ReadingList />', () => {
     });
 
     it('allows you to bail out', async () => {
-      renderWithRouterRedux(<ReadingList />, { initialState });
-      const startButton = screen.getByRole('button');
-      userEvent.click(startButton);
-
-      // wait for Input to appear
-      await screen.findByPlaceholderText('Paper title');
-
-      // type in a title
-      userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
-
       // click the cancel button
       const cancelButton = screen.getByRole('button', { name: 'cancel' });
       userEvent.click(cancelButton);

@@ -7,12 +7,12 @@ import { blankNotes } from '../../templates';
 import { updateDraftId } from '../../slices/activeDraftSlice';
 import { setActiveReview } from '../../slices/activeReviewSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { useUpdateReadingListFunc } from './hooks';
+import { useSetReadingList } from './hooks';
 
 export default function ReadingListRedux(): JSX.Element {
   const dispatch = useAppDispatch();
   const readingList: Paper[] = useAppSelector((state) => state.readingList);
-  const { updateReadingListFunc } = useUpdateReadingListFunc();
+  const { setReadingList } = useSetReadingList();
 
   const handleEditClick = (paper: Paper) => {
     dispatch(updateDraftId(null));
@@ -22,12 +22,12 @@ export default function ReadingListRedux(): JSX.Element {
 
   const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {
     const newReadingList = arrayMove(readingList, oldIndex, newIndex);
-    updateReadingListFunc(newReadingList);
+    setReadingList(newReadingList);
   };
 
   const removeFromReadingList = (paper: Paper) => {
     const newReadingList = readingList.filter((currPaper) => currPaper !== paper);
-    updateReadingListFunc(newReadingList);
+    setReadingList(newReadingList);
   };
 
   return (
