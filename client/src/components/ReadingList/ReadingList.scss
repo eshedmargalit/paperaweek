@@ -42,6 +42,8 @@
 
     .ant-btn {
       margin-left: 5px;
+
+      // override antd allowing disabled buttons to still have hover effects
       &[disabled] {
         &:hover {
           color: #999 !important;
