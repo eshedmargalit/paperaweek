@@ -3,8 +3,8 @@ import { enterDemoMode, fetchUser } from '../actions';
 import { demoUser } from '../templates';
 import { Paper } from '../types';
 
-export type ReadlingListState = Paper[];
-const initialState: ReadlingListState = [];
+export type ReadingListState = Paper[];
+const initialState: ReadingListState = [];
 
 export const readingListSlice = createSlice({
   name: 'readingList',
