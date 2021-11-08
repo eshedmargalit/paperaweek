@@ -27,10 +27,10 @@ export default function ManualReadingListAdder(): JSX.Element {
       ) : (
         <div className="reading-list-adder__form">
           <Input placeholder="Paper title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <Button onClick={submitItem} disabled={title === ''}>
+          <Button aria-label="submit" onClick={submitItem} disabled={title === ''}>
             <CheckCircleOutlined />
           </Button>
-          <Button danger onClick={() => setIsEditing(false)}>
+          <Button aria-label="cancel" danger onClick={() => setIsEditing(false)}>
             <CloseCircleOutlined />
           </Button>
         </div>

@@ -30,7 +30,7 @@ describe('<ReadingList />', () => {
       userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
 
       // click the accept button
-      const acceptButton = screen.getByRole('button', { name: 'check-circle' });
+      const acceptButton = screen.getByRole('button', { name: 'submit' });
       userEvent.click(acceptButton);
 
       // see that our paper made it in
@@ -49,7 +49,7 @@ describe('<ReadingList />', () => {
       userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
 
       // click the cancel button
-      const cancelButton = screen.getByRole('button', { name: 'close-circle' });
+      const cancelButton = screen.getByRole('button', { name: 'cancel' });
       userEvent.click(cancelButton);
 
       // see that our paper did not make it in
