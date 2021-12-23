@@ -6,18 +6,6 @@ import { Paper } from '../../types';
 import { isDOI } from '../utils';
 import PaperSearchBarView from './PaperSearchBar-view';
 
-const interpret = async (input: string): Promise<Paper[]> => {
-  // first regex to replace any dashes or underscores with a space
-  let query = input.replace(/[-_]/g, ' ').toLowerCase();
-
-  // second regex to delete single quotes, double quotes, and slashes
-  query = query.replace(/['"/\\]/g, '');
-
-  const { data } = await axios.get<PaperResponse[]>(`api/searchBar/interpret/${query}`);
-
-  return data.map(constructPaperFromResponse);
-};
-
 const doiSearch = async (input: string): Promise<Paper[]> => {
   let query = input;
   if (query.includes('doi.org')) {
@@ -62,9 +50,8 @@ export default function PaperSearchBarContainer({
 
     setLoading(true);
 
-    // if searchQuery looks like a DOI, call that API instead of interpretation
-    const apiCall = isDOI(searchQuery) ? doiSearch : interpret;
-    const resultPapers: Paper[] = await apiCall(searchQuery);
+    // if searchQuery looks like a DOI, call that API. Otherwise short-circuit to no results
+    const resultPapers: Paper[] = isDOI(searchQuery) ? await doiSearch(searchQuery) : [];
     setSearchResults(resultPapers);
     setLoading(false);
   };

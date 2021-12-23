@@ -4,8 +4,6 @@ A simple interface for finding papers, taking detailed notes, building a habit o
 
 ## Features
 
-- :mag_right: Search for papers online, powered by Microsoft Academic Knowledge
-
 - :pencil: Flexible form to take detailed notes including Markdown and LaTeX
 
 - :eyeglasses: Sort and search through your database of notes
@@ -39,10 +37,9 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 COOKIE_KEY=
 MONGO_URI=
-REACT_APP_MSCOG_KEY1=
 ```
 
-The first two keys are obtained by setting up a Google OAuth account, the cookie key can be any arbitrary string, the Mongo URI is obtained after setting up a MongoDB instance, and the MSCOG key refers to a Microsoft Academic Knowledge API key.
+The first two keys are obtained by setting up a Google OAuth account, the cookie key can be any arbitrary string, and the Mongo URI is obtained after setting up a MongoDB instance.
 
 #### Mongo Databases
 

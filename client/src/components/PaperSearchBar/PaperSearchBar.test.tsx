@@ -17,11 +17,11 @@ describe('<PaperSearchBar />', () => {
   describe('search input', () => {
     it('shows the right placeholder', () => {
       renderWithRouterRedux(<PaperSearchBar />);
-      expect(screen.getByPlaceholderText(/search by DOI, title, author, or journal/)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search by DOI/)).toBeInTheDocument();
     });
 
     describe('when search is not a doi', () => {
-      it('renders relevant papers', async () => {
+      it('shows no results, because the search API is deprecated', async () => {
         renderWithRouterRedux(<PaperSearchBar />);
 
         // Type in a search query
@@ -33,7 +33,7 @@ describe('<PaperSearchBar />', () => {
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('Test Interpret Title')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText('No Results Found')).toBeInTheDocument());
       });
     });
 
@@ -116,11 +116,11 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'test query');
-        await screen.findByText('Test Interpret Title');
+        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
+        await screen.findByText('Test DOI Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test Interpret Title'));
+        userEvent.click(screen.getByText('Test DOI Title'));
         userEvent.click(screen.getByText(/Start Review Now/));
 
         expect(screen.getByText(/Redirected/)).toBeInTheDocument();

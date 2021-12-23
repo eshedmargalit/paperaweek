@@ -11,8 +11,7 @@ const steps: Step[] = [
   {
     ...defaultStep,
     target: '.paper-searchbar',
-    content:
-      'Search for papers by topic, author, journal, or DOI. Add papers to your reading list, or start a review immediately.',
+    content: 'Search for papers by DOI. Add papers to your reading list, or start a review immediately.',
   },
   {
     ...defaultStep,
