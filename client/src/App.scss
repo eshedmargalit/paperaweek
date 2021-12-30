@@ -1,6 +1,48 @@
 @import '~antd/dist/antd.css';
 @import './styles/colors.scss';
 
+:root {
+  [data-color-theme='green'] {
+    --color-primary: #00b295;
+    --color-primary-light: #009980;
+    --color-primary-dark: #00bd9d;
+    --color-primary-bg: #00e3bd;
+    --color-primary-bg-dark: #00bd9d6e;
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='red'] {
+    --color-primary: #bf0e01;
+    --color-primary-light: #bc3930;
+    --color-primary-dark: #8e0b01;
+    --color-primary-bg: #fe120173;
+    --color-primary-bg-dark: #4b060173;
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='pink'] {
+    --color-primary: #f2789f;
+    --color-primary-light: #f7a5bf;
+    --color-primary-dark: #ef306c;
+    --color-primary-bg: #f2789f;
+    --color-primary-bg-dark: #e61c5c;
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='blue'] {
+    --color-primary: #22577e;
+    --color-primary-light: #3a92f0;
+    --color-primary-dark: #194362;
+    --color-primary-bg: #0ad2ff;
+    --color-primary-bg-dark: #0d3056;
+
+    --color-border: #ccc;
+  }
+}
+
 .App {
   text-align: left;
   background-color: white;
@@ -42,25 +84,25 @@
   justify-content: center;
 
   &:hover {
-    color: $primary-color !important;
-    border-color: $primary-lighter !important;
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary-light) !important;
   }
 }
 
 .ant-btn-primary {
-  border-color: $primary-darker !important;
-  background-color: $primary-lighter !important;
+  border-color: var(--color-primary-dark) !important;
+  background-color: var(--color-primary-light) !important;
 
   &:hover {
-    border-color: $primary-color !important;
+    border-color: var(--color-primary) !important;
     background-color: white !important;
-    color: $primary-color !important;
+    color: var(--color-primary) !important;
     text-shadow: unset !important;
   }
 }
 
 .ant-avatar {
-  background-color: $primary-color;
+  background-color: var(--color-primary);
 }
 
 .width-80 {
@@ -77,7 +119,7 @@
   width: 100%;
   border-radius: 6px;
   padding: 10px 10px;
-  background: linear-gradient(90deg, $primary-color 0%, white 200%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, white 200%);
 
   h2 {
     font-size: x-large;

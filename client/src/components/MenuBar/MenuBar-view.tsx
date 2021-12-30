@@ -14,11 +14,16 @@ import { useMedia } from 'react-media';
 import './MenuBar.scss';
 import { Maybe, User } from '../../types';
 import ThemePicker from '../ThemePicker';
+import { ThemeColor } from '../../theming/themes';
 
 export interface MenuBarViewProps {
   user: User;
   numberOfDrafts: number;
   isDemo: boolean;
+
+  themes: readonly ThemeColor[];
+  currentTheme: ThemeColor;
+  updateTheme: (newColor: ThemeColor) => void;
 }
 
 const Menu = (
@@ -27,7 +32,10 @@ const Menu = (
   draftMenuItem: Maybe<JSX.Element>,
   infoPopover: JSX.Element,
   isSmallScreen: boolean,
-  isDemo: boolean
+  isDemo: boolean,
+  themes: readonly ThemeColor[],
+  currentTheme: ThemeColor,
+  updateTheme: (newColor: ThemeColor) => void
 ) => {
   const [collapsed, setCollapsed] = useState(true);
   const signedIn: boolean = displayName !== '';
@@ -71,7 +79,7 @@ const Menu = (
       <span className="flex menu-item-container">
         {signedIn && (
           <li>
-            <ThemePicker />
+            <ThemePicker themes={themes} current={currentTheme} onClick={updateTheme} />
           </li>
         )}
         {signedIn && <li className="menu__item">{draftMenuItem}</li>}
@@ -149,7 +157,14 @@ const Menu = (
   return isSmallScreen ? collapsedMenu : expandedMenu;
 };
 
-export default function MenuBarView({ user, numberOfDrafts, isDemo }: MenuBarViewProps): JSX.Element {
+export default function MenuBarView({
+  user,
+  numberOfDrafts,
+  isDemo,
+  themes,
+  currentTheme,
+  updateTheme,
+}: MenuBarViewProps): JSX.Element {
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
 
   const draftMenuItem: Maybe<JSX.Element> =
@@ -182,5 +197,15 @@ export default function MenuBarView({ user, numberOfDrafts, isDemo }: MenuBarVie
     </Popover>
   );
 
-  return Menu(user.displayName, user.googleId, draftMenuItem, infoPopover, isSmallScreen, isDemo);
+  return Menu(
+    user.displayName,
+    user.googleId,
+    draftMenuItem,
+    infoPopover,
+    isSmallScreen,
+    isDemo,
+    themes,
+    currentTheme,
+    updateTheme
+  );
 }

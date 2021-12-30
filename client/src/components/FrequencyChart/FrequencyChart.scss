@@ -2,7 +2,7 @@
 
 .frequency-chart {
   path.recharts-curve.recharts-line-curve {
-    stroke: $primary-color;
+    stroke: var(--color-primary);
   }
 
   .ant-card {
