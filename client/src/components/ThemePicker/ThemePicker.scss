@@ -1,0 +1,18 @@
+.themePicker {
+  display: flex;
+  width: 5rem;
+  justify-content: space-between;
+
+  .pickButton {
+    height: 1rem;
+    width: 1rem;
+    border-radius: 50%;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

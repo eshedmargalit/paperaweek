@@ -13,6 +13,7 @@ import { useMedia } from 'react-media';
 
 import './MenuBar.scss';
 import { Maybe, User } from '../../types';
+import ThemePicker from '../ThemePicker';
 
 export interface MenuBarViewProps {
   user: User;
@@ -68,9 +69,14 @@ const Menu = (
       <span className="flex">{brandHeader}</span>
 
       <span className="flex menu-item-container">
-        {signedIn ? <li className="menu__item">{draftMenuItem}</li> : null}
-        {signedIn ? profileButton : null}
-        {signedIn ? signoutButton : null}
+        {signedIn && (
+          <li>
+            <ThemePicker />
+          </li>
+        )}
+        {signedIn && <li className="menu__item">{draftMenuItem}</li>}
+        {signedIn && profileButton}
+        {signedIn && signoutButton}
         <li className="menu__item">{infoPopover}</li>
       </span>
     </ul>
