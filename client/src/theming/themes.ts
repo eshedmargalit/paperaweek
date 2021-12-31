@@ -8,8 +8,7 @@ export function getPersistedTheme(): ThemeColor | null {
   if (persisted && themes.find((themeColor) => themeColor === persisted)) {
     return persisted as ThemeColor;
   }
-  // eslint-disable-next-line no-console
-  console.error('saved theme is not a valid theme');
+
   return null;
 }
 
