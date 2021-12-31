@@ -3,41 +3,41 @@
 
 :root {
   [data-color-theme='green'] {
-    --color-primary: #00b295;
-    --color-primary-light: #009980;
-    --color-primary-dark: #00bd9d;
-    --color-primary-bg: #00e3bd;
-    --color-primary-bg-dark: #00bd9d6e;
+    --color-primary: #{$mint-green};
+    --color-primary-light: #{$mint-green-dark};
+    --color-primary-dark: #{$mint-green-light};
+    --color-primary-bg: #{$turqoise};
+    --color-primary-bg-dark: #{$turqoise-dark};
 
     --color-border: #ccc;
   }
 
   [data-color-theme='orange'] {
-    --color-primary: orange;
-    --color-primary-light: #ffcc00;
-    --color-primary-dark: #d08802;
-    --color-primary-bg: orange;
-    --color-primary-bg-dark: #c47f00;
+    --color-primary: #{$orange};
+    --color-primary-light: #{$orange-light};
+    --color-primary-dark: #{$orange-dark};
+    --color-primary-bg: #{$orange};
+    --color-primary-bg-dark: #{$toasted-orange};
 
     --color-border: #ccc;
   }
 
   [data-color-theme='pink'] {
-    --color-primary: #f2789f;
-    --color-primary-light: #f7a5bf;
-    --color-primary-dark: #ef306c;
-    --color-primary-bg: #f2789f;
-    --color-primary-bg-dark: #e61c5c;
+    --color-primary: #{$pink};
+    --color-primary-light: #{$pink-light};
+    --color-primary-dark: #{$pink-dark};
+    --color-primary-bg: #{$pink};
+    --color-primary-bg-dark: #{$lipstick-pink};
 
     --color-border: #ccc;
   }
 
   [data-color-theme='blue'] {
-    --color-primary: #22577e;
-    --color-primary-light: #3a92f0;
-    --color-primary-dark: #194362;
-    --color-primary-bg: #0ad2ff;
-    --color-primary-bg-dark: #0d3056;
+    --color-primary: #{$blue};
+    --color-primary-light: #{$blue-light};
+    --color-primary-dark: #{$blue-dark};
+    --color-primary-bg: #{$cyan};
+    --color-primary-bg-dark: #{$ocean};
 
     --color-border: #ccc;
   }
