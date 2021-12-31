@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { ThemeColor } from '../../theming/themes';
 import { configByTheme } from './ThemePicker.utils';
 
@@ -14,14 +15,12 @@ export default function ColorButton({ color, isSelected, onClick }: ColorButtonP
   return (
     <button
       type="button"
-      className="pickButton"
+      className={cx('pickButton', { isSelected })}
       aria-label={`theme picker color ${color}`}
       onClick={() => onClick(color)}
       style={{
         background: backgroundColor,
         border: `0.1rem solid ${borderColor}`,
-        width: isSelected ? '1.25rem' : '1rem',
-        height: isSelected ? '1.25rem' : '1rem',
       }}
     />
   );

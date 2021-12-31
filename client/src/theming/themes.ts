@@ -1,6 +1,6 @@
 import { getFromLocalStorage, saveToLocalStorage } from '../storage';
 
-export const themes = ['red', 'blue', 'pink', 'green'] as const;
+export const themes = ['orange', 'blue', 'pink', 'green'] as const;
 export type ThemeColor = typeof themes[number];
 
 export function getPersistedTheme(): ThemeColor | null {

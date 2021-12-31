@@ -12,12 +12,12 @@
     --color-border: #ccc;
   }
 
-  [data-color-theme='red'] {
-    --color-primary: #bf0e01;
-    --color-primary-light: #bc3930;
-    --color-primary-dark: #8e0b01;
-    --color-primary-bg: #fe120173;
-    --color-primary-bg-dark: #4b060173;
+  [data-color-theme='orange'] {
+    --color-primary: orange;
+    --color-primary-light: #ffcc00;
+    --color-primary-dark: #d08802;
+    --color-primary-bg: orange;
+    --color-primary-bg-dark: #c47f00;
 
     --color-border: #ccc;
   }

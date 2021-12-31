@@ -8,6 +8,6 @@ type ThemeConfig = {
 export const configByTheme: Record<ThemeColor, ThemeConfig> = {
   blue: { borderColor: '#194362', backgroundColor: '#22577E' },
   green: { borderColor: '#004d40', backgroundColor: '#00b295' },
-  red: { borderColor: '#8e0b01', backgroundColor: '#bf0e01' },
+  orange: { borderColor: '#d08802', backgroundColor: 'orange' },
   pink: { borderColor: '#ef306c', backgroundColor: '#F2789F' },
 };
