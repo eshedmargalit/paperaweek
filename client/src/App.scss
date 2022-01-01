@@ -101,6 +101,25 @@
   }
 }
 
+// Modals are rendered outside of <App />
+// and don't respect data-color-theme
+// TODO: Fix this
+.ant-modal {
+  .ant-btn-primary {
+    border-color: $mint-green-dark !important;
+    background-color: white !important;
+    color: $mint-green-light !important;
+    text-shadow: unset !important;
+
+    &:hover {
+      border-color: var(--color-primary) !important;
+      background-color: white !important;
+      color: var(--color-primary) !important;
+      text-shadow: unset !important;
+    }
+  }
+}
+
 .ant-avatar {
   background-color: var(--color-primary);
 }
