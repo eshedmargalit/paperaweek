@@ -10,11 +10,12 @@ import PublicProfile from './components/PublicProfile';
 import NotFound from './components/NotFound/NotFound';
 
 import './App.scss';
-import { useAppDispatch } from './hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from './hooks/reduxHooks';
 import { fetchUser } from './actions';
 
 export default function App(): JSX.Element {
   const dispatch = useAppDispatch();
+  const { currentTheme } = useAppSelector((state) => state.theme);
 
   // by passing [dispatch] as the second argument of useEffect, we replicate the behavior
   // of componentDidMount + componentDidUnmount, but not componentDidUpdate
@@ -24,7 +25,7 @@ export default function App(): JSX.Element {
 
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="App" data-color-theme={currentTheme}>
         <Route path="/" component={MenuBar} />
         <Switch>
           <Route path="/profiles/:userId/:reviewIdToOpen?" component={PublicProfile} />

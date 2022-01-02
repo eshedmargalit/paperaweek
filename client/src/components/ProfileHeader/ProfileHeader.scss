@@ -4,7 +4,7 @@
   margin-top: 5vh;
 
   .ant-switch-checked {
-    background-color: $primary-color !important;
+    background-color: var(--color-primary) !important;
   }
 
   .toggle-public {

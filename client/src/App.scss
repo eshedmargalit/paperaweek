@@ -1,6 +1,48 @@
 @import '~antd/dist/antd.css';
 @import './styles/colors.scss';
 
+:root {
+  [data-color-theme='green'] {
+    --color-primary: #{$mint-green};
+    --color-primary-light: #{$mint-green-dark};
+    --color-primary-dark: #{$mint-green-light};
+    --color-primary-bg: #{$turqoise};
+    --color-primary-bg-dark: #{$turqoise-dark};
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='orange'] {
+    --color-primary: #{$orange};
+    --color-primary-light: #{$orange-light};
+    --color-primary-dark: #{$orange-dark};
+    --color-primary-bg: #{$orange};
+    --color-primary-bg-dark: #{$toasted-orange};
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='pink'] {
+    --color-primary: #{$pink};
+    --color-primary-light: #{$pink-light};
+    --color-primary-dark: #{$pink-dark};
+    --color-primary-bg: #{$pink};
+    --color-primary-bg-dark: #{$lipstick-pink};
+
+    --color-border: #ccc;
+  }
+
+  [data-color-theme='blue'] {
+    --color-primary: #{$blue};
+    --color-primary-light: #{$blue-light};
+    --color-primary-dark: #{$blue-dark};
+    --color-primary-bg: #{$cyan};
+    --color-primary-bg-dark: #{$ocean};
+
+    --color-border: #ccc;
+  }
+}
+
 .App {
   text-align: left;
   background-color: white;
@@ -42,25 +84,44 @@
   justify-content: center;
 
   &:hover {
-    color: $primary-color !important;
-    border-color: $primary-lighter !important;
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary-light) !important;
   }
 }
 
 .ant-btn-primary {
-  border-color: $primary-darker !important;
-  background-color: $primary-lighter !important;
+  border-color: var(--color-primary-dark) !important;
+  background-color: var(--color-primary-light) !important;
 
   &:hover {
-    border-color: $primary-color !important;
+    border-color: var(--color-primary) !important;
     background-color: white !important;
-    color: $primary-color !important;
+    color: var(--color-primary) !important;
     text-shadow: unset !important;
   }
 }
 
+// Modals are rendered outside of <App />
+// and don't respect data-color-theme
+// TODO: Fix this
+.ant-modal {
+  .ant-btn-primary {
+    border-color: $mint-green-dark !important;
+    background-color: white !important;
+    color: $mint-green-light !important;
+    text-shadow: unset !important;
+
+    &:hover {
+      border-color: var(--color-primary) !important;
+      background-color: white !important;
+      color: var(--color-primary) !important;
+      text-shadow: unset !important;
+    }
+  }
+}
+
 .ant-avatar {
-  background-color: $primary-color;
+  background-color: var(--color-primary);
 }
 
 .width-80 {
@@ -77,7 +138,7 @@
   width: 100%;
   border-radius: 6px;
   padding: 10px 10px;
-  background: linear-gradient(90deg, $primary-color 0%, white 200%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, white 200%);
 
   h2 {
     font-size: x-large;

@@ -7,6 +7,7 @@ import draftsReducer from './draftsSlice';
 import readingListReducer from './readingListSlice';
 import reviewsReducer from './reviewsSlice';
 import userReducer from './userSlice';
+import themeReducer from './themeSlice';
 
 const rootReducer = combineReducers({
   activeDraft: activeDraftReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   readingList: readingListReducer,
   reviews: reviewsReducer,
   user: userReducer,
+  theme: themeReducer,
 });
 
 export default rootReducer;
