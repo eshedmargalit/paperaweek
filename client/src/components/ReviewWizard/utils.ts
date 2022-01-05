@@ -60,6 +60,14 @@ export const splitKeywordsIntoArray = (keywords: string | string[]): string[] =>
   );
 };
 
+// emptyGuard simple replaces [] with [''] to give the form something to render
+const emptyGuard = (arr: string[]): string[] => {
+  if (arr.length === 0) {
+    return [''];
+  }
+  return arr;
+};
+
 const objectArrayToStringArray = (arr: StringObj[]): string[] => arr.map((s) => s.contents);
 const stringArrayToObjectArray = (arr: string[]): StringObj[] => arr.map((s) => ({ contents: s }));
 
@@ -95,7 +103,7 @@ export const convertReviewToFormValues = (review: Review): FormReview => ({
   },
   paper: {
     ...review.paper,
-    authors: stringArrayToObjectArray(review.paper.authors),
-    institutions: stringArrayToObjectArray(review.paper.institutions),
+    authors: stringArrayToObjectArray(emptyGuard(review.paper.authors)),
+    institutions: stringArrayToObjectArray(emptyGuard(review.paper.institutions)),
   },
 });
