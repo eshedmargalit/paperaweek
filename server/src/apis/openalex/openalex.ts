@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { IPaper } from '../../models/Paper';
-import { paperFromWork } from './converters';
-import { Work, WorksResponse } from './types';
+import { Author } from '../../services/search.types';
+import { paperFromWork, authorFromAuthorResponse } from './converters';
+import { AuthorsResponse, Work, WorksResponse } from './types';
 
 const OPEN_ALEX_URL = 'https://api.openalex.org';
 const MAX_RESULTS = 5;
@@ -19,13 +20,37 @@ export async function getPapersByTitle(title: string): Promise<IPaper[]> {
 }
 
 export async function getPapersByDOI(doi: string): Promise<IPaper[]> {
-  console.log(doi);
   try {
     const workResponse = await axios.get<Work>(`${OPEN_ALEX_URL}/works/doi:${doi}`);
     const paper: IPaper = paperFromWork(workResponse.data);
     return [paper];
   } catch (err) {
     console.log(err);
+    return [];
+  }
+}
+
+export async function getAuthorByName(name: string): Promise<Author | null> {
+  try {
+    const authorsResponse = await axios.get<AuthorsResponse>(
+      `${OPEN_ALEX_URL}/authors?filter=display_name.search:${name}&sort=cited_by_count`
+    );
+    const author = authorFromAuthorResponse(authorsResponse.data);
+    return author;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getPapersByAuthor(author: Author): Promise<IPaper[]> {
+  try {
+    const worksResponse = await axios.get<WorksResponse>(
+      `${OPEN_ALEX_URL}/works?filter=author.id:${author.id}&per-page=${MAX_RESULTS}`
+    );
+    const papers: IPaper[] = worksResponse.data.results.map(paperFromWork);
+    return papers;
+  } catch (err) {
     return [];
   }
 }

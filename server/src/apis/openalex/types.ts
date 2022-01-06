@@ -5,6 +5,7 @@ interface Venue {
 
 interface Author {
   display_name: string;
+  id: string;
 }
 
 interface Institution {
@@ -26,4 +27,8 @@ export interface Work {
 
 export interface WorksResponse {
   results: Work[];
+}
+
+export interface AuthorsResponse {
+  results: Author[];
 }
