@@ -17,40 +17,23 @@ describe('<PaperSearchBar />', () => {
   describe('search input', () => {
     it('shows the right placeholder', () => {
       renderWithRouterRedux(<PaperSearchBar />);
-      expect(screen.getByPlaceholderText(/search by DOI/)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search by title, DOI, or author/)).toBeInTheDocument();
     });
 
-    describe('when search is not a doi', () => {
-      it('shows no results, because the search API is deprecated', async () => {
-        renderWithRouterRedux(<PaperSearchBar />);
-
-        // Type in a search query
-        const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'search query');
-
-        // To account for debounce, wait for loading spinner
-        await screen.findByTestId('paper-searchbar-spinner');
-
-        // Once the result comes back from our mocked API, confirm they're rendered
-        // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('No Results Found')).toBeInTheDocument());
-      });
-    });
-
-    describe('when search is a doi', () => {
+    describe('when user searches for a paper', () => {
       it('renders relevant papers', async () => {
         renderWithRouterRedux(<PaperSearchBar />);
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
+        userEvent.type(searchInput, 'all about aardvarks');
 
         // To account for debounce, wait for loading spinner
         await screen.findByTestId('paper-searchbar-spinner');
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('Test DOI Title')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText('Test Paper Title')).toBeInTheDocument());
       });
     });
   });
@@ -66,7 +49,7 @@ describe('<PaperSearchBar />', () => {
   describe('results', () => {
     it('shows not found if none are found', async () => {
       // For this test, we want no papers to be returned, so override the mock server handler
-      server.use(rest.get('/api/searchBar/interpret/notFound', (_req, res, ctx) => res(ctx.status(200), ctx.json([]))));
+      server.use(rest.get('/api/search/notFound', (_req, res, ctx) => res(ctx.status(200), ctx.json([]))));
 
       renderWithRouterRedux(<PaperSearchBar />);
 
@@ -85,11 +68,11 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
-        await screen.findByText('Test DOI Title');
+        userEvent.type(searchInput, 'all about aardvarks');
+        await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test DOI Title'));
+        userEvent.click(screen.getByText('Test Paper Title'));
 
         // Confirm both popover options are present
         expect(screen.getByText(/Add to Reading List/)).toBeInTheDocument();
@@ -102,11 +85,11 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
-        await screen.findByText('Test DOI Title');
+        userEvent.type(searchInput, 'aardvark sleeping habits');
+        await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test DOI Title'));
+        userEvent.click(screen.getByText('Test Paper Title'));
         userEvent.click(screen.getByText(/Add to Reading List/));
       });
 
@@ -116,11 +99,11 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'http://dx.doi.org/10.1523/JNEUROSCI.2106-19');
-        await screen.findByText('Test DOI Title');
+        userEvent.type(searchInput, 'aardvark obsession');
+        await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test DOI Title'));
+        userEvent.click(screen.getByText('Test Paper Title'));
         userEvent.click(screen.getByText(/Start Review Now/));
 
         expect(screen.getByText(/Redirected/)).toBeInTheDocument();

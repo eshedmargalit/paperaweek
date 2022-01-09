@@ -24,7 +24,7 @@ describe('<Home />', () => {
 
     it('has a search bar', () => {
       renderHome(initialAuthState);
-      expect(screen.getAllByPlaceholderText(/search by DOI/)).toBeDefined();
+      expect(screen.getAllByPlaceholderText(/search by title/)).toBeDefined();
     });
 
     it('has a reading list', () => {
