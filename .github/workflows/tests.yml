@@ -5,13 +5,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,21 +18,20 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install server deps
-      working-directory: ./server
-      run: yarn --frozen-lockfile
-    - name: Run server tests
-      working-directory: ./server
-      run: yarn test
-    - name: Install client deps
-      working-directory: ./client
-      run: yarn --frozen-lockfile
-    - name: Run client tests
-      working-directory: ./client
-      run: yarn test:ci
-    
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install server deps
+        working-directory: ./server
+        run: yarn --frozen-lockfile
+      - name: Run server tests
+        working-directory: ./server
+        run: yarn test:ci
+      - name: Install client deps
+        working-directory: ./client
+        run: yarn --frozen-lockfile
+      - name: Run client tests
+        working-directory: ./client
+        run: yarn test:ci
