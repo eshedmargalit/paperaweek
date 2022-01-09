@@ -4,3 +4,5 @@
 .python-version
 *.ipynb*
 node_modules
+
+./server/coverage
