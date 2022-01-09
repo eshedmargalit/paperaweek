@@ -8,50 +8,78 @@ const OPEN_ALEX_URL = 'https://api.openalex.org';
 const MAILTO = 'paperaweek@protonmail.com';
 const MAX_RESULTS = 5;
 
-export async function getPapersByTitle(title: string): Promise<IPaper[]> {
+/**
+ *
+ * @param entity the entity you want from openAlex (e.g. works, authors)
+ * @param parameters a dictionary of the parameters you want to search for
+ * @param limit limits your query to MAX_RESULTS if true
+ * @returns a Promise fulfilling the generic or null
+ */
+async function openAlexGet<T>(
+  entity: string,
+  parameters: Record<string, string> = {},
+  limit = false
+): Promise<T | null> {
   try {
-    const worksResponse = await axios.get<WorksResponse>(
-      `${OPEN_ALEX_URL}/works?filter=title.search:${title}&per-page=${MAX_RESULTS}&mailto=${MAILTO}`
-    );
-    const papers: IPaper[] = worksResponse.data.results.map(paperFromWork);
-    return papers;
-  } catch (err) {
-    return [];
-  }
-}
+    const response = await axios.get<T>(`${OPEN_ALEX_URL}/${entity}`, {
+      params: {
+        ...(limit ? { per_page: MAX_RESULTS } : undefined),
+        mailto: MAILTO,
+        ...parameters,
+      },
+    });
 
-export async function getPapersByDOI(doi: string): Promise<IPaper[]> {
-  try {
-    const workResponse = await axios.get<Work>(`${OPEN_ALEX_URL}/works/doi:${doi}?mailto=${MAILTO}`);
-    const paper: IPaper = paperFromWork(workResponse.data);
-    return [paper];
-  } catch (err) {
-    console.log(err);
-    return [];
-  }
-}
+    if (response.data) {
+      return response.data;
+    }
 
-export async function getAuthorByName(name: string): Promise<Author | null> {
-  try {
-    const authorsResponse = await axios.get<AuthorsResponse>(
-      `${OPEN_ALEX_URL}/authors?filter=display_name.search:${name}&sort=cited_by_count&mailto=${MAILTO}`
-    );
-    const author = authorFromAuthorResponse(authorsResponse.data);
-    return author;
+    console.error(`Fetching ${entity} returned no data`);
+    return null;
   } catch (err) {
-    console.log(err);
+    if (err instanceof Error) {
+      console.error(`Failed to get ${entity}, error: ${err.message}`);
+      console.error(err);
+    }
+
     return null;
   }
 }
 
-export async function getPapersByAuthor(author: Author): Promise<IPaper[]> {
-  try {
-    const worksResponse = await axios.get<WorksResponse>(
-      `${OPEN_ALEX_URL}/works?filter=author.id:${author.id}&per-page=${MAX_RESULTS}&mailto=${MAILTO}`
-    );
-    const papers: IPaper[] = worksResponse.data.results.map(paperFromWork);
-    return papers;
-  } catch (err) {
+export async function getPapersByTitle(title: string): Promise<IPaper[]> {
+  const worksResponse = await openAlexGet<WorksResponse>('works', { filter: `title.search:${title}` }, true);
+  if (!worksResponse) {
     return [];
   }
+
+  return worksResponse.results.map(paperFromWork);
+}
+
+export async function getPapersByDOI(doi: string): Promise<IPaper[]> {
+  const workResponse = await openAlexGet<Work>(`works/doi/${doi}`);
+  if (!workResponse) {
+    return [];
+  }
+
+  return [paperFromWork(workResponse)];
+}
+
+export async function getAuthorByName(name: string): Promise<Author | null> {
+  const authorResponse = await openAlexGet<AuthorsResponse>('authors', {
+    filter: `display_name.search:${name}`,
+    sort: 'cited_by_count',
+  });
+  if (!authorResponse) {
+    return null;
+  }
+
+  return authorFromAuthorResponse(authorResponse);
+}
+
+export async function getPapersByAuthor(author: Author): Promise<IPaper[]> {
+  const worksResponse = await openAlexGet<WorksResponse>('works', { filter: `author.id:${author.id}` }, true);
+  if (!worksResponse) {
+    return [];
+  }
+
+  return worksResponse.results.map(paperFromWork);
 }
