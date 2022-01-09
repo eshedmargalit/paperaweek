@@ -13,7 +13,7 @@ export default function ThemePicker({ themes, current, onClick }: ThemePickerPro
   return (
     <div className="themePicker">
       {themes.map((c) => (
-        <ThemeColorButton color={c} isSelected={c === current} onClick={onClick} />
+        <ThemeColorButton color={c} isSelected={c === current} onClick={onClick} key={`theme-color-${c}`} />
       ))}
     </div>
   );
