@@ -10,11 +10,8 @@ export const handlers = [
   rest.delete('/api/drafts/:draftId', (_req, res, ctx) => {
     return res(ctx.status(200));
   }),
-  rest.get('/api/searchBar/interpret/:query', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Interpret Title' }, blankPaper]));
-  }),
-  rest.get('/api/doi/*', (_req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ ...blankPaper, title: 'Test DOI Title' }));
+  rest.get('/api/search/:query', (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Paper Title' }, blankPaper]));
   }),
   rest.put('/api/readingList', (_req, res, ctx) => {
     return res(ctx.status(200), ctx.json([{ ...blankPaper, title: 'Test Paper Title' }, blankPaper]));

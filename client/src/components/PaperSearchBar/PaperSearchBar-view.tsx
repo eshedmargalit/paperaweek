@@ -24,7 +24,7 @@ const renderSearchResults = (
     <Alert
       className="no-results-alert"
       message="No Results Found"
-      description="As we seek replacements for the discontinued Microsoft academic API, searches should be made by DOI. Try formatting the query like '10.7554/elife.53798'."
+      description="We support searching by DOI, keywords in the paper title, or by author name."
       type="info"
       showIcon
     />
@@ -62,7 +62,7 @@ export default function PaperSearchBarView({
             <Input
               type="text"
               onChange={(e) => handleSearch(`${e.target.value}`)}
-              placeholder="search by DOI"
+              placeholder="search by title, DOI, or author"
               value={query}
               allowClear
             />

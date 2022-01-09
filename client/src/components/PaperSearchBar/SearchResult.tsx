@@ -19,6 +19,7 @@ export default function SearchResult({
 }: SearchResultProps): JSX.Element {
   const { title, journal, date, authors } = result;
   const year: Maybe<number> = date ? new Date(date).getFullYear() : null;
+
   const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4));
 
   const [visible, setVisible] = useState(false);

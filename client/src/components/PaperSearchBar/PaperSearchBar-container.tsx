@@ -3,24 +3,14 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { constructPaperFromResponse, PaperResponse } from '../../dtos';
 import { Paper } from '../../types';
-import { isDOI } from '../utils';
 import PaperSearchBarView from './PaperSearchBar-view';
 
-const doiSearch = async (input: string): Promise<Paper[]> => {
-  let query = input;
-  if (query.includes('doi.org')) {
-    // catches both doi.org and dx.doi.org
-    query = new URL(query).pathname.substr(1);
-  }
-
-  if (query.split('/').length < 2) {
-    return [];
-  }
-
+const paperSearch = async (input: string): Promise<Paper[]> => {
   try {
-    const { data } = await axios.get<PaperResponse>(`/api/doi/${query}`);
-    return [constructPaperFromResponse(data)];
+    const { data } = await axios.get<PaperResponse[]>(`/api/search/${input}`);
+    return data.map(constructPaperFromResponse);
   } catch (err) {
+    console.error(err);
     return [];
   }
 };
@@ -51,7 +41,7 @@ export default function PaperSearchBarContainer({
     setLoading(true);
 
     // if searchQuery looks like a DOI, call that API. Otherwise short-circuit to no results
-    const resultPapers: Paper[] = isDOI(searchQuery) ? await doiSearch(searchQuery) : [];
+    const resultPapers: Paper[] = await paperSearch(searchQuery);
     setSearchResults(resultPapers);
     setLoading(false);
   };
