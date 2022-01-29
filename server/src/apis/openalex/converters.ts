@@ -1,4 +1,4 @@
-import { flatten as _flatten } from 'lodash';
+import { flatten as _flatten, uniq as _uniq } from 'lodash';
 import moment from 'moment';
 import { IPaper } from '../../models/Paper';
 import { Author } from '../../services/search.types';
@@ -10,7 +10,8 @@ function authorshipsToAuthors(authorships: Authorship[]): string[] {
 
 function authorshipsToInstitutions(authorships: Authorship[]): string[] {
   const institutionsByAuthorship = _flatten(authorships.map((authorship) => authorship.institutions));
-  return institutionsByAuthorship.map((institution) => institution.display_name);
+  const institutionNames = institutionsByAuthorship.map((institution) => institution.display_name);
+  return _uniq(institutionNames);
 }
 
 export function authorFromAuthorResponse(resp: AuthorsResponse): Author | null {
