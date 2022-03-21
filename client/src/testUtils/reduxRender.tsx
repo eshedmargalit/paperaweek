@@ -4,9 +4,8 @@ import { render, RenderResult } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Switch } from 'react-router-dom';
 import { Store } from 'redux';
-import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import rootReducer from '../slices';
+import { configureStore } from '@reduxjs/toolkit';
+import { configureStoreOptions, RootState } from '../store';
 
 interface RenderWithRouterReduxOptions {
   redirectTo?: string;
@@ -19,16 +18,6 @@ interface RenderWithRouterReduxResult extends RenderResult {
 }
 
 /**
- * Try to keep this in-line with store.ts when possible
- * Direct reuse results in false-alarm type errors which are painful and confusing to silence
- */
-
-const storeOptions: ConfigureStoreOptions = {
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
-};
-
-/**
  * Render the component wrapped in a mock router and a Redux provider
  */
 export function renderWithRouterRedux(
@@ -37,7 +26,7 @@ export function renderWithRouterRedux(
     redirectTo,
     initialState,
     store = configureStore({
-      ...storeOptions,
+      ...configureStoreOptions,
       preloadedState: initialState,
     }),
   }: RenderWithRouterReduxOptions = {}
@@ -61,5 +50,5 @@ export function renderWithRouterRedux(
 
 // Exported to help tests quickly get a blank initialState to work with
 export function getBlankInitialState(): RootState {
-  return configureStore(storeOptions).getState();
+  return configureStore(configureStoreOptions).getState();
 }
