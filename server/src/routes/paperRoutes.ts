@@ -53,7 +53,7 @@ module.exports = (app: Application) => {
         { googleId: req.user.googleId },
         {
           $pull: {
-            reviews: { _id: new Types.ObjectId(req.params.id) },
+            reviews: { _id: Types.ObjectId(req.params.id) },
           },
         },
         { new: true },

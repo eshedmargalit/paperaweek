@@ -1,6 +1,8 @@
 interface Venue {
-  display_name: string;
-  url: string;
+  source: {
+    display_name?: string;
+  };
+  landing_page_url?: string;
 }
 
 interface Author {
@@ -20,7 +22,7 @@ export interface Authorship {
 export interface Work {
   display_name: string;
   publication_date: string;
-  host_venue: Venue;
+  primary_location: Venue;
   authorships: Authorship[];
   doi: string;
 }

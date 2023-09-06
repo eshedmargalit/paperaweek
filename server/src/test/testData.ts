@@ -253,7 +253,7 @@ export const nullTestAuthorResponse = {
 export const testUserId = '6ef7637953cac5899118898f';
 
 export const testUser = new UserModel({
-  _id: new mongoose.Types.ObjectId(testUserId),
+  _id: mongoose.Types.ObjectId(testUserId),
   unique_id: 'user',
   display_name: 'Arad Margalit',
   reading_list: [],
