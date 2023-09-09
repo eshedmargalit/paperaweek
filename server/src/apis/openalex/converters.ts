@@ -23,9 +23,7 @@ export function authorFromAuthorResponse(resp: AuthorsResponse): Author | null {
 }
 
 export function paperFromWork(work: Work): IPaper {
-  console.log(work);
-  const source = work.primary_location.source ? work.primary_location.source : null;
-  const journal = source ? source.display_name : '';
+  const journal = work.primary_location.source?.display_name;
   return {
     title: work.display_name,
     authors: authorshipsToAuthors(work.authorships),
