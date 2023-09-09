@@ -10,7 +10,6 @@ const paperSearch = async (input: string): Promise<Paper[]> => {
     const { data } = await axios.get<PaperResponse[]>(`/api/search/${input}`);
     return data.map(constructPaperFromResponse);
   } catch (err) {
-    console.error(err);
     return [];
   }
 };
