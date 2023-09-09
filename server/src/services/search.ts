@@ -25,7 +25,6 @@ async function searchByAuthor(query: string): Promise<IPaper[]> {
 
 export default async function search(query: string): Promise<IPaper[]> {
   const papers = await Promise.all([searchByTitle(query), searchByDOI(query), searchByAuthor(query)]);
-  console.log(papers);
 
   return _uniqBy(_flatten(papers), 'title');
 }
