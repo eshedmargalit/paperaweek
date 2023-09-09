@@ -159,10 +159,12 @@ export const hashString = (str: string): number => {
   return Math.abs(hash);
 };
 
-export const makeHandleModalCopy = (userId: string) => (review: Review): void => {
-  const link = `${window.location.origin}/profiles/${userId}/${review._id}`;
-  navigator.clipboard.writeText(link);
-  notification.success({
-    message: 'Link Copied!',
-  });
-};
+export const makeHandleModalCopy =
+  (userId: string) =>
+  (review: Review): void => {
+    const link = `${window.location.origin}/profiles/${userId}/${review._id}`;
+    navigator.clipboard.writeText(link);
+    notification.success({
+      message: 'Link Copied!',
+    });
+  };

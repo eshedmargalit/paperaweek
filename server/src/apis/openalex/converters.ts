@@ -23,13 +23,14 @@ export function authorFromAuthorResponse(resp: AuthorsResponse): Author | null {
 }
 
 export function paperFromWork(work: Work): IPaper {
+  const journal = work.primary_location.source?.display_name;
   return {
     title: work.display_name,
     authors: authorshipsToAuthors(work.authorships),
     institutions: authorshipsToInstitutions(work.authorships),
     date: moment(work.publication_date, 'YYYY-MM-DD').toDate(),
-    journal: work.host_venue.display_name,
+    journal: journal || '',
     doi: work.doi,
-    url: work.host_venue.url,
+    url: work.primary_location.landing_page_url || '',
   };
 }

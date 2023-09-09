@@ -93,8 +93,7 @@ export const demoReviews: Review[] = [
       other: [
         "It would have been nice to see if the other SOTA models perform better on the two-category task -- I was expecting to see results there and didn't. Did I just miss something?",
       ],
-      tldr:
-        "Natural image datasets aren't useful for separating models of object recognition, since a trivial V1 model can reach SOTA on Caltech101 but fail on a two-category task with more within-category variability",
+      tldr: "Natural image datasets aren't useful for separating models of object recognition, since a trivial V1 model can reach SOTA on Caltech101 but fail on a two-category task with more within-category variability",
       keywords: ['v1', 'object recognition', 'natural images', 'caltech101'],
     },
     createdAt: new Date(moment().subtract(2.9, 'weeks').format()),

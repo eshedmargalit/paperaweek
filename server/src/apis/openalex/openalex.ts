@@ -56,6 +56,7 @@ export async function getPapersByTitle(title: string): Promise<IPaper[]> {
 
 export async function getPapersByDOI(doi: string): Promise<IPaper[]> {
   const workResponse = await openAlexGet<Work>(`works/doi/${doi}`);
+
   if (!workResponse) {
     return [];
   }

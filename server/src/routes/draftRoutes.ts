@@ -59,7 +59,7 @@ module.exports = (app: Application) => {
         { googleId: req.user.googleId },
         {
           $pull: {
-            drafts: { _id: new Types.ObjectId(req.params.id) },
+            drafts: { _id: Types.ObjectId(req.params.id) },
           },
         },
         { new: true },
