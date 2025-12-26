@@ -16,6 +16,10 @@ A simple interface for finding papers, taking detailed notes, building a habit o
 
 ## Development
 
+### Requirements
+
+- Node.js 20 (specified in `.nvmrc`)
+
 ### Backend
 
 The server is written using [Node.js](https://nodejs.org/) and [Express.js](https://expressjs.com/). Data is stored using MongoDB with [Mongoose](https://mongoosejs.com/) as an object-document mapping (ODM) library.
@@ -24,7 +28,7 @@ The website is deployed from a Docker container using Google Cloud Run.
 
 ### Frontend
 
-The interface is primarily based on [ant design](https://ant.design/), with a number of custom components added. React and Redux are used to manage component and application state, respectively.
+The interface is primarily based on [ant design](https://ant.design/), with a number of custom components added. React and Redux are used to manage component and application state, respectively. [Vite](https://vitejs.dev/) is used as the build tool and dev server.
 
 ## Guide for Developers
 
