@@ -18,7 +18,7 @@ A simple interface for finding papers, taking detailed notes, building a habit o
 
 ### Requirements
 
-- Node.js 20 (specified in `.nvmrc`)
+- Node.js 24 (specified in `.nvmrc`)
 
 ### Backend
 
