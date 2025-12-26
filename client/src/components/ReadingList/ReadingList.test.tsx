@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { blankPaper } from '../../templates';
@@ -18,34 +18,38 @@ describe('<ReadingList />', () => {
   });
 
   describe('when the user clicks the manual add button', () => {
-    beforeEach(async () => {
+    const setupManualAdd = async () => {
       renderWithRouterRedux(<ReadingList />, { initialState });
       const startButton = screen.getByRole('button');
-      userEvent.click(startButton);
+      await userEvent.click(startButton);
 
       // wait for Input to appear
       await screen.findByPlaceholderText('Paper title');
 
       // type in a title
-      userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
-    });
+      await userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
+    };
 
     it('allows papers to be added', async () => {
+      await setupManualAdd();
+
       // click the accept button
       const acceptButton = screen.getByRole('button', { name: 'submit' });
-      userEvent.click(acceptButton);
+      await userEvent.click(acceptButton);
 
       // see that our paper made it in
-      expect(screen.getByText(/giraffes/)).toBeInTheDocument();
+      await screen.findByText(/giraffes/);
     });
 
     it('allows you to bail out', async () => {
+      await setupManualAdd();
+
       // click the cancel button
       const cancelButton = screen.getByRole('button', { name: 'cancel' });
-      userEvent.click(cancelButton);
+      await userEvent.click(cancelButton);
 
       // see that our paper did not make it in
-      expect(screen.queryByText(/giraffes/)).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(/giraffes/)).not.toBeInTheDocument());
     });
   });
 
@@ -58,7 +62,7 @@ describe('<ReadingList />', () => {
 
   describe('when there is a paper in the reading list', () => {
     describe('and the authors are listed', () => {
-      const readingList: ReadingListState = [
+      const testReadingList: ReadingListState = [
         {
           ...blankPaper,
           title:
@@ -66,26 +70,26 @@ describe('<ReadingList />', () => {
           authors: ['Geoff Taylor', 'Marisa Nuzzi'],
         },
       ];
-      const initialState: RootState = { ...getBlankInitialState(), readingList };
+      const testInitialState: RootState = { ...getBlankInitialState(), readingList: testReadingList };
       it('displays the start of the paper title', () => {
-        renderWithRouterRedux(<ReadingList />, { initialState });
+        renderWithRouterRedux(<ReadingList />, { initialState: testInitialState });
         expect(screen.getByText(/The wonderful world/)).toBeInTheDocument();
       });
 
       it('does not display the end of the paper title', () => {
-        renderWithRouterRedux(<ReadingList />, { initialState });
+        renderWithRouterRedux(<ReadingList />, { initialState: testInitialState });
         expect(screen.queryByText(/starchiness/)).not.toBeInTheDocument();
       });
 
       it('shows author last names', () => {
-        renderWithRouterRedux(<ReadingList />, { initialState });
+        renderWithRouterRedux(<ReadingList />, { initialState: testInitialState });
         expect(screen.getByText(/Taylor/)).toBeInTheDocument();
         expect(screen.queryByText(/Geoff/)).not.toBeInTheDocument();
       });
     });
 
     describe('and there are no authors', () => {
-      const readingList: ReadingListState = [
+      const testReadingList2: ReadingListState = [
         {
           ...blankPaper,
           title:
@@ -93,20 +97,20 @@ describe('<ReadingList />', () => {
           authors: [],
         },
       ];
-      const initialState: RootState = { ...getBlankInitialState(), readingList };
+      const testInitialState2: RootState = { ...getBlankInitialState(), readingList: testReadingList2 };
       it('says N/A', () => {
-        renderWithRouterRedux(<ReadingList />, { initialState });
+        renderWithRouterRedux(<ReadingList />, { initialState: testInitialState2 });
         expect(screen.getByText(/N\/A/)).toBeInTheDocument();
       });
     });
   });
 
   describe('when there are no papers in the reading list', () => {
-    const readingList: ReadingListState = [];
-    const initialState: RootState = { ...getBlankInitialState(), readingList };
+    const emptyReadingList: ReadingListState = [];
+    const emptyInitialState: RootState = { ...getBlankInitialState(), readingList: emptyReadingList };
 
     it('prompts the user to add some', () => {
-      renderWithRouterRedux(<ReadingList />, { initialState });
+      renderWithRouterRedux(<ReadingList />, { initialState: emptyInitialState });
       expect(screen.getByText(/Add papers to your reading list/)).toBeInTheDocument();
     });
   });

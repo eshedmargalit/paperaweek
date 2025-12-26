@@ -53,15 +53,15 @@ describe('<Home />', () => {
     });
 
     describe('when the user clicks next', () => {
-      it('goes to the next step', () => {
+      it('goes to the next step', async () => {
         renderHome(initialAuthState);
 
         expect(screen.getByText(/all the data you will see on this tour/)).toBeInTheDocument();
 
         const nextButton = screen.getByLabelText('Next');
-        userEvent.click(nextButton);
+        await userEvent.click(nextButton);
 
-        expect(screen.getByText(/start a review immediately/)).toBeInTheDocument();
+        await screen.findByText(/start a review immediately/);
       });
     });
   });

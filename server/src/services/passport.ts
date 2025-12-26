@@ -3,14 +3,18 @@ import GoogleStrategy from 'passport-google-oauth20';
 import { getEnvironmentVariable } from '../config/keys';
 import UserModel, { UserDocument } from '../models/User';
 
-passport.serializeUser<UserDocument, string>((user, done) => {
-  done(null, user.id);
+passport.serializeUser((user: any, done) => {
+  done(null, user._id.toString());
 });
 
-passport.deserializeUser((id, done) => {
-  UserModel.findById(id).then((user) => {
-    done(null, user);
-  });
+passport.deserializeUser((id: string, done) => {
+  UserModel.findById(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err, null);
+    });
 });
 
 const googleClientID = getEnvironmentVariable('GOOGLE_CLIENT_ID');

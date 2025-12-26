@@ -1,9 +1,9 @@
-import { mocked } from 'ts-jest/utils';
+import { vi } from 'vitest';
 import * as storage from '../storage';
 import { getPersistedTheme, saveTheme } from './themes';
 
-jest.mock('../storage');
-const mockStorage = mocked(storage);
+vi.mock('../storage');
+const mockStorage = vi.mocked(storage);
 
 describe('themes', () => {
   describe(getPersistedTheme.name, () => {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
-import { RouteComponentProps } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PublicProfileContainer from './PublicProfile-container';
 import { Maybe, Profile, Review, User } from '../../types';
 
@@ -11,7 +11,7 @@ export interface PublicProfileMatchParams {
   reviewIdToOpen: Review['_id'];
 }
 
-export type PublicProfileReduxProps = RouteComponentProps<PublicProfileMatchParams>;
+export type PublicProfileReduxProps = Record<string, never>;
 
 // TODO returning string or {} or Profile or null is criminal
 const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>> => {
@@ -25,16 +25,17 @@ const getProfileData = async (userId: User['googleId']): Promise<Maybe<Profile>>
   }
 };
 
-export default function PublicProfileRedux({ match }: PublicProfileReduxProps): JSX.Element {
+export default function PublicProfileRedux(): JSX.Element {
   const [userDisplayName, setUserDisplayName] = useState('');
   const [reviewIdToOpen, setReviewIdToOpen] = useState<Review['_id'] | undefined>(undefined);
   const [reviews, setReviews] = useState<Review[] | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [isOwnPage, setIsOwnPage] = useState(false);
 
-  const { userId, reviewIdToOpen: matchedReviewId } = match.params;
+  const { userId, reviewIdToOpen: matchedReviewId } = useParams();
 
   const refreshData = async () => {
+    if (!userId) return;
     setLoading(true);
     const profileData = await getProfileData(userId);
     setLoading(false);
@@ -59,7 +60,7 @@ export default function PublicProfileRedux({ match }: PublicProfileReduxProps): 
       reviews={reviews}
       reviewIdToOpen={reviewIdToOpen}
       userDisplayName={userDisplayName}
-      userId={userId}
+      userId={userId || ''}
       loading={loading}
       isOwnPage={isOwnPage}
       onChange={wrappedRefreshData}

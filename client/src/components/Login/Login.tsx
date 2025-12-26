@@ -1,10 +1,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { Button, Col, Popover, Row } from 'antd';
 import { ExperimentOutlined, LoginOutlined } from '@ant-design/icons';
 
-import { Location } from 'history';
 import GoogleButton from 'react-google-button/dist/react-google-button';
 import './Login.scss';
 import { Maybe } from '../../types';
@@ -15,10 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { AuthState } from '../../slices/authSlice';
 import { enterDemoMode } from '../../actions';
 
-interface LoginProps {
-  location: Location;
-}
-
 const featureList = [
   'Find papers online, automatically import metadata, and write one review per week',
   'Search through reviews you’ve written',
@@ -26,29 +21,23 @@ const featureList = [
   'Write thorough, structured reviews with Markdown and LaTeX',
 ];
 
-export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
+export default function Login(): Maybe<JSX.Element> {
   const { loading, user }: AuthState = useAppSelector(({ auth }) => auth);
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { push } = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Instead of flashing a loading spinner for 1/4 second this is loading, just don't render anything
   if (loading) return null;
 
   if (user !== blankUser) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/dashboard',
-          state: { from: location },
-        }}
-      />
-    );
+    return <Navigate to="/dashboard" replace state={{ from: location }} />;
   }
 
   const handleDemo = () => {
     dispatch(enterDemoMode());
-    push('/dashboard');
+    navigate('/dashboard');
   };
 
   const LoginButton = (
@@ -78,9 +67,9 @@ export default function Login({ location }: LoginProps): Maybe<JSX.Element> {
               <Popover
                 content={LoginButton}
                 trigger="click"
-                visible={isModalOpen}
+                open={isModalOpen}
                 placement="top"
-                onVisibleChange={() => setIsModalOpen(!isModalOpen)}
+                onOpenChange={() => setIsModalOpen(!isModalOpen)}
               >
                 <Button shape="round" size="large" icon={<LoginOutlined />}>
                   Sign In

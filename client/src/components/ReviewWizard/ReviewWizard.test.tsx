@@ -19,7 +19,7 @@ describe('<ReviewWizard />', () => {
         auth: { user: { ...blankUser, reviews: [] }, loading: false, demoMode: false },
       };
       renderWithRouterRedux(<ReviewWizard />, { initialState });
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
+      await screen.findByText(/Try it yourself/);
     });
 
     it('does not open automatically if at least 1 review is present', async () => {
@@ -33,8 +33,8 @@ describe('<ReviewWizard />', () => {
 
     it('opens on click', async () => {
       renderWithRouterRedux(<ReviewWizard />);
-      userEvent.click(screen.getByText(/Help/));
-      await waitFor(() => expect(screen.getByText(/Try it yourself/)).toBeInTheDocument());
+      await userEvent.click(screen.getByText(/Help/));
+      await screen.findByText(/Try it yourself/);
     });
   });
 
@@ -50,14 +50,14 @@ describe('<ReviewWizard />', () => {
       const titleInput = screen.getByLabelText('Paper Title');
 
       //  Start typing, but click away while it's still blank
-      userEvent.type(titleInput, '');
-      userEvent.click(screen.getByText(/Paper Information/));
+      await userEvent.type(titleInput, '');
+      await userEvent.click(screen.getByText(/Paper Information/));
 
-      await waitFor(() => expect(screen.getByText(/Paper must have a title/)).toBeInTheDocument());
+      await screen.findByText(/Paper must have a title/);
 
       // Now make sure it goes away
-      userEvent.type(titleInput, 'The Great Burger Article');
-      userEvent.click(screen.getByText(/Paper Information/));
+      await userEvent.type(titleInput, 'The Great Burger Article');
+      await userEvent.click(screen.getByText(/Paper Information/));
 
       await waitFor(() => expect(screen.queryByText(/Paper must have a title/)).not.toBeInTheDocument());
     });
@@ -68,16 +68,14 @@ describe('<ReviewWizard />', () => {
       const authorInput = screen.getByLabelText('paper.authors[0]');
 
       //  Start typing, but click away while it's still blank
-      userEvent.type(authorInput, '');
-      userEvent.click(screen.getByText(/Paper Information/));
+      await userEvent.type(authorInput, '');
+      await userEvent.click(screen.getByText(/Paper Information/));
 
-      await waitFor(() =>
-        expect(screen.getByText(/Paper author must have at least one character/)).toBeInTheDocument()
-      );
+      await screen.findByText(/Paper author must have at least one character/);
 
       // Now make sure it goes away
-      userEvent.type(authorInput, 'Don McDon');
-      userEvent.click(screen.getByText(/Paper Information/));
+      await userEvent.type(authorInput, 'Don McDon');
+      await userEvent.click(screen.getByText(/Paper Information/));
 
       await waitFor(() =>
         expect(screen.queryByText(/Paper author must have at least one character/)).not.toBeInTheDocument()
@@ -89,15 +87,15 @@ describe('<ReviewWizard />', () => {
     it('shows the right tooltip for the Overview field', async () => {
       renderWithRouterRedux(<ReviewWizard />);
       const tooltips = screen.getAllByLabelText('question-circle');
-      userEvent.hover(tooltips[1]);
-      await waitFor(() => expect(screen.getByText(/What are the key takeaways/)).toBeInTheDocument());
+      await userEvent.hover(tooltips[1]);
+      await screen.findByText(/What are the key takeaways/);
     });
 
     it('shows the right tooltip for the Other field', async () => {
       renderWithRouterRedux(<ReviewWizard />);
       const tooltips = screen.getAllByLabelText('question-circle');
-      userEvent.hover(tooltips[tooltips.length - 1]);
-      await waitFor(() => expect(screen.getByText(/linking to related papers/)).toBeInTheDocument());
+      await userEvent.hover(tooltips[tooltips.length - 1]);
+      await screen.findByText(/linking to related papers/);
     });
   });
 
@@ -108,7 +106,7 @@ describe('<ReviewWizard />', () => {
     };
     it('shows the preview modal', () => {
       renderWithRouterRedux(<ReviewWizard />, { initialState });
-      expect(screen.queryByText(/Login to Continue/)).toBeInTheDocument();
+      expect(screen.getByText(/Login to Continue/)).toBeInTheDocument();
     });
   });
 });

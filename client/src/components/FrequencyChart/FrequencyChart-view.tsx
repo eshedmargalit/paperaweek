@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, Label, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
-import { Alert, Row, Col, Card, Spin, Statistic, Menu, Dropdown, Button } from 'antd';
+import { Alert, Row, Col, Card, Spin, Statistic, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import moment, { Moment } from 'moment';
@@ -37,30 +37,38 @@ export default function FrequencyChartView({ reviews }: FrequencyChartViewProps)
   const pastCutoff = moment().subtract(monthCutoff || 99999, 'months');
   const filteredReviews = reviews.filter((review) => moment(review.createdAt).diff(pastCutoff) > 0);
 
-  const dropdown = (
-    <Menu>
-      <Menu.Item key="0" onClick={() => setMonthCutoff(3)}>
-        Past 3 Months
-      </Menu.Item>
-      <Menu.Item key="1" onClick={() => setMonthCutoff(6)}>
-        Past 6 Months
-      </Menu.Item>
-      <Menu.Item key="2" onClick={() => setMonthCutoff(12)}>
-        Past Year
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="4" onClick={() => setMonthCutoff(null)}>
-        All Time
-      </Menu.Item>
-    </Menu>
-  );
+  const menuItems = [
+    {
+      key: '0',
+      label: 'Past 3 Months',
+      onClick: () => setMonthCutoff(3),
+    },
+    {
+      key: '1',
+      label: 'Past 6 Months',
+      onClick: () => setMonthCutoff(6),
+    },
+    {
+      key: '2',
+      label: 'Past Year',
+      onClick: () => setMonthCutoff(12),
+    },
+    {
+      type: 'divider' as const,
+    },
+    {
+      key: '4',
+      label: 'All Time',
+      onClick: () => setMonthCutoff(null),
+    },
+  ];
 
   const cardTitle = (
     <div className="card-title">
       <h5>Your Stats</h5>
       <div>
         Showing{` `}
-        <Dropdown overlay={dropdown}>
+        <Dropdown menu={{ items: menuItems }}>
           <Button className="ant-dropdown-link">
             {monthCutoffToString(monthCutoff)} <DownOutlined />
           </Button>

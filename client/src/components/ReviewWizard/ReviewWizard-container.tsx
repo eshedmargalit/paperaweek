@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { Moment } from 'moment';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import ReviewWizardView from './ReviewWizard-view';
@@ -76,12 +76,12 @@ export default function ReviewWizardContainer({
 
   const modal = (
     <div>
-      <ReviewModal review={review} visible={showModal} onClose={onModalCancel} buttons={buttons} />
+      <ReviewModal review={review} open={showModal} onClose={onModalCancel} buttons={buttons} />
     </div>
   );
 
   return redirectHome ? (
-    <Redirect to="/dashboard" push />
+    <Navigate to="/dashboard" replace />
   ) : (
     <ReviewWizardView
       form={form}

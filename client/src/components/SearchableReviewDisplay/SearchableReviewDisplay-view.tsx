@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { DeleteOutlined, EditOutlined, LinkOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { PageHeaderProps } from 'antd/lib/page-header';
 import ReviewModal from '../ReviewModal/ReviewModal';
+import { PageHeaderProps } from '../utils/PageHeader';
 import './SearchableReviewDisplay.scss';
 import { Review } from '../../types';
 import { SearchHandler, VoidHandler } from './types';
@@ -101,7 +101,7 @@ export default function SearchableReviewDisplayView({
       <SearchRow query={query} pageHeaderProps={pageHeaderProps} handleSearch={handleSearch} />
       <ReviewTable reviews={reviews} handleSearch={handleSearch} reviewClicked={reviewClicked} />
       {modalReview && (
-        <ReviewModal review={modalReview} visible={showModal} onClose={handleModalClose} buttons={modalButtons} />
+        <ReviewModal review={modalReview} open={showModal} onClose={handleModalClose} buttons={modalButtons} />
       )}
     </div>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import MarkdownTextArea, { MarkdownTextAreaProps } from './MarkdownTextArea';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
 
@@ -19,7 +20,7 @@ export const RHFMarkdownTextArea = ({ shouldRenderMarkdown = true }: Partial<Mar
             value={value}
             shouldRenderMarkdown={shouldRenderMarkdown}
             onChange={onChange}
-            onBlurHandler={jest.fn()}
+            onBlurHandler={vi.fn()}
           />
         )}
       />
@@ -28,7 +29,7 @@ export const RHFMarkdownTextArea = ({ shouldRenderMarkdown = true }: Partial<Mar
   );
 };
 
-const clickAway = () => userEvent.click(screen.getByText(/Some Other Element/));
+const clickAway = async () => userEvent.click(screen.getByText(/Some Other Element/));
 
 describe('MarkdownTextArea', () => {
   it('renders without crashing', () => {
@@ -42,11 +43,11 @@ describe('MarkdownTextArea', () => {
       render(<RHFMarkdownTextArea />);
       const input = screen.getByRole('textbox');
 
-      userEvent.click(input);
-      userEvent.type(input, '$\\sum_0^\\infty$');
-      clickAway();
+      await userEvent.click(input);
+      await userEvent.type(input, '$\\sum_0^\\infty$');
+      await clickAway();
 
-      await waitFor(() => expect(screen.getAllByText(/∑/)).toBeDefined());
+      await screen.findAllByText(/∑/);
       expect(screen.getAllByText(/∞/)).toBeDefined();
     });
   });
@@ -58,9 +59,9 @@ describe('MarkdownTextArea', () => {
       render(<RHFMarkdownTextArea shouldRenderMarkdown={false} />);
       const input = screen.getByRole('textbox');
 
-      userEvent.click(input);
-      userEvent.type(input, '$\\sum_0^\\infty$');
-      clickAway();
+      await userEvent.click(input);
+      await userEvent.type(input, '$\\sum_0^\\infty$');
+      await clickAway();
 
       await waitFor(() => expect(screen.queryByText(/∑/)).not.toBeInTheDocument());
     });

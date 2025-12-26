@@ -49,9 +49,9 @@ describe('<ReviewReader />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/Filter by/);
-        userEvent.type(searchInput, 'potatoes');
+        await userEvent.type(searchInput, 'potatoes');
 
-        await waitFor(() => expect(screen.getByText(/Everything About Potatoes/)).toBeInTheDocument());
+        await screen.findByText(/Everything About Potatoes/);
         await waitFor(() => expect(screen.queryByText(/Ice Cream/)).not.toBeInTheDocument());
       });
     });
@@ -62,32 +62,32 @@ describe('<ReviewReader />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/Filter by/);
-        userEvent.type(searchInput, 'ice cream');
+        await userEvent.type(searchInput, 'ice cream');
 
-        await waitFor(() => expect(screen.getByText(/Ice Cream/)).toBeInTheDocument());
+        await screen.findByText(/Ice Cream/);
         await waitFor(() => expect(screen.queryByText(/Everything/)).not.toBeInTheDocument());
       });
     });
 
     describe('review modal', () => {
       describe('when the potato paper is being read', () => {
-        it('shows the title and authors', () => {
+        it('shows the title and authors', async () => {
           renderWithRouterRedux(<ReviewReader />, { initialState });
 
           // first element is the table entry, second is the hidden modal
           const potatoPaper = screen.getAllByText(/Everything About Potatoes/)[0];
-          userEvent.click(potatoPaper);
+          await userEvent.click(potatoPaper);
 
-          expect(screen.getByText(/Eshed Margalit/)).toBeInTheDocument();
+          await screen.findByText(/Eshed Margalit/);
         });
-        it('has no TLDR', () => {
+        it('has no TLDR', async () => {
           renderWithRouterRedux(<ReviewReader />, { initialState });
 
           // first element is the table entry, second is the hidden modal
           const potatoPaper = screen.getAllByText(/Everything About Potatoes/)[0];
-          userEvent.click(potatoPaper);
+          await userEvent.click(potatoPaper);
 
-          expect(screen.queryByText(/TLDR/)).not.toBeInTheDocument();
+          await waitFor(() => expect(screen.queryByText(/TLDR/)).not.toBeInTheDocument());
         });
       });
     });

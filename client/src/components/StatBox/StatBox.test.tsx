@@ -37,10 +37,10 @@ describe('<StatBox />', () => {
       expect(screen.getByText(/Stats will begin to appear/)).toBeInTheDocument();
     });
 
-    it('lets them start a manual review', () => {
+    it('lets them start a manual review', async () => {
       renderWithRouterRedux(<StatBox />, { redirectTo: '/form' });
-      userEvent.click(screen.getByText(/Create Manual Entry/));
-      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
+      await userEvent.click(screen.getByText(/Create Manual Entry/));
+      await screen.findByText(/Redirected to a new page/);
     });
   });
 

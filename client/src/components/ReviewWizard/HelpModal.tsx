@@ -43,10 +43,10 @@ export function FormHelpInfo(): JSX.Element {
   );
 }
 
-export default function HelpModal({ visible, onCancel, onOk }: ModalFuncProps): JSX.Element {
+export default function HelpModal({ open, onCancel, onOk }: ModalFuncProps): JSX.Element {
   return (
     <div>
-      <Modal visible={visible} onCancel={onCancel} onOk={onOk} destroyOnClose footer={null} width="70%">
+      <Modal open={open} onCancel={onCancel} onOk={onOk} destroyOnHidden footer={null} width="70%">
         <FormHelpInfo />
       </Modal>
     </div>

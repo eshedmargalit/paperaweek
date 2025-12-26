@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { IPaper } from '../../models/Paper';
-import { Author } from '../../services/search.types';
-import { paperFromWork, authorFromAuthorResponse } from './converters';
-import { AuthorsResponse, Work, WorksResponse } from './types';
+import { paperFromWork } from './converters';
+import { Work, WorksResponse } from './types';
 
 const OPEN_ALEX_URL = 'https://api.openalex.org';
 const MAILTO = 'paperaweek@protonmail.com';
@@ -46,7 +45,7 @@ async function openAlexGet<T>(
 }
 
 export async function getPapersByTitle(title: string): Promise<IPaper[]> {
-  const worksResponse = await openAlexGet<WorksResponse>('works', { filter: `title.search:${title}` }, true);
+  const worksResponse = await openAlexGet<WorksResponse>('works', { search: title }, true);
   if (!worksResponse) {
     return [];
   }
@@ -64,20 +63,8 @@ export async function getPapersByDOI(doi: string): Promise<IPaper[]> {
   return [paperFromWork(workResponse)];
 }
 
-export async function getAuthorByName(name: string): Promise<Author | null> {
-  const authorResponse = await openAlexGet<AuthorsResponse>('authors', {
-    filter: `display_name.search:${name}`,
-    sort: 'cited_by_count',
-  });
-  if (!authorResponse) {
-    return null;
-  }
-
-  return authorFromAuthorResponse(authorResponse);
-}
-
-export async function getPapersByAuthor(author: Author): Promise<IPaper[]> {
-  const worksResponse = await openAlexGet<WorksResponse>('works', { filter: `author.id:${author.id}` }, true);
+export async function getPapersByAuthorName(name: string): Promise<IPaper[]> {
+  const worksResponse = await openAlexGet<WorksResponse>('works', { filter: `raw_author_name.search:${name}` }, true);
   if (!worksResponse) {
     return [];
   }

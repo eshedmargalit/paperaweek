@@ -3,21 +3,22 @@
 import { screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import { blankNotes, blankReview } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import DraftsRedux from './Drafts-redux';
 import { suppressWarnings } from '../../testUtils/suppressWarnings';
 import { RootState } from '../../store';
 
-const mockGoBack = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...(jest.requireActual('react-router-dom') as any),
-  useHistory: () => ({
-    goBack: mockGoBack,
-  }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 const initialStateWithDrafts: RootState = {
   ...getBlankInitialState(),
@@ -26,11 +27,11 @@ const initialStateWithDrafts: RootState = {
 
 describe('<Drafts />', () => {
   describe('on back', () => {
-    it('goes back to the previous page', () => {
+    it('goes back to the previous page', async () => {
       renderWithRouterRedux(<DraftsRedux />);
       const backButton = screen.getByLabelText('Back');
-      userEvent.click(backButton);
-      expect(mockGoBack).toHaveBeenCalledTimes(1);
+      await userEvent.click(backButton);
+      expect(mockNavigate).toHaveBeenCalledWith(-1);
     });
   });
 
@@ -46,25 +47,25 @@ describe('<Drafts />', () => {
       expect(screen.getByText(/it was nice/)).toBeInTheDocument();
     });
 
-    it('displays more options and actions when user clicks on a draft', () => {
+    it('displays more options and actions when user clicks on a draft', async () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
       const draftRow = screen.getByText(/it was nice/);
-      userEvent.click(draftRow);
-      expect(screen.getByText(/Delete this Draft/)).toBeInTheDocument();
+      await userEvent.click(draftRow);
+      await screen.findByText(/Delete this Draft/);
     });
 
     it('deletes a draft from Redux when the delete button is clicked', async () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
 
       // Find the draft's row and click on it.
-      userEvent.click(screen.getByText(/it was nice/));
+      await userEvent.click(screen.getByText(/it was nice/));
 
       // Now that the modal is open, find and click the delete button
-      userEvent.click(screen.getByText(/Delete this Draft/));
+      await userEvent.click(await screen.findByText(/Delete this Draft/));
 
       // Wait for antd to render the confirm modal, then click Yes
       await screen.findByText('Yes');
-      userEvent.click(screen.getByText('Yes'));
+      await userEvent.click(screen.getByText('Yes'));
 
       // Wait for the async logic to complete and for the draft to disappear
       await waitFor(() => expect(screen.queryByText(/it was nice/)).toBeNull());
@@ -74,13 +75,13 @@ describe('<Drafts />', () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts, redirectTo: '/form' });
 
       // Find the draft's row and click on it.
-      userEvent.click(screen.getByText(/it was nice/));
+      await userEvent.click(screen.getByText(/it was nice/));
 
       // Now that the modal is open, find and click the edit button
-      userEvent.click(screen.getByText(/Edit this Draft/));
+      await userEvent.click(await screen.findByText(/Edit this Draft/));
 
       // Confirm that we navigate to the "form" after clicking edit
-      expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
+      await screen.findByText(/Redirected to a new page/);
     });
   });
 });

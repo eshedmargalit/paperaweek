@@ -38,7 +38,7 @@ export function useAutoResizingTextArea(
     // https://stackoverflow.com/a/995374
     // Set the textarea's height manually based on "scrollHeight", which grows with the text content.
     currentTextArea.style.height = 'auto';
-    currentTextArea.style.height = `calc(${currentTextArea.scrollHeight}px + ${extraMargin}`;
+    currentTextArea.style.height = `calc(${currentTextArea.scrollHeight}px + ${extraMargin})`;
 
     // Set the cursor at the end for the user, since we're assuming they want to edit
     const existingLength = currentTextArea.value.length;

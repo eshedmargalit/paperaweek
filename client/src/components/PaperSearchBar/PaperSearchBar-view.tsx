@@ -1,7 +1,8 @@
 import { FileSearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Input, PageHeader, Row, Spin } from 'antd';
+import { Alert, Button, Col, Input, Row, Spin } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PageHeader from '../utils/PageHeader';
 import { Paper } from '../../types';
 
 import './PaperSearchBar.scss';
@@ -12,14 +13,14 @@ const renderSearchResults = (
   handleReadingListAdd: (paper: Paper) => void,
   handleStartReview: (paper: Paper) => void
 ) => {
-  const renderedSearchResults = searchResults.map((result: Paper) => (
+  const searchResultElements = searchResults.map((result: Paper) => (
     <span key={result.title}>
       <SearchResult result={result} handleReadingListAdd={handleReadingListAdd} handleStartReview={handleStartReview} />
     </span>
   ));
 
-  return renderedSearchResults.length ? (
-    renderedSearchResults
+  return searchResultElements.length ? (
+    searchResultElements
   ) : (
     <Alert
       className="no-results-alert"
@@ -50,7 +51,7 @@ export default function PaperSearchBarView({
   loading,
   query,
 }: PaperSearchBarViewProps): JSX.Element {
-  const renderedSearchResults = renderSearchResults(searchResults, handleReadingListAdd, handleStartReview);
+  const view = renderSearchResults(searchResults, handleReadingListAdd, handleStartReview);
   const searchArea = (
     <div>
       <div>
@@ -80,7 +81,7 @@ export default function PaperSearchBarView({
     </div>
   );
 
-  const resultsToDisplay = query === '' ? null : renderedSearchResults;
+  const resultsToDisplay = query === '' ? null : view;
 
   return (
     <div className="paper-searchbar">

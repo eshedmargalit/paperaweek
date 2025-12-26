@@ -10,7 +10,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:testing-library/recommended',
+    'plugin:testing-library/react',
   ],
   settings: {
     'import/resolver': {

@@ -2,6 +2,7 @@
 /* eslint-disable no-return-assign */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import {
   hashString,
   isDOI,
@@ -14,6 +15,17 @@ import {
 } from './utils';
 import { suppressWarnings } from '../testUtils/suppressWarnings';
 import { blankReview } from '../templates';
+import { notification } from 'antd';
+
+vi.mock('antd', async () => {
+  const actual = await vi.importActual<typeof import('antd')>('antd');
+  return {
+    ...actual,
+    notification: {
+      success: vi.fn(),
+    },
+  };
+});
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
@@ -22,21 +34,21 @@ describe('utils', () => {
     });
 
     it('renders one item without a comma separator', () => {
-      const output = renderCommaSepList(['Shrek']);
-      render(<div>{output}</div>);
+      const view = renderCommaSepList(['Shrek']);
+      render(<div>{view}</div>);
       expect(screen.getByText(/Shrek/)).toBeInTheDocument();
     });
 
     it('renders two items without a comma separator and an "and"', () => {
-      const output = renderCommaSepList(['Shrek', 'Donkey']);
-      render(<div>{output}</div>);
+      const view = renderCommaSepList(['Shrek', 'Donkey']);
+      render(<div>{view}</div>);
       expect(screen.getByText('Shrek')).toBeInTheDocument();
       expect(screen.getByText('and Donkey')).toBeInTheDocument();
     });
 
     it('renders 3 or more items with comma separation', () => {
-      const output = renderCommaSepList(['Shrek', 'Donkey', 'Fiona', 'Father Time']);
-      render(<div>{output}</div>);
+      const view = renderCommaSepList(['Shrek', 'Donkey', 'Fiona', 'Father Time']);
+      render(<div>{view}</div>);
       expect(screen.getByText(/Shrek,/)).toBeInTheDocument();
       expect(screen.getByText(/Donkey,/)).toBeInTheDocument();
       expect(screen.getByText(/Fiona/)).toBeInTheDocument();
@@ -86,14 +98,14 @@ describe('utils', () => {
 
   describe('shortenAuthors', () => {
     it('returns NAText when a single blank author is provided', () => {
-      const output = shortenAuthors(['']);
-      render(output as JSX.Element);
+      const view = shortenAuthors(['']);
+      render(view as JSX.Element);
       expect(screen.getByText('N/A')).toBeInTheDocument();
     });
 
     it('returns NAText when no authors are provided', () => {
-      const output = shortenAuthors([]);
-      render(output as JSX.Element);
+      const view = shortenAuthors([]);
+      render(view as JSX.Element);
       expect(screen.getByText('N/A')).toBeInTheDocument();
     });
 
@@ -214,7 +226,7 @@ describe('utils', () => {
   });
 
   describe(makeHandleModalCopy.name, () => {
-    const writeToClipboardMock = jest.fn();
+    const writeToClipboardMock = vi.fn();
 
     beforeAll(() => {
       Object.assign(navigator, {
@@ -224,9 +236,13 @@ describe('utils', () => {
       });
     });
 
+    beforeEach(() => {
+      writeToClipboardMock.mockClear();
+    });
+
     it('copies the right URL to the clipboard', () => {
       makeHandleModalCopy('userId')({ ...blankReview, _id: 'reviewId' });
-      expect(writeToClipboardMock).toHaveBeenCalledWith('http://localhost/profiles/userId/reviewId');
+      expect(writeToClipboardMock).toHaveBeenCalledWith('http://localhost:3000/profiles/userId/reviewId');
     });
   });
 });

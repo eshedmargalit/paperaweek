@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import { PageHeaderProps } from '../utils/PageHeader';
 import { fetchUser } from '../../actions';
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import { Review, User } from '../../types';

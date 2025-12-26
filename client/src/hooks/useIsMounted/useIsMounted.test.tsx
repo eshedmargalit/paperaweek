@@ -8,7 +8,7 @@ function TestComponent(): JSX.Element {
   return <h1>{isMounted().toString()}</h1>;
 }
 
-xdescribe('useIsMounted', () => {
+describe.skip('useIsMounted', () => {
   it('returns false before the component is mounted', async () => {
     render(<TestComponent />);
     expect(screen.getByText(/true/)).toBeInTheDocument();

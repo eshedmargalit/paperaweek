@@ -1,18 +1,17 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-
+import { vi } from 'vitest';
 import { useMedia } from 'react-media';
-import { mocked } from 'ts-jest/utils';
 import ReviewOfTheDay from '.';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import { Review } from '../../types';
 import { blankReview } from '../../templates';
 
-jest.mock('react-media', () => ({
-  useMedia: jest.fn().mockReturnValue(false),
+vi.mock('react-media', () => ({
+  useMedia: vi.fn().mockReturnValue(false),
 }));
 
-const mockedReactMedia = mocked(useMedia);
+const mockedReactMedia = vi.mocked(useMedia);
 
 function makeReview(monthsAgo: number): Review {
   const createdAt = new Date();

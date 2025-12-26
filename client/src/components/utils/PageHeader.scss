@@ -1,0 +1,41 @@
+.custom-page-header {
+  background: #fff;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+
+  &__main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__back-button {
+    margin-right: 8px;
+  }
+
+  &__avatar {
+    background-color: var(--color-primary, #1890ff);
+  }
+
+  &__title {
+    margin: 0 !important;
+    font-weight: 600;
+  }
+
+  &__extra {
+    display: flex;
+    align-items: center;
+  }
+
+  &__content {
+    margin-top: 16px;
+  }
+}

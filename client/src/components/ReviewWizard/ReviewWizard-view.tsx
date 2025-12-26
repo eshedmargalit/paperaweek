@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, PageHeader, Button } from 'antd';
+import { Alert, Button } from 'antd';
 import { QuestionCircleOutlined, SaveFilled, SaveTwoTone } from '@ant-design/icons';
 import './ReviewWizard.scss';
 import moment, { Moment } from 'moment';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import PageHeader, { PageHeaderProps } from '../utils/PageHeader';
 import { Maybe } from '../../types';
 import HelpModal, { FormHelpInfo } from './HelpModal';
 import FrostedPreview from '../FrostedPreview/FrostedPreview';
@@ -123,7 +123,7 @@ function ReviewWizardView({
         </div>
         {form}
         {modal}
-        <HelpModal visible={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
+        <HelpModal open={showHelp} onCancel={closeHelpModal} onOk={closeHelpModal} />
       </div>
     </FrostedPreview>
   );

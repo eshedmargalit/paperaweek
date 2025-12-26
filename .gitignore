@@ -5,4 +5,5 @@
 *.ipynb*
 node_modules
 
-./server/coverage
+coverage
+*.lcov

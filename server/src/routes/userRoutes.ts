@@ -4,7 +4,7 @@ import requireLogin from '../middlewares/requireLogin';
 
 module.exports = (app: Application) => {
   app.put('/api/user', requireLogin, async (req, res) => {
-    const filter = { googleId: req.user.googleId };
+    const filter = { googleId: req.user!.googleId };
     const update = req.body;
 
     try {
