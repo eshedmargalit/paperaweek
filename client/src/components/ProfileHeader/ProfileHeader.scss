@@ -7,12 +7,29 @@
     background-color: var(--color-primary) !important;
   }
 
+  .profile-actions {
+    gap: 20px;
+  }
+
   .toggle-public {
     p {
       font-size: 1.2em;
       font-weight: 600;
       color: white;
       margin: 0 5px !important;
+    }
+  }
+
+  .download-data-btn {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-primary-light, var(--color-primary));
+      border-color: var(--color-primary-light, var(--color-primary));
+      color: white;
     }
   }
 
