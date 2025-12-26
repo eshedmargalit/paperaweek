@@ -1,7 +1,6 @@
 import { uniqBy as _uniqBy, flatten as _flatten } from 'lodash';
 import { IPaper } from '../models/Paper';
-import { getPapersByTitle, getPapersByDOI, getAuthorByName, getPapersByAuthor } from '../apis/openalex/openalex';
-import { Author } from './search.types';
+import { getPapersByTitle, getPapersByDOI, getPapersByAuthorName } from '../apis/openalex/openalex';
 
 function isDOI(query: string): boolean {
   return query.startsWith('10.') || query.includes('doi.org');
@@ -16,11 +15,7 @@ async function searchByDOI(query: string): Promise<IPaper[]> {
 }
 
 async function searchByAuthor(query: string): Promise<IPaper[]> {
-  const author: Author | null = await getAuthorByName(query);
-  if (!author) {
-    return [];
-  }
-  return getPapersByAuthor(author);
+  return getPapersByAuthorName(query);
 }
 
 export default async function search(query: string): Promise<IPaper[]> {
