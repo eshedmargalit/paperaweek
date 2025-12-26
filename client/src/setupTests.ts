@@ -6,6 +6,27 @@ import { server } from './mocks/server';
 
 import '@testing-library/jest-dom/extend-expect';
 
+// Suppress React act() warnings from third-party components (antd, etc.)
+// These warnings are caused by internal state updates in libraries we don't control
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args: any[]) => {
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('Warning: An update to') ||
+        args[0].includes('was not wrapped in act') ||
+        args[0].includes('When testing, code that causes React state updates'))
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
 global.matchMedia =
   global.matchMedia ||
   (() => ({

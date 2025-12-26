@@ -15,6 +15,17 @@ import {
 } from './utils';
 import { suppressWarnings } from '../testUtils/suppressWarnings';
 import { blankReview } from '../templates';
+import { notification } from 'antd';
+
+vi.mock('antd', async () => {
+  const actual = await vi.importActual<typeof import('antd')>('antd');
+  return {
+    ...actual,
+    notification: {
+      success: vi.fn(),
+    },
+  };
+});
 
 describe('utils', () => {
   describe('renderCommaSepList', () => {
