@@ -1,8 +1,8 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { PageHeaderProps } from '../utils/PageHeader';
 import moment from 'moment';
 import React from 'react';
 import { useMedia } from 'react-media';
+import { PageHeaderProps } from '../utils/PageHeader';
 import { Review } from '../../types';
 import ReviewOfTheDayView from './ReviewOfTheDay-view';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import MenuBarRedux from './MenuBar-redux';
@@ -20,10 +20,8 @@ describe('<MenuBar />', () => {
     it('shows the information icon with information on hover', async () => {
       renderWithRouterRedux(<MenuBarRedux />);
 
-      userEvent.hover(screen.getByLabelText('info-circle'));
-      await waitFor(() =>
-        expect(screen.getByText(/Paper a Week began as an experiment in accountability/)).toBeInTheDocument()
-      );
+      await userEvent.hover(screen.getByLabelText('info-circle'));
+      await screen.findByText(/Paper a Week began as an experiment in accountability/);
     });
   });
 
@@ -42,9 +40,9 @@ describe('<MenuBar />', () => {
 
     it('shows link to profile', async () => {
       renderWithRouterRedux(<MenuBarRedux />, { initialState, redirectTo: '/profiles/' });
-      userEvent.click(screen.getByText('My Profile'));
+      await userEvent.click(screen.getByText('My Profile'));
 
-      await waitFor(() => expect(screen.getByText(/Redirect/)).toBeInTheDocument());
+      await screen.findByText(/Redirect/);
     });
   });
 });

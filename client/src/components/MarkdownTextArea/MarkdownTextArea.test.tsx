@@ -29,7 +29,7 @@ export const RHFMarkdownTextArea = ({ shouldRenderMarkdown = true }: Partial<Mar
   );
 };
 
-const clickAway = async () => await userEvent.click(screen.getByText(/Some Other Element/));
+const clickAway = async () => userEvent.click(screen.getByText(/Some Other Element/));
 
 describe('MarkdownTextArea', () => {
   it('renders without crashing', () => {
@@ -47,7 +47,7 @@ describe('MarkdownTextArea', () => {
       await userEvent.type(input, '$\\sum_0^\\infty$');
       await clickAway();
 
-      await waitFor(() => expect(screen.getAllByText(/∑/)).toBeDefined());
+      await screen.findAllByText(/∑/);
       expect(screen.getAllByText(/∞/)).toBeDefined();
     });
   });

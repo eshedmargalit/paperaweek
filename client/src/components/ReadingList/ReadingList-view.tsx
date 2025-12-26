@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Empty, List } from 'antd';
-import PageHeader from '../utils/PageHeader';
 import { OrderedListOutlined, DeleteOutlined, FormOutlined, MenuOutlined } from '@ant-design/icons';
 import {
   DndContext,
@@ -20,6 +19,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import moment from 'moment';
+import PageHeader from '../utils/PageHeader';
 import { shortenAuthors, shortenString, stringArrayHasNonEmpty } from '../utils';
 import './ReadingList.scss';
 import { Paper } from '../../types';
@@ -110,7 +110,7 @@ export default function ReadingListView({
         <List bordered style={{ height: LIST_HEIGHT, overflow: 'scroll' }}>
           {items.map((value, index) => (
             <SortableItem
-              key={`item-${index}`}
+              key={`item-${index}`} // eslint-disable-line react/no-array-index-key
               id={`item-${index}`}
               value={value}
               handleEditClick={handleEditClick}

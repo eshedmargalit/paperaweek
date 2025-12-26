@@ -3,7 +3,7 @@ import * as storage from '../storage';
 import { getPersistedTheme, saveTheme } from './themes';
 
 vi.mock('../storage');
-const mockStorage = storage as any;
+const mockStorage = vi.mocked(storage);
 
 describe('themes', () => {
   describe(getPersistedTheme.name, () => {

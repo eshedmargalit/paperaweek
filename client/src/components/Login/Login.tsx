@@ -14,8 +14,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { AuthState } from '../../slices/authSlice';
 import { enterDemoMode } from '../../actions';
 
-interface LoginProps {}
-
 const featureList = [
   'Find papers online, automatically import metadata, and write one review per week',
   'Search through reviews you’ve written',

@@ -51,7 +51,7 @@ describe('<Drafts />', () => {
       renderWithRouterRedux(<DraftsRedux />, { initialState: initialStateWithDrafts });
       const draftRow = screen.getByText(/it was nice/);
       await userEvent.click(draftRow);
-      await waitFor(() => expect(screen.getByText(/Delete this Draft/)).toBeInTheDocument());
+      await screen.findByText(/Delete this Draft/);
     });
 
     it('deletes a draft from Redux when the delete button is clicked', async () => {
@@ -81,7 +81,7 @@ describe('<Drafts />', () => {
       await userEvent.click(await screen.findByText(/Edit this Draft/));
 
       // Confirm that we navigate to the "form" after clicking edit
-      await waitFor(() => expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument());
+      await screen.findByText(/Redirected to a new page/);
     });
   });
 });

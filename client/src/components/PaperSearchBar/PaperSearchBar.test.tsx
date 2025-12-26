@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import PaperSearchBar from '.';
@@ -26,14 +26,14 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'all about aardvarks');
+        await userEvent.type(searchInput, 'all about aardvarks');
 
         // To account for debounce, wait for loading spinner
         await screen.findByTestId('paper-searchbar-spinner');
 
         // Once the result comes back from our mocked API, confirm they're rendered
         // This mock data we're expecting is defined in handlers.ts
-        await waitFor(() => expect(screen.getByText('Test Paper Title')).toBeInTheDocument());
+        await screen.findByText('Test Paper Title');
       });
     });
   });
@@ -58,7 +58,7 @@ describe('<PaperSearchBar />', () => {
       await userEvent.type(searchInput, 'notFound');
 
       // Once no result comes back from our mocked API, confirm our custom message is rendered
-      await waitFor(() => expect(screen.getByText('No Results Found')).toBeInTheDocument());
+      await screen.findByText('No Results Found');
     });
 
     describe('result interaction', () => {
@@ -75,7 +75,7 @@ describe('<PaperSearchBar />', () => {
         await userEvent.click(screen.getByText('Test Paper Title'));
 
         // Confirm both popover options are present
-        await waitFor(() => expect(screen.getByText(/Add to Reading List/)).toBeInTheDocument());
+        await screen.findByText(/Add to Reading List/);
         expect(screen.getByText(/Start Review Now/)).toBeInTheDocument();
       });
 
@@ -106,7 +106,7 @@ describe('<PaperSearchBar />', () => {
         await userEvent.click(screen.getByText('Test Paper Title'));
         await userEvent.click(screen.getByText(/Start Review Now/));
 
-        await waitFor(() => expect(screen.getByText(/Redirected/)).toBeInTheDocument());
+        await screen.findByText(/Redirected/);
       });
     });
   });

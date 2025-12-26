@@ -1,8 +1,7 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { rest } from 'msw';
 import userEvent from '@testing-library/user-event';
-import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -44,7 +43,7 @@ function renderWithMatchOptions(
 describe('<PublicProfile />', () => {
   it('renders without crashing', async () => {
     renderWithMatchOptions();
-    await waitFor(() => expect(screen.getByText(/Nobody can see/)).toBeInTheDocument());
+    await screen.findByText(/Nobody can see/);
   });
 
   describe('when the profile belongs to the logged-in user', () => {
@@ -52,7 +51,7 @@ describe('<PublicProfile />', () => {
       it('renders without crashing', async () => {
         const googleId = '12345';
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, false);
-        await waitFor(() => expect(screen.getByText(/Nobody can see/)).toBeInTheDocument());
+        await screen.findByText(/Nobody can see/);
       });
     });
 
@@ -77,7 +76,7 @@ describe('<PublicProfile />', () => {
 
       it("shows the user's review", async () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, true);
-        await waitFor(() => expect(screen.getByText(`${userDisplayName}'s Reviews`)).toBeInTheDocument());
+        await screen.findByText(`${userDisplayName}'s Reviews`);
       });
 
       it('allows copying the link to the reviews', async () => {
@@ -86,7 +85,7 @@ describe('<PublicProfile />', () => {
 
         await userEvent.click(screen.getByText('Paper Title'));
 
-        await waitFor(() => expect(screen.getByText('Copy Link')).toBeInTheDocument());
+        await screen.findByText('Copy Link');
       });
     });
   });
@@ -105,7 +104,7 @@ describe('<PublicProfile />', () => {
 
       it('shows a privacy explainer page', async () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId: `not ${googleId}` }, false);
-        await waitFor(() => expect(screen.getByText(/This Profile is Private/)).toBeInTheDocument());
+        await screen.findByText(/This Profile is Private/);
       });
     });
 
@@ -126,7 +125,7 @@ describe('<PublicProfile />', () => {
 
       it("shows the user's review", async () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId: `not ${googleId}` }, false);
-        await waitFor(() => expect(screen.getByText(`${userDisplayName}'s Reviews`)).toBeInTheDocument());
+        await screen.findByText(`${userDisplayName}'s Reviews`);
       });
     });
   });

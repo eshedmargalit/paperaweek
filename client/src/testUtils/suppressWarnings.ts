@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-return-assign */
+/* eslint-disable import/no-extraneous-dependencies */
 import { vi } from 'vitest';
 
 /**

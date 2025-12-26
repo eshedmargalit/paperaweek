@@ -30,7 +30,3 @@ export interface Work {
 export interface WorksResponse {
   results: Work[];
 }
-
-export interface AuthorsResponse {
-  results: Author[];
-}
