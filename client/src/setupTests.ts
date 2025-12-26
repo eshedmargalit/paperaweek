@@ -47,6 +47,23 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+// Mock getComputedStyle for React 19 + Ant Design compatibility
+// This is needed for modals and portals to render properly in jsdom
+const originalGetComputedStyle = window.getComputedStyle;
+window.getComputedStyle = (element: Element) => {
+  const styles = originalGetComputedStyle(element);
+  // Return a proxy that provides default values for any missing properties
+  return new Proxy(styles, {
+    get: (target, prop) => {
+      if (prop in target) {
+        return target[prop as keyof CSSStyleDeclaration];
+      }
+      // Return empty string for any undefined style properties
+      return '';
+    },
+  }) as CSSStyleDeclaration;
+};
+
 export {};
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());
