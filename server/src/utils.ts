@@ -44,6 +44,7 @@ const createApp = (): Application => {
   require('./routes/searchBarRoutes')(app);
   require('./routes/profileRoutes')(app);
   require('./routes/healthRoutes')(app);
+  require('./routes/exportRoutes')(app);
 
   if (process.env.NODE_ENV === 'production') {
     // Express knows how to serve production assets (like main.js)
