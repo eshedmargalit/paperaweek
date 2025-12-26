@@ -20,7 +20,8 @@ export default function SearchResult({
   const { title, journal, date, authors } = result;
   const year: Maybe<number> = date ? new Date(date).getFullYear() : null;
 
-  const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4));
+  // eslint-disable-next-line testing-library/render-result-naming-convention
+  const authorNamesText = renderCommaSepList(removeMiddleAuthors(authors, 4));
 
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!open);
@@ -60,7 +61,7 @@ export default function SearchResult({
           <div>
             <strong>{title}</strong>
             <br />
-            {renderedAuthorNames}
+            {authorNamesText}
           </div>
         </div>
         <em>

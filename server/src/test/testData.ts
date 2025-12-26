@@ -804,57 +804,6 @@ export const testWork = {
   created_date: '2023-05-20',
 };
 
-export const testAuthor = {
-  name: 'Torsten N. Wiesel',
-  id: 'https://openalex.org/A2023460828',
-};
-
-export const testAuthorResponse = {
-  meta: {
-    count: 7,
-    db_response_time_ms: 20,
-    page: 1,
-    per_page: 25,
-  },
-  results: [
-    {
-      id: 'https://openalex.org/A2023460828',
-      display_name: 'Torsten N. Wiesel',
-      display_name_alternatives: [],
-      relevance_score: null,
-      orcid: null,
-      works_count: 92,
-      cited_by_count: 55945,
-      ids: {
-        openalex: 'https://openalex.org/A2023460828',
-        orcid: null,
-        scopus: null,
-        twitter: null,
-        wikipedia: null,
-        mag: '2023460828',
-      },
-      last_known_institution: {
-        id: 'https://openalex.org/I83399316',
-        ror: 'https://ror.org/0420db125',
-        display_name: 'Rockefeller University',
-        country_code: 'US',
-        type: 'education',
-      },
-    },
-  ],
-};
-
-export const nullTestAuthorResponse = {
-  meta: {
-    count: 0,
-    db_response_time_ms: 19,
-    page: 1,
-    per_page: 25,
-  },
-  results: [],
-  group_by: [],
-};
-
 export const testUserId = '6ef7637953cac5899118898f';
 
 export const testUser = new UserModel({

@@ -51,7 +51,7 @@ describe('<ReviewReader />', () => {
         const searchInput = screen.getByPlaceholderText(/Filter by/);
         await userEvent.type(searchInput, 'potatoes');
 
-        await waitFor(() => expect(screen.getByText(/Everything About Potatoes/)).toBeInTheDocument());
+        await screen.findByText(/Everything About Potatoes/);
         await waitFor(() => expect(screen.queryByText(/Ice Cream/)).not.toBeInTheDocument());
       });
     });
@@ -64,7 +64,7 @@ describe('<ReviewReader />', () => {
         const searchInput = screen.getByPlaceholderText(/Filter by/);
         await userEvent.type(searchInput, 'ice cream');
 
-        await waitFor(() => expect(screen.getByText(/Ice Cream/)).toBeInTheDocument());
+        await screen.findByText(/Ice Cream/);
         await waitFor(() => expect(screen.queryByText(/Everything/)).not.toBeInTheDocument());
       });
     });
@@ -78,7 +78,7 @@ describe('<ReviewReader />', () => {
           const potatoPaper = screen.getAllByText(/Everything About Potatoes/)[0];
           await userEvent.click(potatoPaper);
 
-          await waitFor(() => expect(screen.getByText(/Eshed Margalit/)).toBeInTheDocument());
+          await screen.findByText(/Eshed Margalit/);
         });
         it('has no TLDR', async () => {
           renderWithRouterRedux(<ReviewReader />, { initialState });

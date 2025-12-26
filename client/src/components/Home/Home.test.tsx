@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Home from '.';
@@ -61,7 +61,7 @@ describe('<Home />', () => {
         const nextButton = screen.getByLabelText('Next');
         await userEvent.click(nextButton);
 
-        await waitFor(() => expect(screen.getByText(/start a review immediately/)).toBeInTheDocument());
+        await screen.findByText(/start a review immediately/);
       });
     });
   });

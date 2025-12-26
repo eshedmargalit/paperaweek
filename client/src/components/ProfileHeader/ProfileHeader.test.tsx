@@ -42,7 +42,7 @@ describe('<ProfileHeader />', () => {
         renderProfileHeader();
 
         const toggleSwitch = screen.getByRole('switch');
-        userEvent.click(toggleSwitch);
+        await userEvent.click(toggleSwitch);
 
         // Wait for loading to end
         await waitFor(() => expect(screen.queryByLabelText('loading')).not.toBeInTheDocument());

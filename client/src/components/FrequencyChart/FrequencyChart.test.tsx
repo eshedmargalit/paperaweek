@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import React from 'react';
@@ -67,7 +67,7 @@ describe('<FrequencyChart />', () => {
         await userEvent.hover(dropdown);
         await screen.findByText('Past Year');
         await userEvent.click(screen.getByText('Past Year'));
-        await waitFor(() => expect(screen.getByText(/written/)).toBeInTheDocument());
+        await screen.findByText(/written/);
       });
     });
   });
@@ -105,7 +105,7 @@ describe('<FrequencyChart />', () => {
           await userEvent.hover(dropdown);
           await screen.findByText(buttonText);
           await userEvent.click(screen.getByText(buttonText));
-          await waitFor(() => expect(screen.getByText(expectedText)).toBeInTheDocument());
+          await screen.findByText(expectedText);
         });
       });
     });

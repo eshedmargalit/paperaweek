@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import moment from 'moment';
@@ -40,7 +40,7 @@ describe('<StatBox />', () => {
     it('lets them start a manual review', async () => {
       renderWithRouterRedux(<StatBox />, { redirectTo: '/form' });
       await userEvent.click(screen.getByText(/Create Manual Entry/));
-      await waitFor(() => expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument());
+      await screen.findByText(/Redirected to a new page/);
     });
   });
 
