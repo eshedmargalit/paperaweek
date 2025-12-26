@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import React from 'react';
@@ -64,10 +64,10 @@ describe('<FrequencyChart />', () => {
       it('renders those old reviews', async () => {
         render(<FrequencyChart reviews={reviews} />);
         const dropdown = screen.getByRole('button');
-        userEvent.hover(dropdown);
+        await userEvent.hover(dropdown);
         await screen.findByText('Past Year');
-        userEvent.click(screen.getByText('Past Year'));
-        expect(screen.getByText(/written/)).toBeInTheDocument();
+        await userEvent.click(screen.getByText('Past Year'));
+        await waitFor(() => expect(screen.getByText(/written/)).toBeInTheDocument());
       });
     });
   });
@@ -102,10 +102,10 @@ describe('<FrequencyChart />', () => {
         it('renders the expected statistics', async () => {
           render(<FrequencyChart reviews={reviews} />);
           const dropdown = screen.getByRole('button');
-          userEvent.hover(dropdown);
+          await userEvent.hover(dropdown);
           await screen.findByText(buttonText);
-          userEvent.click(screen.getByText(buttonText));
-          expect(screen.getByText(expectedText)).toBeInTheDocument();
+          await userEvent.click(screen.getByText(buttonText));
+          await waitFor(() => expect(screen.getByText(expectedText)).toBeInTheDocument());
         });
       });
     });

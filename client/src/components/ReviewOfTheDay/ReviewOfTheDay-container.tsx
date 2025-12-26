@@ -1,5 +1,5 @@
 import { ClockCircleOutlined } from '@ant-design/icons';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import { PageHeaderProps } from '../utils/PageHeader';
 import moment from 'moment';
 import React from 'react';
 import { useMedia } from 'react-media';
@@ -19,7 +19,7 @@ export default function ReviewOfTheDayContainer({ rotd }: ReviewOfTheDayContaine
 
   // Pageheader subtitles look awful on small screens, so we don't bother
   const isSmallScreen = useMedia({ query: '(max-width: 599px)' });
-  const subTitle = isSmallScreen ? null : `You wrote these notes ${weeksAgo(rotd)} weeks ago`;
+  const subTitle = isSmallScreen ? undefined : `You wrote these notes ${weeksAgo(rotd)} weeks ago`;
   const avatar = { icon: <ClockCircleOutlined /> };
   const pageHeaderProps: PageHeaderProps = {
     title,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 
 import Home from './components/Home';
 import Login from './components/Login/Login';
@@ -26,15 +26,15 @@ export default function App(): JSX.Element {
   return (
     <BrowserRouter>
       <div className="App" data-color-theme={currentTheme}>
-        <Route path="/" component={MenuBar} />
-        <Switch>
-          <Route path="/profiles/:userId/:reviewIdToOpen?" component={PublicProfile} />
-          <Route exact path="/" component={Login} />
-          <Route exact path="/dashboard" component={Home} />
-          <Route exact path="/form" component={ReviewWizard} />
-          <Route exact path="/drafts" component={DraftPage} />
-          <Route component={NotFound} />
-        </Switch>
+        <MenuBar />
+        <Routes>
+          <Route path="/profiles/:userId/:reviewIdToOpen?" element={<PublicProfile />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/form" element={<ReviewWizard />} />
+          <Route path="/drafts" element={<DraftPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </div>
     </BrowserRouter>
   );

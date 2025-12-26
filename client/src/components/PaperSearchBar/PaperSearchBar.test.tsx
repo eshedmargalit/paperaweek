@@ -39,9 +39,9 @@ describe('<PaperSearchBar />', () => {
   });
 
   describe('manual entry button', () => {
-    it('redirects to the form page', () => {
+    it('redirects to the form page', async () => {
       renderWithRouterRedux(<PaperSearchBar />, { redirectTo: '/form' });
-      userEvent.click(screen.getByText(/Create Manual Entry/));
+      await userEvent.click(screen.getByText(/Create Manual Entry/));
       expect(screen.getByText(/Redirected to a new page/)).toBeInTheDocument();
     });
   });
@@ -55,7 +55,7 @@ describe('<PaperSearchBar />', () => {
 
       // Type in a search query
       const searchInput = screen.getByPlaceholderText(/search by/);
-      userEvent.type(searchInput, 'notFound');
+      await userEvent.type(searchInput, 'notFound');
 
       // Once no result comes back from our mocked API, confirm our custom message is rendered
       await waitFor(() => expect(screen.getByText('No Results Found')).toBeInTheDocument());
@@ -68,14 +68,14 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'all about aardvarks');
+        await userEvent.type(searchInput, 'all about aardvarks');
         await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test Paper Title'));
+        await userEvent.click(screen.getByText('Test Paper Title'));
 
         // Confirm both popover options are present
-        expect(screen.getByText(/Add to Reading List/)).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/Add to Reading List/)).toBeInTheDocument());
         expect(screen.getByText(/Start Review Now/)).toBeInTheDocument();
       });
 
@@ -85,12 +85,12 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'aardvark sleeping habits');
+        await userEvent.type(searchInput, 'aardvark sleeping habits');
         await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test Paper Title'));
-        userEvent.click(screen.getByText(/Add to Reading List/));
+        await userEvent.click(screen.getByText('Test Paper Title'));
+        await userEvent.click(screen.getByText(/Add to Reading List/));
       });
 
       it('starts the review now', async () => {
@@ -99,14 +99,14 @@ describe('<PaperSearchBar />', () => {
 
         // Type in a search query
         const searchInput = screen.getByPlaceholderText(/search by/);
-        userEvent.type(searchInput, 'aardvark obsession');
+        await userEvent.type(searchInput, 'aardvark obsession');
         await screen.findByText('Test Paper Title');
 
         // Click on the item
-        userEvent.click(screen.getByText('Test Paper Title'));
-        userEvent.click(screen.getByText(/Start Review Now/));
+        await userEvent.click(screen.getByText('Test Paper Title'));
+        await userEvent.click(screen.getByText(/Start Review Now/));
 
-        expect(screen.getByText(/Redirected/)).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/Redirected/)).toBeInTheDocument());
       });
     });
   });

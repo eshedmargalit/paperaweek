@@ -1,11 +1,11 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-plusplus */
-import React, { ElementType } from 'react';
+import React from 'react';
 import moment from 'moment';
 
-import { InlineMath, BlockMath } from 'react-katex';
-import math from 'remark-math';
-import gfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
+import rehypeKatex from 'rehype-katex';
 
 import ReactMarkdown from 'react-markdown';
 
@@ -122,23 +122,17 @@ export const getReviewStats = (reviews: Review[]): ReviewStats => {
 
 export const isDOI = (query: string): boolean => query.startsWith('10.') || query.includes('doi.org');
 
-/**
- * This type comes from the ReactMarkdown package. We're declaring it ourselves because it isn't exported.
- */
-type RenderersProps = { [nodeType: string]: ElementType };
-
 export const wrapMarkdownWithMath = (markdownString: string): JSX.Element => {
-  const renderers: RenderersProps = {
-    inlineMath: ({ value }) => <InlineMath math={value} />,
-
-    math: ({ value }) => <BlockMath math={value} />,
-
-    // Prevent images from taking more than 90% of the preview box
-    image: ({ alt, src, title }) => <img alt={alt} src={src} title={title} style={{ maxWidth: '90%' }} />,
-  };
-
   return (
-    <ReactMarkdown plugins={[gfm, math]} renderers={renderers}>
+    // @ts-expect-error - Type conflict between @types/react versions, safe to ignore
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm, remarkMath]}
+      rehypePlugins={[rehypeKatex]}
+      components={{
+        // Prevent images from taking more than 90% of the preview box
+        img: ({ alt, src, title }) => <img alt={alt} src={src} title={title} style={{ maxWidth: '90%' }} />,
+      }}
+    >
       {markdownString}
     </ReactMarkdown>
   );

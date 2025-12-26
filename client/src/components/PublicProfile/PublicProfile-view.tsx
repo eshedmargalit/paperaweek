@@ -2,7 +2,7 @@ import './PublicProfile.scss';
 import React from 'react';
 
 import { Row, Col, Spin, Alert } from 'antd';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import { PageHeaderProps } from '../utils/PageHeader';
 
 import SearchableReviewDisplay from '../SearchableReviewDisplay';
 import MinimalStatBox from '../MinimalStatBox';

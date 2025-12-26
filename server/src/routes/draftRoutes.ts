@@ -7,7 +7,7 @@ import requireLogin from '../middlewares/requireLogin';
 
 module.exports = (app: Application) => {
   app.get('/api/drafts', requireLogin, async (req, res) => {
-    res.send(JSON.stringify(req.user.drafts));
+    res.send(JSON.stringify(req.user!.drafts));
   });
 
   app.post('/api/drafts', requireLogin, async (req, res) => {
@@ -20,8 +20,8 @@ module.exports = (app: Application) => {
       _id: new Types.ObjectId(),
     });
 
-    req.user.drafts.push(newReview);
-    req.user.save();
+    req.user!.drafts.push(newReview);
+    req.user!.save();
     res.send(JSON.stringify(newReview));
   });
 
@@ -32,8 +32,8 @@ module.exports = (app: Application) => {
       const newPaper = new PaperModel(paper);
       const user = await UserModel.findOneAndUpdate(
         {
-          googleId: req.user.googleId,
-          'drafts._id': Types.ObjectId(req.body.id),
+          googleId: req.user!.googleId,
+          'drafts._id': new Types.ObjectId(req.body.id),
         },
         {
           $set: {
@@ -55,22 +55,20 @@ module.exports = (app: Application) => {
 
   app.delete('/api/drafts/:id', requireLogin, async (req, res) => {
     try {
-      UserModel.findOneAndUpdate(
-        { googleId: req.user.googleId },
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { googleId: req.user!.googleId },
         {
           $pull: {
-            drafts: { _id: Types.ObjectId(req.params.id) },
+            drafts: { _id: new Types.ObjectId(req.params.id) },
           },
         },
-        { new: true },
-        (err, draft) => {
-          if (err) {
-            console.error(err);
-          } else {
-            res.send(JSON.stringify(draft));
-          }
-        }
+        { new: true }
       );
+      if (updatedUser) {
+        res.send(JSON.stringify(updatedUser));
+      } else {
+        res.status(404).send('User or draft not found');
+      }
     } catch (err) {
       res.status(500).send(err);
     }

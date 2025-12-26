@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { PageHeader } from 'antd';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import PageHeader, { PageHeaderProps } from '../utils/PageHeader';
 import { Review } from '../../types';
 import ReviewDisplay from '../ReviewDisplay/ReviewDisplay';
 import FadePreview from '../FadePreview/FadePreview';

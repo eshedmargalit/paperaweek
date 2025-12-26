@@ -1,5 +1,4 @@
 import React from 'react';
-import '@ant-design/compatible/assets/index.css';
 import { Switch } from 'antd';
 import './ProfileHeader.scss';
 import { Profile } from '../../types';

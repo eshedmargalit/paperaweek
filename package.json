@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "description": "A simple interface for finding papers, taking detailed notes, building a habit out of reading papers, and sharing your ideas with others.",
   "scripts": {
-    "client": "cd client && yarn start",
+    "client": "cd client && yarn dev",
     "server": "cd server && yarn server",
-    "start": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"[{name}]\" -n \"CLIENT,SERVER\" \"yarn run client\" \"yarn run server\" "
+    "start": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"[{name}]\" -n \"CLIENT,SERVER\" \"yarn client\" \"yarn server\"",
+    "build": "cd client && yarn build",
+    "test": "cd client && yarn test && cd ../server && yarn test",
+    "install-all": "yarn install && cd client && yarn install && cd ../server && yarn install"
   },
   "repository": {
     "type": "git",

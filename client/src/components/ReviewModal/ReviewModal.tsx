@@ -8,12 +8,12 @@ import ReviewDisplay from '../ReviewDisplay/ReviewDisplay';
 
 export interface ReviewModalProps {
   review: Review;
-  visible: boolean;
+  open: boolean;
   onClose: VoidFunction;
   buttons: Maybe<JSX.Element>;
 }
 
-export default function ReviewModal({ review, visible, onClose, buttons }: ReviewModalProps): JSX.Element {
+export default function ReviewModal({ review, open, onClose, buttons }: ReviewModalProps): JSX.Element {
   const ModalTitle = () => (
     <div className="flex modal-title">
       {review.paper.title}
@@ -22,7 +22,7 @@ export default function ReviewModal({ review, visible, onClose, buttons }: Revie
   );
 
   return (
-    <Modal title={<ModalTitle />} visible={visible} onCancel={onClose} footer={null} destroyOnClose width="80%">
+    <Modal title={<ModalTitle />} open={open} onCancel={onClose} footer={null} destroyOnHidden width="80%">
       <div className="review-modal">
         <ReviewDisplay review={review} showTitle={false} />
       </div>

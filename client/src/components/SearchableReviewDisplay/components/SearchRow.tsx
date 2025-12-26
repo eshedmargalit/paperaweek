@@ -1,6 +1,6 @@
 import React from 'react';
-import { Col, Input, PageHeader, Row } from 'antd';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import { Col, Input, Row } from 'antd';
+import PageHeader, { PageHeaderProps } from '../../utils/PageHeader';
 import { ReadOutlined } from '@ant-design/icons';
 import { SearchHandler } from '../types';
 import './SearchRow.scss';

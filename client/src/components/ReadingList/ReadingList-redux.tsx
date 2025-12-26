@@ -1,6 +1,6 @@
 import React from 'react';
 import arrayMove from 'array-move';
-import { SortEndHandler } from 'react-sortable-hoc';
+import { DragEndEvent } from '@dnd-kit/core';
 import ReadingListContainer from './ReadingList-container';
 import { Paper, Review } from '../../types';
 import { blankNotes } from '../../templates';
@@ -20,9 +20,15 @@ export default function ReadingListRedux(): JSX.Element {
     dispatch(setActiveReview(newReview));
   };
 
-  const onSortEnd: SortEndHandler = ({ oldIndex, newIndex }) => {
-    const newReadingList = arrayMove(readingList, oldIndex, newIndex);
-    setReadingList(newReadingList);
+  const onDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = parseInt(active.id.toString().replace('item-', ''), 10);
+      const newIndex = parseInt(over.id.toString().replace('item-', ''), 10);
+      const newReadingList = arrayMove(readingList, oldIndex, newIndex);
+      setReadingList(newReadingList);
+    }
   };
 
   const removeFromReadingList = (paper: Paper) => {
@@ -35,7 +41,7 @@ export default function ReadingListRedux(): JSX.Element {
       items={readingList}
       handleEditClick={handleEditClick}
       handleDeleteClick={removeFromReadingList}
-      onSortEnd={onSortEnd}
+      onDragEnd={onDragEnd}
     />
   );
 }

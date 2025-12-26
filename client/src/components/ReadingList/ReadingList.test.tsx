@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { blankPaper } from '../../templates';
@@ -21,31 +21,31 @@ describe('<ReadingList />', () => {
     beforeEach(async () => {
       renderWithRouterRedux(<ReadingList />, { initialState });
       const startButton = screen.getByRole('button');
-      userEvent.click(startButton);
+      await userEvent.click(startButton);
 
       // wait for Input to appear
       await screen.findByPlaceholderText('Paper title');
 
       // type in a title
-      userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
+      await userEvent.type(screen.getByPlaceholderText('Paper title'), 'Everything about giraffes');
     });
 
     it('allows papers to be added', async () => {
       // click the accept button
       const acceptButton = screen.getByRole('button', { name: 'submit' });
-      userEvent.click(acceptButton);
+      await userEvent.click(acceptButton);
 
       // see that our paper made it in
-      expect(screen.getByText(/giraffes/)).toBeInTheDocument();
+      await waitFor(() => expect(screen.getByText(/giraffes/)).toBeInTheDocument());
     });
 
     it('allows you to bail out', async () => {
       // click the cancel button
       const cancelButton = screen.getByRole('button', { name: 'cancel' });
-      userEvent.click(cancelButton);
+      await userEvent.click(cancelButton);
 
       // see that our paper did not make it in
-      expect(screen.queryByText(/giraffes/)).not.toBeInTheDocument();
+      await waitFor(() => expect(screen.queryByText(/giraffes/)).not.toBeInTheDocument());
     });
   });
 

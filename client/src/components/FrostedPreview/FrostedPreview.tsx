@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import './FrostedPreview.scss';
 import { Modal } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface FrostedPreviewProps {
   isPreview?: boolean;
@@ -15,12 +15,12 @@ export default function FrostedPreview({
   modalContent,
   isPreview = false,
 }: FrostedPreviewProps): JSX.Element {
-  const { goBack } = useHistory();
+  const navigate = useNavigate();
 
   return (
     <>
       <div className={cx('frosted-preview', { isPreview })}>{children}</div>
-      <Modal visible={isPreview} footer={null} onCancel={goBack} closable={false}>
+      <Modal open={isPreview} footer={null} onCancel={() => navigate(-1)} closable={false}>
         {modalContent}
       </Modal>
     </>

@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
@@ -12,10 +12,9 @@ import MaintenancePage from './components/MaintenancePage';
 // and this prevents users from getting around the page by directly hitting endpoints registered by React Router
 const IS_UNDER_MAINTENANCE = false;
 
-ReactDOM.render(
-  <Provider store={store}>{!IS_UNDER_MAINTENANCE ? <App /> : <MaintenancePage />}</Provider>,
-  document.getElementById('root')
-);
+const container = document.getElementById('root')!;
+const root = createRoot(container);
+root.render(<Provider store={store}>{!IS_UNDER_MAINTENANCE ? <App /> : <MaintenancePage />}</Provider>);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

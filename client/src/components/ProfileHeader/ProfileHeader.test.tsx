@@ -1,20 +1,21 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
 import ProfileHeader from '.';
 import { ProfileHeaderReduxProps } from './ProfileHeader-redux';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 import { blankUser } from '../../templates';
 
 const defaultProps: ProfileHeaderReduxProps = {
-  onChange: jest.fn(),
+  onChange: vi.fn(),
   isOwnPage: true,
   userDisplayName: 'The Other',
 };
 
 function renderProfileHeader(props?: ProfileHeaderReduxProps) {
   return renderWithRouterRedux(<ProfileHeader {...defaultProps} {...props} />, {
-    initialState: { ...getBlankInitialState(), auth: { user: blankUser, loading: false } },
+    initialState: { ...getBlankInitialState(), auth: { user: blankUser, loading: false, demoMode: false } },
   });
 }
 

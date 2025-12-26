@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { cloneDeep as _cloneDeep } from 'lodash';
 import { fetchUser } from '../../actions';
 import { Review } from '../../types';
@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 export default function DraftsRedux(): JSX.Element {
   const dispatch = useAppDispatch();
   const drafts: Review[] = useAppSelector((state) => state.drafts);
-  const { goBack } = useHistory();
+  const navigate = useNavigate();
 
   // function to delete the specified draft
   const deleteDraft = async (draftToDelete: Review) => {
@@ -32,7 +32,7 @@ export default function DraftsRedux(): JSX.Element {
 
   const pageHeaderProps = {
     title: 'Your Drafts',
-    onBack: goBack,
+    onBack: () => navigate(-1),
   };
 
   return (

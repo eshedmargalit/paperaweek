@@ -1,4 +1,3 @@
-import { createLocation } from 'history';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
@@ -13,7 +12,7 @@ describe('<Login />', () => {
         ...getBlankInitialState(),
         auth: { user: blankUser, loading: false, demoMode: false },
       };
-      renderWithRouterRedux(<Login location={createLocation('/')} />, { initialState });
+      renderWithRouterRedux(<Login />, { initialState });
       expect(screen.getByText("Read a paper a week. That's it.")).toBeInTheDocument();
     });
   });
@@ -24,7 +23,7 @@ describe('<Login />', () => {
         ...getBlankInitialState(),
         auth: { user: { ...blankUser, displayName: 'Piranesi' }, loading: false, demoMode: false },
       };
-      renderWithRouterRedux(<Login location={createLocation('/')} />, { redirectTo: '/dashboard', initialState });
+      renderWithRouterRedux(<Login />, { redirectTo: '/dashboard', initialState });
       expect(screen.getByText('Redirected to a new page.')).toBeInTheDocument();
     });
   });

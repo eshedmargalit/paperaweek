@@ -1,5 +1,6 @@
 import { FileSearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Alert, Button, Col, Input, PageHeader, Row, Spin } from 'antd';
+import { Alert, Button, Col, Input, Row, Spin } from 'antd';
+import PageHeader from '../utils/PageHeader';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Paper } from '../../types';

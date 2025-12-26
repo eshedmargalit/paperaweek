@@ -10,14 +10,19 @@ module.exports = (app: Application) => {
   );
 
   app.get('/auth/google/callback', passport.authenticate('google'), (_, res) => {
-    res.redirect('/dashboard');
+    const clientUrl = process.env.NODE_ENV === 'production' ? '/dashboard' : 'http://localhost:3000/dashboard';
+    res.redirect(clientUrl);
   });
 
   // Logout is automatically attached to the req object by logout
   // Kills the cookie!
   app.get('/api/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+    req.logout((err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Logout failed' });
+      }
+      res.redirect('/');
+    });
   });
 
   app.get('/api/current_user', (req, res) => {

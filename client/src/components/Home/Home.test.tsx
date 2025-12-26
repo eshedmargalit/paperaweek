@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Home from '.';
@@ -53,15 +53,15 @@ describe('<Home />', () => {
     });
 
     describe('when the user clicks next', () => {
-      it('goes to the next step', () => {
+      it('goes to the next step', async () => {
         renderHome(initialAuthState);
 
         expect(screen.getByText(/all the data you will see on this tour/)).toBeInTheDocument();
 
         const nextButton = screen.getByLabelText('Next');
-        userEvent.click(nextButton);
+        await userEvent.click(nextButton);
 
-        expect(screen.getByText(/start a review immediately/)).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/start a review immediately/)).toBeInTheDocument());
       });
     });
   });

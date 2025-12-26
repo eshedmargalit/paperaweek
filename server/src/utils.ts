@@ -17,6 +17,21 @@ const createApp = (): Application => {
 
   app.use(bodyParser.json());
 
+  // Compatibility shim for passport 0.7.0 with cookie-session
+  app.use((req, res, next) => {
+    if (req.session && !req.session.regenerate) {
+      req.session.regenerate = (cb: (err?: any) => void) => {
+        cb();
+      };
+    }
+    if (req.session && !req.session.save) {
+      req.session.save = (cb: (err?: any) => void) => {
+        cb();
+      };
+    }
+    next();
+  });
+
   app.use(passport.initialize());
   app.use(passport.session());
 

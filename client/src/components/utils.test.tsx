@@ -2,6 +2,7 @@
 /* eslint-disable no-return-assign */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import {
   hashString,
   isDOI,
@@ -214,7 +215,7 @@ describe('utils', () => {
   });
 
   describe(makeHandleModalCopy.name, () => {
-    const writeToClipboardMock = jest.fn();
+    const writeToClipboardMock = vi.fn();
 
     beforeAll(() => {
       Object.assign(navigator, {
@@ -224,9 +225,13 @@ describe('utils', () => {
       });
     });
 
+    beforeEach(() => {
+      writeToClipboardMock.mockClear();
+    });
+
     it('copies the right URL to the clipboard', () => {
       makeHandleModalCopy('userId')({ ...blankReview, _id: 'reviewId' });
-      expect(writeToClipboardMock).toHaveBeenCalledWith('http://localhost/profiles/userId/reviewId');
+      expect(writeToClipboardMock).toHaveBeenCalledWith('http://localhost:3000/profiles/userId/reviewId');
     });
   });
 });

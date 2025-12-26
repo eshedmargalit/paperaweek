@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Fuse from 'fuse.js';
-import { PageHeaderProps } from 'antd/lib/page-header';
+import { PageHeaderProps } from '../utils/PageHeader';
 import SearchableReviewDisplayView from './SearchableReviewDisplay-view';
 import { Notes, Paper, Review } from '../../types';
 

@@ -15,9 +15,9 @@ module.exports = (app: Application) => {
       _id: new Types.ObjectId(),
     });
 
-    req.user.reviews.push(newReview);
-    req.user.save();
-    res.send(JSON.stringify(req.user.reviews));
+    req.user!.reviews.push(newReview);
+    req.user!.save();
+    res.send(JSON.stringify(req.user!.reviews));
   });
 
   app.put('/api/reviews', requireLogin, async (req, res) => {
@@ -27,8 +27,8 @@ module.exports = (app: Application) => {
       const newPaper = new PaperModel(paper);
       const user = await UserModel.findOneAndUpdate(
         {
-          googleId: req.user.googleId,
-          'reviews._id': Types.ObjectId(req.body.id),
+          googleId: req.user!.googleId,
+          'reviews._id': new Types.ObjectId(req.body.id),
         },
         {
           $set: {
@@ -50,22 +50,20 @@ module.exports = (app: Application) => {
 
   app.delete('/api/reviews/:id', requireLogin, async (req, res) => {
     try {
-      UserModel.findOneAndUpdate(
-        { googleId: req.user.googleId },
+      const updatedUser = await UserModel.findOneAndUpdate(
+        { googleId: req.user!.googleId },
         {
           $pull: {
-            reviews: { _id: Types.ObjectId(req.params.id) },
+            reviews: { _id: new Types.ObjectId(req.params.id) },
           },
         },
-        { new: true },
-        (err, review) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.send(JSON.stringify(review));
-          }
-        }
+        { new: true }
       );
+      if (updatedUser) {
+        res.send(JSON.stringify(updatedUser));
+      } else {
+        res.status(404).send('User or review not found');
+      }
     } catch (err) {
       res.status(500).send(err);
     }

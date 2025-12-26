@@ -1,18 +1,19 @@
 import React from 'react';
+import { vi } from 'vitest';
 import { useProtected } from '.';
 import { RootState } from '../../store';
 import { blankUser } from '../../templates';
 import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
 
-const mockHistoryPush = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...(jest.requireActual('react-router-dom') as any),
-  useHistory: () => ({
-    push: mockHistoryPush,
-  }),
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 // Because you can't run a hook outside of a react component, we'll make a small test case:
 function TestComponent({ redirect }: { redirect?: string }): JSX.Element {
@@ -27,14 +28,18 @@ describe('useProtected', () => {
       auth: { loading: false, user: blankUser, demoMode: false },
     };
 
+    beforeEach(() => {
+      mockNavigate.mockClear();
+    });
+
     it('redirects to the default path if no user is present', () => {
       renderWithRouterRedux(<TestComponent />, { initialState });
-      expect(mockHistoryPush).toHaveBeenCalledWith('/');
+      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
 
     it('redirects to a custom path if one is specific', () => {
       renderWithRouterRedux(<TestComponent redirect="customPath" />, { initialState });
-      expect(mockHistoryPush).toHaveBeenCalledWith('customPath');
+      expect(mockNavigate).toHaveBeenCalledWith('customPath');
     });
 
     it('does not redirect if a user is present', () => {
@@ -44,7 +49,7 @@ describe('useProtected', () => {
           auth: { user: { ...blankUser, displayName: 'John' }, loading: false, demoMode: false },
         },
       });
-      expect(mockHistoryPush).not.toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 });

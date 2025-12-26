@@ -1,42 +1,44 @@
-import { createLocation, createMemoryHistory, Location, MemoryHistory } from 'history';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { match as matchType } from 'react-router-dom';
 import { rest } from 'msw';
 import userEvent from '@testing-library/user-event';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import PublicProfile from '.';
-import { getBlankInitialState, renderWithRouterRedux } from '../../testUtils/reduxRender';
+import { getBlankInitialState } from '../../testUtils/reduxRender';
 import { Review, User } from '../../types';
-import { PublicProfileMatchParams, PublicProfileReduxProps } from './PublicProfile-redux';
 import { blankPaper, blankReview, blankUser } from '../../templates';
 import { server } from '../../mocks/server';
+import { configureStoreOptions } from '../../store';
 
 // Helper to render the profile with any userId and reviewId
-// You could, in theory, set all of this up within `renderWithRouterRedux`, but it'd be a massive pain
-// and being able to control it all here is pretty convenient
 function renderWithMatchOptions(
   userId: User['googleId'] = 'googleId',
   reviewIdToOpen: Review['_id'] = 'reviewId',
   loggedInUser: User = blankUser,
   publicProfile = true
 ) {
-  const match: matchType<PublicProfileMatchParams> = {
-    params: { userId, reviewIdToOpen },
-    isExact: true,
-    path: '',
-    url: '',
+  const initialState = {
+    ...getBlankInitialState(),
+    auth: { user: { ...loggedInUser, publicProfile }, loading: false, demoMode: false },
   };
 
-  const history: MemoryHistory = createMemoryHistory();
-  const location: Location = createLocation('/');
-  const props: PublicProfileReduxProps = { match, history, location };
-
-  return renderWithRouterRedux(<PublicProfile {...props} />, {
-    initialState: {
-      ...getBlankInitialState(),
-      auth: { user: { ...loggedInUser, publicProfile }, loading: false, demoMode: false },
-    },
+  const store = configureStore({
+    ...configureStoreOptions,
+    preloadedState: initialState,
   });
+
+  return render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[`/profiles/${userId}/${reviewIdToOpen}`]}>
+        <Routes>
+          <Route path="/profiles/:userId/:reviewIdToOpen?" element={<PublicProfile />} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>
+  );
 }
 
 describe('<PublicProfile />', () => {
@@ -82,9 +84,9 @@ describe('<PublicProfile />', () => {
         renderWithMatchOptions(googleId, 'reviewId', { ...blankUser, googleId }, true);
         await screen.findByText(`${userDisplayName}'s Reviews`);
 
-        userEvent.click(screen.getByText('Paper Title'));
+        await userEvent.click(screen.getByText('Paper Title'));
 
-        expect(screen.getByText('Copy Link')).toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText('Copy Link')).toBeInTheDocument());
       });
     });
   });

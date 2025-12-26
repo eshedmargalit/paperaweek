@@ -2,7 +2,7 @@ import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { render, RenderResult } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Switch } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Store } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { configureStoreOptions, RootState } from '../store';
@@ -34,14 +34,10 @@ export function renderWithRouterRedux(
   return {
     ...render(
       <MemoryRouter initialEntries={['/starting']}>
-        <Switch>
-          <Route exact path="/starting">
-            <Provider store={store}>{ui}</Provider>
-          </Route>
-          <Route exact path={redirectTo || '/redirected'}>
-            Redirected to a new page.
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/starting" element={<Provider store={store}>{ui}</Provider>} />
+          <Route path={redirectTo || '/redirected'} element={<>Redirected to a new page.</>} />
+        </Routes>
       </MemoryRouter>
     ),
     store,

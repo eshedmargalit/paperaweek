@@ -2,6 +2,7 @@
 // This is a known limitation of antd, we need to mock matchMedia since JSDOM doesn't implement it
 // https://github.com/ant-design/ant-design/issues/21096
 import { server } from './mocks/server';
+import { vi } from 'vitest';
 
 import '@testing-library/jest-dom/extend-expect';
 
@@ -9,9 +10,16 @@ global.matchMedia =
   global.matchMedia ||
   (() => ({
     matches: false,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
   }));
+
+// Mock ResizeObserver which is not available in jsdom
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
 
 export {};
 // Establish API mocking before all tests.

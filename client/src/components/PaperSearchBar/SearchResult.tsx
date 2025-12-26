@@ -22,14 +22,14 @@ export default function SearchResult({
 
   const renderedAuthorNames = renderCommaSepList(removeMiddleAuthors(authors, 4));
 
-  const [visible, setVisible] = useState(false);
-  const toggleVisible = () => setVisible(!visible);
+  const [open, setOpen] = useState(false);
+  const toggleOpen = () => setOpen(!open);
   const popOverContent = (
     <div>
       <Button
         onClick={() => {
           handleReadingListAdd(result);
-          setVisible(false);
+          setOpen(false);
         }}
       >
         Add to Reading List <PlusOutlined />
@@ -52,8 +52,8 @@ export default function SearchResult({
       trigger="click"
       key={title}
       placement="right"
-      visible={visible}
-      onVisibleChange={toggleVisible}
+      open={open}
+      onOpenChange={toggleOpen}
     >
       <div className="searchResult">
         <div className="paperSearch__result">

@@ -7,17 +7,10 @@ import './models/User';
 import './models/Paper';
 import './models/Review';
 
-mongoose.connect(getEnvironmentVariable('MONGO_URI'), {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Mongoose 8.x - deprecated options and methods removed
+mongoose.connect(getEnvironmentVariable('MONGO_URI'));
 
-// from https://mongoosejs.com/docs/deprecations.html#-findandmodify-
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
-
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 createApp().listen(PORT, () => {
   console.log(`📝 Listening on port: ${PORT}`);
