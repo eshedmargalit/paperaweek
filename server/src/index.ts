@@ -12,7 +12,8 @@ mongoose.connect(getEnvironmentVariable('MONGO_URI'));
 
 // Google Auth requires port 5000
 const PORT = 5000;
+const HOST = '0.0.0.0';
 
-createApp().listen(PORT, () => {
-  console.log(`📝 Listening on port: ${PORT}`);
+createApp().listen(PORT, HOST, () => {
+  console.log(`📝 Listening on ${HOST}:${PORT}`);
 });
