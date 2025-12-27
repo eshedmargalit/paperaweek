@@ -4,7 +4,7 @@
   "description": "Paper a Week",
   "main": "index",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node --max-old-space-size=512 -r ts-node/register src/index.ts",
     "server": "nodemon src/index.ts",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
